@@ -1,0 +1,2 @@
+# XIHBoomer
+结合XIHNet和XIHHotFix整合的炸弹人类型游戏
