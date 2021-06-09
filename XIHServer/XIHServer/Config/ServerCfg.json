@@ -1,0 +1,31 @@
+{
+	"Addr": "192.168.12.142",
+	"cmt": "说明:具体看Program.cs的StartSvr()方法如何解析和使用 -1表示开启全部服务器",
+	"SvrType": -1,
+	"Servers": [
+		{
+			"id": 1,
+			"name": "Login",
+			"port": 12345,
+			"netid": 1,
+			"netName": "Kcp",
+			"cryptType": 2
+		},
+		{
+			"id": 2,
+			"name": "Lobby",
+			"port": 54321,
+			"netid": 2,
+			"netName": "Tcp",
+			"cryptType": 1
+		},
+		{
+			"id": 4,
+			"name": "Battle",
+			"port": 12321,
+			"netid": 1,
+			"netName": "Kcp",
+			"cryptType": 0
+		}
+	]
+}

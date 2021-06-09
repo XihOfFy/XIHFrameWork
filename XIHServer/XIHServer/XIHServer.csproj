@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>XIHServer.Program</StartupObject>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;XIHSERVER</DefineConstants>
+    <OutputPath>..\Res\ServerBin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;SERVER</DefineConstants>
+    <OutputPath>..\Res\ServerBin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LitJson" Version="0.17.0" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\Assets\XiHNet\Runtime\Crypt\**\*.cs">
+      <Link>XiHNet\Runtime\Crypt\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Compile>
+	<Compile Include="..\..\Assets\XiHNet\Runtime\ProtoBuf\**\*.cs">
+      <Link>XiHNet\Runtime\ProtoBuf\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Compile>
+	<Compile Include="..\..\Assets\XiHNet\Runtime\Util\**\*.cs">
+      <Link>XiHNet\Runtime\Util\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Compile>
+
+	<Compile Include="..\..\Assets\XiHNet\Runtime\Mgr\KCP\Kcp.cs">
+      <Link>XiHNet\Runtime\Mgr\KCP\Kcp.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Config\ServerCfg.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\Log4Net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

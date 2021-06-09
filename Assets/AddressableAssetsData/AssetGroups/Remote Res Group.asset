@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote Res Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote Res Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 2b4421a8284b89142982827b7d847f28
+  m_SerializeEntries:
+  - m_GUID: bcaf77d67b63cb546a7e44ff28659ac5
+    m_Address: Assets/Bundles/Scenes/ColorMat2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5241a3221ed421544ae59c1920f3339e
+    m_Address: Assets/Bundles/Scenes/ColorMat.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 59dd0484d61d7c24ea548d9a0c48edda
+    m_Address: Assets/Bundles/Scenes/GridMat.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 645bbf249001c894e8deb0b292130a13, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 91ce74be780d0aa4b89a46af4717e547, type: 2}
+    - {fileID: 11400000, guid: 645e7793158b5dc4590748228d79ebbe, type: 2}

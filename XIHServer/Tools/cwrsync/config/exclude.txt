@@ -1,0 +1,4 @@
+.vs/
+Tools/
+XIHServer.sln
+XIHServer/
