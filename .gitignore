@@ -15,10 +15,11 @@
 /*
 !.gitignore
 !Assets/
+Assets/XIHBasic/Generated/*
 !Packages/
 !ProjectSettings/
-!XIHServer/
 
+!XIHServer/
 XIHServer/*
 !XIHServer/XIHServer.sln
 !XIHServer/README.md
