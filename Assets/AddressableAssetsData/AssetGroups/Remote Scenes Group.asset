@@ -17,18 +17,24 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: ac89987f7f34c00439bcb0f5b9c60817
   m_SerializeEntries:
-  - m_GUID: a11296526da0bfb4c8b279d80470f6a4
+  - m_GUID: 0ff35e7d98776674fb4a1f2c44cd447f
     m_Address: Assets/Bundles/Scenes/LoginScene.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 102900000, guid: a11296526da0bfb4c8b279d80470f6a4, type: 3}
-    m_TargetAsset: {fileID: 102900000, guid: a11296526da0bfb4c8b279d80470f6a4, type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 31ef74632601c8148851fb24483b1b04
     m_Address: Assets/Bundles/Scenes/BattleScene.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 102900000, guid: 31ef74632601c8148851fb24483b1b04, type: 3}
-    m_TargetAsset: {fileID: 102900000, guid: 31ef74632601c8148851fb24483b1b04, type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 4062d7a8808bbd14980bbfcf018e35b2
+    m_Address: Assets/Bundles/Scenes/LobbyScene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 645bbf249001c894e8deb0b292130a13, type: 2}
   m_SchemaSet:

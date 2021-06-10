@@ -138,7 +138,7 @@ namespace XIHServer
             {
                 rooms.Add(new RoomInfo() { Name = r.players[r.OwnerId].name, RoomId = r.id });
             }
-            client.Send(new LobbyGetRoomsRsp() { TaskId = req.TaskId, Rooms = rooms });
+            client.Send(new LobbyGetRoomsRsp() { TaskId = req.TaskId, Rooms = rooms.ToArray() });
         }
         public static void LobbyStartNtf(AbsNetClient client, LobbyStartNtf ntf)
         {
@@ -146,7 +146,7 @@ namespace XIHServer
             if (palyer == null || palyer.Room == null) return;
             ntf.MapHost = Program.SvrCfg[NetServer.Battle].IPEndPoint.Address.ToString();
             ntf.MapPort = Program.SvrCfg[NetServer.Battle].IPEndPoint.Port;
-            ntf.NetProtocol = Program.SvrCfg[NetServer.Battle].NetProtocol;
+            ntf.NetProtocol = (int)Program.SvrCfg[NetServer.Battle].NetProtocol;
             palyer.Room.StartBattle(ntf);
         }
         public static void BindHandle(Dictionary<ushort, Action<AbsNetClient, byte[]>> handles)

@@ -1,0 +1,12 @@
+{
+    "name": "Protobuf.Editor",
+    "references": [
+        "Protobuf"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true
+}

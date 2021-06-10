@@ -141,6 +141,7 @@ namespace XIHServer
                 Buffer.BlockCopy(cryotorKey, 0, bs, 2, cryotorKey.Length);
                 bs[0] = (byte)cryptType;
                 bs[1] = (byte)cryotorKey.Length;
+                //Debugger.Log($"{BitConverter.ToString(bs, 0, bs.Length)}");
                 client.Send(bs);//返回加密信息，开始走KCP模式
             }
         }
@@ -193,6 +194,7 @@ namespace XIHServer
                 {
                     var binary = new byte[size];
                     Buffer.BlockCopy(data, 0, binary, 0, size);
+                    //Debugger.Log($"{BitConverter.ToString(data, 0, size)}");
                     await _client.SendAsync(binary, binary.Length, iPEnd);
                 });
                 // fast mode

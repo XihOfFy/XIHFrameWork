@@ -24,18 +24,18 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\Assets\XiHNet\Runtime\Crypt\**\*.cs">
-      <Link>XiHNet\Runtime\Crypt\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    <Compile Include="..\..\Assets\XIHHotFix\XIHNet\Runtime\Crypt\**\*.cs">
+      <Link>XIHHotFix\XIHNet\Runtime\Crypt\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
-	<Compile Include="..\..\Assets\XiHNet\Runtime\ProtoBuf\**\*.cs">
-      <Link>XiHNet\Runtime\ProtoBuf\%(RecursiveDir)%(FileName)%(Extension)</Link>
+	<Compile Include="..\..\Assets\XIHHotFix\XIHNet\Runtime\ProtoBuf\**\*.cs">
+      <Link>XIHHotFix\XIHNet\Runtime\ProtoBuf\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
-	<Compile Include="..\..\Assets\XiHNet\Runtime\Util\**\*.cs">
-      <Link>XiHNet\Runtime\Util\%(RecursiveDir)%(FileName)%(Extension)</Link>
+	<Compile Include="..\..\Assets\XIHHotFix\XIHNet\Runtime\Util\**\*.cs">
+      <Link>XIHHotFix\XIHNet\Runtime\Util\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
 
-	<Compile Include="..\..\Assets\XiHNet\Runtime\Mgr\KCP\Kcp.cs">
-      <Link>XiHNet\Runtime\Mgr\KCP\Kcp.cs</Link>
+	<Compile Include="..\..\Assets\XIHHotFix\XIHNet\Runtime\Mgr\KCP\Kcp.cs">
+      <Link>XIHHotFix\XIHNet\Runtime\Mgr\KCP\Kcp.cs</Link>
     </Compile>
   </ItemGroup>
   

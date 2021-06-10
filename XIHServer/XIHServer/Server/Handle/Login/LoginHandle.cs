@@ -26,7 +26,7 @@ namespace XIHServer
                 client.Send(new LoginRsp()
                 {
                     TaskId = req.TaskId,
-                    Result = LoginResultType.LoginResultError
+                    Result = (int)LoginResultType.LoginResultError
                 });
             }
             else
@@ -37,8 +37,8 @@ namespace XIHServer
                     TaskId = req.TaskId,
                     GateHost = Program.SvrCfg[NetServer.Lobby].IPEndPoint.Address.ToString(),
                     GatePort = Program.SvrCfg[NetServer.Lobby].IPEndPoint.Port,
-                    NetProtocol = Program.SvrCfg[NetServer.Lobby].NetProtocol,
-                    Result = LoginResultType.LoginResultSuccess,
+                    NetProtocol = (int)Program.SvrCfg[NetServer.Lobby].NetProtocol,
+                    Result = (int)LoginResultType.LoginResultSuccess,
                     SessionKey = sk
                 });
                 MockCache.WaitVerify.Add(sk, res.Value.Key);

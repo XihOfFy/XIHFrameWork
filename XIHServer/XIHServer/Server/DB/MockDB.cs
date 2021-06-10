@@ -18,7 +18,7 @@ namespace XIHServer
         private readonly Dictionary<string, UserBean> userdb = new Dictionary<string, UserBean>();
         public UserBean? Login(LoginReq req)
         {
-            switch (req.LoginType)
+            switch ((LoginType)req.LoginType)
             {
                 case LoginType.LoginByGm:
                     if (req.Account.Replace(" ", "") == "" || req.Password.Replace(" ", "") == "")
@@ -32,7 +32,7 @@ namespace XIHServer
                     {
                         return null;
                     }
-                    RegisterAccount(req.LoginType, req.UniqueId);
+                    RegisterAccount((LoginType)req.LoginType, req.UniqueId);
                     return userdb[req.UniqueId];
             }
             return null;

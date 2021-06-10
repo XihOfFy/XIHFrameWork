@@ -14,8 +14,6 @@ using ILRuntime.Runtime.Intepreter;
 using ILRuntime.Runtime.Debugger;
 using ILRuntime.Runtime.Stack;
 using ILRuntime.Other;
-using ILRuntime.Runtime.Intepreter.RegisterVM;
-
 namespace ILRuntime.Runtime.Enviorment
 {
     public unsafe delegate StackObject* CLRRedirectionDelegate(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj);
@@ -57,13 +55,11 @@ namespace ILRuntime.Runtime.Enviorment
         Dictionary<Type, CLRMemberwiseCloneDelegate> memberwiseCloneMap = new Dictionary<Type, CLRMemberwiseCloneDelegate>(new ByReferenceKeyComparer<Type>());
         Dictionary<Type, CLRCreateDefaultInstanceDelegate> createDefaultInstanceMap = new Dictionary<Type, CLRCreateDefaultInstanceDelegate>(new ByReferenceKeyComparer<Type>());
         Dictionary<Type, CLRCreateArrayInstanceDelegate> createArrayInstanceMap = new Dictionary<Type, CLRCreateArrayInstanceDelegate>(new ByReferenceKeyComparer<Type>());
-        IType voidType, intType, longType, boolType, floatType, doubleType, objectType, jitAttributeType;
+        IType voidType, intType, longType, boolType, floatType, doubleType, objectType;
         DelegateManager dMgr;
         Assembly[] loadedAssemblies;
         Dictionary<string, byte[]> references = new Dictionary<string, byte[]>();
         DebugService debugService;
-        AsyncJITCompileWorker jitWorker = new AsyncJITCompileWorker();
-        int defaultJITFlags;
 
         /// <summary>
         /// Determine if invoking unbinded CLR method(using reflection) is allowed
@@ -77,12 +73,9 @@ namespace ILRuntime.Runtime.Enviorment
             return UnityMainThreadID != 0 && (UnityMainThreadID != System.Threading.Thread.CurrentThread.ManagedThreadId);
         }
 #endif
-
         internal bool SuppressStaticConstructor { get; set; }
 
-        public int DefaultJITFlags { get { return defaultJITFlags; } }
-
-        public unsafe AppDomain(int defaultJITFlags = ILRuntimeJITFlags.None)
+        public unsafe AppDomain()
         {
             AllowUnboundCLRMethod = true;
             InvocationContext.InitializeDefaultConverters();
@@ -157,16 +150,16 @@ namespace ILRuntime.Runtime.Enviorment
                 {
                     RegisterCLRMethodRedirection(i, CLRRedirections.EnumGetNames);
                 }
-                if (i.Name == "GetName")
+                if(i.Name == "GetName")
                 {
                     RegisterCLRMethodRedirection(i, CLRRedirections.EnumGetName);
                 }
 #if NET_4_6 || NET_STANDARD_2_0
-                if (i.Name == "HasFlag")
+                if(i.Name == "HasFlag")
                 {
                     RegisterCLRMethodRedirection(i, CLRRedirections.EnumHasFlag);
                 }
-                if (i.Name == "CompareTo")
+                if(i.Name == "CompareTo")
                 {
                     RegisterCLRMethodRedirection(i, CLRRedirections.EnumCompareTo);
                 }
@@ -189,13 +182,6 @@ namespace ILRuntime.Runtime.Enviorment
             RegisterCrossBindingAdaptor(new Adapters.AttributeAdapter());
 
             debugService = new Debugger.DebugService(this);
-            this.defaultJITFlags = defaultJITFlags & (ILRuntimeJITFlags.JITImmediately | ILRuntimeJITFlags.JITOnDemand);
-        }
-
-        public void Dispose()
-        {
-            debugService.StopDebugService();
-            jitWorker.Dispose();
         }
 
         public IType VoidType { get { return voidType; } }
@@ -205,8 +191,6 @@ namespace ILRuntime.Runtime.Enviorment
         public IType FloatType { get { return floatType; } }
         public IType DoubleType { get { return doubleType; } }
         public IType ObjectType { get { return objectType; } }
-
-        public IType JITAttributeType { get { return jitAttributeType; } }
 
         /// <summary>
         /// Attention, this property isn't thread safe
@@ -227,10 +211,6 @@ namespace ILRuntime.Runtime.Enviorment
 
         public DelegateManager DelegateManager { get { return dMgr; } }
 
-        internal void EnqueueJITCompileJob(ILMethod method)
-        {
-            jitWorker.QueueCompileJob(method);
-        }
 
         /// <summary>
         /// 加载Assembly 文件，从指定的路径
@@ -462,7 +442,6 @@ namespace ILRuntime.Runtime.Enviorment
                 floatType = GetType("System.Single");
                 doubleType = GetType("System.Double");
                 objectType = GetType("System.Object");
-                jitAttributeType = GetType("ILRuntime.Runtime.ILRuntimeJITAttribute");
             }
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
             debugService.NotifyModuleLoaded(module.Name);
@@ -1158,7 +1137,6 @@ namespace ILRuntime.Runtime.Enviorment
 #endif
                 inteptreter.Stack.ManagedStack.Clear();
                 inteptreter.Stack.Frames.Clear();
-                inteptreter.Stack.ClearAllocator();
                 freeIntepreters.Enqueue(inteptreter);
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
                 //debugService.ThreadEnded(inteptreter);
