@@ -43,7 +43,9 @@ namespace ProtoBuf.Meta
             AttributeMap[] result = new AttributeMap[all.Length];
             for(int i = 0 ; i < all.Length ; i++)
             {
-                result[i] = new ReflectionAttributeMap((Attribute)all[i]);
+                var tmp = (Attribute)all[i];
+                if (tmp == null) continue;
+                result[i] = new ReflectionAttributeMap(tmp);
             }
             return result;
 #endif
@@ -69,7 +71,9 @@ namespace ProtoBuf.Meta
             AttributeMap[] result = new AttributeMap[all.Length];
             for(int i = 0 ; i < all.Length ; i++)
             {
-                result[i] = new ReflectionAttributeMap((Attribute)all[i]);
+                var tmp = (Attribute)all[i];
+                if (tmp == null) continue;
+                result[i] = new ReflectionAttributeMap(tmp);
             }
             return result;
 #endif
@@ -97,7 +101,9 @@ namespace ProtoBuf.Meta
             AttributeMap[] result = new AttributeMap[all.Length];
             for(int i = 0 ; i < all.Length ; i++)
             {
-                result[i] = new ReflectionAttributeMap((Attribute)all[i]);
+                var tmp = (Attribute)all[i];
+                if (tmp == null) continue;
+                result[i] = new ReflectionAttributeMap(tmp);
             }
             return result;
 #endif

@@ -686,6 +686,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: 
+    7: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

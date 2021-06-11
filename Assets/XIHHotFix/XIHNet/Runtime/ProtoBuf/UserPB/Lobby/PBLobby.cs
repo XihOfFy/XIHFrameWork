@@ -143,11 +143,14 @@ namespace XiHNet
         public ushort TaskId { get; set; }
     }
     [ProtoContract]
-    public struct RoomInfo {
+    public sealed class RoomInfo : IMessage
+    {
         [ProtoMember(1)]
         public string Name { get; set; }
         [ProtoMember(2)]
         public ulong RoomId { get; set; }
+        //无需序列化
+        ushort IMessage.TaskId { get => 0; set { } }
     }
     [ProtoContract]
     [MsgTypeCode(20014, false)]

@@ -1,3 +1,4 @@
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,9 @@ namespace XiHNet
                 if (!mt.IsAssignableFrom(type)) {//接口
                     continue;
                 }
+#if !XIHSERVER
+                PType.RegisterType(type.FullName, type);//ILR下，尽管ClassA包含ClassB，ClassB也必须注册，即继承IMessage
+#endif
                 object[] objects = type.GetCustomAttributes(typeof(MsgTypeCodeAttribute), false);
                 if (objects.Length == 0)
                 {
@@ -85,9 +89,6 @@ namespace XiHNet
                     msg2Types.Add(val, type);
                     type2Msgs.Add(type, val);
                     //Debugger.Log($"{mt.FullName};{val}:{type}");
-#if !XIHSERVER
-                    ProtoBuf.PType.RegisterType(type.FullName,type);
-#endif
                     if (attr.IsResponse) {
                         rsps.Add(val);
                     }
