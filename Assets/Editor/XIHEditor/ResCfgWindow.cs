@@ -29,7 +29,7 @@ namespace XIHBasic
         readonly string resCfgPath = $"Assets/Resources/{PlatformConfig.CONFIG_NAME}.json";//配置文件目录
         readonly string resDllPath = $"Assets/Resources/{PlatformConfig.HOTFIX_DLL_NAME}.bytes";//DLL配置文件目录
 
-        string resOutPath;//dll和资源输出路径
+        const string resOutPath= "XIHServer/Res/WebBin/Game/";//dll和资源输出路径
         readonly string dllPath = $"Library/ScriptAssemblies/{PlatformConfig.HOTFIX_DLL_NAME}.dll";
         readonly string pdbPath = $"Library/ScriptAssemblies/{PlatformConfig.HOTFIX_DLL_NAME}.pdb";
 
@@ -53,7 +53,7 @@ namespace XIHBasic
             EditorGUILayout.Space();
             if (GUILayout.Button("输出Dll和配置文件到目标目录"))
             {
-                resOutPath = EditorUtility.OpenFolderPanel("请选择输出目录", resOutPath, "");
+                //resOutPath = EditorUtility.OpenFolderPanel("请选择输出目录", resOutPath, "");
                 if (!string.IsNullOrEmpty(resOutPath) && Directory.Exists(resOutPath))
                 {
                     if (EditorUtility.DisplayDialog("打包确认弹框", $"即将Dll和配置文件到目标目录:{resOutPath}", "确定", "取消"))

@@ -14,23 +14,20 @@ namespace XIHEmptyWeb
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true)
-                .Build();
-            string path = config["ResRoot"];
-            System.Console.WriteLine($"ResPath:");
-            if (!Directory.Exists(path)) {
-                Directory.CreateDirectory(path);
-            }
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args) {
+            var config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", true)
+                    .Build();
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls(config["ResUrls"]);
                 });
+        }
     }
 }

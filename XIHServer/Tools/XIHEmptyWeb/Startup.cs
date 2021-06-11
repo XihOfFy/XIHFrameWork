@@ -45,15 +45,22 @@ namespace XIHEmptyWeb
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
+            string curDir = Directory.GetCurrentDirectory();
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(curDir)
                 .AddJsonFile("appsettings.json", true)
                 .Build();
 
             string configDir = config["ResRoot"];
 
             configDir = new DirectoryInfo(configDir).FullName;
-            Console.WriteLine(configDir);
+
+            System.Console.WriteLine($"ResPath:{configDir}   \r\nCurDir:{curDir}");
+            if (!string.IsNullOrEmpty(configDir) && !Directory.Exists(configDir))
+            {
+                Directory.CreateDirectory(configDir);
+            }
+
             UseStaticFiles(app, configDir);
             app.Run(async (context) => { await context.Response.WriteAsync("Hello World"); });
         }

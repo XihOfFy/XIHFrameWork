@@ -9,7 +9,7 @@ using ProtoBuf.Reflection;
 using System.IO;
 
 public class Protogen {
-    [MenuItem("Bundle/Generate Protocs")]
+    [MenuItem("XIHUtil/Bundle/Generate Protocs")]
     public static void GenerateProtobufCS(){
 		Generate(Application.dataPath + "/../../../Others/Proto/", new string[]{"mmopb.proto"},Application.dataPath + "/../../HotFix/");
     }

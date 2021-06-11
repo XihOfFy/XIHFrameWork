@@ -68,9 +68,9 @@ MonoBehaviour:
       - m_Id: e88d26d4ecc811b4dab704639ceac5e2
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: ed7112528c08dbc4dbe3a3fc7a9948d1
-        m_Value: D:\DevKits\apache-tomcat-10.0.0-M5\webapps\downloadres\AA\[BuildTarget]
+        m_Value: ./XIHServer/Res/WebBin/Game/AA/[BuildTarget]
       - m_Id: 6b4585f6b48824f4f9b006fea5b255f7
-        m_Value: http://[PrivateIpAddress]:8080/downloadres/AA/[BuildTarget]
+        m_Value: http://[PrivateIpAddress]:5000/AA/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 7ed8926b0ed60ad4d9e4f938c83c7003
       m_Name: BuildTarget
@@ -117,7 +117,7 @@ MonoBehaviour:
           m_Key: HostingServicePort
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String
-          m_Data: Library/com.unity.addressables/aa/Android/Android;D:\DevKits\apache-tomcat-10.0.0-M5\webapps\downloadres\AA\Android
+          m_Data: Library/com.unity.addressables/aa/Android/Android;./XIHServer/Res/WebBin/Game/AA/Android
           m_Key: ContentRoot
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.Boolean

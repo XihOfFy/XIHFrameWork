@@ -4,24 +4,35 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using XIHBasic;
+using XiHNet;
+
 namespace XIHHotFix
 {
     public class BattleSceneMgr : AbsComponent
     {
         protected BattleSceneMgr(MonoTouch dot) : base(dot) { }
-        private GameObject playerPrefab;
+        NetAdapter battleClient;
+        public GameObject playerPrefab;
+        public Action<BattleStartNtf> battleStartNtf;
+        public Action<PositionNtf> postionAct;
+        private Action<LobbyRoomLeaveNtf> OnLobbyRoomLeaveNtf;
+
+        public Action battleEndNtf;
+        private Dictionary<int, Robot> robots;
+        private Robot selfRb;
         private Rigidbody selfRgb;
-        private Transform followCam;
+        public Transform followCam;
         private Vector3 deltaCam;
-        private RectTransform moveImg;
-        private Text cdTimeTx;
+        public RectTransform moveImg;
+        public Text cdTimeTx;
         private Button exitBtn;
         private int dir = 0;
         private Dictionary<int, Vector3> dirSpeed;
-        protected async override void Awake()
+        protected override void Awake()
         {
             MonoTouch dot = MonoDot as MonoTouch;
             dot.onBeginDrag = OnBeginDrag;
@@ -32,6 +43,24 @@ namespace XIHHotFix
             moveImg = dot.GameObjsDic["Point"].GetComponent<RectTransform>();
             cdTimeTx = dot.GameObjsDic["CD"].GetComponent<Text>();
             exitBtn = dot.GameObjsDic["Exit"].GetComponent<Button>();
+            exitBtn.onClick.AddListener(async () =>
+            {
+                var lobbyClient = MonoNetMsgLooper.Instance.NetClients[NetServer.Lobby];
+                if ((await lobbyClient.Request(new LobbyLeaveRoomReq())) is LobbyLeaveRoomRsp)
+                {
+                    OnReVerify();
+                }
+                else
+                {
+                    Debug.Log("离开失败");
+                }
+            });
+        }
+
+        protected async override void OnEnable()
+        {
+            HotFixInit.Update += Update;
+            HotFixInit.FixedUpdate += FixedUpdate;
             deltaCam = followCam.position;
             dirSpeed = new Dictionary<int, Vector3>();
             dirSpeed.Add(0, Vector3.zero);
@@ -40,78 +69,153 @@ namespace XIHHotFix
             dirSpeed.Add(2, Vector3.back * Time.fixedDeltaTime * speed);
             dirSpeed.Add(3, Vector3.left * Time.fixedDeltaTime * speed);
             dirSpeed.Add(4, Vector3.right * Time.fixedDeltaTime * speed);
-            bool isBacking = false;
-            exitBtn.onClick.AddListener(async () =>
+            robots = new Dictionary<int, Robot>();
+            MonoNetMsgLooper.Instance.OnReVerify += OnReVerify;
+            var lobbyClient = MonoNetMsgLooper.Instance.NetClients[NetServer.Lobby];
+            OnLobbyRoomLeaveNtf = ntf =>
             {
-                if (isBacking) return;
-                isBacking = true;
-                await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LoginScene.unity").Task;
+                if (robots.ContainsKey(ntf.OrderInRoom))
+                {
+                    var rm = robots[ntf.OrderInRoom];
+                    GameObject.Destroy(rm.playerTr.gameObject);
+                    robots.Remove(ntf.OrderInRoom);
+                }
+            };
+            lobbyClient.RegisterNtf<LobbyRoomLeaveNtf>(ntf =>
+            {
+                MonoNetMsgLooper.Instance.LobbyJoinRoomRsp.OwnerIdxInRoom = ntf.OwnerIdxInRoom;
+                MonoNetMsgLooper.Instance.LobbyJoinRoomRsp.PlayersName[ntf.OrderInRoom] = null;
+                OnLobbyRoomLeaveNtf?.Invoke(ntf);
             });
-
-            string playerName = "Player";
-            var gb = GameObject.Instantiate(playerPrefab);
-            gb.SetActive(true);
-            gb.name = playerName;
-            gb.GetComponentInChildren<TextMesh>().text = playerName;
-            gb.GetComponent<Collider>().isTrigger = false;
-            selfRgb = gb.AddComponent<Rigidbody>();
-            selfRgb.constraints = RigidbodyConstraints.FreezePositionY;
-            selfRgb.freezeRotation = true;
-            selfRgb.useGravity = false;
-
-            string sceneName = SceneManager.GetActiveScene().name;
-            var desT = DateTime.Now.AddMilliseconds(30000);
-            int cdTime = (desT - DateTime.Now).Seconds;
-            while (cdTime >= 0)
+            battleClient = MonoNetMsgLooper.Instance.NetClients[NetServer.Battle];
+            battleStartNtf = async (ntf) =>
             {
-                if (cdTimeTx == null)
+                battleStartNtf = null;
+                robots.Clear();
+                int max = 0;
+                foreach (var r in ntf.Robots)
                 {
-                    break;
+                    Robot rb = new Robot
+                    {
+                        orderInRoom = r.OrderInRoom,
+                        isSelf = r.OrderInRoom == MonoNetMsgLooper.Instance.LobbyJoinRoomRsp.IdxInRoom
+                    };
+                    var gb = GameObject.Instantiate(playerPrefab);
+                    gb.SetActive(true);
+                    gb.name = r.Name;
+                    rb.name = gb.GetComponentInChildren<TextMesh>();
+                    rb.name.text = r.Name;
+                    rb.playerTr = gb.transform;
+                    rb.lastVec3 = new Vector3(r.OrderInRoom * 1.0f / 2.0f, 0, r.OrderInRoom * 1.0f / 2.0f);
+                    rb.playerTr.position = rb.lastVec3;
+                    rb.targetVec3 = rb.lastVec3;
+                    rb.playerTr.GetComponent<Collider>().isTrigger = !rb.isSelf;
+                    rb.name.color = rb.isSelf ? Color.blue : Color.red;
+                    robots.Add(r.OrderInRoom, rb);
+                    if (rb.isSelf)
+                    {
+                        selfRb = rb;
+                        var rg = rb.playerTr.gameObject.AddComponent<Rigidbody>();
+                        rg.constraints = RigidbodyConstraints.FreezePositionY;
+                        rg.freezeRotation = true;
+                        rg.useGravity = false;
+                        selfRgb = rg;
+                    }
+                    max = Math.Max(r.OrderInRoom, max);
                 }
-                else
+                refV3others = new Vector3[max + 1];
+                var desT = DateTime.Now.AddMilliseconds(ntf.CDTime);
+                int cdTime = (desT - DateTime.Now).Seconds;
+                while (cdTime >= 0)
                 {
-                    cdTimeTx.text = $"CD:{cdTime}";
+                    if (cdTimeTx == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        cdTimeTx.text = $"CD:{cdTime}";
+                    }
+                    await Task.Delay(1000);
+                    cdTime = (desT - DateTime.Now).Seconds;
                 }
-                await Task.Delay(1000);
-                cdTime = (desT - DateTime.Now).Seconds;
-            }
-            if (!isBacking && SceneManager.GetActiveScene().name == sceneName)
+            };
+            battleClient.RegisterNtf<BattleStartNtf>((ntf) =>
             {
-                await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LoginScene.unity").Task;
-            }
-        }
+                battleStartNtf?.Invoke(ntf);
+            });
+            battleEndNtf = () =>
+            {
+                MonoNetMsgLooper.Instance.NetClients.TryRemove(NetServer.Battle, out _);
+                battleClient.Close();
+                SceneManager.LoadScene("Lobby");
+            };
+            battleClient.RegisterNtf<BattleEndNtf>((ntf) =>
+            {
+                battleEndNtf?.Invoke();
+            });
+            postionAct = (ntf) =>
+            {
+                if (robots.ContainsKey(ntf.PlayerOrderInRoom))
+                {
+                    var rb = robots[ntf.PlayerOrderInRoom];
+                    rb.targetVec3 = new Vector3(ntf.X, 0, ntf.Z);
+                }
+            };
+            battleClient.RegisterNtf<PositionNtf>((ntf) =>
+            {
+                postionAct?.Invoke(ntf);
+            });
+            await battleClient.Notify(new BattleReadyNtf()
+            {
+                PlayerOrderInRoom = MonoNetMsgLooper.Instance.LobbyJoinRoomRsp.IdxInRoom,
+                RoomId = MonoNetMsgLooper.Instance.LobbyJoinRoomRsp.RoomId,
+                SessionKey = MonoNetMsgLooper.Instance.LoginRsp.SessionKey,
+            });
+            battleClient.StartPingPong();
 
-        Vector3 refV3;
-        protected override void OnEnable()
-        {
-            HotFixInit.Update += Update;
-            HotFixInit.FixedUpdate += FixedUpdate;
         }
+        short frame = 0;
+        Vector3[] refV3others;
         private void FixedUpdate()
         {
             if (selfRgb == null) return;
-            selfRgb.MovePosition(Vector3.SmoothDamp(selfRgb.position, selfRgb.position + dirSpeed[dir], ref refV3, 0.03125f));
+            ++frame;
+            if (frame >= 5)
+            {
+                frame = 0;
+                SendSelfPos();
+            }
+            //selfRb.playerTr.Translate(dirSpeed[dir], Space.World);
+            selfRgb.MovePosition(Vector3.SmoothDamp(selfRgb.position, selfRgb.position + dirSpeed[dir], ref refV3others[selfRb.orderInRoom], 0.03125f));
             followCam.position = Vector3.Lerp(followCam.position, selfRgb.position + deltaCam, 0.25f);
         }
 
         private void Update()
         {
-            /*不能使用宏定义，除非dll生成也分平台
-            if (Application.platform==RuntimePlatform.WindowsEditor &&  Input.GetKey(KeyCode.LeftShift))
+            foreach (var rb in robots.Values)
             {
-                if (Input.GetKey(KeyCode.UpArrow))
+                if (rb.isSelf) continue;
+                //rb.playerTr.position = Vector3.Lerp(rb.lastVec3, rb.targetVec3, 0.1f);
+                rb.playerTr.position = Vector3.SmoothDamp(rb.lastVec3, rb.targetVec3, ref refV3others[rb.orderInRoom], 0.25f);
+                rb.lastVec3 = rb.playerTr.position;
+            }
+#if UNITY_EDITOR && UNITY_EDITOR_WIN
+            if (Keyboard.current.leftShiftKey.isPressed)
+            {
+                if (Keyboard.current.upArrowKey.isPressed)
                 {
                     dir = 1;
                 }
-                else if (Input.GetKey(KeyCode.DownArrow))
+                else if (Keyboard.current.downArrowKey.isPressed)
                 {
                     dir = 2;
                 }
-                else if (Input.GetKey(KeyCode.LeftArrow))
+                else if (Keyboard.current.leftArrowKey.isPressed)
                 {
                     dir = 3;
                 }
-                else if (Input.GetKey(KeyCode.RightArrow))
+                else if (Keyboard.current.rightArrowKey.isPressed)
                 {
                     dir = 4;
                 }
@@ -119,15 +223,43 @@ namespace XIHHotFix
                 {
                     dir = 0;
                 }
-            }*/
+            }
+#endif
         }
         protected override void OnDisable()
         {
             HotFixInit.Update -= Update;
             HotFixInit.FixedUpdate -= FixedUpdate;
+            MonoNetMsgLooper.Instance.OnReVerify -= OnReVerify;
+            battleStartNtf = null;
+            postionAct = null;
+            battleEndNtf = null;
+            OnLobbyRoomLeaveNtf = null;
+        }
+        async void OnReVerify()
+        {
+            MonoNetMsgLooper.Instance.LobbyJoinRoomRsp = null;
+            MonoNetMsgLooper.Instance.NetClients.TryRemove(NetServer.Battle, out _);
+            battleClient.Close();
+            await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LobbyScene.unity").Task;
         }
         protected override void OnDestory()
         {
+        }
+        private async void SendSelfPos()
+        {
+            selfRb.targetVec3 = selfRgb.position;
+            if (Vector3.SqrMagnitude(selfRb.lastVec3 - selfRb.targetVec3) < 0.0025f)
+            {
+                return;
+            }
+            await battleClient.Notify(new PositionNtf()
+            {
+                PlayerOrderInRoom = selfRb.orderInRoom,
+                X = selfRgb.position.x,
+                Z = selfRgb.position.z
+            });
+            selfRb.lastVec3 = selfRgb.position;
         }
         const int R = 160;
         const int R2 = R * R;
@@ -167,5 +299,14 @@ namespace XIHHotFix
             moveImg.anchoredPosition = Vector3.zero;
             dir = 0;
         }
+    }
+    class Robot
+    {
+        public bool isSelf;
+        public int orderInRoom;
+        public Transform playerTr;
+        public TextMesh name;
+        public Vector3 lastVec3;
+        public Vector3 targetVec3;
     }
 }
