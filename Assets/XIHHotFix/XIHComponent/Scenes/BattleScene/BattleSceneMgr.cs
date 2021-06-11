@@ -144,11 +144,11 @@ namespace XIHHotFix
             {
                 battleStartNtf?.Invoke(ntf);
             });
-            battleEndNtf = () =>
+            battleEndNtf = async() =>
             {
                 MonoNetMsgLooper.Instance.NetClients.TryRemove(NetServer.Battle, out _);
                 battleClient.Close();
-                SceneManager.LoadScene("Lobby");
+                await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LobbyScene.unity").Task;
             };
             battleClient.RegisterNtf<BattleEndNtf>((ntf) =>
             {

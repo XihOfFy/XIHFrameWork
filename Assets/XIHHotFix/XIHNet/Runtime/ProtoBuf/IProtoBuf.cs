@@ -84,7 +84,7 @@ namespace XiHNet
                     }
                     msg2Types.Add(val, type);
                     type2Msgs.Add(type, val);
-                    //Debugger.Log($"{val}:{type}");
+                    //Debugger.Log($"{mt.FullName};{val}:{type}");
 #if !XIHSERVER
                     ProtoBuf.PType.RegisterType(type.FullName,type);
 #endif

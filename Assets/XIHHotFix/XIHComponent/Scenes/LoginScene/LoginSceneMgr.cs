@@ -44,14 +44,9 @@ namespace XIHHotFix
                ToLobby();
            });
             MonoNetMsgLooper.Instance.Clear();
-            //正式游戏: 可以从网络Https下载或本地配置使用哪种方式连接
-            //本地测试: Login协议配置依据服务器ServerCfg.json配置文件
-            //string _url = "127.0.0.1";
-            string _url = "192.168.12.142";
-            //string _url = "192.168.25.128";
-            int port = 12345;
-            var address = IPAddress.Parse(_url);
-            loginClient = new NetAdapter(NetworkProtocol.Kcp, new IPEndPoint(address, port));
+
+            var address = IPAddress.Parse(IPConfig.CurCfg.loginIp);
+            loginClient = new NetAdapter(IPConfig.CurCfg.netType, new IPEndPoint(address, IPConfig.CurCfg.loginPort));
             MonoNetMsgLooper.Instance.NetClients.TryAdd(NetServer.Login, loginClient);
         }
         protected override void OnDestory()
@@ -75,6 +70,7 @@ namespace XIHHotFix
                 tips.text = "请输入正确账号或密码";
                 return;
             }
+            //Debug.Log($"{acc.text}；{pwd.text}");
             if ((await loginClient.Request(new LoginReq() { Account = acc.text, LoginType = (int)LoginType.LoginByGm, Password = pwd.text })) is LoginRsp rsp)
             {
                 if (rsp.Result == (int)LoginResultType.LoginResultSuccess)

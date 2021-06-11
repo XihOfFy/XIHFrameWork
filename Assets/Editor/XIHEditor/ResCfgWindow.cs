@@ -21,11 +21,17 @@ namespace XIHBasic
             dllVersion = data["dllVersion"].ToString();
             connKey = data["key"].ToString();
             connBundleName = data["bundleName"].ToString();
+            loginIp = (string)(data["loginIp"]??"127.0.0.1");
+            loginPort = (int)(data["loginPort"] ?? 5000);
+            loginKcp = (bool)(data["isKcp"] ?? true);
         }
         string mainUrl;//资源下载地址
         string dllVersion;//当前Dll版本
         string connKey;//判断AA网络是否正常所尝试的Key
         string connBundleName;//connKey所在bundle的名字
+        string loginIp;
+        int loginPort;
+        bool loginKcp;
         readonly string resCfgPath = $"Assets/Resources/{PlatformConfig.CONFIG_NAME}.json";//配置文件目录
         readonly string resDllPath = $"Assets/Resources/{PlatformConfig.HOTFIX_DLL_NAME}.bytes";//DLL配置文件目录
 
@@ -42,7 +48,10 @@ namespace XIHBasic
             mainUrl = EditorGUILayout.TextField("Main Url", mainUrl);
             dllVersion = EditorGUILayout.TextField("Dll Version", dllVersion);
             connKey = EditorGUILayout.TextField("检测AA网络尝试的Key", connKey);
-            connBundleName = EditorGUILayout.TextField("Key所在bundle的名字", connBundleName); 
+            connBundleName = EditorGUILayout.TextField("Key所在bundle的名字", connBundleName);
+            loginIp = EditorGUILayout.TextField("LoginIp", loginIp);
+            loginPort = EditorGUILayout.IntField("LoginPort", loginPort);
+            loginKcp = EditorGUILayout.Toggle("Is Kcp,Otherwise Tcp", loginKcp);
             EditorGUILayout.Space();
             EditorGUILayout.HelpBox($"Key只是为了检测AA网络顺畅，因为UpdateCatalogs不管网络是否连接都会执行成功，导致无网络无法更新hash和json，就默认使用缓存，造成catalog.json以为是最新\r\n查看远程资源Bundle的信息前最好在编辑器运行时进行且已更新最新的hash和catalog.json，避免漫长的等待\r\n默认Key: Assets/Bundles/CheckAANetConn.txt\r\nbundleName: aecd6b06c08b86e6e367ab1f201c5120\r\n因为只是为了检测AA网络，所以该group最好不要再添加任何资源，保持bundle内存最小", MessageType.Warning);
             if (GUILayout.Button("查看远程资源Bundle的信息,显示全部远程bundle名字"))
@@ -67,6 +76,9 @@ namespace XIHBasic
                         data["dllVersion"] = dllVersion ?? "";
                         data["key"] = connKey ?? "";
                         data["bundleName"] = connBundleName ?? "";
+                        data["loginIp"] = loginIp ?? "127.0.0.1";
+                        data["loginPort"] = loginPort;
+                        data["isKcp"] = loginKcp;
                         var json = JsonMapper.ToJson(data);
                         File.WriteAllText(resCfgPath, json);
                         File.Copy(dllPath, resDllPath, true);

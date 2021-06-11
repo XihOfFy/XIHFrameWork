@@ -1,7 +1,12 @@
 <linker>
-  <assembly fullname="Assembly-CSharp" preserve="all"/>
+  <assembly fullname="XIHBasic" preserve="all"/>
+  <assembly fullname="XIHHotFix" preserve="all"/>
   <assembly fullname="U3DThirdPart" preserve="all"/>
+  <assembly fullname="Protobuf" preserve="all"/>
   <assembly fullname="ILRuntime" preserve="all"/>
   <assembly fullname="UnityEngine" preserve="all"/>
+  <assembly fullname="Unity.Addressables" preserve="all"/>
+  <assembly fullname="Unity.ResourceManager" preserve="all"/>
+  <assembly fullname="Unity.InputSystem" preserve="all"/>
   <assembly fullname="System" preserve="all"/>
 </linker>

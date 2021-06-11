@@ -204,7 +204,7 @@ namespace XIHServer
                 int cdTime = 30000;
                 foreach (var r in robots.Values)
                 {
-                    r.btCli.Send(new BattleStartNtf() { Robots= rbs, CDTime= cdTime });
+                    r.btCli.Send(new BattleStartNtf() { Robots= rbs.ToArray(), CDTime= cdTime });
                 }
                 EndBattle(cdTime);
             }

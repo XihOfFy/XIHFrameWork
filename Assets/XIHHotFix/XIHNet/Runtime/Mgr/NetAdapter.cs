@@ -112,7 +112,9 @@ namespace XiHNet
             {
                 return NullMessage.IMessageNull;
             }
+            Debugger.Log($"Send1111111111");
             (byte[] data, TaskCompletionSource<IMessage> task) = pBProxy.SendReq(req);
+            Debugger.Log($"Send22222:{data.Length}");
             cryptor.Encrypt(data, 0, data.Length, out byte[] opt);
             byte[] body = NetConfig.BuildData(opt, req.GetMsgType());
             //Debugger.Log($"客户端发送》》:【{BitConverter.ToString(body, 0, body.Length)}】");
@@ -140,7 +142,9 @@ namespace XiHNet
             (bool suc, byte[] rem, ushort msgType, byte[] body) = NetConfig.UnpackBody(data);
             if (suc)
             {
+                Debugger.Log($"Rec1111111111");
                 cryptor.Decrypt(body, 0, body.Length, out byte[] opt);
+                Debugger.Log($"Rec22222:{opt.Length}");
                 Action act = pBProxy.DecodeRsp(opt, msgType);
                 if (act != null)
                 {

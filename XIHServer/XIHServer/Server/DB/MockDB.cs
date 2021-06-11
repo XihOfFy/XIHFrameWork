@@ -21,14 +21,14 @@ namespace XIHServer
             switch ((LoginType)req.LoginType)
             {
                 case LoginType.LoginByGm:
-                    if (req.Account.Replace(" ", "") == "" || req.Password.Replace(" ", "") == "")
+                    if (string.IsNullOrEmpty(req.Account) || string.IsNullOrEmpty(req.Password))
                     {
                         return null;
                     }
                     if (userdb.ContainsKey(req.Account) && userdb[req.Account].password.Equals(req.Password)) return userdb[req.Account];
                     break;
                 case LoginType.LoginBySDK:
-                    if (req.UniqueId.Replace(" ", "") == "")
+                    if (string.IsNullOrEmpty(req.UniqueId))
                     {
                         return null;
                     }
@@ -65,12 +65,16 @@ namespace XIHServer
 
         public bool RegisterAccount(RegisterReq req)
         {
+            if (string.IsNullOrEmpty(req.Account) || string.IsNullOrEmpty(req.Password))
+            {
+                return false;
+            }
             return RegisterAccount(LoginType.LoginByGm, req.Account, req.Password);
         }
 
         public UserBean? QueryUser(string accOrUid)
         {
-            if (userdb.ContainsKey(accOrUid)) return userdb[accOrUid];
+            if (!string.IsNullOrEmpty(accOrUid)&&userdb.ContainsKey(accOrUid)) return userdb[accOrUid];
             return null;
         }
     }

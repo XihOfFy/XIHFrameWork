@@ -21,7 +21,7 @@ namespace XiHNet
     public sealed partial class BattleStartNtf : IMessage 
     {
         [ProtoMember(1)]
-        public List<PBRobot> Robots { get; set; }
+        public PBRobot[] Robots { get; set; }
         [ProtoMember(2)]
         public int CDTime { get; set; }
         [ProtoMember(32)]

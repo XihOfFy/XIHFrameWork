@@ -18,6 +18,7 @@
 > ```
 > dotnet XIHServer.dll
 > ```
+> **若是Window，也可以直接执行XIHServer.exe**
 
 资源服务器`WebBin`可以替换为你自己的Web服务器，这只是充当资源下载功能
 
@@ -26,6 +27,7 @@
 > ```
 > dotnet XIHEmptyWeb.dll
 > ```
+> **若是Window，也可以直接执行XIHEmptyWeb.exe**
 
 #### 客户端配置
 
@@ -45,6 +47,9 @@
 - `Dll Version` 填写当前dll版本，方便热更对比
 - `检测AA网络尝试的Key`默认`Assets/Bundles/CheckAANetConn.txt` 即可
 - `Key所在bundle的名字` 需要在游戏运行时，点击`查看远程资源Bundle的信息,显示全部远程bundle名字`按钮，然后找到对应bundle名字填写到此
+- `LoginIp` 对应游戏服务器的登录IP
+- `LoginPort` 对应游戏服务器的登录端口
+- `Is Kcp,Otherwise Tcp` 对应游戏服务器的协议类型KCP/TCP
 
 **最后找到`Assets/XIHBasic/XIHBaseEnter.unity`，打开此场景，运行游戏**
 

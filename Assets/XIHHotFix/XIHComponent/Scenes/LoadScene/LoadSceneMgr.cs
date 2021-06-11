@@ -13,6 +13,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.UI;
 using XIHBasic;
+using XiHNet;
 
 namespace XIHHotFix
 {
@@ -121,6 +122,9 @@ namespace XIHHotFix
                         var data = LitJson.JsonMapper.ToObject(json);
                         string newDllVer = data["dllVersion"].ToString();
                         string newMainUrl = data["mainUrl"].ToString();
+                        IPConfig.CurCfg.loginIp= data["loginIp"].ToString();
+                        IPConfig.CurCfg.loginPort= (int)data["loginPort"];
+                        IPConfig.CurCfg.netType = (bool)data["isKcp"]? NetworkProtocol.Kcp: NetworkProtocol.Tcp;
                         if (newDllVer == dllVersion)
                         {
                             CheckResUpdate(data["bundleName"].ToString(), data["key"].ToString());
@@ -271,6 +275,7 @@ namespace XIHHotFix
         {
             if (needQuit)
             {
+                progress = 0.90f;
                 ShowTips("版本更新", "版本更新完毕，请重新运行,体验最新内容", Application.Quit, Application.Quit);
                 return;
             }
