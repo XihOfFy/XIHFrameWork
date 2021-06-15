@@ -113,7 +113,7 @@ namespace XIHHotFix
             try
             {
                 //若手机无法发送Http，修改为Https
-                HttpWebRequest request = HttpWebRequest.CreateHttp($"{prixUrl}{PlatformConfig.CONFIG_NAME}");
+                HttpWebRequest request = HttpWebRequest.CreateHttp($"{prixUrl}{PlatformConfig.CONFIG_NAME}_{PlatformConfig.PLATFORM_NAME}");
                 using (WebResponse wr = await request.GetResponseAsync())
                 {
                     using (StreamReader sr = new StreamReader(wr.GetResponseStream()))

@@ -35,7 +35,7 @@ namespace XIHBasic
         readonly string resCfgPath = $"Assets/Resources/{PlatformConfig.CONFIG_NAME}.json";//配置文件目录
         readonly string resDllPath = $"Assets/Resources/{PlatformConfig.HOTFIX_DLL_NAME}.bytes";//DLL配置文件目录
 
-        const string resOutPath= "XIHServer/Res/WebBin/Game/";//dll和资源输出路径
+        const string webResOutPath= "XIHServer/Res/WebBin/Game/";//dll和资源输出路径
         readonly string dllPath = $"Library/ScriptAssemblies/{PlatformConfig.HOTFIX_DLL_NAME}.dll";
         readonly string pdbPath = $"Library/ScriptAssemblies/{PlatformConfig.HOTFIX_DLL_NAME}.pdb";
 
@@ -58,17 +58,17 @@ namespace XIHBasic
             {
                 LogRemoteBundleName();
             }
-            EditorGUILayout.HelpBox($"当前配置文件输出目录{resCfgPath}\r\n当前Dll和配置文件输出目录:{resOutPath}", MessageType.Info);
+            EditorGUILayout.HelpBox($"当前配置文件输出目录{resCfgPath}\r\n当前Dll和配置文件输出目录:{webResOutPath}", MessageType.Info);
             EditorGUILayout.Space();
             if (GUILayout.Button("输出Dll和配置文件到目标目录"))
             {
                 //resOutPath = EditorUtility.OpenFolderPanel("请选择输出目录", resOutPath, "");
-                if (!string.IsNullOrEmpty(resOutPath) && Directory.Exists(resOutPath))
+                if (!string.IsNullOrEmpty(webResOutPath) && Directory.Exists(webResOutPath))
                 {
-                    if (EditorUtility.DisplayDialog("打包确认弹框", $"即将Dll和配置文件到目标目录:{resOutPath}", "确定", "取消"))
+                    if (EditorUtility.DisplayDialog("打包确认弹框", $"即将Dll和配置文件到目标目录:{Path.GetFullPath(webResOutPath)}", "确定", "取消"))
                     {
                         //先输出Dll到目标路径
-                        string urlDllPath = $"{resOutPath}/{PlatformConfig.HOTFIX_DLL_NAME}_{PlatformConfig.PLATFORM_NAME}";
+                        string urlDllPath = $"{webResOutPath}/{PlatformConfig.HOTFIX_DLL_NAME}_{PlatformConfig.PLATFORM_NAME}";
                         File.Copy(dllPath, urlDllPath, true);
 
                         JsonData data = new JsonData();
@@ -82,8 +82,9 @@ namespace XIHBasic
                         var json = JsonMapper.ToJson(data);
                         File.WriteAllText(resCfgPath, json);
                         File.Copy(dllPath, resDllPath, true);
-                        File.WriteAllText($"{resOutPath}/{PlatformConfig.CONFIG_NAME}", json);
-                        Debug.Log($"已生成配置：{resCfgPath}、{resDllPath}; \r\n已复制{Path.GetFileName(urlDllPath)},{PlatformConfig.CONFIG_NAME} 到目录:{resOutPath}");
+                        string urlCfgPath = $"{webResOutPath}/{PlatformConfig.CONFIG_NAME}_{PlatformConfig.PLATFORM_NAME}";
+                        File.WriteAllText(urlCfgPath, json);
+                        Debug.Log($"已生成配置：{resCfgPath}、{resDllPath}; \r\n已复制{Path.GetFileName(urlDllPath)},{Path.GetFileName(urlCfgPath)} 到目录:{Path.GetFullPath(webResOutPath)}");
                         string persistentPath = PlatformConfig.PersistentDataPath;
                         if (File.Exists($"{persistentPath}/{PlatformConfig.CONFIG_NAME}"))
                         {
