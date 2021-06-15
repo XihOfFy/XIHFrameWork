@@ -1,22 +1,22 @@
 [TOC]
 
-# Ê¹ÓÃ¡¾RSYNC¡¿ÉÏ´«×ÊÔ´µ½Centos·şÎñÆ÷
+# ä½¿ç”¨ã€RSYNCã€‘ä¸Šä¼ èµ„æºåˆ°CentosæœåŠ¡å™¨
 
-## Centos7·şÎñ¶Ë°²×°RSYNC
+## Centos7æœåŠ¡ç«¯å®‰è£…RSYNC
 
-- ÔÚCentosÆ½Ì¨ÏÂ°²×°Rsync£º
+- åœ¨Centoså¹³å°ä¸‹å®‰è£…Rsyncï¼š
 
 ```
 sudo yum -y install rsync
 ```
 
-- ´ò¿ªRSyncµÄÅäÖÃÎÄ¼ş£¬²¢½«ÎÄ¼ş°´ÈçÏÂ¸ñÊ½ĞŞ¸Ä£¬È»ºó±£´æ
+- æ‰“å¼€RSyncçš„é…ç½®æ–‡ä»¶ï¼Œå¹¶å°†æ–‡ä»¶æŒ‰å¦‚ä¸‹æ ¼å¼ä¿®æ”¹ï¼Œç„¶åä¿å­˜
 
 ```
-sudo vim /etc/rsyncd.conf #´ò¿ªÅäÖÃÎÄ¼ş
+sudo vim /etc/rsyncd.conf #æ‰“å¼€é…ç½®æ–‡ä»¶
 ```
 
-ĞŞ¸ÄÈçÏÂ£¬È«²¿¸´ÖÆÈ»ºóÌæ»»Ô´ÅäÖÃÎÄ¼ş¼´¿É
+ä¿®æ”¹å¦‚ä¸‹ï¼Œå…¨éƒ¨å¤åˆ¶ç„¶åæ›¿æ¢æºé…ç½®æ–‡ä»¶å³å¯
 
 ```
 fake super = yes
@@ -34,87 +34,88 @@ secrets file = /home/fy/xihsvr/rsync.pwd
 list = yes
 ```
 
-ÒÔÉÏÅäÖÃÎÄ¼ş¿É°´ĞèĞŞ¸Ä£¬ÍÆ¼öÖ»ĞŞ¸ÄÈçÏÂÅäÖÃ
+ä»¥ä¸Šé…ç½®æ–‡ä»¶å¯æŒ‰éœ€ä¿®æ”¹ï¼Œæ¨èåªä¿®æ”¹å¦‚ä¸‹é…ç½®
 
-**[Sync]**:  Ä£¿éÃû×Ö,×ÔĞĞ¶¨Òå£¬Ö®ºó¿Í»§¶ËÉÏ´«ĞèÒªÓÃµ½
+**[Sync]**:  æ¨¡å—åå­—,è‡ªè¡Œå®šä¹‰ï¼Œä¹‹åå®¢æˆ·ç«¯ä¸Šä¼ éœ€è¦ç”¨åˆ°
 
-**path = /home/fy/xihsvr/Sync**: ·şÎñÆ÷´æ·ÅµÄÂ·¾¶`Îñ±ØĞŞ¸ÄÎªÄã×Ô¼ºµÄ`£¬¿ÉÒÔ×ÔĞĞ½¨Á¢ĞÂÂ·¾¶ºÍÎÄ¼ş¼Ğ´æ·Å£¬±ğ·ÅÔÚRootÈ¨ÏŞÏÂµÄÄ¿Â¼£¬²»È»ºÜ¶àÈ¨ÏŞÎÊÌâ£¬´¦ÀíÆğÀ´Âé·³
+**path = /home/fy/xihsvr/Sync**: æœåŠ¡å™¨å­˜æ”¾çš„è·¯å¾„`åŠ¡å¿…ä¿®æ”¹ä¸ºä½ è‡ªå·±çš„`ï¼Œå¯ä»¥è‡ªè¡Œå»ºç«‹æ–°è·¯å¾„å’Œæ–‡ä»¶å¤¹å­˜æ”¾ï¼Œåˆ«æ”¾åœ¨Rootæƒé™ä¸‹çš„ç›®å½•ï¼Œä¸ç„¶å¾ˆå¤šæƒé™é—®é¢˜ï¼Œå¤„ç†èµ·æ¥éº»çƒ¦
 
-**secrets file = /home/fy/xihsvr/rsync.pwd**: ËùÓĞ¿Í»§¶ËÕËºÅÃÜÂë±£´æÂ·¾¶,`Îñ±ØĞŞ¸ÄÎªÄã×Ô¼ºµÄ`£¬¿Í»§¶ËÁ¬½ÓÕËºÅÃÜÂëÓë¸ÃÅäÖÃÆ¥Åä²Å¿ÉÒÔÕı³£Á¬½Ó
+**secrets file = /home/fy/xihsvr/rsync.pwd**: æ‰€æœ‰å®¢æˆ·ç«¯è´¦å·å¯†ç ä¿å­˜è·¯å¾„,`åŠ¡å¿…ä¿®æ”¹ä¸ºä½ è‡ªå·±çš„`ï¼Œå®¢æˆ·ç«¯è¿æ¥è´¦å·å¯†ç ä¸è¯¥é…ç½®åŒ¹é…æ‰å¯ä»¥æ­£å¸¸è¿æ¥
 
-- Ìí¼Ó¿Í»§¶ËÕËºÅÃÜÂë½ø**rsync.pwd**ÎÄ¼ş,¶ÔÓ¦Â·¾¶`Îñ±ØĞŞ¸ÄÎªÄã×Ô¼ºµÄ`
+- æ·»åŠ å®¢æˆ·ç«¯è´¦å·å¯†ç è¿›**rsync.pwd**æ–‡ä»¶,å¯¹åº”è·¯å¾„`åŠ¡å¿…ä¿®æ”¹ä¸ºä½ è‡ªå·±çš„`
 
 ```
-echo 'fy:fy'>/home/fy/xihsvr/rsync.pwd #fyÎªÕËºÅºóÃæµÄÊÇÃÜÂë£¬ÒÔÃ°ºÅ·Ö¸î£¬Õâ¸ö²»ÊÇCentos7µÄµÇÂ½ÕËºÅºÍÃÜÂë£¬ÕâÊÇÍêÈ«×Ô¼º¾ö¶¨µÄ£¬¿Í»§¶ËĞèÒªÓÃµ½
+echo 'fy:fy'>/home/fy/xihsvr/rsync.pwd #fyä¸ºè´¦å·åé¢çš„æ˜¯å¯†ç ï¼Œä»¥å†’å·åˆ†å‰²ï¼Œè¿™ä¸ªä¸æ˜¯Centos7çš„ç™»é™†è´¦å·å’Œå¯†ç ï¼Œè¿™æ˜¯å®Œå…¨è‡ªå·±å†³å®šçš„ï¼Œå®¢æˆ·ç«¯éœ€è¦ç”¨åˆ°
 ```
 
-- ĞŞ¸Ä**rsync.pwd**ÎÄ¼şÈ¨ÏŞ,¶ÔÓ¦Â·¾¶`Îñ±ØĞŞ¸ÄÎªÄã×Ô¼ºµÄ`
+- ä¿®æ”¹**rsync.pwd**æ–‡ä»¶æƒé™,å¯¹åº”è·¯å¾„`åŠ¡å¿…ä¿®æ”¹ä¸ºä½ è‡ªå·±çš„`
 
 ```
 chmod 600 /home/fy/xihsvr/rsync.pwd
 ```
 
-- Æô¶¯Rsync·şÎñ£¬Ä¬ÈÏ¶Ë¿Ú873
+- å¯åŠ¨RsyncæœåŠ¡ï¼Œé»˜è®¤ç«¯å£873
 
 ```
-sudo setenforce 0 #ÁÙÊ±¹Ø±ÕSElinux
+sudo setenforce 0 #ä¸´æ—¶å…³é—­SElinux
 sudo systemctl start rsyncd 
 ```
 
-- ²é¿´ÊÇ·ñÆô¶¯£¬²¢²é¿´Õ¼ÓÃµÄ¶Ë¿ÚÊÇ·ñ°üº¬873£¬Èç¹ûÓĞËµÃ÷Æô¶¯³É¹¦
+- æŸ¥çœ‹æ˜¯å¦å¯åŠ¨ï¼Œå¹¶æŸ¥çœ‹å ç”¨çš„ç«¯å£æ˜¯å¦åŒ…å«873ï¼Œå¦‚æœæœ‰è¯´æ˜å¯åŠ¨æˆåŠŸ
 
 ```
 netstat -tlunp
 ```
 
-- ÎªÁËÍâ½çÄÜÁ¬½Óµ½´Ë·şÎñÆ÷¶Ë¿Ú£¬ĞèÒª½«873¶Ë¿Ú±©Â¶
+- ä¸ºäº†å¤–ç•Œèƒ½è¿æ¥åˆ°æ­¤æœåŠ¡å™¨ç«¯å£ï¼Œéœ€è¦å°†873ç«¯å£æš´éœ²
 
 ```
-firewall-cmd --zone=public --add-port=873/tcp --permanent #½«¶Ë¿Ú±©Â¶
-firewall-cmd --reload #ÖØÔØ·À»ğÇ½
-firewall-cmd --zone=public --list-ports #²é¿´·À»ğÇ½±©Â¶µÄ¶Ë¿Ú£¬Èç¹ûÓĞ873ËµÃ÷ÄÜ´ÓÍâ½çÁ¬½Ó¸Ã·şÎñÆ÷µÄRsync·şÎñ
+firewall-cmd --zone=public --add-port=873/tcp --permanent #å°†ç«¯å£æš´éœ²
+firewall-cmd --reload #é‡è½½é˜²ç«å¢™
+firewall-cmd --zone=public --list-ports #æŸ¥çœ‹é˜²ç«å¢™æš´éœ²çš„ç«¯å£ï¼Œå¦‚æœæœ‰873è¯´æ˜èƒ½ä»å¤–ç•Œè¿æ¥è¯¥æœåŠ¡å™¨çš„RsyncæœåŠ¡
 ```
 
-## ¿Í»§¶ËÊ¹ÓÃRSYNC
+## å®¢æˆ·ç«¯ä½¿ç”¨RSYNC
 
-- ½øÈëUnity\XiHNet\XIHServer£¬´ò¿ªcmdÖ´ĞĞ:
+- è¿›å…¥Unity\XiHNet\XIHServerï¼Œæ‰“å¼€cmdæ‰§è¡Œ:
 
 ```
 D:\WorkSpace\Unity\XiHNet\XIHServer\Tools\cwrsync\rsync.exe -vzrtopg --password-file=./Tools/cwrsync/config/rsync.secrets --exclude-from=./Tools/cwrsync/config/exclude.txt --delete ./ fy@192.168.25.128::Sync/ --chmod=ugo=rwX
 ```
 
-½âÊÍÏÂÉÏÃæµÄÃüÁî£º
+è§£é‡Šä¸‹ä¸Šé¢çš„å‘½ä»¤ï¼š
 
-**D:\WorkSpace\Unity\XiHNet\XIHServer\Tools\cwrsync\rsync.exe**: rsync.exeËùÔÚµÄÄ¿Â¼£¨ĞèÒª¸ÄÎª×Ô¼ºµÄ£©
+**D:\WorkSpace\Unity\XiHNet\XIHServer\Tools\cwrsync\rsync.exe**: rsync.exeæ‰€åœ¨çš„ç›®å½•ï¼ˆéœ€è¦æ”¹ä¸ºè‡ªå·±çš„ï¼‰
 
-**--password-file=./Tools/cwrsync/config/rsync.secrets**: ÃÜÂë´æ·ÅÂ·¾¶(²»°üº¬ÕËºÅĞÅÏ¢)£¬¶ÔÓ¦ÕËºÅÎª**fy@192.168.25.128::Sync/**ÖĞµÄ**fy**
+**--password-file=./Tools/cwrsync/config/rsync.secrets**: å¯†ç å­˜æ”¾è·¯å¾„(ä¸åŒ…å«è´¦å·ä¿¡æ¯)ï¼Œå¯¹åº”è´¦å·ä¸º**fy@192.168.25.128::Sync/**ä¸­çš„**fy**
 
-**--exclude-from=./Tools/cwrsync/config/exclude.txt**: ÎŞĞèÍ¬²½µ½·şÎñÆ÷µÄÎÄ¼ş£¬¿ÉÒÔ×ÔĞĞÌí¼Ó
+**--exclude-from=./Tools/cwrsync/config/exclude.txt**: æ— éœ€åŒæ­¥åˆ°æœåŠ¡å™¨çš„æ–‡ä»¶ï¼Œå¯ä»¥è‡ªè¡Œæ·»åŠ 
 
-**--delete ./**: É¾³ı·şÎñÆ÷ËùÓĞ²»Ò»ÖÂµÄÎÄ¼ş£¬±£³ÖÓë¿Í»§¶ËÎÄ¼şÍ¬²½
+**--delete ./**: åˆ é™¤æœåŠ¡å™¨æ‰€æœ‰ä¸ä¸€è‡´çš„æ–‡ä»¶ï¼Œä¿æŒä¸å®¢æˆ·ç«¯æ–‡ä»¶åŒæ­¥
 
-**fy@192.168.25.128::Sync/**: Ê¹ÓÃÕËºÅÎª**fy**È¥Í¬²½ÎÄ¼ş(`×¢Òâfy²»ÊÇCentosµÄÕËºÅÃû£¬¶øÊÇÔÚ·şÎñ¶Ë/home/fy/xihsvr/rsync.pwdÎÄ¼şÄÚ°üº¬µÄÕËºÅ`)£¬¶ÔÓ¦Ä£¿éÎª**Sync**(¼´·şÎñ¶Ë/etc/rsyncd.confÎÄ¼şÄÚÅäÖÃµÄÄ£¿éÃû)
+**fy@192.168.25.128::Sync/**: ä½¿ç”¨è´¦å·ä¸º**fy**å»åŒæ­¥æ–‡ä»¶(`æ³¨æ„fyä¸æ˜¯Centosçš„è´¦å·åï¼Œè€Œæ˜¯åœ¨æœåŠ¡ç«¯/home/fy/xihsvr/rsync.pwdæ–‡ä»¶å†…åŒ…å«çš„è´¦å·`)ï¼Œå¯¹åº”æ¨¡å—ä¸º**Sync**(å³æœåŠ¡ç«¯/etc/rsyncd.confæ–‡ä»¶å†…é…ç½®çš„æ¨¡å—å)
 
-# ÈçºÎÔËĞĞÔ¶¶Ë·şÎñÆ÷
+# å¦‚ä½•è¿è¡Œè¿œç«¯æœåŠ¡å™¨
 
-- Ö±½ÓÔÚ·şÎñ¶Ë½øÈëRSYNCµÄÍ¬²½Ä¿Â¼ÏÂµÄ**Sync/Res/ServerBin/net5.0/**Ä¿Â¼£¬Ö´ĞĞ
+- ç›´æ¥åœ¨æœåŠ¡ç«¯è¿›å…¥RSYNCçš„åŒæ­¥ç›®å½•ä¸‹çš„**Sync/Res/ServerBin/net5.0/**ç›®å½•ï¼Œæ‰§è¡Œ
 
->  ÎŞ.Net5»·¾³¿ÉÒÔÏÈÈ¥ÕâÀï°²×°: [ÔÚ CentOS ÉÏ°²×° .NET - .NET | Microsoft Docs](https://docs.microsoft.com/zh-cn/dotnet/core/install/linux-centos)
+>  æ— .Net5ç¯å¢ƒå¯ä»¥å…ˆå»è¿™é‡Œå®‰è£…: [åœ¨ CentOS ä¸Šå®‰è£… .NET - .NET | Microsoft Docs](https://docs.microsoft.com/zh-cn/dotnet/core/install/linux-centos)
 
 ```
 [fy@localhost ~]$ cd xihsvr/Sync/Res/ServerBin/net5.0/
+#å…ˆå°†./Config/ServerCfg.jsonçš„Addråœ°å€ä¿®æ”¹ä¸ºè‡ªå·±æœ¬æœºçš„IPåœ°å€
 [fy@localhost ~]$ dotnet XIHServer.dll
 ```
 
-- ½«·şÎñÆ÷¶Ë¿Ú±©Â¶,ÈÃÍâ²¿ÄÜÁ¬½Ó£¬ÆäËû¶Ë¿ÚÀàËÆ
+- å°†æœåŠ¡å™¨ç«¯å£æš´éœ²,è®©å¤–éƒ¨èƒ½è¿æ¥ï¼Œå…¶ä»–ç«¯å£ç±»ä¼¼
 
-> **12345/udp**¡¢**54321/tcp**Îª`Unity\XiHNet\XIHServer\XIHServer\Server\Config\SvrConfig.cs`ÅäÖÃµÄ¶Ë¿Ú
+> **12345/udp**ã€**54321/tcp**ä¸º`XIHServer\XIHServer\Config\SvrConfig.cs`é…ç½®çš„ç«¯å£
 
 ```
-sudo setenforce 0 #ÁÙÊ±¹Ø±ÕSElinux
-firewall-cmd --zone=public --add-port=12345/udp --permanent #½«·şÎñÆ÷TCP¶Ë¿Ú±©Â¶
-firewall-cmd --zone=public --add-port=54321/tcp --permanent #½«·şÎñÆ÷KCP¶Ë¿Ú±©Â¶
-firewall-cmd --reload #ÖØÔØ·À»ğÇ½
-firewall-cmd --zone=public --list-ports #²é¿´·À»ğÇ½±©Â¶µÄ¶Ë¿Ú£¬Èç¹ûÓĞËµÃ÷ÄÜ´ÓÍâ½çÁ¬½Ó¸Ã·şÎñ
+sudo setenforce 0 #ä¸´æ—¶å…³é—­SElinux
+firewall-cmd --zone=public --add-port=12345/udp --permanent #å°†æœåŠ¡å™¨TCPç«¯å£æš´éœ²
+firewall-cmd --zone=public --add-port=54321/tcp --permanent #å°†æœåŠ¡å™¨KCPç«¯å£æš´éœ²
+firewall-cmd --reload #é‡è½½é˜²ç«å¢™
+firewall-cmd --zone=public --list-ports #æŸ¥çœ‹é˜²ç«å¢™æš´éœ²çš„ç«¯å£ï¼Œå¦‚æœæœ‰è¯´æ˜èƒ½ä»å¤–ç•Œè¿æ¥è¯¥æœåŠ¡
 ```
 

@@ -29,6 +29,8 @@
 > ```
 > **若是Window，也可以直接执行XIHEmptyWeb.exe**
 
+**以上配置目前可以在Unity的菜单栏【XIHUtil>Server>对应功能】开启**
+
 #### 客户端配置
 
 打开Unity项目
