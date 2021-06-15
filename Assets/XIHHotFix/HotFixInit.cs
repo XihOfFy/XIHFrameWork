@@ -2,7 +2,6 @@ using XIHBasic;
 using UnityEngine;
 using System;
 using UnityEngine.AddressableAssets;
-using UnityEngine.AddressableAssets.ResourceLocators;
 
 namespace XIHHotFix {
     public static class HotFixInit

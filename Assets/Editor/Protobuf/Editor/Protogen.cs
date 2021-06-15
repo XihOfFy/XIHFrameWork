@@ -9,9 +9,9 @@ using ProtoBuf.Reflection;
 using System.IO;
 
 public class Protogen {
-    [MenuItem("XIHUtil/Bundle/Generate Protocs")]
-    public static void GenerateProtobufCS(){
-		Generate(Application.dataPath + "/../../../Others/Proto/", new string[]{"mmopb.proto"},Application.dataPath + "/../../HotFix/");
+	//[MenuItem("XIHUtil/Bundle/Generate Protocs")] 直接代码撸
+	public static void GenerateProtobufCS(){
+		Generate("./PBB/In/", new string[]{ "Battle.proto" },"./PBB/Out/");
     }
     static void Generate(string inpath,string[] inprotos,string outpath){
 

@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 namespace XIHBasic {
     public sealed class SvrMenus
@@ -21,5 +22,16 @@ namespace XIHBasic {
             ProcessUtil.Run(Path.GetFullPath("./XIHServer/Tools/cwrsync/rsync.exe"), $"-vzrtopg --password-file={Path.GetFullPath("./XIHServer/Tools/cwrsync/config/rsync.secrets")} --exclude-from={Path.GetFullPath("./XIHServer/Tools/cwrsync/config/exclude.txt")} --delete ./ {LINUX_IP}::Sync/ --chmod=ugo=rwX", "./XIHServer/Res");
             //ProcessUtil.Run("./rsync.exe", $"-vzrtopg --password-file=./config/rsync.secrets --exclude-from=./config/exclude.txt --delete ./ {LINUX_IP}::Sync/ --chmod=ugo=rwX", "./XIHServer/Tools/cwrsync");
         }
+        [MenuItem("XIHUtil/Run XIHBaseEnter Scene")]
+        static void StartRunXIHBaseEnter()
+        {
+            if (!EditorApplication.isPlaying)
+            {
+                if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                    EditorSceneManager.OpenScene("Assets/XIHBasic/XIHBaseEnter.unity");
+            }
+            EditorApplication.isPlaying = !EditorApplication.isPlaying;
+        }
+
     }
 }

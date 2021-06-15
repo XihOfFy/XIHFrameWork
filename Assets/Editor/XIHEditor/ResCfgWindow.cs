@@ -53,7 +53,7 @@ namespace XIHBasic
             loginPort = EditorGUILayout.IntField("LoginPort", loginPort);
             loginKcp = EditorGUILayout.Toggle("Is Kcp,Otherwise Tcp", loginKcp);
             EditorGUILayout.Space();
-            EditorGUILayout.HelpBox($"Key只是为了检测AA网络顺畅，因为UpdateCatalogs不管网络是否连接都会执行成功，导致无网络无法更新hash和json，就默认使用缓存，造成catalog.json以为是最新\r\n查看远程资源Bundle的信息前最好在编辑器运行时进行且已更新最新的hash和catalog.json，避免漫长的等待\r\n默认Key: Assets/Bundles/CheckAANetConn.txt\r\nbundleName: aecd6b06c08b86e6e367ab1f201c5120\r\n因为只是为了检测AA网络，所以该group最好不要再添加任何资源，保持bundle内存最小", MessageType.Warning);
+            EditorGUILayout.HelpBox($"Key只是为了检测AA网络顺畅，因为UpdateCatalogs不管网络是否连接都会执行成功，导致无网络无法更新hash和json，就默认使用缓存，造成catalog.json以为是最新\r\n查看远程资源Bundle的信息前最好在编辑器运行时进行,AA服务器开启状态且已更新最新的hash和catalog.json，避免漫长的等待\r\n默认Key: Assets/Bundles/CheckAANetConn.txt\r\nbundleName: aecd6b06c08b86e6e367ab1f201c5120\r\n因为只是为了检测AA网络，所以该group最好不要再添加任何资源，保持bundle内存最小", MessageType.Warning);
             if (GUILayout.Button("查看远程资源Bundle的信息,显示全部远程bundle名字"))
             {
                 LogRemoteBundleName();
