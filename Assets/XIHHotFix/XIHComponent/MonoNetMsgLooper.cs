@@ -8,9 +8,9 @@ using XiHNet;
 
 namespace XIHHotFix
 {
-    public class MonoNetMsgLooper : AbsComponent
+    public class MonoNetMsgLooper : AbsSingletonComponent<MonoNetMsgLooper>
     {
-        private MonoNetMsgLooper(MonoDotBase dot) : base(dot) { }
+        protected MonoNetMsgLooper(MonoManual dot) : base(dot) { }
         public bool IsFoucus { get; private set; }
         public LoginRsp LoginRsp { get; set; }
         public LobbyJoinRoomRsp LobbyJoinRoomRsp { get; set; }
@@ -20,8 +20,6 @@ namespace XIHHotFix
         {
             OnReVerify?.Invoke();
         }
-        private static MonoNetMsgLooper instance;
-        public static MonoNetMsgLooper Instance => instance;
         public ConcurrentDictionary<NetServer, NetAdapter> NetClients { get; private set; }
         void Update()
         {
@@ -50,13 +48,7 @@ namespace XIHHotFix
 
         protected override void Awake()
         {
-            if (instance != null)
-            {
-                GameObject.Destroy(MonoDot.gameObject);
-                return;
-            }
-            instance = this;
-            GameObject.DontDestroyOnLoad(MonoDot.gameObject);
+            base.Awake();
             NetClients = new ConcurrentDictionary<NetServer, NetAdapter>();
             HotFixInit.Update += Update;
         }
@@ -71,7 +63,7 @@ namespace XIHHotFix
 
         protected override void OnDestory()
         {
-            if (instance == this) HotFixInit.Update -= Update;
+            if (Instance == this) HotFixInit.Update -= Update;
         }
     }
 }

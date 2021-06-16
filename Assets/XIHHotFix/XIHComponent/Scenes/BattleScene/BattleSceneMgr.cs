@@ -12,7 +12,7 @@ using XiHNet;
 
 namespace XIHHotFix
 {
-    public class BattleSceneMgr : AbsComponent
+    public class BattleSceneMgr : AbsComponent<MonoTouch>
     {
         protected BattleSceneMgr(MonoTouch dot) : base(dot) { }
         NetAdapter battleClient;
@@ -34,15 +34,14 @@ namespace XIHHotFix
         private Dictionary<int, Vector3> dirSpeed;
         protected override void Awake()
         {
-            MonoTouch dot = MonoDot as MonoTouch;
-            dot.onBeginDrag = OnBeginDrag;
-            dot.onDrag = OnDrag;
-            dot.onEndDrag = OnEndDrag;
-            playerPrefab = dot.GameObjsDic["Player"];
-            followCam = dot.GameObjsDic["PlayerCamera"].transform;
-            moveImg = dot.GameObjsDic["Point"].GetComponent<RectTransform>();
-            cdTimeTx = dot.GameObjsDic["CD"].GetComponent<Text>();
-            exitBtn = dot.GameObjsDic["Exit"].GetComponent<Button>();
+            MonoDot.onBeginDrag = OnBeginDrag;
+            MonoDot.onDrag = OnDrag;
+            MonoDot.onEndDrag = OnEndDrag;
+            playerPrefab = MonoDot.GameObjsDic["Player"];
+            followCam = MonoDot.GameObjsDic["PlayerCamera"].transform;
+            moveImg = MonoDot.GameObjsDic["Point"].GetComponent<RectTransform>();
+            cdTimeTx = MonoDot.GameObjsDic["CD"].GetComponent<Text>();
+            exitBtn = MonoDot.GameObjsDic["Exit"].GetComponent<Button>();
             exitBtn.onClick.AddListener(async () =>
             {
                 var lobbyClient = MonoNetMsgLooper.Instance.NetClients[NetServer.Lobby];
@@ -179,6 +178,13 @@ namespace XIHHotFix
         Vector3[] refV3others;
         private void FixedUpdate()
         {
+            foreach (var rb in robots.Values)
+            {
+                if (rb.isSelf) continue;
+                //rb.playerTr.position = Vector3.Lerp(rb.lastVec3, rb.targetVec3, 0.1f);
+                rb.playerTr.position = Vector3.SmoothDamp(rb.lastVec3, rb.targetVec3, ref refV3others[rb.orderInRoom], 0.25f);
+                rb.lastVec3 = rb.playerTr.position;
+            }
             if (selfRgb == null) return;
             ++frame;
             if (frame >= 5)
@@ -193,13 +199,6 @@ namespace XIHHotFix
 
         private void Update()
         {
-            foreach (var rb in robots.Values)
-            {
-                if (rb.isSelf) continue;
-                //rb.playerTr.position = Vector3.Lerp(rb.lastVec3, rb.targetVec3, 0.1f);
-                rb.playerTr.position = Vector3.SmoothDamp(rb.lastVec3, rb.targetVec3, ref refV3others[rb.orderInRoom], 0.25f);
-                rb.lastVec3 = rb.playerTr.position;
-            }
 #if UNITY_EDITOR && UNITY_EDITOR_WIN
             if (Keyboard.current.leftShiftKey.isPressed)
             {

@@ -12,9 +12,9 @@ using XiHNet;
 
 namespace XIHHotFix
 {
-    public class LobbySceneMgr : AbsComponent
+    public class LobbySceneMgr : AbsComponent<MonoDotBase>
     {
-        private LobbySceneMgr(MonoDotBase dot) : base(dot) { }
+        protected LobbySceneMgr(MonoDotBase dot) : base(dot) { }
         NetAdapter lobbyClient;
         private InputField chatMsg;
         private Text chatInfos;

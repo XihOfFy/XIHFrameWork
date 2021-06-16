@@ -17,7 +17,7 @@ using XiHNet;
 
 namespace XIHHotFix
 {
-    public class LoadSceneMgr : AbsComponent
+    public class LoadSceneMgr : AbsComponent<MonoDotBase>
     {
         protected LoadSceneMgr(MonoDotBase dot) : base(dot) { }
         private float progress;

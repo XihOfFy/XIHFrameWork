@@ -10,30 +10,17 @@ using Object = UnityEngine.Object;
 namespace XIHBasic
 {
     /// <summary>
+    /// Awake时调用<see cref="MonoManual.Inject(string)"> ，实现脚本自动注入
     /// Update等相关调用放入全局中，避免反射放在Update中
     /// </summary>
-    public class MonoDotBase : MonoBehaviour
+    public class MonoDotBase : MonoManual
     {
         public string hotFixTypeName;
         [SerializeField]
         private List<GameObject> gameObjArr;
         public Dictionary<string, GameObject> GameObjsDic { get; private set; } = new Dictionary<string, GameObject>();
-
-#if UNITY_EDITOR
-        private ILTypeInstance instance;
-#endif
-        public Action onEnable;
-        public Action onDisable;
-        public Action onDestory;
         private void Awake()
         {
-            var domain = HotFixBridge.Appdomain;
-            if (domain == null || !domain.LoadedTypes.ContainsKey(hotFixTypeName))
-            {
-                Debug.LogError($"未在热更DLL中找到{hotFixTypeName}类");
-                Destroy(this);
-                return;
-            }
             foreach (var gb in gameObjArr)
             {
                 if (GameObjsDic.ContainsKey(name))
@@ -43,10 +30,7 @@ namespace XIHBasic
                 }
                 GameObjsDic.Add(gb.name, gb);
             }
-#if UNITY_EDITOR
-            instance =
-#endif
-        domain.Instantiate(hotFixTypeName, new object[] { this });//装箱拆箱操作，有GC
+            Inject(hotFixTypeName);
         }
         private void OnEnable()
         {

@@ -40,7 +40,7 @@ namespace XIHBasic
                     p = new MemoryStream(pdb);
                     Appdomain.LoadAssembly(fs, p, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
                     Appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
-                    Appdomain.DebugService.StartDebugService(56001);
+                    Appdomain.DebugService.StartDebugService(56000);
                 }
 #else
                 Appdomain.LoadAssembly(fs);

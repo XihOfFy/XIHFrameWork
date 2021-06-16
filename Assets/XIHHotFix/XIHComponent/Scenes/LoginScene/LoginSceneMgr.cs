@@ -8,9 +8,9 @@ using XiHNet;
 
 namespace XIHHotFix
 {
-    public class LoginSceneMgr : AbsComponent
+    public class LoginSceneMgr : AbsComponent<MonoDotBase>
     {
-        private LoginSceneMgr(MonoDotBase dot) : base(dot) { }
+        protected LoginSceneMgr(MonoDotBase dot) : base(dot) { }
         private GameObject loginUI;
         private GameObject enterUI;
         private InputField acc;
