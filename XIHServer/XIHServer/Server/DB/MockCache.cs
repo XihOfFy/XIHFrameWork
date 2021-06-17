@@ -24,7 +24,9 @@ namespace XIHServer
             else {
                 WaitVerify.Remove(sessionKey);//被踢的玩家，直接移除
             }
-
+            if (netClient.Map != null) {
+                netClient.Map.room.Leave(player);
+            }
         }
         public async static void RemoveSessionkey(string key, ulong sessionKey) {
             await Task.Delay(NetConfig.RecTimeOut * 10);

@@ -19,6 +19,7 @@ namespace XIHServer
                         if (map != null) {
                             map.robots[ntf.PlayerOrderInRoom].btCli = client;
                             client.Map = map;
+                            client.Player = player;
                             map.StartBattle();
                             client.AuthStatus = ClientAuth.Authed;
                         }

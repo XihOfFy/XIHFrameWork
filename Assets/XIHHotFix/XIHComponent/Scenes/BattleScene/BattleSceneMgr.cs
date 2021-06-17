@@ -138,6 +138,8 @@ namespace XIHHotFix
                     await Task.Delay(1000);
                     cdTime = (desT - DateTime.Now).Seconds;
                 }
+				if (cdTimeTx != null)
+                    cdTimeTx.text = "CD:0";
             };
             battleClient.RegisterNtf<BattleStartNtf>((ntf) =>
             {
@@ -172,7 +174,13 @@ namespace XIHHotFix
                 SessionKey = MonoNetMsgLooper.Instance.LoginRsp.SessionKey,
             });
             battleClient.StartPingPong();
-
+			battleClient.OnClosed = () => {
+                Debug.Log($"OnClosed: {MonoNetMsgLooper.Instance.NetClients.ContainsKey(NetServer.Battle)}");
+                if (MonoNetMsgLooper.Instance.NetClients.ContainsKey(NetServer.Battle)) {
+                    //切换后台过久导致断线
+                    OnReVerify();
+                }
+            };
         }
         short frame = 0;
         Vector3[] refV3others;

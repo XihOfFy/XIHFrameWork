@@ -32,17 +32,5 @@ namespace XIHBasic
             }
             Inject(hotFixTypeName);
         }
-        private void OnEnable()
-        {
-            onEnable?.Invoke();
-        }
-        private void OnDisable()
-        {
-            onDisable?.Invoke();
-        }
-        private void OnDestroy()
-        {
-            onDestory?.Invoke();
-        }
     }
 }

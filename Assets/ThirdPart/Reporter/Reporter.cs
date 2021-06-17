@@ -370,7 +370,6 @@ public class Reporter : MonoBehaviour
 #endif
             DontDestroyOnLoad(gameObject);
             UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
-            Debug.Log("DontDestroyOnLoad");
 #if UNITY_CHANGE1
 			Application.RegisterLogCallback (new Application.LogCallback (CaptureLog));
 			Application.RegisterLogCallbackThreaded (new Application.LogCallback (CaptureLogThread));
