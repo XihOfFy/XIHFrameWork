@@ -76,9 +76,28 @@ namespace XiHNet
         private async void StartRecUpdate()
         {
             source = new CancellationTokenSource();
-            XIHHotFix.HotFixInit.Update += Update;
+            DateTime d2 = new DateTime(2000, 1, 1);
             var now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
             _lastRecvTime = (uint)(now & 0xFFFFFFFF);
+            XiHTimer timer = new XiHTimer();
+            timer.SetTimer(() => {
+                if (NetState == NetState.Open)
+                {
+                    while (updateActs.Count > 0)
+                    {
+                        updateActs.Dequeue().Invoke();
+                    }
+                    now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
+                    if (!Update((uint)(now & 0xFFFFFFFF)))
+                    {
+                        timer.Close();
+                    }
+                }
+                else
+                {
+                    timer.Close();
+                }
+            }, NetConfig.KcpInterval);
             await await Task.Factory.StartNew(async () =>
             {
                 try
@@ -94,9 +113,9 @@ namespace XiHNet
                                 Debugger.Log("终端主动断开连接");
                                 break;
                             }
-                            updateActs.Enqueue(()=> _rcvQueue.Enqueue(data));
+                            updateActs.Enqueue(() => _rcvQueue.Enqueue(data));
                         }
-                        await Task.Delay(NetConfig.KcpInterval >> 1);
+                        await Task.Delay(NetConfig.KcpInterval);
                     }
                 }
                 catch (Exception e)
@@ -106,21 +125,7 @@ namespace XiHNet
             }, source.Token);
             Close();
         }
-        readonly Queue<Action> updateActs=new Queue<Action>();
-        readonly DateTime d2 = new DateTime(2000, 1, 1);
-        private void Update() {
-            while (updateActs.Count > 0) {
-                updateActs.Dequeue().Invoke();
-            }
-            if (NetState == NetState.Open)
-            {
-                var now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
-                if (!Update((uint)(now & 0xFFFFFFFF)))
-                {
-                    Close();
-                }
-            }
-        }
+        readonly Queue<Action> updateActs = new Queue<Action>();
         private void PushToRecvQueue(byte[] data)
         {
             //ILRunTime下不要使用lock，最好直接post到mainthread
@@ -203,12 +208,36 @@ namespace XiHNet
             }
             return current - _lastRecvTime <= _recvTimeoutMM;
         }
+
+        private async void StartKcpUpdate()
+        {
+            await await Task.Factory.StartNew(async () =>
+            {
+                DateTime d2 = new DateTime(2000, 1, 1);
+                var now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
+                _lastRecvTime = (uint)(now & 0xFFFFFFFF);
+                while (NetState == NetState.Open)
+                {
+                    now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
+                    if (Update((uint)(now & 0xFFFFFFFF)))
+                    {
+                        await Task.Delay(NetConfig.KcpInterval);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }, source.Token);
+            UnityEngine.Debug.Log("StartKcpUpdate");
+            Close();
+        }
+
         public override void Close()
         {
             if (NetState == NetState.Closed)
                 return;
             NetState = NetState.Closed;
-            XIHHotFix.HotFixInit.Update -= Update;
             if (_client != null)
             {
                 try
