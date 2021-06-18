@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -14,8 +15,7 @@ namespace XiHNet
         private UdpClient _client = null;
         // recv buffer
         private readonly byte[] _kcpRcvBuf;
-        private Queue<byte[]> _rcvQueue;
-        private Queue<byte[]> _forGround;
+        private ConcurrentQueue<byte[]> rcvQueue;
         private readonly Queue<Exception> _errors;
 
         // time-out control
@@ -27,8 +27,7 @@ namespace XiHNet
         {
             _recvTimeoutMM = NetConfig.RecTimeOut;
             _kcpRcvBuf = new byte[(Kcp.IkcpMtuDef + Kcp.IkcpOverhead) * 3];
-            _rcvQueue = new Queue<byte[]>(64);
-            _forGround = new Queue<byte[]>(64);
+            rcvQueue = new ConcurrentQueue<byte[]>();
             _errors = new Queue<Exception>(8);
         }
         public override async Task<bool> ConnectAsync()
@@ -80,23 +79,17 @@ namespace XiHNet
             var now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
             _lastRecvTime = (uint)(now & 0xFFFFFFFF);
             XiHTimer timer = new XiHTimer();
-            timer.SetTimer(() => {
+            timer.SetTimer(() =>
+            {
                 if (NetState == NetState.Open)
                 {
-                    while (updateActs.Count > 0)
-                    {
-                        updateActs.Dequeue().Invoke();
-                    }
                     now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
-                    if (!Update((uint)(now & 0xFFFFFFFF)))
+                    if (Update((uint)(now & 0xFFFFFFFF)))
                     {
-                        timer.Close();
+                        return;
                     }
                 }
-                else
-                {
-                    timer.Close();
-                }
+                timer.Close();
             }, NetConfig.KcpInterval);
             await await Task.Factory.StartNew(async () =>
             {
@@ -113,7 +106,7 @@ namespace XiHNet
                                 Debugger.Log("终端主动断开连接");
                                 break;
                             }
-                            updateActs.Enqueue(() => _rcvQueue.Enqueue(data));
+                            rcvQueue.Enqueue(data);
                         }
                         await Task.Delay(NetConfig.KcpInterval);
                     }
@@ -124,24 +117,6 @@ namespace XiHNet
                 }
             }, source.Token);
             Close();
-        }
-        readonly Queue<Action> updateActs = new Queue<Action>();
-        private void PushToRecvQueue(byte[] data)
-        {
-            //ILRunTime下不要使用lock，最好直接post到mainthread
-            _rcvQueue.Enqueue(data);
-        }
-
-        // if `rcvqueue` is not empty, swap it with `forground`
-        private Queue<byte[]> SwitchRecvQueue()
-        {
-            //ILRunTime下不要使用lock，最好直接post到mainthread
-            //lock (_rcvQueue)
-            if (_rcvQueue.Count <= 0) return _forGround;
-            var tmp = _rcvQueue;
-            _rcvQueue = _forGround;
-            _forGround = tmp;
-            return _forGround;
         }
         // 业务消息发送事件，进入 KCP 模块
         public override async Task<bool> RequestAsync(byte[] data)
@@ -168,11 +143,11 @@ namespace XiHNet
         private void ProcessRecv(uint current)
         {
             //var queue = SwitchRecvQueue();
-            var queue = _rcvQueue;
-            while (queue.Count > 0)
+            //while (queue.Count > 0)
+            while (rcvQueue.TryDequeue(out byte[] data))
             {
                 _lastRecvTime = current;
-                var data = queue.Dequeue();
+                //var data = queue.Dequeue();
                 var r = _kcp.Input(data, 0, data.Length);
                 Debug.Assert(r >= 0);
                 _needUpdate = true;
@@ -208,31 +183,6 @@ namespace XiHNet
             }
             return current - _lastRecvTime <= _recvTimeoutMM;
         }
-
-        private async void StartKcpUpdate()
-        {
-            await await Task.Factory.StartNew(async () =>
-            {
-                DateTime d2 = new DateTime(2000, 1, 1);
-                var now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
-                _lastRecvTime = (uint)(now & 0xFFFFFFFF);
-                while (NetState == NetState.Open)
-                {
-                    now = Convert.ToInt64(DateTime.Now.Subtract(d2).TotalMilliseconds);
-                    if (Update((uint)(now & 0xFFFFFFFF)))
-                    {
-                        await Task.Delay(NetConfig.KcpInterval);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }, source.Token);
-            UnityEngine.Debug.Log("StartKcpUpdate");
-            Close();
-        }
-
         public override void Close()
         {
             if (NetState == NetState.Closed)
@@ -260,8 +210,6 @@ namespace XiHNet
             source.Dispose();
             _lastRecvTime = 0;
             _errors.Clear();
-            _forGround.Clear();
-            _rcvQueue.Clear();
             OnClosed?.Invoke();
         }
     }
