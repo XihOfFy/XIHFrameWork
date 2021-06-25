@@ -157,7 +157,7 @@ namespace XIHHotFix
                     {
                         MonoNetMsgLooper.Instance.VerifyRsp = lrsp;
                         lobbyClient.StartPingPong();
-                        await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LobbyScene.unity").Task;
+                        await Addressables.LoadSceneAsync(PathConfig.AA_Scene_Lobby).Task;
                         return;
                     }
                     else
@@ -217,7 +217,7 @@ namespace XIHHotFix
         async void ToLogin(string tip)
         {
             Debug.Log(tip);
-            await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LoginScene.unity").Task;
+            await Addressables.LoadSceneAsync(PathConfig.AA_Scene_Login).Task;
         }
     }
 }

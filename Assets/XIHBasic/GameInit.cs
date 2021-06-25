@@ -35,9 +35,10 @@ namespace XIHBasic
                 File.WriteAllBytes(dllPath, dll);
             }
             byte[] pdb = null;
-            if (File.Exists($"{PlatformConfig.PersistentDataPath}/{PlatformConfig.HOTFIX_DLL_NAME}.pdb"))
+            string pdbPath = $"{PlatformConfig.PersistentDataPath}/{PlatformConfig.HOTFIX_DLL_NAME}.pdb";
+            if (File.Exists(pdbPath))
             {
-                pdb = File.ReadAllBytes($"{PlatformConfig.PersistentDataPath}/{PlatformConfig.HOTFIX_DLL_NAME}.pdb");
+                pdb = File.ReadAllBytes(pdbPath);
             }
             if (!HotFixBridge.Start(dll, pdb))
             {

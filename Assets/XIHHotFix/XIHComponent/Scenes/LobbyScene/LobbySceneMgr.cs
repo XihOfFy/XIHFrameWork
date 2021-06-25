@@ -67,7 +67,7 @@ namespace XIHHotFix
                     return;//防止房主点击开始，但是玩家却选择离开
                 }
                 MonoNetMsgLooper.Instance.NetClients.TryAdd(NetServer.Battle, battleCli);
-                await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/BattleScene.unity").Task;
+                await Addressables.LoadSceneAsync(PathConfig.AA_Scene_Battle).Task;
             }
             else
             {
@@ -224,7 +224,7 @@ namespace XIHHotFix
         }
         public async void Logout()
         {
-            await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LoginScene.unity").Task;
+            await Addressables.LoadSceneAsync(PathConfig.AA_Scene_Login).Task;
         }
 
         protected override void Awake()

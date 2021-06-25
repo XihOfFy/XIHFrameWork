@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 664284292}
   - component: {fileID: 664284291}
   m_Layer: 0
-  m_Name: "Reporter\u53D1\u5E03\u65F6\u9700\u8981\u5220\u9664\u8BE5\u7269\u4F53"
+  m_Name: "Reporter\u53D1\u5E03\u65F6\u5220\u9664\u8BE5\u7269\u4F53"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -16,14 +16,27 @@ namespace XIHBasic
         }
         private void OnEnable()
         {
-            var data = JsonMapper.ToObject(Resources.Load<TextAsset>(PlatformConfig.CONFIG_NAME).text);
-            mainUrl = data["mainUrl"].ToString();
-            dllVersion = data["dllVersion"].ToString();
-            connKey = data["key"].ToString();
-            connBundleName = data["bundleName"].ToString();
-            loginIp = (string)(data["loginIp"]??"127.0.0.1");
-            loginPort = (int)(data["loginPort"] ?? 5000);
-            loginKcp = (bool)(data["isKcp"] ?? true);
+            mainUrl = "http://127.0.0.1:5000/";
+            dllVersion = "1.0.0";
+            connKey = "Assets/Bundles/CheckAANetConn.txt";
+            connBundleName = "aecd6b06c08b86e6e367ab1f201c5120";
+            loginIp = "127.0.0.1";
+            loginPort = 12345;
+            loginKcp = true;
+            if (File.Exists(resCfgPath)) {
+                var data = JsonMapper.ToObject(File.ReadAllText(resCfgPath));
+                mainUrl = (string)(data["mainUrl"] ?? dllVersion);
+                dllVersion = (string)(data["dllVersion"] ?? dllVersion);
+            }
+            if (File.Exists(edtCfgPath))
+            {
+                var data = JsonMapper.ToObject(File.ReadAllText(edtCfgPath));
+                connKey = (string)(data["key"] ?? connKey);
+                connBundleName = (string)(data["bundleName"] ?? connBundleName);
+                loginIp = (string)(data["loginIp"] ?? loginIp);
+                loginPort = (int)(data["loginPort"] ?? loginPort);
+                loginKcp = (bool)(data["isKcp"] ?? loginKcp);
+            }
         }
         string mainUrl;//资源下载地址
         string dllVersion;//当前Dll版本
@@ -34,6 +47,7 @@ namespace XIHBasic
         bool loginKcp;
         readonly string resCfgPath = $"Assets/Resources/{PlatformConfig.CONFIG_NAME}.json";//配置文件目录
         readonly string resDllPath = $"Assets/Resources/{PlatformConfig.HOTFIX_DLL_NAME}.bytes";//DLL配置文件目录
+        readonly string edtCfgPath = $"Assets/Editor/XIHEditor/{PlatformConfig.CONFIG_NAME}_svr.json";//DLL配置文件目录
 
         const string webResOutPath= "XIHServer/Res/WebBin/Game/";//dll和资源输出路径
         readonly string dllPath = $"Library/ScriptAssemblies/{PlatformConfig.HOTFIX_DLL_NAME}.dll";
@@ -74,20 +88,25 @@ namespace XIHBasic
                     string urlDllPath = $"{webResOutPath}/{PlatformConfig.HOTFIX_DLL_NAME}_{PlatformConfig.PLATFORM_NAME}";
                     File.Copy(dllPath, urlDllPath, true);
 
-                    JsonData data = new JsonData();
-                    data["mainUrl"] = mainUrl ?? "";
-                    data["dllVersion"] = dllVersion ?? "";
+                    JsonData data = new JsonData
+                    {
+                        ["mainUrl"] = mainUrl ?? "",
+                        ["dllVersion"] = dllVersion ?? ""
+                    };
+                    var json = JsonMapper.ToJson(data);
+                    File.WriteAllText(resCfgPath, json);
                     data["key"] = connKey ?? "";
                     data["bundleName"] = connBundleName ?? "";
                     data["loginIp"] = loginIp ?? "127.0.0.1";
                     data["loginPort"] = loginPort;
                     data["isKcp"] = loginKcp;
-                    var json = JsonMapper.ToJson(data);
-                    File.WriteAllText(resCfgPath, json);
+                    json = JsonMapper.ToJson(data);
+                    File.WriteAllText(edtCfgPath, json);
                     File.Copy(dllPath, resDllPath, true);
+
                     string urlCfgPath = $"{webResOutPath}/{PlatformConfig.CONFIG_NAME}_{PlatformConfig.PLATFORM_NAME}";
                     File.WriteAllText(urlCfgPath, json);
-                    Debug.Log($"已生成配置：{resCfgPath}、{resDllPath}; \r\n已复制{Path.GetFileName(urlDllPath)},{Path.GetFileName(urlCfgPath)} 到目录:{Path.GetFullPath(webResOutPath)}");
+                    Debug.Log($"已生成配置：{resCfgPath}、{edtCfgPath}、{resDllPath}; \r\n已复制{Path.GetFileName(urlDllPath)},{Path.GetFileName(urlCfgPath)} 到目录:{Path.GetFullPath(webResOutPath)}");
                     string persistentPath = PlatformConfig.PersistentDataPath;
                     if (File.Exists($"{persistentPath}/{PlatformConfig.CONFIG_NAME}"))
                     {

@@ -149,7 +149,7 @@ namespace XIHHotFix
             {
                 MonoNetMsgLooper.Instance.NetClients.TryRemove(NetServer.Battle, out _);
                 battleClient.Close();
-                await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LobbyScene.unity").Task;
+                await Addressables.LoadSceneAsync(PathConfig.AA_Scene_Lobby).Task;
             };
             battleClient.RegisterNtf<BattleEndNtf>((ntf) =>
             {
@@ -247,7 +247,7 @@ namespace XIHHotFix
             MonoNetMsgLooper.Instance.LobbyJoinRoomRsp = null;
             MonoNetMsgLooper.Instance.NetClients.TryRemove(NetServer.Battle, out _);
             battleClient.Close();
-            await Addressables.LoadSceneAsync("Assets/Bundles/Scenes/LobbyScene.unity").Task;
+            await Addressables.LoadSceneAsync(PathConfig.AA_Scene_Lobby).Task;
         }
         protected override void OnDestory()
         {
