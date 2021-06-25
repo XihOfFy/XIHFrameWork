@@ -23,14 +23,11 @@ namespace XIHBasic
             loginIp = "127.0.0.1";
             loginPort = 12345;
             loginKcp = true;
-            if (File.Exists(resCfgPath)) {
-                var data = JsonMapper.ToObject(File.ReadAllText(resCfgPath));
-                mainUrl = (string)(data["mainUrl"] ?? dllVersion);
-                dllVersion = (string)(data["dllVersion"] ?? dllVersion);
-            }
             if (File.Exists(edtCfgPath))
             {
                 var data = JsonMapper.ToObject(File.ReadAllText(edtCfgPath));
+                mainUrl = (string)(data["mainUrl"] ?? dllVersion);
+                dllVersion = (string)(data["dllVersion"] ?? dllVersion);
                 connKey = (string)(data["key"] ?? connKey);
                 connBundleName = (string)(data["bundleName"] ?? connBundleName);
                 loginIp = (string)(data["loginIp"] ?? loginIp);
@@ -47,7 +44,7 @@ namespace XIHBasic
         bool loginKcp;
         readonly string resCfgPath = $"Assets/Resources/{PlatformConfig.CONFIG_NAME}.json";//配置文件目录
         readonly string resDllPath = $"Assets/Resources/{PlatformConfig.HOTFIX_DLL_NAME}.bytes";//DLL配置文件目录
-        readonly string edtCfgPath = $"Assets/Editor/XIHEditor/{PlatformConfig.CONFIG_NAME}_svr.json";//DLL配置文件目录
+        readonly string edtCfgPath = $"Assets/Editor/XIHEditor/{PlatformConfig.CONFIG_NAME}_svr.json";//服务端配置文件目录
 
         const string webResOutPath= "XIHServer/Res/WebBin/Game/";//dll和资源输出路径
         readonly string dllPath = $"Library/ScriptAssemblies/{PlatformConfig.HOTFIX_DLL_NAME}.dll";

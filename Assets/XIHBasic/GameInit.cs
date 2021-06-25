@@ -18,6 +18,7 @@ namespace XIHBasic
         }
         void StartHotFix()
         {
+            //比对版本高低自行实现，目前暂定版本不同就更新，不关心版本高低
             string urlPath = $"{PlatformConfig.PersistentDataPath}/{PlatformConfig.CONFIG_NAME}";
             if (!File.Exists(urlPath))
             {
