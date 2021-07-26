@@ -315,17 +315,15 @@ namespace XIHHotFix
                 bool pass = false;
                 async void DoWait()
                 {
-                    await Task.Factory.StartNew(async () => {
-                        await Task.Delay(5000);
-                        if (pass) return;
-                        if (handle.Status != TaskStatus.RanToCompletion)
-                        {
-                            //此处报错一般是因为热更资源引用了新的Unity本地资源(需要替换新apk)
-                            //所以为了避免该情况，热更资源应该尽可能只使用热更资源所引用的资源；或设计时多引用本地资源（可能此时用不到，但以后热更可能会引用到）
-                            PathConfig.ClearAll();
-                            ShowTips("版本不兼容", $"请在官网[{newMainUrl}]下载最新Apk", () => Application.OpenURL(newMainUrl), Application.Quit);
-                        }
-                    });
+                    await Task.Delay(5000);
+                    if (pass) return;
+                    if (handle.Status != TaskStatus.RanToCompletion)
+                    {
+                        //此处报错一般是因为热更资源引用了新的Unity本地资源(需要替换新apk)
+                        //所以为了避免该情况，热更资源应该尽可能只使用热更资源所引用的资源；或设计时多引用本地资源（可能此时用不到，但以后热更可能会引用到）
+                        PathConfig.ClearAll();
+                        ShowTips("版本不兼容", $"请在官网[{newMainUrl}]下载最新Apk", () => Application.OpenURL(newMainUrl), Application.Quit);
+                    }
                 }
                 DoWait();
                 await handle;//这个报错是无法捕获异常的，因为属于其他异步Task中,且报错后此await处于漫长等待...若报错则不可能加载成功，属于替换apk才能解决的情况

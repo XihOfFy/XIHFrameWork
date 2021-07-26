@@ -183,8 +183,8 @@ namespace XIHServer
             await Task.Delay(cdTime);
             foreach (var rb in robots.Values)
             {
+                rb.btCli.Map = null;
                 rb.btCli?.Send(new BattleEndNtf());
-				rb.btCli.Map = null;
             }
             robots.Clear();
             room.EndBattle();

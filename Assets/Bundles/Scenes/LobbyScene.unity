@@ -3753,7 +3753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5474c350e7d81a74391b5cb6ea118fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotFixTypeName: XIHHotFix.LobbySceneMgr
+  hotFixTypeFullName: XIHHotFix.LobbySceneMgr
   gameObjArr:
   - {fileID: 1673451409}
   - {fileID: 940450865}

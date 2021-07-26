@@ -15,22 +15,23 @@ namespace XIHBasic
     /// </summary>
     public class MonoDotBase : MonoManual
     {
-        public string hotFixTypeName;
         [SerializeField]
         private List<GameObject> gameObjArr;
         public Dictionary<string, GameObject> GameObjsDic { get; private set; } = new Dictionary<string, GameObject>();
         private void Awake()
         {
-            foreach (var gb in gameObjArr)
-            {
-                if (GameObjsDic.ContainsKey(name))
+            if (gameObjArr != null) {
+                foreach (var gb in gameObjArr)
                 {
-                    Debug.LogError($"请勿将相同名字的物体放入链表中，{gb.name}");
-                    continue;
+                    if (GameObjsDic.ContainsKey(name))
+                    {
+                        Debug.LogError($"请勿将相同名字的物体放入链表中，{gb.name}");
+                        continue;
+                    }
+                    GameObjsDic.Add(gb.name, gb);
                 }
-                GameObjsDic.Add(gb.name, gb);
             }
-            Inject(hotFixTypeName);
+            Inject(HotFixTypeName);
         }
     }
 }

@@ -20,10 +20,6 @@ namespace XIHBasic
         {
             //比对版本高低自行实现，目前暂定版本不同就更新，不关心版本高低
             string urlPath = $"{PlatformConfig.PersistentDataPath}/{PlatformConfig.CONFIG_NAME}";
-            if (!File.Exists(urlPath))
-            {
-                File.WriteAllText(urlPath, Resources.Load<TextAsset>(PlatformConfig.CONFIG_NAME).text);
-            }
             byte[] dll;
             string dllPath = $"{PlatformConfig.PersistentDataPath}/{PlatformConfig.HOTFIX_DLL_NAME}";
             if (File.Exists(dllPath))
@@ -34,6 +30,7 @@ namespace XIHBasic
             {
                 dll = Resources.Load<TextAsset>(PlatformConfig.HOTFIX_DLL_NAME).bytes;
                 File.WriteAllBytes(dllPath, dll);
+                File.Delete(urlPath);
             }
             byte[] pdb = null;
             string pdbPath = $"{PlatformConfig.PersistentDataPath}/{PlatformConfig.HOTFIX_DLL_NAME}.pdb";

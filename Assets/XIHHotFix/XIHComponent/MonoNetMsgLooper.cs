@@ -8,7 +8,7 @@ using XiHNet;
 
 namespace XIHHotFix
 {
-    public class MonoNetMsgLooper : AbsSingletonComponent<MonoNetMsgLooper>
+    public class MonoNetMsgLooper : AbsSingletonComponent<MonoNetMsgLooper,MonoManual>
     {
         protected MonoNetMsgLooper(MonoManual dot) : base(dot) { }
         public bool IsFoucus { get; private set; }

@@ -1056,7 +1056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5474c350e7d81a74391b5cb6ea118fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotFixTypeName: XIHHotFix.LoginSceneMgr
+  hotFixTypeFullName: XIHHotFix.LoginSceneMgr
   gameObjArr:
   - {fileID: 1798223557}
   - {fileID: 1709147053}

@@ -30,3 +30,4 @@ XIHServer/*
 **/obj/*
 **/.vs
 
+/Assets/XIHBasic/Generated

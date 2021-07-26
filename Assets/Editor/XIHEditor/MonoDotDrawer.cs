@@ -22,10 +22,9 @@ namespace XIHBasic
         {
             if (!Application.isPlaying) return;
             var dot = serializedObject.targetObject as MonoDotBase;
-            var hotfixTypeName = dot.hotFixTypeName;
             var type = dot.GetType();
-            var field = type.GetField("instance", BindingFlags.Instance | BindingFlags.NonPublic);
-            instance = field.GetValue(dot) as ILTypeInstance;
+            var hotfixTypeName = dot.HotFixTypeName;
+            instance = dot.ILTypeInstance;
             IType t = HotFixBridge.Appdomain.LoadedTypes[hotfixTypeName];
             type = t.ReflectionType;
             var strStr = typeof(string).ToString();
@@ -38,9 +37,11 @@ namespace XIHBasic
             if (Application.isPlaying)
             {
                 EditorGUILayout.BeginVertical();
-                foreach (var field in fields)
-                {
-                    EditorGUILayout.LabelField($"{field.Name}:{field.GetValue(instance)}");
+                if (fields != null) {
+                    foreach (var field in fields)
+                    {
+                        EditorGUILayout.LabelField($"{field.Name}:{field.GetValue(instance)}");
+                    }
                 }
                 EditorGUILayout.EndVertical();
             }

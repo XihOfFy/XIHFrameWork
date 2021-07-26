@@ -89,6 +89,16 @@ namespace XIHBasic
             domain.DelegateManager.RegisterFunctionDelegate<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator, System.String>();
             domain.DelegateManager.RegisterFunctionDelegate<System.Object, System.String>();
             domain.DelegateManager.RegisterFunctionDelegate<ILRuntime.CLR.TypeSystem.IType, System.Type>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoManual, System.Boolean>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoManual, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoDotBase, System.Boolean>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoDotBase, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoTouch, System.Boolean>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoTouch, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoCollision2D, System.Boolean>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoCollision2D, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoCollision, System.Boolean>();
+            domain.DelegateManager.RegisterFunctionDelegate<XIHBasic.MonoCollision, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
             domain.DelegateManager.RegisterMethodDelegate<System.Byte[]>();
             domain.DelegateManager.RegisterMethodDelegate<object, ElapsedEventArgs>();
             domain.DelegateManager.RegisterDelegateConvertor<ElapsedEventHandler>((act) =>
