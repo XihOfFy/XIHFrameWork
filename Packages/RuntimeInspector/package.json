@@ -1,0 +1,14 @@
+{
+    "name": "com.tool.unityruntimeinspector",
+    "displayName": "UnityRuntimeInspector",
+    "version": "1.7.1",
+    "description": "UnityRuntimeInspector",
+    "author": {
+        "name": "UnityRuntimeInspector",
+        "url": "https://github.com/yasirkula/UnityRuntimeInspector"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yasirkula/UnityRuntimeInspector"
+    }
+}

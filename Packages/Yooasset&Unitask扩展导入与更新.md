@@ -11,8 +11,25 @@
 ### UniTask 扩展 导入更新
 
 - 具体参考`YooAsset\Samples~\UniTask Sample\README.md`
-
-
+- 创建\`package.json`填写: 
+- ```
+  {
+      "name": "com.tuyoogame.yooasset.unitask",
+      "displayName": "UniTask.YooAsset",
+      "version": "2.0.3-preview",
+      "unity": "2019.4",
+      "description": "UniTask.YooAsset",
+      "author": {
+          "name": "TuYoo Games",
+          "url": "https://github.com/tuyoogame/YooAsset"
+      },
+      "repository": {
+          "type": "git",
+          "url": "https://github.com/tuyoogame/YooAsset.git"
+      }
+  }
+  ```
+- 
 
 ## 项目定制教程
 
