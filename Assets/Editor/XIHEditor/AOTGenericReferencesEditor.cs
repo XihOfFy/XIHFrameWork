@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class AOTGenericReferencesEditor
 {
-    [MenuItem("XIHUtil/GenerStrippedCS")]
+    [MenuItem("XIHUtil/Hclr/GenerStrippedCS")]
     static void GenerStrippedCS() {
         var path = HybridCLRSettings.Instance.outputAOTGenericReferenceFile;
         var src = $"{Application.dataPath}/{path}";

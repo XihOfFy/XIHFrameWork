@@ -24,8 +24,58 @@ MonoBehaviour:
     IgnoreDefaultType: 1
     AutoCollectShaders: 1
     Groups:
-    - GroupName: Common
-      GroupDesc: 
-      AssetTags: 
+    - GroupName: Aot2Hot
+      GroupDesc: "Aot2Hot\u7684\u5168\u90E8\u8D44\u6E90"
+      AssetTags: Aot2Hot
       ActiveRuleName: EnableGroup
-      Collectors: []
+      Collectors:
+      - CollectPath: Assets/Res/Scene/Aot2HotScene
+        CollectorGUID: a0e6b4191c0f86d42b5ccfa6bff41bda
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Raw/Aot2Hot
+        CollectorGUID: 0617fb888a512414dae4e59b4e980136
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: RawFile
+      GroupDesc: "\u539F\u59CB\u6587\u4EF6"
+      AssetTags: RawFile
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Raw/Aot
+        CollectorGUID: e0c8f8fbad229c4469d4ed7f78edb4ad
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Raw/Hot
+        CollectorGUID: 5b95201c58052624dae4fa4d2e3f5546
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: HotScene
+      GroupDesc: "\u573A\u666F"
+      AssetTags: HotScene
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Scene/HotScene
+        CollectorGUID: ac90aca6f7478e841b369e3a5315bf17
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
