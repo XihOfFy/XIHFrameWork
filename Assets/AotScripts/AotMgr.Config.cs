@@ -13,7 +13,7 @@ namespace Aot
             var www = UnityWebRequest.Get(AotConfig.GetFrontUrl());
             try
             {
-                var result = await www.SendWebRequest();
+                var result = await www.SendWebRequest().WithCancellation(this.GetCancellationTokenOnDestroy());
                 if (string.IsNullOrEmpty(www.error))
                 {
                     var json = result.downloadHandler.text;

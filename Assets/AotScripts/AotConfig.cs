@@ -6,7 +6,6 @@ namespace Aot
 {
     public class AotConfig
     {
-        public static string focusVersion="0.0.0";//最低强更版本
         public static FrontConfig frontConfig = new FrontConfig();
         public static string GetFrontUrl() {
             string url = "http://192.168.7.113:5000/Front/";
@@ -36,6 +35,8 @@ namespace Aot
             }
             string preffixUrl = "http://192.168.7.113:5000/";
             var config = new FrontConfig();
+            config.focusVersion = "0.0.0";
+
             config.defaultHostServer = preffixUrl+"Android";
             config.fallbackHostServer = preffixUrl + "Android";
             var file = $"{dir}/Android.json";
@@ -73,6 +74,7 @@ namespace Aot
     [Serializable]
     public class FrontConfig
     {
+        public string focusVersion="0.0.0";//最低强更版本
         //yooasset的下载资源路径，后期可以扩展其他的
         public string defaultHostServer;
         public string fallbackHostServer;
