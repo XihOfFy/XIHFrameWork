@@ -1,55 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
-	<assembly fullname="DOTween" preserve="all">
-	</assembly>
-	<assembly fullname="DOTween.Modules" preserve="all">
-	</assembly>
-	<assembly fullname="HybridCLR.Runtime" preserve="all">
-	</assembly>
-	<assembly fullname="RuntimeInspector.Runtime" preserve="all">
-	</assembly>
-	<assembly fullname="System" preserve="all">
-	</assembly>
-	<assembly fullname="System.Core" preserve="all">
-	</assembly>
-	<assembly fullname="UniTask" preserve="all">
-	</assembly>
-	<assembly fullname="Unity.2D.Animation.Runtime" preserve="all">
-	</assembly>
-	<assembly fullname="Unity.Burst" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.AndroidJNIModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.AnimationModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.AssetBundleModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.AudioModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.CoreModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.IMGUIModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.InputLegacyModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.JSONSerializeModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.ParticleSystemModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.Physics2DModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.PhysicsModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.UI" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.UIModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.UnityWebRequestModule" preserve="all">
-	</assembly>
-	<assembly fullname="UnityEngine.VideoModule" preserve="all">
-	</assembly>
-	<assembly fullname="LogViewer" preserve="all">
-	</assembly>
-	<assembly fullname="mscorlib" preserve="all">
-	</assembly>
+  <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
+  </assembly>
+  <assembly fullname="mscorlib">
+    <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
+  </assembly>
 </linker>
