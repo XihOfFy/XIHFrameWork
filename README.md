@@ -41,3 +41,7 @@
 > 在HybridCLRSettings中，开启`Use Global Il2cpp` 选项。因为webgl平台只支持全局安装。
 > 
 > 建立 Editor目录的libil2cpp到本地libil2cpp目录的软（硬）引用。升级hybridclr等情形需要重新install时，先恢复Editor安装目录的原始libil2cpp目录
+
+# 推荐版本
+
+- 微信小游戏： [下载与安装 | Unity小游戏](https://unity.cn/instantgame/docs/WechatMinigame/InstallUnity/)
