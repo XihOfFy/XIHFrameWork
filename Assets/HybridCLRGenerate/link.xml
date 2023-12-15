@@ -3,7 +3,7 @@
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
   </assembly>
-  <assembly fullname="netstandard">
+  <assembly fullname="mscorlib">
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />

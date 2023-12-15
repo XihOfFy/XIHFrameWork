@@ -1,21 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using YooAsset;
 
 namespace Aot
 {
-    public class AotMgr : MonoBehaviour
+    public partial class AotMgr : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        public EPlayMode playMode = EPlayMode.EditorSimulateMode;
+        private void Awake()
         {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
+            if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)
+            {
+                InitConfigStart(8).Forget();
+            }
+            else
+            {//非联机模式直接跳到yooasset初始化
+                InitYooAssetStart().Forget();
+            }
         }
     }
 }
