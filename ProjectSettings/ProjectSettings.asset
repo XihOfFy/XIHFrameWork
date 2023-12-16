@@ -769,11 +769,12 @@ PlayerSettings:
   webGLExceptionSupport: 1
   webGLExceptionOnlyEnableForUserCodes: 0
   webGLNameFilesAsHashes: 0
-  webGLDataCaching: 1
-  webGLDebugSymbols: 0
-  webGLEmscriptenArgs: 
+  webGLDataCaching: 0
+  webGLDebugSymbols: 1
+  webGLEmscriptenArgs: ' -s EXPORTED_FUNCTIONS=_sbrk,_emscripten_stack_get_base,_emscripten_stack_get_end,_main
+    -s TOTAL_MEMORY=256MB --profiling-funcs  -s EXPORTED_RUNTIME_METHODS=''["dynCall","removeRunDependency","ccall","stringToUTF8","lengthBytesUTF8"]'''
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Default
+  webGLTemplate: PROJECT:WXTemplate2020
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 2

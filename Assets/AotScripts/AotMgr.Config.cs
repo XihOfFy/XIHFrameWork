@@ -7,10 +7,18 @@ namespace Aot
 {
     public partial class AotMgr
     {
+        class CertificateHandlerImpl : CertificateHandler
+        {
+            protected override bool ValidateCertificate(byte[] certificateData)
+            {
+                return true;
+            }
+        }
         //这里通过服务器获取热更地址配置信息
         async UniTaskVoid InitConfigStart(int tryTime)
         {
             var www = UnityWebRequest.Get(AotConfig.GetFrontUrl());
+            www.certificateHandler = new CertificateHandlerImpl();
             try
             {
                 var result = await www.SendWebRequest().WithCancellation(this.GetCancellationTokenOnDestroy());
@@ -34,6 +42,7 @@ namespace Aot
                 }
             }
             finally {
+                www.certificateHandler.Dispose();
                 www.Dispose();
             }
         }
