@@ -5,7 +5,7 @@ namespace Aot
     //无需实现IDecryptionServices，因为我们只加密原生文件rawfile，不是ab
     public class XIHDecryptionServices
     {
-        public static byte[] ProcessRawFile(byte[] bytes)
+        public static byte[] Decrypt(byte[] bytes)
         {
             int len = bytes.Length;
             var encryptedData = new byte[len];

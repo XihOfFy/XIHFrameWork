@@ -45,3 +45,7 @@
 # 推荐版本
 
 - 微信小游戏： [下载与安装 | Unity小游戏](https://unity.cn/instantgame/docs/WechatMinigame/InstallUnity/)
+
+## 小游戏优化和设置
+
+- [案例： Endless Runner | Unity小游戏](https://unity.cn/instantgame/docs/WechatMinigame/Demo/)

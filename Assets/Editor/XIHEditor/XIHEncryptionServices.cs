@@ -1,24 +1,18 @@
 ﻿using System;
 using System.IO;
-using YooAsset;
+using UnityEngine;
 
-public class XIHEncryptionServices : IEncryptionServices
+public class XIHEncryptionServices
 {
-    public EncryptResult Encrypt(EncryptFileInfo fileInfo)
+    public static void Encrypt(string srcFilePath, string dstFilePath)
     {
-        if (fileInfo.BundleName.EndsWith(".rawfile"))
+        if (!File.Exists(srcFilePath))
         {
-            EncryptResult result = new EncryptResult();
-            result.Encrypted = true;
-            result.EncryptedData = ProcessRawFile(File.ReadAllBytes(fileInfo.FilePath));
-            return result;
+            Debug.LogError($"CopyDll {srcFilePath}不存在");
+            return;
         }
-        else
-        {
-            EncryptResult result = new EncryptResult();
-            result.Encrypted =false;
-            return result;
-        }
+        File.WriteAllBytes(dstFilePath, ProcessRawFile(File.ReadAllBytes(srcFilePath)));
+        Debug.LogWarning($"{srcFilePath}已经加密输出到{dstFilePath}");
     }
     static byte[] ProcessRawFile(byte[] bytes)
     {

@@ -67,6 +67,31 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "com.unity.instantgame": {
+      "version": "1.0.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0",
+        "com.unity.modules.autostreaming": "1.0.0",
+        "nuget.mono-cecil": "1.0.0"
+      },
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.nuget.mono-cecil": {
+      "version": "1.10.1",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "2.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.20.2",
       "depth": 1,
@@ -151,6 +176,14 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "nuget.mono-cecil": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.nuget.mono-cecil": "1.10.1"
+      }
+    },
     "xih.fy.logsviewer4newinputsys": {
       "version": "file:Unity-Logs-Viewer",
       "depth": 0,
@@ -186,6 +219,19 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
+    },
+    "com.unity.modules.autostreaming": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.audio": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+      }
     },
     "com.unity.modules.director": {
       "version": "1.0.0",

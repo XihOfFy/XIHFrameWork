@@ -50,7 +50,7 @@ public class DllCopyEditor
             }
             File.Copy(ph, $"{dstPath}/{dll}.bytes");
         }
-        Debug.LogWarning($"拷贝dlls到 {dstPath}");
+        Debug.LogWarning($"拷贝无需加密的Aotdlls到 {dstPath}");
     }
     static void CopyHotDll(bool isAot2Hot, string dstPath, BuildTarget target)
     {
@@ -76,14 +76,8 @@ public class DllCopyEditor
         Directory.CreateDirectory(dstPath);
         foreach (var dll in dlls)
         {
-            var ph = $"{sourPath}/{dll}.dll";
-            if (!File.Exists(ph))
-            {
-                Debug.LogError($"CopyDll {ph}不存在");
-                continue;
-            }
-            File.Copy(ph, $"{dstPath}/{dll}.bytes");
+            XIHEncryptionServices.Encrypt($"{sourPath}/{dll}.dll", $"{dstPath}/{dll}.bytes");
         }
-        Debug.LogWarning($"拷贝dlls到 {dstPath}");
+        Debug.LogWarning($"拷贝加密的dlls到 {dstPath}");
     }
 }

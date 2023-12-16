@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.IO;
 using UnityEngine;
 using YooAsset;
 
@@ -8,7 +9,8 @@ namespace Aot
     {
         const string PACKAGE_NAME = "DefaultPackage";
         //为了保持全平台一致逻辑，所以都使用webgl 小游戏的处理方式，不需要首包资源，全部通过下载
-        async UniTaskVoid InitYooAssetStart() {
+        async UniTaskVoid InitYooAssetStart()
+        {
             // 初始化资源系统
             YooAssets.Initialize();
             // 创建资源包裹类
@@ -31,19 +33,25 @@ namespace Aot
                 createParameters = new OfflinePlayModeParameters();
             }
             // 联机运行模式
-            else if(playMode == EPlayMode.HostPlayMode)
+            else if (playMode == EPlayMode.HostPlayMode)
             {
-                createParameters = new HostPlayModeParameters() {
-                    RemoteServices = new RemoteServices()
+                createParameters = new HostPlayModeParameters()
+                {
+                    RemoteServices = new RemoteServices(),
+                    BuildinQueryServices = new BuildinQueryServices()
                 };
             }
             // WebGL运行模式
-            else if(playMode == EPlayMode.WebPlayMode)
+            else if (playMode == EPlayMode.WebPlayMode)
             {
-                createParameters = new WebPlayModeParameters() {
-                    RemoteServices = new RemoteServices()
+                createParameters = new WebPlayModeParameters()
+                {
+                    RemoteServices = new RemoteServices(),
+                    BuildinQueryServices = new BuildinQueryServices()
                 };
             }
+            //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
+            //createParameters.DecryptionServices = new DecryptionServices();
 
             var initializationOperation = package.InitializeAsync(createParameters);
             await initializationOperation.ToUniTask();
@@ -51,13 +59,39 @@ namespace Aot
             // 如果初始化失败弹出提示界面
             if (initializationOperation.Status != EOperationStatus.Succeed)
             {
-                Debug.LogWarning($"{initializationOperation.Error}");
+                QuitGame();//AOT启动过程必须保持一切顺利，不然全部退出游戏
+                return;
             }
-            var version = package.GetPackageVersion();
-            Debug.Log($"Init resource package version : {version}");
-
+            UpdatePackageVersionAsync(package).Forget();
         }
+        //解密接口            
+        //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
+        //这个也用不上了
+        private class DecryptionServices : IDecryptionServices
+        {
+            public AssetBundle LoadAssetBundle(DecryptFileInfo fileInfo, out Stream managedStream)
+            {
+                /*if (fileInfo.BundleName.EndsWith(".rawfile"))
+                {
+                    EncryptResult result = new EncryptResult();
+                    result.Encrypted = true;
+                    result.EncryptedData = XIHDecryptionServices.ProcessRawFile(File.ReadAllBytes(fileInfo.FileLoadPath));
+                }
+                else
+                {
+                    EncryptResult result = new EncryptResult();
+                    result.Encrypted = false;
+                }*/
+                managedStream = new MemoryStream(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath))) ;
+                return AssetBundle.LoadFromStream(managedStream);
+            }
 
+            public AssetBundleCreateRequest LoadAssetBundleAsync(DecryptFileInfo fileInfo, out Stream managedStream)
+            {
+                managedStream = new MemoryStream(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath)));
+                return AssetBundle.LoadFromStreamAsync(managedStream);
+            }
+        }
         /// <summary>
         /// 远端资源地址查询服务类
         /// </summary>
@@ -65,11 +99,81 @@ namespace Aot
         {
             string IRemoteServices.GetRemoteMainURL(string fileName)
             {
-                return AotConfig.frontConfig.defaultHostServer;
+                return AotConfig.frontConfig.defaultHostServer + "/"+ fileName;
             }
             string IRemoteServices.GetRemoteFallbackURL(string fileName)
             {
-                return AotConfig.frontConfig.fallbackHostServer;
+                return AotConfig.frontConfig.fallbackHostServer + "/" + fileName;
+            }
+        }
+        /// <summary>
+        /// 微信小游戏不支持内置streamingasset的资源，所以都不存在内置资源即可，后期可以分平台处理
+        /// </summary>
+        private class BuildinQueryServices : IBuildinQueryServices
+        {
+            public bool Query(string packageName, string fileName)
+            {
+                return false;
+            }
+        }
+
+        //获取资源版本
+        async UniTaskVoid UpdatePackageVersionAsync(ResourcePackage package)
+        {
+            var yooOp = package.UpdatePackageVersionAsync();
+            var uniOp = yooOp.ToUniTask();
+            await uniOp;
+            if (uniOp.Status == UniTaskStatus.Succeeded)
+            {
+                //更新成功
+                Debug.Log($"Updated package Version : {yooOp.PackageVersion}");
+                UpdatePackageManifest(package, yooOp.PackageVersion).Forget();
+            }
+            else
+            {
+                QuitGame();
+            }
+        }
+        //UpdatePackageManifest
+        async UniTaskVoid UpdatePackageManifest(ResourcePackage package,string packageVersion)
+        {
+            var yooOp = package.UpdatePackageManifestAsync(packageVersion,true);
+            var uniOp = yooOp.ToUniTask();
+            await uniOp;
+            if (uniOp.Status == UniTaskStatus.Succeeded)
+            {
+                //更新成功
+                DownloadAot2HotRes(package).Forget();
+            }
+            else
+            {
+                QuitGame();
+            }
+        }
+        //资源包下载,只下载aot2hot的tag资源，余下的到hot再继续下载，因为aot不提供ui功能
+        async UniTaskVoid DownloadAot2HotRes(ResourcePackage package) {
+            int downloadingMaxNum = 10;
+            int failedTryAgain = 3;
+            var downloader = package.CreateResourceDownloader("Aot2Hot", downloadingMaxNum, failedTryAgain);
+
+            //没有需要下载的资源
+            if (downloader.TotalDownloadCount == 0)
+            {
+                GotoAot2HotScene().Forget();
+                return;
+            }
+            //开启下载
+            downloader.BeginDownload();
+            await downloader.ToUniTask();
+
+            //检测下载结果
+            if (downloader.Status == EOperationStatus.Succeed)
+            {
+                GotoAot2HotScene().Forget();
+            }
+            else
+            {
+                QuitGame();
             }
         }
     }

@@ -10,6 +10,7 @@ namespace Aot
         public static string GetFrontUrl() {
             string url = "http://192.168.7.113:5000/Front/";
 #if UNITY_EDITOR
+            url = $"http://{GetIP()}:5000/Front/";
             url += $"{UnityEditor.EditorUserBuildSettings.activeBuildTarget}.json";
 #else
             if (Application.platform == RuntimePlatform.Android)
@@ -33,7 +34,8 @@ namespace Aot
             {
                 Directory.CreateDirectory(dir);
             }
-            string preffixUrl = "http://192.168.7.113:5000/";
+            //string preffixUrl = "http://192.168.7.113:5000/";自己指定ip
+            string preffixUrl = $"http://{GetIP()}:5000/";//自动获取本机的ip
             var config = new FrontConfig();
             config.focusVersion = "0.0.0";
 
@@ -68,6 +70,17 @@ namespace Aot
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
+        }
+
+        public static string GetIP() {
+            string hostname = System.Net.Dns.GetHostName();
+            var ipadrlist = System.Net.Dns.GetHostEntry(hostname);
+            var localaddrs = ipadrlist.AddressList;
+            foreach (var add in localaddrs)
+            {
+                if (add.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !add.ToString().EndsWith(".1")) return add.ToString();
+            }
+            return "127.0.0.1";
         }
 #endif
     }
