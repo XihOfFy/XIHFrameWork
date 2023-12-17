@@ -49,3 +49,29 @@
 ## 小游戏优化和设置
 
 - [案例： Endless Runner | Unity小游戏](https://unity.cn/instantgame/docs/WechatMinigame/Demo/)
+
+## 资源部署
+
+- Yooasset打包的AB全部拷贝到下载目录`XIHWebServerRes\WebGL`中
+
+- StreamingAssets也是全部拷贝到`XIHWebServerRes\WebGL\StreamingAssets`中
+
+# 
+
+## 解决
+
+- 原生webgl遇到最多是这样的报错：Uncaught (in promise) TypeError: Module.addRunDependency is not a function
+      at unityFileSystemInit (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:1756)
+      at 74a3274d-022f-4ba2-99ba-26e65fb031ea:3:1994
+      at callRuntimeCallbacks (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:18987)
+      at preRun (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:14367)
+      at run (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:522847)
+      at runCaller (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:522184)
+      at removeRunDependency (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:15690)
+      at receiveInstance (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:17420)
+      at receiveInstantiationResult (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:17541)
+  unityFileSystemInit @ 74a3274d-022f-4ba2-99ba-26e65fb031ea:3
+
+- 其次Yooasset的错误：Exception: The manifest file format is invalid !
+
+- 必须转为小游戏才能正常运行

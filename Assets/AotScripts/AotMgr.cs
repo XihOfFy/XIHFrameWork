@@ -3,14 +3,16 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using YooAsset;
-
+using TMPro;
 namespace Aot
 {
     public partial class AotMgr : MonoBehaviour
     {
         public EPlayMode playMode = EPlayMode.EditorSimulateMode;
+        public TMP_Text tip;
         private void Awake()
         {
+            tip.text = "Awake";
             if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)
             {
                 InitConfigStart(8).Forget();
@@ -23,6 +25,8 @@ namespace Aot
 
         async UniTaskVoid GotoAot2HotScene()
         {
+            tip.text = "GotoAot2HotScene";
+
             var rawOp = YooAssets.LoadAssetAsync<TextAsset>("Assets/Res/Raw/Aot2Hot/Aot2Hot.bytes");
             await rawOp.ToUniTask();
             if (rawOp.Status != EOperationStatus.Succeed)

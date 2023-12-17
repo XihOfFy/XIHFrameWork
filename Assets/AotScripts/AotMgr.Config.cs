@@ -17,6 +17,8 @@ namespace Aot
         //这里通过服务器获取热更地址配置信息
         async UniTaskVoid InitConfigStart(int tryTime)
         {
+            tip.text = "InitConfigStart" + tryTime;
+
             var www = UnityWebRequest.Get(AotConfig.GetFrontUrl());
             www.certificateHandler = new CertificateHandlerImpl();
             try

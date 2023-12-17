@@ -15,7 +15,7 @@ MonoBehaviour:
   ProjectConf:
     projectName: TryAndUp
     Appid: wxdb969b951fdef68f
-    CDN: 
+    CDN: http://localhost:5000/WebGL/
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 
@@ -48,15 +48,15 @@ MonoBehaviour:
     DevelopBuild: 0
     AutoProfile: 0
     ScriptOnly: 0
-    Il2CppOptimizeSize: 1
+    Il2CppOptimizeSize: 0
     profilingFuncs: 1
     Webgl2: 1
     fbslim: 0
-    DeleteStreamingAssets: 1
+    DeleteStreamingAssets: 0
     ProfilingMemory: 0
     CleanBuild: 0
     CustomNodePath: 
-    showMonitorSuggestModal: 1
+    showMonitorSuggestModal: 0
     enableProfileStats: 0
     enableRenderAnalysis: 0
     iOSAutoGCInterval: 10000
