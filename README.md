@@ -60,18 +60,4 @@
 
 ## 解决
 
-- 原生webgl遇到最多是这样的报错：Uncaught (in promise) TypeError: Module.addRunDependency is not a function
-  
-      at unityFileSystemInit (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:1756)
-      at 74a3274d-022f-4ba2-99ba-26e65fb031ea:3:1994
-      at callRuntimeCallbacks (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:18987)
-      at preRun (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:14367)
-      at run (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:522847)
-      at runCaller (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:522184)
-      at removeRunDependency (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:15690)
-      at receiveInstance (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:17420)
-      at receiveInstantiationResult (74a3274d-022f-4ba2-99ba-26e65fb031ea:3:17541)
-  
-  unityFileSystemInit @ 74a3274d-022f-4ba2-99ba-26e65fb031ea:3
-
-- 必须转为小游戏才能正常运行
+- 对于打包报错，记得检查link.xml是否正确裁剪，有些程序集不能全部保留，必须裁剪掉一部分才能在webgl运行，例如`UnityEngine.CoreModule`不能全保留

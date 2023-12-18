@@ -10,10 +10,15 @@
 	</assembly>
 	<assembly fullname="Unity.TextMeshPro">
 	</assembly>
-	<assembly fullname="UnityEngine.CoreModule">
-	</assembly>
 	<assembly fullname="YooAsset">
 	</assembly>
 	<assembly fullname="mscorlib">
+	</assembly>
+	<assembly fullname="UnityEngine.CoreModule">
+		<type fullname="UnityEngine.Debug" preserve="all" />
+		<type fullname="UnityEngine.MonoBehaviour" preserve="all" />
+		<type fullname="UnityEngine.Object" preserve="all" />
+		<type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
+		<type fullname="UnityEngine.TextAsset" preserve="all" />
 	</assembly>
 </linker>

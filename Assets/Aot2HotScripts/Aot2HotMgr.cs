@@ -14,7 +14,7 @@ namespace Aot2Hot
         public TMP_Text tip;
         void Awake()
         {
-            DownloadAot2HotRes().Forget();
+            DownloadHotRes().Forget();
         }
 
         void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
@@ -22,7 +22,7 @@ namespace Aot2Hot
             tip.text = $"正在下载({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB";
         }
         void TryReDownload() {
-            DownloadAot2HotRes().Forget();
+            DownloadHotRes().Forget();
         }
         void DownLoadEnd()
         {

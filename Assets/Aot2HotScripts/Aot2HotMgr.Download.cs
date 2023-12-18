@@ -7,7 +7,7 @@ namespace Aot2Hot
     public partial class Aot2HotMgr
     {
         string PACKAGE_NAME = "DefaultPackage";
-        async UniTaskVoid DownloadAot2HotRes()
+        async UniTaskVoid DownloadHotRes()
         {
             var package = YooAssets.GetPackage(PACKAGE_NAME);
             int downloadingMaxNum = 10;
