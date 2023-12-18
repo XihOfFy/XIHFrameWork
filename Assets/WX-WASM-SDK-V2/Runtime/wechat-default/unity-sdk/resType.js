@@ -782,19 +782,6 @@ export const ResType = {
         appId: 'string',
         extraData: 'object',
     },
-    OnTouchStartListenerResult: {
-        changedTouches: 'Touch[]',
-        timeStamp: 'long',
-        touches: 'Touch[]',
-    },
-    Touch: {
-        clientX: 'number',
-        clientY: 'number',
-        force: 'number',
-        identifier: 'number',
-        pageX: 'number',
-        pageY: 'number',
-    },
     OnUnhandledRejectionListenerResult: {
         promise: 'string',
         reason: 'string',

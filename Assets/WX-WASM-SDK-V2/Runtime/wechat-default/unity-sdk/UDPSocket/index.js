@@ -18,6 +18,7 @@ function WX_UDPSocketClose(id) {
         return;
     }
     obj.close();
+    delete UDPSocketList[id];
 }
 function WX_UDPSocketConnect(id, option) {
     const obj = getUDPSocketObject(id);
@@ -109,7 +110,7 @@ function WX_UDPSocketOnMessage(id, needInfo) {
             GameGlobal.Module.HEAPU8.set(messageByteArray, messageBuffer);
             GameGlobal.Module.HEAPU8.set(localInfoByteArray, localInfoBuffer);
             GameGlobal.Module.HEAPU8.set(remoteInfoByteArray, remoteInfoBuffer);
-            GameGlobal.Module.dynCall('viiiii', wxUDPSocketOnMessageCallback, [idPtr, messageBuffer, messageByteArray.length, localInfoBuffer, remoteInfoBuffer]);
+            GameGlobal.Module.dynCall_viiiii(wxUDPSocketOnMessageCallback, idPtr, messageBuffer, messageByteArray.length, localInfoBuffer, remoteInfoBuffer);
             GameGlobal.Module._free(idPtr);
             GameGlobal.Module._free(messageBuffer);
             GameGlobal.Module._free(localInfoBuffer);
@@ -123,7 +124,7 @@ function WX_UDPSocketOnMessage(id, needInfo) {
             const messageByteArray = new Uint8Array(res.message);
             const messageBuffer = GameGlobal.Module._malloc(messageByteArray.length);
             GameGlobal.Module.HEAPU8.set(messageByteArray, messageBuffer);
-            GameGlobal.Module.dynCall('viiiii', wxUDPSocketOnMessageCallback, [idPtr, messageBuffer, messageByteArray.length, 0, 0]);
+            GameGlobal.Module.dynCall_viiiii(wxUDPSocketOnMessageCallback, idPtr, messageBuffer, messageByteArray.length, 0, 0);
             GameGlobal.Module._free(idPtr);
             GameGlobal.Module._free(messageBuffer);
         }
@@ -141,8 +142,6 @@ function WX_UDPSocketSendString(id, data, param) {
         address: config.address,
         message: data,
         port: config.port,
-        length: config.length,
-        offset: config.offset,
         setBroadcast: config.setBroadcast,
     });
 }
@@ -154,7 +153,7 @@ function WX_UDPSocketSendBuffer(id, dataPtr, dataLength, param) {
     const config = formatJsonStr(param);
     obj.send({
         address: config.address,
-        message: GameGlobal.Module.HEAPU8.subarray(dataPtr, dataPtr + dataLength),
+        message: GameGlobal.Module.HEAPU8.buffer.slice(dataPtr, dataPtr + dataLength),
         port: config.port,
         length: config.length,
         offset: config.offset,

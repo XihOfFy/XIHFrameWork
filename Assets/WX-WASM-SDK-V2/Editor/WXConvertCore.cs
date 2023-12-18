@@ -336,8 +336,10 @@ namespace WeChatWASM
                 PlayerSettings.WebGL.emscriptenArgs += " --profiling-funcs ";
             }
 
-            // 添加 -s EXPORTED_RUNTIME_METHODS='["dynCall"]' 到 Emscripten 编译选项
-            PlayerSettings.WebGL.emscriptenArgs += " -s EXPORTED_RUNTIME_METHODS='[\"dynCall\",\"removeRunDependency\",\"ccall\",\"stringToUTF8\",\"lengthBytesUTF8\"]'";
+            string original_EXPORTED_RUNTIME_METHODS = "\"ccall\",\"cwrap\",\"stackTrace\",\"addRunDependency\",\"removeRunDependency\",\"FS_createPath\",\"FS_createDataFile\",\"stackTrace\",\"writeStackCookie\",\"checkStackCookie\"";
+            // 添加额外的EXPORTED_RUNTIME_METHODS
+            string additional_EXPORTED_RUNTIME_METHODS = ",\"lengthBytesUTF8\",\"stringToUTF8\"";
+            PlayerSettings.WebGL.emscriptenArgs += " -s EXPORTED_RUNTIME_METHODS='[" + original_EXPORTED_RUNTIME_METHODS + additional_EXPORTED_RUNTIME_METHODS + "]'";
 
 #if UNITY_2021_2_OR_NEWER
 #if UNITY_2022_1_OR_NEWER

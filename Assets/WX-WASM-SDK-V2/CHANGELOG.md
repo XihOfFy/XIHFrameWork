@@ -6,23 +6,23 @@ Removed - 删除功能/接口
 Fixed - 修复问题
 Others - 其他 
 -->
-## 2023-12-13 【重要更新】
+## 2023-12-18
+【重要更新】包含重要bugfix、特性支持
 ### Feature
-* 新增C# SDK接口注释
+* 普通：TouchStart/TouchEnd去json性能优化
 ### Fixed
-* 严重：修复TouchMove在<iOS 15.0系统BigUnit64Array兼容性问题
+* 重要：修复TCP接口处理buffer
 
-
-## 2023-12-12 【重要更新】
-包含重要bugfix、特性支持
+## 2023-12-12
+【重要更新】包含重要bugfix、特性支持
 ### Feature
 * 重要：优化TCP接口能力，使用请查阅[网络通信适配](https://github.com/wechat-miniprogram/minigame-unity-webgl-transform/blob/main/Design/UsingNetworking.md)
 * 重要：优化UDP接口能力
 * 普通：优化启动剧情能力(Beta)
 * 普通：增加接口WX.CanIUse
 
-## 2023-12-08 【重要更新】
-包含重要bugfix、特性支持
+## 2023-12-08
+【重要更新】包含重要bugfix、特性支持
 ### Feature
 * 重要：新增启动剧情能力(Beta)
 * 重要：新增TCP接口能力
@@ -31,12 +31,13 @@ Others - 其他
 * 严重：修复TouchMove在<iOS 15.0系统BigUnit64Array兼容性问题
 * 严重：修复适配插件处理代码分包时序导致的一定概率启动失败
 
-## 2023-11-29 【普通更新】
+## 2023-11-29
+【普通更新】
 ### Fixed
 * 普通：修复TouchMove优化在2020之前版本产生的导出错误
 
-## 2023-11-28 重要更新】
-包含重要bugfix、特性支持
+## 2023-11-28
+【重要更新】包含重要bugfix、特性支持
 ### Feature
 * 普通：FileSystem Stat支持isDirectory和isFile
 * 普通：优化胶水层代码，删减多余代码

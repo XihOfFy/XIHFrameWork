@@ -1,6 +1,6 @@
 
 import moduleHelper from './module-helper';
-import { uid, formatResponse, formatJsonStr, formatTouchEvent, onEventCallback, offEventCallback, getListObject } from './utils';
+import { uid, formatResponse, formatJsonStr, onEventCallback, offEventCallback, getListObject } from './utils';
 let OnAccelerometerChangeList;
 let OnAudioInterruptionBeginList;
 let OnAudioInterruptionEndList;
@@ -33,9 +33,6 @@ let OnNetworkStatusChangeList;
 let OnNetworkWeakChangeList;
 let OnScreenRecordingStateChangedList;
 let OnShowList;
-let OnTouchCancelList;
-let OnTouchEndList;
-let OnTouchStartList;
 let OnUnhandledRejectionList;
 let OnUserCaptureScreenList;
 let OnVoIPChatInterruptedList;
@@ -3918,69 +3915,6 @@ export default {
     WX_OffShow() {
         (OnShowList || []).forEach((v) => {
             wx.offShow(v);
-        });
-    },
-    WX_OnTouchCancel() {
-        if (!OnTouchCancelList) {
-            OnTouchCancelList = [];
-        }
-        const callback = (res) => {
-            const touches = res.touches.map((v) => formatTouchEvent(v));
-            const resStr = JSON.stringify({
-                touches,
-                timeStamp: parseInt(res.timeStamp, 10),
-                changedTouches: res.changedTouches.map((v) => formatTouchEvent(v)),
-            });
-            moduleHelper.send('_OnTouchCancelCallback', resStr);
-        };
-        OnTouchCancelList.push(callback);
-        wx.onTouchCancel(callback);
-    },
-    WX_OffTouchCancel() {
-        (OnTouchCancelList || []).forEach((v) => {
-            wx.offTouchCancel(v);
-        });
-    },
-    WX_OnTouchEnd() {
-        if (!OnTouchEndList) {
-            OnTouchEndList = [];
-        }
-        const callback = (res) => {
-            const touches = res.touches.map((v) => formatTouchEvent(v));
-            const resStr = JSON.stringify({
-                touches,
-                timeStamp: parseInt(res.timeStamp, 10),
-                changedTouches: res.changedTouches.map((v) => formatTouchEvent(v)),
-            });
-            moduleHelper.send('_OnTouchEndCallback', resStr);
-        };
-        OnTouchEndList.push(callback);
-        wx.onTouchEnd(callback);
-    },
-    WX_OffTouchEnd() {
-        (OnTouchEndList || []).forEach((v) => {
-            wx.offTouchEnd(v);
-        });
-    },
-    WX_OnTouchStart() {
-        if (!OnTouchStartList) {
-            OnTouchStartList = [];
-        }
-        const callback = (res) => {
-            const touches = res.touches.map((v) => formatTouchEvent(v));
-            const resStr = JSON.stringify({
-                touches,
-                timeStamp: parseInt(res.timeStamp, 10),
-                changedTouches: res.changedTouches.map((v) => formatTouchEvent(v)),
-            });
-            moduleHelper.send('_OnTouchStartCallback', resStr);
-        };
-        OnTouchStartList.push(callback);
-        wx.onTouchStart(callback);
-    },
-    WX_OffTouchStart() {
-        (OnTouchStartList || []).forEach((v) => {
-            wx.offTouchStart(v);
         });
     },
     WX_OnUnhandledRejection() {

@@ -649,24 +649,6 @@ WX_OnShow:function() {
 WX_OffShow:function() {
     window.WXWASMSDK.WX_OffShow();
 },
-WX_OnTouchCancel:function() {
-    window.WXWASMSDK.WX_OnTouchCancel();
-},
-WX_OffTouchCancel:function() {
-    window.WXWASMSDK.WX_OffTouchCancel();
-},
-WX_OnTouchEnd:function() {
-    window.WXWASMSDK.WX_OnTouchEnd();
-},
-WX_OffTouchEnd:function() {
-    window.WXWASMSDK.WX_OffTouchEnd();
-},
-WX_OnTouchStart:function() {
-    window.WXWASMSDK.WX_OnTouchStart();
-},
-WX_OffTouchStart:function() {
-    window.WXWASMSDK.WX_OffTouchStart();
-},
 WX_OnUnhandledRejection:function() {
     window.WXWASMSDK.WX_OnUnhandledRejection();
 },

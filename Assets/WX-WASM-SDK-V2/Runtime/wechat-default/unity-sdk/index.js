@@ -26,7 +26,7 @@ import font from './font/index';
 import authorize from './authorize';
 import videoDecoder from './video/index';
 import mobileKeyboard from './mobileKeyboard/index';
-import touchMove from './touch/touchMove';
+import touch from './touch/index';
 import TCPSocket from './TCPSocket/index';
 import UDPSocket from './UDPSocket/index';
 const unityVersion = '$unityVersion$';
@@ -103,7 +103,7 @@ const WXWASMSDK = {
     ...authorize,
     ...videoDecoder,
     ...mobileKeyboard,
-    ...touchMove,
+    ...touch,
     ...TCPSocket,
     ...UDPSocket,
 };

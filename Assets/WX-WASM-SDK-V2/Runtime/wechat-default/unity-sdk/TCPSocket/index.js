@@ -26,6 +26,7 @@ function WX_TCPSocketClose(id) {
         return;
     }
     obj.close();
+    delete TCPSocketList[id];
 }
 function WX_TCPSocketConnect(id, option) {
     const obj = getTCPSocketObject(id);
@@ -46,7 +47,7 @@ function WX_TCPSocketWriteBuffer(id, dataPtr, dataLength) {
     if (!obj) {
         return;
     }
-    obj.write(GameGlobal.Module.HEAPU8.subarray(dataPtr, dataPtr + dataLength));
+    obj.write(GameGlobal.Module.HEAPU8.buffer.slice(dataPtr, dataPtr + dataLength));
 }
 function WX_TCPSocketOffBindWifi(id) {
     const obj = getTCPSocketObject(id);
@@ -148,7 +149,7 @@ function WX_TCPSocketOnMessage(id, needInfo) {
             GameGlobal.Module.HEAPU8.set(messageByteArray, messageBuffer);
             GameGlobal.Module.HEAPU8.set(localInfoByteArray, localInfoBuffer);
             GameGlobal.Module.HEAPU8.set(remoteInfoByteArray, remoteInfoBuffer);
-            GameGlobal.Module.dynCall('viiiii', wxTCPSocketOnMessageCallback, [idPtr, messageBuffer, messageByteArray.length, localInfoBuffer, remoteInfoBuffer]);
+            GameGlobal.Module.dynCall_viiiii(wxTCPSocketOnMessageCallback, idPtr, messageBuffer, messageByteArray.length, localInfoBuffer, remoteInfoBuffer);
             GameGlobal.Module._free(idPtr);
             GameGlobal.Module._free(messageBuffer);
             GameGlobal.Module._free(localInfoBuffer);
@@ -162,7 +163,7 @@ function WX_TCPSocketOnMessage(id, needInfo) {
             const messageByteArray = new Uint8Array(res.message);
             const messageBuffer = GameGlobal.Module._malloc(messageByteArray.length);
             GameGlobal.Module.HEAPU8.set(messageByteArray, messageBuffer);
-            GameGlobal.Module.dynCall('viiiii', wxTCPSocketOnMessageCallback, [idPtr, messageBuffer, messageByteArray.length, 0, 0]);
+            GameGlobal.Module.dynCall_viiiii(wxTCPSocketOnMessageCallback, idPtr, messageBuffer, messageByteArray.length, 0, 0);
             GameGlobal.Module._free(idPtr);
             GameGlobal.Module._free(messageBuffer);
         }

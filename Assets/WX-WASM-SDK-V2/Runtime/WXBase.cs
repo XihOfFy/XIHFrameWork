@@ -914,19 +914,70 @@ namespace WeChatWASM
         }
 #endregion
 
-#region TouchMove
+#region Touch
+        /// <summary>
+        /// [wx.onTouchCancel(function listener)](https://developers.weixin.qq.com/minigame/dev/api/device/touch-event/wx.onTouchCancel.html)
+        /// 监听触点失效事件
+        /// **注意**
+        /// - 在 Windows/Mac 设备上，将会由鼠标事件转义而成。
+        /// </summary>
+        public static void OnTouchCancel(Action<OnTouchStartListenerResult> result)
+        {
+            WXSDKManagerHandler.Instance.OnTouchCancel(result);
+        }
+
+        public static void OffTouchCancel(Action<OnTouchStartListenerResult> result = null)
+        {
+            WXSDKManagerHandler.Instance.OffTouchCancel(result);
+        }
+
+        /// <summary>
+        /// [wx.onTouchEnd(function listener)](https://developers.weixin.qq.com/minigame/dev/api/device/touch-event/wx.onTouchEnd.html)
+        /// 监听触摸结束事件
+        /// **注意**
+        /// - 在 Windows/Mac 设备上，将会由鼠标事件转义而成。
+        /// </summary>
+        public static void OnTouchEnd(Action<OnTouchStartListenerResult> result)
+        {
+            WXSDKManagerHandler.Instance.OnTouchEnd(result);
+        }
+
+        public static void OffTouchEnd(Action<OnTouchStartListenerResult> result = null)
+        {
+            WXSDKManagerHandler.Instance.OffTouchEnd(result);
+        }
+
         /// <summary>
         /// [wx.onTouchMove(function listener)](https://developers.weixin.qq.com/minigame/dev/api/device/touch-event/wx.onTouchMove.html)
         /// 监听触点移动事件
+        /// **注意**
+        /// - 在 Windows/Mac 设备上，将会由鼠标事件转义而成。
+        /// - 在 Windows/Mac 设备上并处于鼠标锁定状态时，touchMove 事件将会随着鼠标滑动持续触发。
         /// </summary>
         public static void OnTouchMove(Action<OnTouchStartListenerResult> result)
         {
             WXSDKManagerHandler.Instance.OnTouchMove(result);
         }
 
-        public static void OffTouchMove(Action<OnTouchStartListenerResult> result)
+        public static void OffTouchMove(Action<OnTouchStartListenerResult> result = null)
         {
             WXSDKManagerHandler.Instance.OffTouchMove(result);
+        }
+
+        /// <summary>
+        /// [wx.onTouchStart(function listener)](https://developers.weixin.qq.com/minigame/dev/api/device/touch-event/wx.onTouchStart.html)
+        /// 监听开始触摸事件
+        /// **注意**
+        /// - 在 Windows/Mac 设备上，将会由鼠标事件转义而成。
+        /// </summary>
+        public static void OnTouchStart(Action<OnTouchStartListenerResult> result)
+        {
+            WXSDKManagerHandler.Instance.OnTouchStart(result);
+        }
+
+        public static void OffTouchStart(Action<OnTouchStartListenerResult> result = null)
+        {
+            WXSDKManagerHandler.Instance.OffTouchStart(result);
         }
 #endregion
 #region TCPSocket
