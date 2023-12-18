@@ -7,7 +7,6 @@ namespace Aot2Hot
     public partial class Aot2HotMgr
     {
         string PACKAGE_NAME = "DefaultPackage";
-        //把这个改为携程，等全部下载完，补充元数据后再使用unitask
         IEnumerator DownloadHotRes()
         {
             var package = YooAssets.GetPackage(PACKAGE_NAME);
