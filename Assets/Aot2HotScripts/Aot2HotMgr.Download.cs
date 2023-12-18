@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 using YooAsset;
 
@@ -7,7 +7,8 @@ namespace Aot2Hot
     public partial class Aot2HotMgr
     {
         string PACKAGE_NAME = "DefaultPackage";
-        async UniTaskVoid DownloadHotRes()
+        //把这个改为携程，等全部下载完，补充元数据后再使用unitask
+        IEnumerator DownloadHotRes()
         {
             var package = YooAssets.GetPackage(PACKAGE_NAME);
             int downloadingMaxNum = 10;
@@ -15,8 +16,8 @@ namespace Aot2Hot
             var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
 
             //注册回调方法
-            downloader.OnDownloadErrorCallback = OnDownloadError;
-            downloader.OnDownloadProgressCallback = OnDownloadProgress;
+            //downloader.OnDownloadErrorCallback = OnDownloadError;
+            //downloader.OnDownloadProgressCallback = OnDownloadProgress;
 
             //没有需要下载的资源
             if (downloader.TotalDownloadCount == 0)
@@ -26,7 +27,7 @@ namespace Aot2Hot
             else {
                 //开启下载
                 downloader.BeginDownload();
-                await downloader.ToUniTask();
+                yield return downloader;
                 //检测下载结果
                 if (downloader.Status == EOperationStatus.Succeed)
                 {

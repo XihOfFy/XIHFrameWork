@@ -58,16 +58,16 @@ MonoBehaviour:
       AssetTags: RawFile
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Raw/Aot
-        CollectorGUID: e0c8f8fbad229c4469d4ed7f78edb4ad
+      - CollectPath: Assets/Res/Raw/Hot
+        CollectorGUID: 5b95201c58052624dae4fa4d2e3f5546
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Res/Raw/Hot
-        CollectorGUID: 5b95201c58052624dae4fa4d2e3f5546
+      - CollectPath: Assets/Res/Raw/Aot
+        CollectorGUID: e0c8f8fbad229c4469d4ed7f78edb4ad
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
