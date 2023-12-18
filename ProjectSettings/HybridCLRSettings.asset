@@ -30,6 +30,7 @@ MonoBehaviour:
   - System.Core
   - System
   - UniTask
+  - YooAsset
   - UnityEngine.AssetBundleModule
   - UnityEngine.CoreModule
   - UnityEngine.JSONSerializeModule
