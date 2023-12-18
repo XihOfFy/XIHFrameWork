@@ -15,15 +15,18 @@ namespace Aot
         {
             isLogoEnd = false;
             tip.text = "Logo";
-            tip.transform.DOScale(1, 2).From(0).OnComplete(() => {
+            tip.transform.DOScale(1, 2).From(0).OnComplete(() =>
+            {
                 isLogoEnd = true;
             });
         }
-        private async UniTaskVoid EndLogo() {
-            if (!isLogoEnd) {
+        private async UniTaskVoid EndLogo()
+        {
+            if (!isLogoEnd)
+            {
                 await UniTask.WaitUntil(() => isLogoEnd);
             }
-            await YooAssets.LoadSceneAsync("Assets/Res/Scene/Aot2HotScene/Aot2Hot.unity").ToUniTask();
+            await YooAssets.LoadSceneAsync("Assets/Res/Aot2Hot/Scene/Aot2Hot.unity").ToUniTask();
         }
     }
 }

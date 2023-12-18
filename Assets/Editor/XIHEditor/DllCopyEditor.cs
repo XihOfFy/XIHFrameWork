@@ -25,7 +25,7 @@ public class DllCopyEditor
     public static void CopyDlls(BuildTarget target)
     {
         CopyAotDll("Assets/Res/Raw/Aot", target);
-        CopyHotDll(true, "Assets/Res/Raw/Aot2Hot", target);
+        CopyHotDll(true, "Assets/Res/Aot2Hot/Raw", target);
         CopyHotDll(false, "Assets/Res/Raw/Hot", target);
         AssetDatabase.Refresh();
     }

@@ -8,7 +8,7 @@ namespace Aot
 {
     public partial class AotMgr
     {
-        const string PACKAGE_NAME = "DefaultPackage";
+        string PACKAGE_NAME = "DefaultPackage";
         //为了保持全平台一致逻辑，所以都使用webgl 小游戏的处理方式，不需要首包资源，全部通过下载
         async UniTaskVoid InitYooAssetStart()
         {

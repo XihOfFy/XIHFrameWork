@@ -29,7 +29,7 @@ MonoBehaviour:
       AssetTags: Aot2Hot
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Scene/Aot2HotScene
+      - CollectPath: Assets/Res/Aot2Hot/Scene
         CollectorGUID: a0e6b4191c0f86d42b5ccfa6bff41bda
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -37,11 +37,19 @@ MonoBehaviour:
         FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Res/Raw/Aot2Hot
+      - CollectPath: Assets/Res/Aot2Hot/Raw
         CollectorGUID: 0617fb888a512414dae4e59b4e980136
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackRawFile
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Aot2Hot/Font
+        CollectorGUID: 56a9ab4bda6e3ed49a2ecbc5c1f4bc8d
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -54,7 +62,7 @@ MonoBehaviour:
         CollectorGUID: e0c8f8fbad229c4469d4ed7f78edb4ad
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackRawFile
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -62,7 +70,7 @@ MonoBehaviour:
         CollectorGUID: 5b95201c58052624dae4fa4d2e3f5546
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackRawFile
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -71,11 +79,11 @@ MonoBehaviour:
       AssetTags: HotScene
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Scene/HotScene
+      - CollectPath: Assets/Res/HotScene
         CollectorGUID: ac90aca6f7478e841b369e3a5315bf17
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackSeparately
         FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
