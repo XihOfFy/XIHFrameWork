@@ -15,7 +15,7 @@ MonoBehaviour:
   ProjectConf:
     projectName: TryAndUp
     Appid: wxdb969b951fdef68f
-    CDN: http://192.168.7.113:5000/WebGL/
+    CDN: https://gitee.com/xihoffy/PublicAccess/raw/master/WebGL/
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 
@@ -23,7 +23,7 @@ MonoBehaviour:
     StreamCDN: 
     bundleHashLength: 32
     bundlePathIdentifier: StreamingAssets;
-    bundleExcludeExtensions: json;
+    bundleExcludeExtensions: json;version;
     AssetsUrl: 
     MemorySize: 256
     HideAfterCallMain: 1
