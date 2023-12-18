@@ -15,8 +15,8 @@ namespace Aot2Hot
             var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
 
             //注册回调方法
-            //downloader.OnDownloadErrorCallback = OnDownloadError;
-            //downloader.OnDownloadProgressCallback = OnDownloadProgress;
+            downloader.OnDownloadErrorCallback = OnDownloadError;
+            downloader.OnDownloadProgressCallback = OnDownloadProgress;
 
             //没有需要下载的资源
             if (downloader.TotalDownloadCount == 0)

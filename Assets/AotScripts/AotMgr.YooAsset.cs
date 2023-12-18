@@ -52,6 +52,8 @@ namespace Aot
                     RemoteServices = new RemoteServices(),
                     BuildinQueryServices = new BuildinQueryServices()
                 };
+                //因为微信小游戏平台的特殊性，需要关闭WebGL的缓存系统，使用微信自带的缓存系统。
+                YooAssets.SetCacheSystemDisableCacheOnWebGL();
             }
             //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
             //createParameters.DecryptionServices = new DecryptionServices();
@@ -159,6 +161,10 @@ namespace Aot
             int failedTryAgain = 3;
             var downloader = package.CreateResourceDownloader("Aot2Hot", downloadingMaxNum, failedTryAgain);
 
+            //注册回调方法，这里AOT使用这个是避免裁剪，不然HOT找不到该方法了
+            downloader.OnDownloadErrorCallback = OnDownloadError;
+            downloader.OnDownloadProgressCallback = OnDownloadProgress;
+
             //没有需要下载的资源
             if (downloader.TotalDownloadCount == 0)
             {
@@ -178,6 +184,14 @@ namespace Aot
             {
                 QuitGame();
             }
+        }
+        void OnDownloadError(string fileName, string error)
+        {
+            Debug.LogError($"OnDownloadError:{fileName} > {error}");
+        }
+        void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
+        {
+            Debug.LogWarning($"正在下载({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB");
         }
     }
 }

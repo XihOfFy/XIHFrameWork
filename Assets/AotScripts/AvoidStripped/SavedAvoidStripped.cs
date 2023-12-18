@@ -37,32 +37,4 @@ public void RefMethods<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TState
         this.StartCoroutine(nameof(RefMethods));
 
     }
-    async UniTaskVoid DownloadHotRes()
-    {
-        var package = YooAssets.GetPackage("");
-        int downloadingMaxNum = 10;
-        int failedTryAgain = 3;
-        var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
-
-        void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
-        {
-        }
-        void OnDownloadError(string fileName, string error)
-        {
-        }
-        //注册回调方法
-        downloader.OnDownloadErrorCallback = OnDownloadError;
-        downloader.OnDownloadProgressCallback = OnDownloadProgress;
-
-        //没有需要下载的资源
-        if (downloader.TotalDownloadCount == 0)
-        {
-        }
-        else
-        {
-            //开启下载
-            downloader.BeginDownload();
-            await downloader.ToUniTask();
-        }
-    }
 }
