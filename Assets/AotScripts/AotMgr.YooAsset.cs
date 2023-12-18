@@ -12,14 +12,11 @@ namespace Aot
         //为了保持全平台一致逻辑，所以都使用webgl 小游戏的处理方式，不需要首包资源，全部通过下载
         async UniTaskVoid InitYooAssetStart()
         {
-            tip.text = "InitYooAssetStart";
             // 初始化资源系统
             YooAssets.Initialize();
-            tip.text = "CreatePackage";
 
             // 创建资源包裹类
             var package = YooAssets.CreatePackage(PACKAGE_NAME);
-            tip.text = "SetDefaultPackage";
 
             // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
             YooAssets.SetDefaultPackage(package);
@@ -58,14 +55,14 @@ namespace Aot
             }
             //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
             //createParameters.DecryptionServices = new DecryptionServices();
-            tip.text = "package.InitializeAsync 1";
 
             try
             {
+                //这里webgl模式，WebPlayModeInitializationOperation会使用buildin去StreamingAssets搜寻清单文件 ，在小游戏平台因为不存在该资源可能会出现：System.Exception: The manifest file format is invalid !错误
+                //因为有些web服务器，资源不存在也会返回HelloWorld，所以导致清单版本以为是HelloWorld，导致后续出问题
+                //所以这里try一下避免因为资源不存在导致无法正常继续运行
                 var initializationOperation = package.InitializeAsync(createParameters);
-                tip.text = " package.InitializeAsync 2";
                 await initializationOperation.ToUniTask();
-                tip.text = " await initializationOperation.ToUniTask()";
 
                 // 如果初始化失败弹出提示界面
                 if (initializationOperation.Status != EOperationStatus.Succeed)
@@ -77,7 +74,6 @@ namespace Aot
             catch (Exception e) {
                 Debug.LogError(e);
             }
-            tip.text = " begin UpdatePackageVersionAsync";
 
             UpdatePackageVersionAsync(package).Forget();
         }
@@ -137,8 +133,6 @@ namespace Aot
         //获取资源版本
         async UniTaskVoid UpdatePackageVersionAsync(ResourcePackage package)
         {
-            tip.text = "UpdatePackageVersionAsync";
-
             var yooOp = package.UpdatePackageVersionAsync();
             var uniOp = yooOp.ToUniTask();
             await uniOp;
@@ -156,8 +150,6 @@ namespace Aot
         //UpdatePackageManifest
         async UniTaskVoid UpdatePackageManifest(ResourcePackage package,string packageVersion)
         {
-            tip.text = "UpdatePackageManifest";
-
             var yooOp = package.UpdatePackageManifestAsync(packageVersion,true);
             var uniOp = yooOp.ToUniTask();
             await uniOp;
@@ -173,8 +165,6 @@ namespace Aot
         }
         //资源包下载,只下载aot2hot的tag资源，余下的到hot再继续下载，因为aot不提供ui功能
         async UniTaskVoid DownloadAot2HotRes(ResourcePackage package) {
-            tip.text = "DownloadAot2HotRes";
-
             int downloadingMaxNum = 10;
             int failedTryAgain = 3;
             var downloader = package.CreateResourceDownloader("Aot2Hot", downloadingMaxNum, failedTryAgain);

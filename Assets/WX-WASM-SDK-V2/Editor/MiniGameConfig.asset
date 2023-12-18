@@ -15,11 +15,11 @@ MonoBehaviour:
   ProjectConf:
     projectName: TryAndUp
     Appid: wxdb969b951fdef68f
-    CDN: http://localhost:5000/WebGL/
+    CDN: http://192.168.7.113:5000/WebGL/
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 
-    DST: C:/Data/MiniGame/XIHFrameWork/XIHWebServerRes/MiniGame
+    DST: D:/MiniWS/XIHFrameWork/XIHWebServerRes/MiniGame
     StreamCDN: 
     bundleHashLength: 32
     bundlePathIdentifier: StreamingAssets;

@@ -9,10 +9,10 @@ namespace Aot
     public partial class AotMgr : MonoBehaviour
     {
         public EPlayMode playMode = EPlayMode.EditorSimulateMode;
-        public TMP_Text tip;
         private void Awake()
         {
-            tip.text = "Awake";
+            StartLogo();
+
             if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)
             {
                 InitConfigStart(8).Forget();
@@ -25,8 +25,6 @@ namespace Aot
 
         async UniTaskVoid GotoAot2HotScene()
         {
-            tip.text = "GotoAot2HotScene";
-
             var rawOp = YooAssets.LoadAssetAsync<TextAsset>("Assets/Res/Raw/Aot2Hot/Aot2Hot.bytes");
             await rawOp.ToUniTask();
             if (rawOp.Status != EOperationStatus.Succeed)
@@ -41,9 +39,8 @@ namespace Aot
 #endif
             rawOp.Release();
             Debug.Log($"成功加载{hotUpdateAss.GetName()}热更程序集");
-            await YooAssets.LoadSceneAsync("Assets/Res/Scene/Aot2HotScene/Aot2Hot.unity").ToUniTask();
+            EndLogo().Forget();
         }
-
 
         //AOT启动过程必须保持一切顺利，不然强制退出游戏，到了Hot才可以给予UI弹框选择，即AOT过程不要有任何UI提示
         void QuitGame()

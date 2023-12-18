@@ -8,7 +8,8 @@ namespace Aot
     {
         public static FrontConfig frontConfig = new FrontConfig();
         public static string GetFrontUrl() {
-            string url = "http://localhost:5000/Front/";
+            string url = "http://192.168.7.113:5000/Front/";
+            //string url = "http://localhost:5000/Front/";
 #if UNITY_EDITOR
             //url = $"http://{GetIP()}:5000/Front/";
             url += $"{UnityEditor.EditorUserBuildSettings.activeBuildTarget}.json";
@@ -34,8 +35,8 @@ namespace Aot
             {
                 Directory.CreateDirectory(dir);
             }
-            //string preffixUrl = "http://192.168.7.113:5000/";自己指定ip
-            string preffixUrl = $"http://localhost:5000/";//自动获取本机的ip
+            string preffixUrl = "http://192.168.7.113:5000/";//自己指定ip
+            //string preffixUrl = $"http://localhost:5000/";//自动获取本机的ip
             var config = new FrontConfig();
             config.focusVersion = "0.0.0";
 
