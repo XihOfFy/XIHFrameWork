@@ -56,23 +56,13 @@ namespace Aot
             //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
             //createParameters.DecryptionServices = new DecryptionServices();
 
-            try
+            var initializationOperation = package.InitializeAsync(createParameters);
+            await initializationOperation.ToUniTask();
+            // 如果初始化失败弹出提示界面
+            if (initializationOperation.Status != EOperationStatus.Succeed)
             {
-                //这里webgl模式，WebPlayModeInitializationOperation会使用buildin去StreamingAssets搜寻清单文件 ，在小游戏平台因为不存在该资源可能会出现：System.Exception: The manifest file format is invalid !错误
-                //因为有些web服务器，资源不存在也会返回HelloWorld，所以导致清单版本以为是HelloWorld，导致后续出问题
-                //所以这里try一下避免因为资源不存在导致无法正常继续运行
-                var initializationOperation = package.InitializeAsync(createParameters);
-                await initializationOperation.ToUniTask();
-
-                // 如果初始化失败弹出提示界面
-                if (initializationOperation.Status != EOperationStatus.Succeed)
-                {
-                    QuitGame();//AOT启动过程必须保持一切顺利，不然全部退出游戏
-                    return;
-                }
-            }
-            catch (Exception e) {
-                Debug.LogError(e);
+                QuitGame();//AOT启动过程必须保持一切顺利，不然全部退出游戏
+                return;
             }
 
             UpdatePackageVersionAsync(package).Forget();
