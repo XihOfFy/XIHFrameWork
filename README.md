@@ -8,7 +8,7 @@
 
 - Aot2HotScripts: 热更首个执行的代码，AOT跳转HOT前，需要通过这个来更新全部资源，也可以热更（重启生效）
 
-- AotScene：AOT场景，启动场景
+- AotRes：AOT场景和资源，启动场景
 
 - AotScripts: AOT代码，启动后只更新Aot2Hot的部分资源，快速跳到热更更新场景
 

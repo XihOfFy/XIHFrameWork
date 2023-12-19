@@ -18,7 +18,7 @@ public sealed class SvrMenus
         if (!EditorApplication.isPlaying)
         {
             if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-                EditorSceneManager.OpenScene("Assets/AotScene/AotSplash.unity");
+                EditorSceneManager.OpenScene("Assets/AotRes/AotSplash.unity");
             EditorApplication.isPlaying = !EditorApplication.isPlaying;
         }
     }

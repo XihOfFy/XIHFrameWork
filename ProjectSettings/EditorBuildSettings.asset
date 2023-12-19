@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/AotScene/AotSplash.unity
+    path: Assets/AotRes/AotSplash.unity
     guid: 61066a4b9bffc96498b661d6a0e6f90b
   m_configObjects: {}

@@ -14,7 +14,7 @@ namespace Aot
         private void StartLogo()
         {
             isLogoEnd = false;
-            tip.text = "Logo";
+            tip.text = "XIH\nGamer";
             tip.transform.DOScale(1, 2).From(0).OnComplete(() =>
             {
                 isLogoEnd = true;

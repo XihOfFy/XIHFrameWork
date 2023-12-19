@@ -108,7 +108,7 @@ namespace Aot
             }
             string IRemoteServices.GetRemoteFallbackURL(string fileName)
             {
-                return AotConfig.frontConfig.fallbackHostServer + "/" + fileName;
+                return AotConfig.frontConfig.fallbackHostServer + "/" + fileName; 
             }
         }
         /// <summary>
@@ -118,6 +118,7 @@ namespace Aot
         {
             public bool Query(string packageName, string fileName)
             {
+                //Debug.Log($"BuildinQueryServices {packageName} >> {fileName}");
                 return false;
             }
         }

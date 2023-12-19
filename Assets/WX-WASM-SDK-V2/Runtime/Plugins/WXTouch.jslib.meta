@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 444bec77765d04ba4b9651e697c210de
+guid: 181a2b83a01be4385986be06d6f06c7c
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -22,11 +22,6 @@ PluginImporter:
       enabled: 0
       settings:
         DefaultValueInitialized: true
-  - first:
-      Facebook: WebGL
-    second:
-      enabled: 1
-      settings: {}
   - first:
       WebGL: WebGL
     second:

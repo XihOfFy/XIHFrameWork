@@ -8,17 +8,6 @@
     <type fullname="HybridCLR.LoadImageErrorCode" preserve="all" />
     <type fullname="HybridCLR.RuntimeApi" preserve="all" />
   </assembly>
-  <assembly fullname="UniTask">
-    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.PlayerLoopTiming" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all" />
-  </assembly>
-  <assembly fullname="UniTask.YooAsset">
-    <type fullname="Cysharp.Threading.Tasks.AsyncOperationBaseExtensions" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.OperationHandleBaseExtensions" preserve="all" />
-  </assembly>
   <assembly fullname="Unity.TextMeshPro">
     <type fullname="TMPro.TMP_Text" preserve="all" />
   </assembly>
@@ -37,7 +26,6 @@
     <type fullname="YooAsset.DownloaderOperation/OnDownloadError" preserve="all" />
     <type fullname="YooAsset.DownloaderOperation/OnDownloadProgress" preserve="all" />
     <type fullname="YooAsset.EOperationStatus" preserve="all" />
-    <type fullname="YooAsset.HandleBase" preserve="all" />
     <type fullname="YooAsset.ResourceDownloaderOperation" preserve="all" />
     <type fullname="YooAsset.ResourcePackage" preserve="all" />
     <type fullname="YooAsset.SceneHandle" preserve="all" />
@@ -49,22 +37,17 @@
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
     <type fullname="System.Diagnostics.DebuggerHiddenAttribute" preserve="all" />
-    <type fullname="System.Exception" preserve="all" />
     <type fullname="System.IDisposable" preserve="all" />
-    <type fullname="System.IProgress`1" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
     <type fullname="System.Int64" preserve="all" />
     <type fullname="System.NotSupportedException" preserve="all" />
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Reflection.Assembly" preserve="all" />
-    <type fullname="System.Runtime.CompilerServices.AsyncStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
-    <type fullname="System.Runtime.CompilerServices.IAsyncStateMachine" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IteratorStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.String" preserve="all" />
     <type fullname="System.Type" preserve="all" />
-    <type fullname="System.ValueType" preserve="all" />
   </assembly>
 </linker>

@@ -13,8 +13,13 @@ namespace Aot2Hot
     public partial class Aot2HotMgr : MonoBehaviour
     {
         public TMP_Text tip;
-        void Awake()
+        private void Awake()
         {
+            StartCoroutine(nameof(IEAwake));
+        }
+        IEnumerator IEAwake()
+        {
+            yield return YooAssets.LoadAllAssetsAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
             StartCoroutine(nameof(DownloadHotRes));
         }
 
