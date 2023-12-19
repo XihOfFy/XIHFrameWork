@@ -53,6 +53,14 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/Res/Aot2Hot/Res
+        CollectorGUID: d8d032cd296912847a3e00941a48a977
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: RawFile
       GroupDesc: "\u539F\u59CB\u6587\u4EF6"
       AssetTags: RawFile

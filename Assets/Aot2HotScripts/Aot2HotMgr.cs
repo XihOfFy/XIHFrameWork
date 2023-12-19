@@ -6,6 +6,7 @@ using HybridCLR;
 using System.Reflection;
 using Aot;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace Aot2Hot
 {
@@ -13,8 +14,11 @@ namespace Aot2Hot
     public partial class Aot2HotMgr : MonoBehaviour
     {
         public TMP_Text tip;
+        public Image progerssImg;
         private void Awake()
         {
+            tip.text = "加载中... 请稍等";
+            progerssImg.fillAmount = 0;
             StartCoroutine(nameof(IEAwake));
         }
         IEnumerator IEAwake()
@@ -26,6 +30,9 @@ namespace Aot2Hot
         void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
         {
             tip.text = $"正在下载({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB";
+            if (totalDownloadBytes > 0) {
+                progerssImg.fillAmount = 1.0f * currentDownloadBytes / totalDownloadBytes;
+            }
         }
         void TryReDownload() {
             StartCoroutine(nameof(DownloadHotRes));
@@ -36,6 +43,8 @@ namespace Aot2Hot
         }
         IEnumerator GotoHotScene()
         {
+            progerssImg.fillAmount = 1;
+
             //// 注意：location只需要填写资源包里的任意资源地址。
             var rawAotOp = YooAssets.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Aot/mscorlib.bytes");
             yield return rawAotOp;
