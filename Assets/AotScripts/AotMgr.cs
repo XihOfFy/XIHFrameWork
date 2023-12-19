@@ -13,6 +13,10 @@ namespace Aot
         {
             StartLogo();
 
+#if UNITY_EDITOR
+            playMode = EPlayMode.EditorSimulateMode;
+#endif
+
             if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)
             {
                 InitConfigStart(8).Forget();

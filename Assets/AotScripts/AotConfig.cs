@@ -6,6 +6,7 @@ namespace Aot
 {
     public class AotConfig
     {
+        public const string PACKAGE_NAME = "DefaultPackage";
         public static FrontConfig frontConfig = new FrontConfig();
         public static string GetFrontUrl() {
             string url = "https://gitee.com/xihoffy/PublicAccess/raw/master/Front/";

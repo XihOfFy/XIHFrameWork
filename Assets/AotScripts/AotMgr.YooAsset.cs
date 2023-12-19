@@ -8,7 +8,6 @@ namespace Aot
 {
     public partial class AotMgr
     {
-        string PACKAGE_NAME = "DefaultPackage";
         //为了保持全平台一致逻辑，所以都使用webgl 小游戏的处理方式，不需要首包资源，全部通过下载
         async UniTaskVoid InitYooAssetStart()
         {
@@ -16,7 +15,7 @@ namespace Aot
             YooAssets.Initialize();
 
             // 创建资源包裹类
-            var package = YooAssets.CreatePackage(PACKAGE_NAME);
+            var package = YooAssets.CreatePackage(AotConfig.PACKAGE_NAME);
 
             // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
             YooAssets.SetDefaultPackage(package);
@@ -27,7 +26,7 @@ namespace Aot
             {
                 createParameters = new EditorSimulateModeParameters()
                 {
-                    SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.ScriptableBuildPipeline.ToString(), PACKAGE_NAME)
+                    SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.ScriptableBuildPipeline.ToString(), AotConfig.PACKAGE_NAME)
                 };
             }
             // 单机运行模式
