@@ -64,7 +64,6 @@ namespace Aot2Hot
 #if !UNITY_EDITOR
                 var ass = Assembly.Load(XIHDecryptionServices.Decrypt(((TextAsset)asset).bytes));
 #endif
-                Debug.Log(asset.name);
             }
             rawHotOp.Release();
 
