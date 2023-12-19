@@ -35,37 +35,38 @@ namespace Aot
             {
                 Directory.CreateDirectory(dir);
             }
-            string preffixUrl = "https://gitee.com/xihoffy/PublicAccess/raw/master/";//自己指定ip
+            var preffixUrl = "https://gitee.com/xihoffy/PublicAccess/raw/master/";//自己指定ip
+            var suffix = "/StreamingAssets/yoo/DefaultPackage";
             //string preffixUrl = $"http://localhost:5000/";//自动获取本机的ip
             var config = new FrontConfig();
             config.focusVersion = "0.0.0";
 
-            config.defaultHostServer = preffixUrl+"Android";
-            config.fallbackHostServer = preffixUrl + "Android";
+            config.defaultHostServer = preffixUrl+"Android"+ suffix;
+            config.fallbackHostServer = preffixUrl + "Android" + suffix;
             var file = $"{dir}/Android.json";
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
 
-            config.defaultHostServer = preffixUrl + "iOS";
-            config.fallbackHostServer = preffixUrl + "iPhone";
+            config.defaultHostServer = preffixUrl + "iOS" + suffix;
+            config.fallbackHostServer = preffixUrl + "iPhone" + suffix;
             file = $"{dir}/iOS.json";
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
 
-            config.defaultHostServer = preffixUrl + "WebGL";
-            config.fallbackHostServer = preffixUrl + "WebGL";
+            config.defaultHostServer = preffixUrl + "WebGL" + suffix;
+            config.fallbackHostServer = preffixUrl + "WebGL" + suffix;
             file = $"{dir}/WebGL.json";
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
 
-            config.defaultHostServer = preffixUrl + "StandaloneWindows64";
-            config.fallbackHostServer = preffixUrl + "StandaloneWindows64";
+            config.defaultHostServer = preffixUrl + "StandaloneWindows64" + suffix;
+            config.fallbackHostServer = preffixUrl + "StandaloneWindows64" + suffix;
             file = $"{dir}/StandaloneWindows64.json";
             if (!File.Exists(file))
             {
