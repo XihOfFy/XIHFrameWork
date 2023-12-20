@@ -28,7 +28,7 @@ namespace Aot
                 {
                     var json = result.downloadHandler.text;
                     AotConfig.frontConfig = JsonUtility.FromJson<FrontConfig>(json);
-#if UNITY_WX
+#if UNITY_WX && !UNITY_EDITOR
                     Debug.LogWarning($"设置微信小游戏的CDN为:{AotConfig.frontConfig.cdn}");
                     WX.SetDataCDN(AotConfig.frontConfig.cdn);
 #endif

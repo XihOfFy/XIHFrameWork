@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
   <assembly fullname="Aot">
+    <type fullname="Aot.AotConfig" preserve="all" />
+    <type fullname="Aot.FrontConfig" preserve="all" />
     <type fullname="Aot.XIHDecryptionServices" preserve="all" />
   </assembly>
   <assembly fullname="HybridCLR.Runtime">
@@ -12,6 +14,7 @@
     <type fullname="TMPro.TMP_Text" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="UnityEngine.Application" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
@@ -52,5 +55,6 @@
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.String" preserve="all" />
     <type fullname="System.Type" preserve="all" />
+    <type fullname="System.Version" preserve="all" />
   </assembly>
 </linker>

@@ -8,14 +8,20 @@ namespace Aot
 {
     public partial class AotMgr : MonoBehaviour
     {
-        public EPlayMode playMode = EPlayMode.EditorSimulateMode;
+        EPlayMode playMode;
         private void Awake()
         {
             StartLogo();
 
-/*#if UNITY_EDITOR
+#if UNITY_WEBGL
+#if UNITY_EDITOR
             playMode = EPlayMode.EditorSimulateMode;
-#endif*/
+#else
+            playMode = EPlayMode.WebPlayMode;
+#endif
+#else
+            playMode = EPlayMode.HostPlayMode;
+#endif
 
             if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)
             {

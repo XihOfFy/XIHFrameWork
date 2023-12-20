@@ -48,6 +48,8 @@ public class JenkinsSupport
     }
     [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
     public static void FullBuild_WithoutHyCLRGenerateAll() {
+        HotBuild();
+
         var curTarget = EditorUserBuildSettings.activeBuildTarget;
         string targetPath = null;
         var buildOptions = BuildOptions.None;
