@@ -14,7 +14,7 @@ namespace Hot
         // Start is called before the first frame update
         void Start()
         {
-            tip.text = "这里是热更场景";
+            tip.text = "这里是热更场景111";
             YooAssets.GetPackage(AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
         }
     }

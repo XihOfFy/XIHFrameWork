@@ -41,52 +41,52 @@ namespace Aot
             }
             else {
                 frontSetting = ScriptableObject.CreateInstance<XIHFrontSetting>();
-                frontSetting.front= $"http://{GetIP()}:5000/Front/";
+                frontSetting.front= $"http://{GetIP()}:5000/Front";
                 AssetDatabase.CreateAsset(frontSetting, cfgPath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 Debug.LogError($"XIH:上线前记得配置{cfgPath}为公网路径");
             }
             var preffixUrl = frontSetting.front;//例如 http://127.0.0.1:5000/Front/
-            if (preffixUrl.EndsWith("/")) preffixUrl = preffixUrl.Substring(0,preffixUrl.Length-1);//http://127.0.0.1:5000/Front
+            if (preffixUrl.EndsWith("/")) preffixUrl = preffixUrl.TrimEnd('/');
             preffixUrl = preffixUrl.Substring(0,preffixUrl.LastIndexOf('/')+1);//http://127.0.0.1:5000/
 
             var dir = "XIHWebServerRes/Front";
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
-                Debug.LogError($"XIH:上线前记得配置{dir}里面的json，将下载地址改为公网地址");
+                Debug.LogError($"XIH:上线前记得配置{dir}里面的json，将下载地址改为公网地址\n若是打包微信小游戏，微信插件里配置CDN可以不配置，会通过{nameof(FrontConfig)}.{nameof(FrontConfig.cdn)}来代码设置");
             }
-            var suffix = $"/StreamingAssets/yoo/{PACKAGE_NAME}";
             var config = new FrontConfig();
             config.focusVersion = "0.0.0";
+            config.cdn = preffixUrl.TrimEnd('/');
 
-            config.defaultHostServer = preffixUrl+"Android"+ suffix;
-            config.fallbackHostServer = preffixUrl + "Android" + suffix;
+            config.defaultHostServer = preffixUrl+"Android";
+            config.fallbackHostServer = preffixUrl + "Android";
             var file = $"{dir}/Android.json";
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
 
-            config.defaultHostServer = preffixUrl + "iOS" + suffix;
-            config.fallbackHostServer = preffixUrl + "iPhone" + suffix;
+            config.defaultHostServer = preffixUrl + "iOS";
+            config.fallbackHostServer = preffixUrl + "iPhone";
             file = $"{dir}/iOS.json";
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
 
-            config.defaultHostServer = preffixUrl + "WebGL" + suffix;
-            config.fallbackHostServer = preffixUrl + "WebGL" + suffix;
+            config.defaultHostServer = preffixUrl + "WebGL";
+            config.fallbackHostServer = preffixUrl + "WebGL";
             file = $"{dir}/WebGL.json";
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
 
-            config.defaultHostServer = preffixUrl + "StandaloneWindows64" + suffix;
-            config.fallbackHostServer = preffixUrl + "StandaloneWindows64" + suffix;
+            config.defaultHostServer = preffixUrl + "StandaloneWindows64";
+            config.fallbackHostServer = preffixUrl + "StandaloneWindows64";
             file = $"{dir}/StandaloneWindows64.json";
             if (!File.Exists(file))
             {
@@ -110,6 +110,7 @@ namespace Aot
     public class FrontConfig
     {
         public string focusVersion="0.0.0";//最低强更版本
+        public string cdn;//可用来切换CDN，替换微信小游戏设置的CDN，使得缓存策略调整
         //yooasset的下载资源路径，后期可以扩展其他的
         public string defaultHostServer;
         public string fallbackHostServer;

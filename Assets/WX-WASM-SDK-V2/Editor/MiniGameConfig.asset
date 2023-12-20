@@ -15,15 +15,15 @@ MonoBehaviour:
   ProjectConf:
     projectName: TryAndUp
     Appid: wxdb969b951fdef68f
-    CDN: https://gitee.com/xihoffy/PublicAccess/raw/master/WebGL/
+    CDN: 
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 
-    DST: D:/MiniWS/XIHFrameWork/XIHWebServerRes/MiniGame
+    DST: XIHWebServerRes/MiniGame
     StreamCDN: 
     bundleHashLength: 32
-    bundlePathIdentifier: StreamingAssets;
-    bundleExcludeExtensions: json;version;
+    bundlePathIdentifier: StreamingAssets;WebGL
+    bundleExcludeExtensions: json;version
     AssetsUrl: 
     MemorySize: 256
     HideAfterCallMain: 1

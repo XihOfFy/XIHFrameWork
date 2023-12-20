@@ -46,7 +46,9 @@
 
 - 执行菜单栏`XIHUtil/Jenkins/HotBuild`生成热更包，可在编辑器看到运行效果
 
-- 若要打整包测试，打开微信小游戏插件，正确设置CDN路径，执行菜单栏`XIHUtil/Jenkins/FullBuild`
+- 若要打整包测试，执行菜单栏`XIHUtil/Jenkins/FullBuild`
+
+- 远程资源部署方案参考下面的**资源部署**
 
 # 推荐版本
 
@@ -58,12 +60,16 @@
 
 ## 资源部署
 
-- Yooasset打包的AB全部拷贝到下载目录`XIHWebServerRes\WebGL`中
-
-- StreamingAssets也是全部拷贝到`XIHWebServerRes\WebGL\StreamingAssets`中
+- 执行菜单栏`XIHUtil/Jenkins/HotBuild`生成热更包后，在`XIHWebServerRes`文件夹内存在2个文件夹`Front`和`WebGL`，将其原封不动放到远程CDN根目录下面即可
+- `Front`下的json记得修改为远程的url和cdn
 
 # 
 
 ## 解决
 
 - 对于打包报错，记得检查link.xml是否正确裁剪，有些程序集不能全部保留，必须裁剪掉一部分才能在webgl运行，例如`UnityEngine.CoreModule`不能全保留
+- 微信小游戏缓存设置
+
+```
+
+```

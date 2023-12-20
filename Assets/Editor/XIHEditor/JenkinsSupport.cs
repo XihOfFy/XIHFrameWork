@@ -9,8 +9,11 @@ using YooAsset.Editor;
 using Aot;
 using System;
 using System.IO;
+using UnityEditor.VersionControl;
+#if UNITY_WX
 using WeChatWASM;
 using static WeChatWASM.WXConvertCore;
+#endif
 
 //需要自行保证YooAsset资源收集规则已经提前设置了
 public class JenkinsSupport 
@@ -40,10 +43,12 @@ public class JenkinsSupport
     [MenuItem("XIHUtil/Jenkins/FullBuild")]
     public static void FullBuild()
     {
-        var curTarget = EditorUserBuildSettings.activeBuildTarget;
         PrebuildCommand.GenerateAll();
-        HotBuild();
-
+        FullBuild_WithoutHyCLRGenerateAll();
+    }
+    [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
+    public static void FullBuild_WithoutHyCLRGenerateAll() {
+        var curTarget = EditorUserBuildSettings.activeBuildTarget;
         string targetPath = null;
         var buildOptions = BuildOptions.None;
         switch (curTarget)
@@ -80,15 +85,20 @@ public class JenkinsSupport
 
             case BuildTarget.WebGL:
                 {
-                    /*buildOptions = BuildOptions.CompressWithLz4HC;
-                    targetPath = $"{WEB_ROOT}/GameWebGL/";
-                    if (Directory.Exists(targetPath)) Directory.Delete(targetPath, true);
-                    Directory.CreateDirectory(targetPath);*/
-                    if (WXExportError.SUCCEED != WXConvertCore.DoExport()) {
-                        //若是无头模式构建，添加这个行
-                        //Environment.Exit(-1);
+#if UNITY_WX
+                    WXSettings();
+                    if (WXExportError.SUCCEED != WXConvertCore.DoExport())
+                    {
+                        Debug.LogError("转换小游戏失败");
                     }
                     return;
+#else
+                    buildOptions = BuildOptions.CompressWithLz4HC;
+                    targetPath = $"{WEB_ROOT}/GameWebGL/";
+                    if (Directory.Exists(targetPath)) Directory.Delete(targetPath, true);
+                    Directory.CreateDirectory(targetPath);
+                    break;
+#endif
                 }
         }
 
@@ -99,8 +109,9 @@ public class JenkinsSupport
             //若是无头模式构建，添加这个行
             //Environment.Exit(-1);
         }
-
     }
+
+
     [MenuItem("XIHUtil/Jenkins/HotBuild")]
     public static void HotBuild()
     {
@@ -109,15 +120,8 @@ public class JenkinsSupport
         CompileDllCommand.CompileDll(curTarget);
         Debug.LogWarning("拷贝热更Dll");
         DllCopyEditor.CopyDlls(curTarget);
-        if (ExecuteYooAssetBuild(curTarget)) {
-            Debug.LogWarning("打包资源AB成功");
-            var dstPath = $"{WEB_ROOT}/{curTarget}/StreamingAssets";
-            if(Directory.Exists(dstPath))Directory.Delete(dstPath, true);
-            Directory.CreateDirectory(dstPath);
-            var srcPath = "Assets/StreamingAssets";
-            CopyDirs(srcPath,dstPath,".meta");
-            Debug.LogWarning($"拷贝到目标目录:{srcPath} > {dstPath}");
-        }
+        Debug.LogWarning("YooAsset开始构建");
+        ExecuteYooAssetBuild(curTarget);
         Debug.LogWarning("完成热更打包");
     }
 
@@ -131,7 +135,7 @@ public class JenkinsSupport
         //var fileNameStyle = AssetBundleBuilderSetting.GetPackageFileNameStyle(PackageName, BuildPipeline);
         var fileNameStyle = EFileNameStyle.BundleName_HashName;
         //var buildinFileCopyOption = AssetBundleBuilderSetting.GetPackageBuildinFileCopyOption(PackageName, BuildPipeline);
-        var buildinFileCopyOption = EBuildinFileCopyOption.ClearAndCopyAll;
+        var buildinFileCopyOption = EBuildinFileCopyOption.None;
         //var buildinFileCopyParams = AssetBundleBuilderSetting.GetPackageBuildinFileCopyParams(PackageName, BuildPipeline);
         var buildinFileCopyParams = "";
         //var compressOption = AssetBundleBuilderSetting.GetPackageCompressOption(PackageName, BuildPipeline);
@@ -156,14 +160,17 @@ public class JenkinsSupport
         // 执行构建
         ScriptableBuildPipeline pipeline = new ScriptableBuildPipeline();
         var buildResult = pipeline.Run(buildParameters, true);
-        if (buildResult.Success)
-        {
-            Debug.Log($"构建成功 : {buildResult.OutputPackageDirectory}");
-            //EditorUtility.RevealInFinder(buildResult.OutputPackageDirectory);
+        if (buildResult.Success) {
+            Debug.LogWarning("打包资源AB成功");
+            var dstPath = $"{WEB_ROOT}/{buildTarget}";
+            if (Directory.Exists(dstPath)) Directory.Delete(dstPath, true);
+            var srcPath = buildResult.OutputPackageDirectory;
+            CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json" ,".xml"});
+            Debug.LogWarning($"拷贝到目标目录:{srcPath} > {dstPath}");
         }
         else
         {
-            Debug.LogError($"构建失败 : {buildResult.FailedTask}");
+            Debug.LogError($"YooAsset 构建失败 : {buildResult.FailedTask}");
         }
         return buildResult.Success;
     }
@@ -174,14 +181,15 @@ public class JenkinsSupport
         return DateTime.Now.ToString("yyyy-MM-dd") + "-" + totalMinutes;
     }
 
-    private static void CopyDirs(string sour, string dst, string exclude)
+    private static void CopyDirs(string sour, string dst, HashSet<string> exclude)
     {
         var files = Directory.GetFiles(sour);
         if (!Directory.Exists(dst)) Directory.CreateDirectory(dst);
         foreach (var file in files)
         {
             var fn = Path.GetFileName(file);
-            if (fn.EndsWith(exclude)) continue;
+            var ext = Path.GetExtension(fn);
+            if (exclude.Contains(ext)) continue;
             File.Copy(file, $"{dst}/{fn}", true);
         }
         var dirs = Directory.GetDirectories(sour);
@@ -205,5 +213,33 @@ public class JenkinsSupport
         }
         return dic;
     }
+#if UNITY_WX
+    static void WXSettings() {
+        var config = UnityUtil.GetEditorConf();
 
+        //设置输出相对路径
+        config.ProjectConf.DST = "XIHWebServerRes/MiniGame";
+        Debug.LogWarning($"设置小游戏输出相对路径 {config.ProjectConf.DST}");
+
+        //config.ProjectConf.CDN = "http://192.168.7.113:5000/";
+
+        //排除缓存为该后缀的文件
+        var str = config.ProjectConf.bundleExcludeExtensions;
+        var hash = new HashSet<string>(str.Split(";"));
+        hash.Remove("");
+        hash.Add("version");
+        config.ProjectConf.bundleExcludeExtensions=string.Join(";", hash);
+
+        //缓存www下载中包含WebGL路径的文件
+        str = config.ProjectConf.bundlePathIdentifier;
+        hash = new HashSet<string>(str.Split(";"));
+        hash.Remove("");
+        hash.Add("WebGL");
+        config.ProjectConf.bundlePathIdentifier = string.Join(";", hash);
+
+        EditorUtility.SetDirty(config);
+        AssetDatabase.SaveAssetIfDirty(config);
+        AssetDatabase.Refresh();
+    }
+#endif
 }

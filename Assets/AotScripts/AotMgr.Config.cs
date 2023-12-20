@@ -2,7 +2,9 @@
 using UnityEngine.Networking;
 using UnityEngine;
 using System;
-
+#if UNITY_WX
+using WeChatWASM;
+#endif
 namespace Aot
 {
     public partial class AotMgr
@@ -26,6 +28,10 @@ namespace Aot
                 {
                     var json = result.downloadHandler.text;
                     AotConfig.frontConfig = JsonUtility.FromJson<FrontConfig>(json);
+#if UNITY_WX
+                    WX.SetDataCDN(AotConfig.frontConfig.cdn);
+                    Debug.LogWarning($"设置微信小游戏的CDN为:{AotConfig.frontConfig.cdn}");
+#endif
                     InitYooAssetStart().Forget();
                 }
             }
@@ -33,8 +39,8 @@ namespace Aot
             {
                 if (--tryTime > 0)
                 {
+                    Debug.LogError($"剩余尝试次数:{tryTime} >> {www.uri}");
                     InitConfigStart(tryTime).Forget();
-                    Debug.LogError($"剩余尝试次数:{tryTime}");
                 }
                 else
                 {

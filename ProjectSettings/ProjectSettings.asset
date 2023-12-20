@@ -783,7 +783,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 1
   webGLSIMDSupport: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    WebGL: UNITY_WX
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

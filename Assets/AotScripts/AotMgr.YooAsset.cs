@@ -111,7 +111,9 @@ namespace Aot
             }
         }
         /// <summary>
-        /// 微信小游戏对于内置StreamingAsset的资源可以缓存，所以这里只需要返回true，小游戏启动时加载StreamingAsset内资源会被转换为www请求，此时走小游戏缓存可直接返回之前下载的资源
+        /// 小游戏启动时加载StreamingAsset内资源会被转换为www请求，此时走小游戏缓存可直接返回之前下载的资源
+        /// 微信小游戏对于CDN下，带有StreamingAsset的资源可以缓存，所以我们设置YooAsset的下载路径和小游戏读取内置路径的url保持一致即可，
+        /// 这样即时首包不包含任何内容，我们触发正常的YooAsset下载，也会被微信缓存了
         /// 所以为了先缓存资源，游戏启动需要先完成资源更新，将远程StreamingAsset资源全部缓存到本地，后面就不需要再从远程获取了
         /// </summary>
         private class BuildinQueryServices : IBuildinQueryServices
@@ -119,7 +121,7 @@ namespace Aot
             public bool Query(string packageName, string fileName)
             {
                 //Debug.Log($"BuildinQueryServices {packageName} >> {fileName}");
-                return true;
+                return false;
             }
         }
 

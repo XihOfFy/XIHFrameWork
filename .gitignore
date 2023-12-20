@@ -63,6 +63,6 @@ HybridCLRData/
 XIHWebServerRes/
 UserSettings/
 yoo/
-Assets/StreamingAssets/*
-Assets/StreamingAssets.meta
+#Assets/StreamingAssets/*
+#Assets/StreamingAssets.meta
 TextToolDatas/

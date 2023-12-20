@@ -6,7 +6,8 @@
         "UniTask.YooAsset",
         "YooAsset",
         "HybridCLR.Runtime",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Wx"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
