@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Aot;
+using System.Collections;
 using UnityEngine;
 using YooAsset;
 
@@ -6,10 +7,9 @@ namespace Aot2Hot
 {
     public partial class Aot2HotMgr
     {
-        string PACKAGE_NAME = "DefaultPackage";
         IEnumerator DownloadHotRes()
         {
-            var package = YooAssets.GetPackage(PACKAGE_NAME);
+            var package = YooAssets.GetPackage(AotConfig.PACKAGE_NAME);
             int downloadingMaxNum = 10;
             int failedTryAgain = 3;
             var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);

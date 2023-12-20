@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Security.Policy;
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Aot
@@ -9,10 +12,9 @@ namespace Aot
         public const string PACKAGE_NAME = "DefaultPackage";
         public static FrontConfig frontConfig = new FrontConfig();
         public static string GetFrontUrl() {
-            string url = "https://gitee.com/xihoffy/PublicAccess/raw/master/Front/";
-            //string url = "http://localhost:5000/Front/";
+            string url = Resources.Load<XIHFrontSetting>(nameof(XIHFrontSetting)).front;
+            if (!url.EndsWith("/")) url += "/";
 #if UNITY_EDITOR
-            //url = $"http://{GetIP()}:5000/Front/";
             url += $"{UnityEditor.EditorUserBuildSettings.activeBuildTarget}.json";
 #else
             if (Application.platform == RuntimePlatform.Android)
@@ -31,14 +33,30 @@ namespace Aot
         [UnityEditor.InitializeOnLoadMethod]
         public static void InitFrontConfig()
         {
+            XIHFrontSetting frontSetting;
+            var cfgPath = $"Assets/Resources/{nameof(XIHFrontSetting)}.asset";
+            if (File.Exists(cfgPath)) {
+                frontSetting = AssetDatabase.LoadAssetAtPath<XIHFrontSetting>(cfgPath);
+            }
+            else {
+                frontSetting = ScriptableObject.CreateInstance<XIHFrontSetting>();
+                frontSetting.front= $"http://{GetIP()}:5000/Front/";
+                AssetDatabase.CreateAsset(frontSetting, cfgPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Debug.LogError($"XIH:上线前记得配置{cfgPath}为公网路径");
+            }
+            var preffixUrl = frontSetting.front;//例如 http://127.0.0.1:5000/Front/
+            if (preffixUrl.EndsWith("/")) preffixUrl = preffixUrl.Substring(0,preffixUrl.Length-1);//http://127.0.0.1:5000/Front
+            preffixUrl = preffixUrl.Substring(0,preffixUrl.LastIndexOf('/')+1);//http://127.0.0.1:5000/
+
             var dir = "XIHWebServerRes/Front";
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
+                Debug.LogError($"XIH:上线前记得配置{dir}里面的json，将下载地址改为公网地址");
             }
-            var preffixUrl = "https://gitee.com/xihoffy/PublicAccess/raw/master/";//自己指定ip
-            var suffix = "/StreamingAssets/yoo/DefaultPackage";
-            //string preffixUrl = $"http://localhost:5000/";//自动获取本机的ip
+            var suffix = $"/StreamingAssets/yoo/{PACKAGE_NAME}";
             var config = new FrontConfig();
             config.focusVersion = "0.0.0";
 
@@ -95,5 +113,4 @@ namespace Aot
         public string defaultHostServer;
         public string fallbackHostServer;
     }
-
 }
