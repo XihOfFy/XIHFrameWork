@@ -30,7 +30,7 @@
 
 ## 首次运行
 
-- 调整`AotConfig`代码中的web地址路径，若存在`XIHWebServerRes\Front`文件夹，先全部删除，第一次运行会自动生成
+- 调整`Assets/Resources/{nameof(XIHFrontSetting)}.asset`中的web地址路径（或者删除，运行后重新生成本地Web路径），若存在`XIHWebServerRes\Front`文件夹，先全部删除，第一次运行会自动生成
   
   Windows下菜单栏 XIHUtil/Server/WebSvr 即可开启本地web服务；
   
@@ -43,6 +43,10 @@
 > 在HybridCLRSettings中，开启`Use Global Il2cpp` 选项。因为webgl平台只支持全局安装。
 > 
 > 建立 Editor目录的libil2cpp到本地libil2cpp目录的软（硬）引用。升级hybridclr等情形需要重新install时，先恢复Editor安装目录的原始libil2cpp目录
+
+- 执行菜单栏`XIHUtil/Jenkins/HotBuild`生成热更包，可在编辑器看到运行效果
+
+- 若要打整包测试，打开微信小游戏插件，正确设置CDN路径，执行菜单栏`XIHUtil/Jenkins/FullBuild`
 
 # 推荐版本
 

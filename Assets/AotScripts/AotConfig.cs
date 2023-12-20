@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Security.Policy;
-using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Aot
 {

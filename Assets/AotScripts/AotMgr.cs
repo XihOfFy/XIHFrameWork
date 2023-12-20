@@ -13,9 +13,9 @@ namespace Aot
         {
             StartLogo();
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
             playMode = EPlayMode.EditorSimulateMode;
-#endif
+#endif*/
 
             if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)
             {
@@ -52,7 +52,7 @@ namespace Aot
             Application.Quit();//尝试多次失败直接退出游戏，不让玩
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-            Debug.LogError($"该报错解决方法：在{nameof(AotConfig.GetFrontUrl)}和{nameof(AotConfig.InitFrontConfig)}方法修改为你本地的web地址且删除项目根目录下的XIHWebServerRes/Front文件夹，然后重新运行程序自动生成它们；\n Windows下菜单栏 XIHUtil/Server/WebSvr 即可开启本地web服务；\n Mac用户请自行搭建web服务，且设置web根路径为 XIHWebServerRes (与Assets同层级)");
+            Debug.LogError($"本地调试报错解决方法：找到Assets/Resources/{nameof(XIHFrontSetting)}.asset和参考{nameof(AotConfig.InitFrontConfig)}方法修改为你本地的web地址且删除项目根目录下的XIHWebServerRes/Front文件夹，然后重新运行程序自动生成它们；\n Windows下菜单栏 XIHUtil/Server/WebSvr 即可开启本地web服务；\n Mac用户请自行搭建web服务，且设置web根路径为 XIHWebServerRes (与Assets同层级)");
 #endif
         }
     }

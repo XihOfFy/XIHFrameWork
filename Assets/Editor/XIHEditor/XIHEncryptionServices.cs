@@ -8,7 +8,7 @@ public class XIHEncryptionServices
     {
         if (!File.Exists(srcFilePath))
         {
-            Debug.LogError($"CopyDll {srcFilePath}不存在");
+            Debug.LogError($"CopyDll {srcFilePath}不存在 (这个报错若是Hot.Ext.dll可以忽略，因为这个是预留的，所以不存在很正常)");
             return;
         }
         File.WriteAllBytes(dstFilePath, ProcessRawFile(File.ReadAllBytes(srcFilePath)));
