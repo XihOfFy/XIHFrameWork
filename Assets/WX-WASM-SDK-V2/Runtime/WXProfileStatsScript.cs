@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 
 using Unity.Profiling;
@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Profiling;
-using WeChatWASM;
 
 #if UNITY_WEBGL || UNITY_EDITOR
 public class WXProfileStatsScript : MonoBehaviour, WeChatWASM.WXSDKManagerHandler.WXProfileStatsScript
