@@ -7,6 +7,8 @@ using System.Reflection;
 using Aot;
 using System.Collections;
 using UnityEngine.UI;
+using System;
+using Object = UnityEngine.Object;
 
 namespace Aot2Hot
 {
@@ -24,7 +26,15 @@ namespace Aot2Hot
         IEnumerator IEAwake()
         {
             yield return YooAssets.LoadAllAssetsAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
-            StartCoroutine(nameof(DownloadHotRes));
+            var localVer = new Version(Application.version);
+            var remteVer = new Version(AotConfig.frontConfig.focusVersion);
+            if (remteVer.CompareTo(localVer) > 0)
+            {
+                tip.text = "当前本版过低，请更新后再启动游戏...";
+            }
+            else { 
+                StartCoroutine(nameof(DownloadHotRes));
+            }
         }
 
         void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)

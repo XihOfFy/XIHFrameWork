@@ -29,17 +29,17 @@ namespace Aot
                     var json = result.downloadHandler.text;
                     AotConfig.frontConfig = JsonUtility.FromJson<FrontConfig>(json);
 #if UNITY_WX
-                    WX.SetDataCDN(AotConfig.frontConfig.cdn);
                     Debug.LogWarning($"设置微信小游戏的CDN为:{AotConfig.frontConfig.cdn}");
+                    WX.SetDataCDN(AotConfig.frontConfig.cdn);
 #endif
                     InitYooAssetStart().Forget();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 if (--tryTime > 0)
                 {
-                    Debug.LogError($"剩余尝试次数:{tryTime} >> {www.uri}");
+                    Debug.LogError($"剩余尝试次数:{tryTime} >> {www.uri} \n{e}");
                     InitConfigStart(tryTime).Forget();
                 }
                 else

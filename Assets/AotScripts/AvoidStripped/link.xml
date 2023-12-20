@@ -2,23 +2,26 @@
 <linker>
 	<assembly fullname="Aot">
 	</assembly>
+	<assembly fullname="DOTween">
+	</assembly>
+	<assembly fullname="DOTween.Modules">
+	</assembly>
 	<assembly fullname="HybridCLR.Runtime">
+	</assembly>
+	<assembly fullname="LitJson">
+	</assembly>
+	<assembly fullname="LogViewer">
+	</assembly>
+	<assembly fullname="RuntimeInspector.Runtime">
 	</assembly>
 	<assembly fullname="UniTask">
 	</assembly>
 	<assembly fullname="UniTask.YooAsset">
 	</assembly>
-	<assembly fullname="Unity.TextMeshPro">
+	<assembly fullname="Wx">
+	</assembly>
+	<assembly fullname="wx-runtime">
 	</assembly>
 	<assembly fullname="YooAsset">
-	</assembly>
-	<assembly fullname="mscorlib">
-	</assembly>
-	<assembly fullname="UnityEngine.CoreModule">
-		<type fullname="UnityEngine.Debug" preserve="all" />
-		<type fullname="UnityEngine.MonoBehaviour" preserve="all" />
-		<type fullname="UnityEngine.Object" preserve="all" />
-		<type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
-		<type fullname="UnityEngine.TextAsset" preserve="all" />
 	</assembly>
 </linker>
