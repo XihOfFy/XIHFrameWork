@@ -20,8 +20,7 @@ MonoBehaviour:
   - {fileID: 5897886265953266890, guid: e947f8b799acc6a4bbcb4cbe90cf9174, type: 3}
   - {fileID: 5897886265953266890, guid: f00dc4fd241e5f44b86a8fda6bb1e4f8, type: 3}
   hotUpdateAssemblies: []
-  preserveHotUpdateAssemblies:
-  - Hot.Ext
+  preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs: []
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
