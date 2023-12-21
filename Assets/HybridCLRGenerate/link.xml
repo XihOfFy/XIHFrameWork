@@ -10,6 +10,12 @@
     <type fullname="HybridCLR.LoadImageErrorCode" preserve="all" />
     <type fullname="HybridCLR.RuntimeApi" preserve="all" />
   </assembly>
+  <assembly fullname="System">
+    <type fullname="System.Collections.Generic.LinkedListNode`1" preserve="all" />
+    <type fullname="System.Collections.Generic.LinkedList`1" preserve="all" />
+    <type fullname="System.Net.IPAddress" preserve="all" />
+    <type fullname="System.Net.IPEndPoint" preserve="all" />
+  </assembly>
   <assembly fullname="Unity.TextMeshPro">
     <type fullname="TMPro.TMP_Text" preserve="all" />
   </assembly>
@@ -25,6 +31,9 @@
   <assembly fullname="UnityEngine.UI">
     <type fullname="UnityEngine.UI.Image" preserve="all" />
   </assembly>
+  <assembly fullname="Wx">
+    <type fullname="WeChatWASM.WXBase" preserve="all" />
+  </assembly>
   <assembly fullname="YooAsset">
     <type fullname="YooAsset.AllAssetsHandle" preserve="all" />
     <type fullname="YooAsset.AsyncOperationBase" preserve="all" />
@@ -38,23 +47,62 @@
     <type fullname="YooAsset.YooAssets" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
+    <type fullname="System.Action" preserve="all" />
+    <type fullname="System.Action`1" preserve="all" />
+    <type fullname="System.Array" preserve="all" />
+    <type fullname="System.AsyncCallback" preserve="all" />
+    <type fullname="System.Buffer" preserve="all" />
+    <type fullname="System.Byte" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerator`1" preserve="all" />
     <type fullname="System.Collections.IEnumerator" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
     <type fullname="System.Diagnostics.DebuggerHiddenAttribute" preserve="all" />
+    <type fullname="System.Enum" preserve="all" />
+    <type fullname="System.IAsyncResult" preserve="all" />
     <type fullname="System.IDisposable" preserve="all" />
+    <type fullname="System.IO.BinaryReader" preserve="all" />
+    <type fullname="System.IO.BinaryWriter" preserve="all" />
+    <type fullname="System.IO.MemoryStream" preserve="all" />
+    <type fullname="System.IO.Stream" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
     <type fullname="System.Int64" preserve="all" />
+    <type fullname="System.MulticastDelegate" preserve="all" />
     <type fullname="System.NotSupportedException" preserve="all" />
+    <type fullname="System.Nullable`1" preserve="all" />
     <type fullname="System.Object" preserve="all" />
+    <type fullname="System.ParamArrayAttribute" preserve="all" />
     <type fullname="System.Reflection.Assembly" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IteratorStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
+    <type fullname="System.Security.Cryptography.Aes" preserve="all" />
+    <type fullname="System.Security.Cryptography.CipherMode" preserve="all" />
+    <type fullname="System.Security.Cryptography.CryptoStream" preserve="all" />
+    <type fullname="System.Security.Cryptography.CryptoStreamMode" preserve="all" />
+    <type fullname="System.Security.Cryptography.ICryptoTransform" preserve="all" />
+    <type fullname="System.Security.Cryptography.SymmetricAlgorithm" preserve="all" />
     <type fullname="System.String" preserve="all" />
+    <type fullname="System.Text.Encoding" preserve="all" />
     <type fullname="System.Type" preserve="all" />
+    <type fullname="System.UInt32" preserve="all" />
+    <type fullname="System.ValueTuple`4" preserve="all" />
     <type fullname="System.Version" preserve="all" />
+  </assembly>
+  <assembly fullname="wx-runtime">
+    <type fullname="WeChatWASM.GeneralCallbackResult" preserve="all" />
+    <type fullname="WeChatWASM.OpenSyncOption" preserve="all" />
+    <type fullname="WeChatWASM.TCPSocketConnectOption" preserve="all" />
+    <type fullname="WeChatWASM.TCPSocketOnMessageListenerResult" preserve="all" />
+    <type fullname="WeChatWASM.UDPSocketConnectOption" preserve="all" />
+    <type fullname="WeChatWASM.UDPSocketOnMessageListenerResult" preserve="all" />
+    <type fullname="WeChatWASM.UDPSocketSendOption" preserve="all" />
+    <type fullname="WeChatWASM.WXEnv" preserve="all" />
+    <type fullname="WeChatWASM.WXFileSystemManager" preserve="all" />
+    <type fullname="WeChatWASM.WXTCPSocket" preserve="all" />
+    <type fullname="WeChatWASM.WXUDPSocket" preserve="all" />
+    <type fullname="WeChatWASM.WriteResult" preserve="all" />
+    <type fullname="WeChatWASM.WriteSyncOption" preserve="all" />
   </assembly>
 </linker>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !UNITY_WX || UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -243,3 +244,5 @@ namespace XiHNet
         }
     }
 }
+
+#endif

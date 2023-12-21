@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using UnityEngine;
 
 namespace XiHNet
 {
@@ -15,18 +16,20 @@ namespace XiHNet
         {
             switch (protocol)
             {
+#if !UNITY_WX || UNITY_EDITOR
                 case NetworkProtocol.Kcp:
                     netClient = new KcpClient(iPEnd);
                     break;
                 case NetworkProtocol.Tcp:
                     netClient = new TcpClient(iPEnd);
                     break;
+#endif
                 case NetworkProtocol.WXTCP:
                     break;
                 case NetworkProtocol.WXUDP:
                     break;
                 default:
-                    //TODO 自行添加
+                    Debug.LogError($"当前平台不支持该类型 {protocol}");
                     break;
             }
             cryptor = cryptType switch
