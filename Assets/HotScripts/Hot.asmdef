@@ -9,7 +9,8 @@
         "YooAsset",
         "HybridCLR.Runtime",
         "Unity.TextMeshPro",
-        "Wx"
+        "Wx",
+        "FairyGUI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

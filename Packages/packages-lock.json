@@ -190,6 +190,12 @@
         "com.unity.nuget.mono-cecil": "1.10.1"
       }
     },
+    "unity.fairygui": {
+      "version": "file:FairyGUI-unity-4.3.0",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "xih.fy.logsviewer4newinputsys": {
       "version": "file:Unity-Logs-Viewer",
       "depth": 0,

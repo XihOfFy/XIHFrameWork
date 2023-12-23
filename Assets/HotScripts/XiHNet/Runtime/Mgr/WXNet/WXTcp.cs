@@ -5,10 +5,9 @@
 using WeChatWASM;
 #endif
 using System.Net;
-using XiHNet;
 using UnityEngine;
 
-namespace Hot
+namespace XiHNet
 {
     public class WXTcp : NetClient
     {
