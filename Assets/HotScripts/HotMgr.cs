@@ -5,6 +5,7 @@ using TMPro;
 using YooAsset;
 using Aot;
 using System.Text;
+using FairyGUI;
 #if UNITY_WX
 using WeChatWASM;
 #endif
@@ -30,31 +31,10 @@ namespace Hot
         }
         void InitHot() {
             tip.text = "初始化";
-            /*
-                        FileUtil.WriteFile("frontConfig.txt",JsonUtility.ToJson(AotConfig.frontConfig));
-                        var readStr = FileUtil.ReadFile("frontConfig.txt");
-                        Debug.LogWarning(readStr);
-                        var bys = UTF8Encoding.UTF8.GetBytes(readStr);
-                        FileUtil.WriteFile("frontConfig.bs", bys);
-                        var rbs = FileUtil.ReadFileBytes("frontConfig.bs");
-                        Debug.LogWarning($"{bys.Length} >> {rbs.Length}");
-                        var str = UTF8Encoding.UTF8.GetString(rbs);
-                        Debug.LogWarning($"{str}");
-                        var jb = JsonUtility.FromJson<FrontConfig>(str);
-                        Debug.Log(jb.fallbackHostServer);
-
-
-                        PlayerPrefsUtil.Set("S","s");
-                        PlayerPrefsUtil.Set("I",1);
-                        PlayerPrefsUtil.Set("F",2.2f);
-                        Debug.LogWarning(PlayerPrefsUtil.Get("S", "ns"));
-                        Debug.LogWarning(PlayerPrefsUtil.HasKey("I"));
-                        Debug.LogWarning(PlayerPrefsUtil.Get("F",0.5f));
-                        Debug.LogWarning(PlayerPrefsUtil.Get("I", 0));
-                        PlayerPrefsUtil.DeleteKey("I");
-                        Debug.LogWarning(PlayerPrefsUtil.HasKey("I"));
-                        PlayerPrefsUtil.DeleteAllKey();
-                        Debug.LogWarning(PlayerPrefsUtil.HasKey("S"));*/
+            //如果需要将字体打包到AssetBundle，那么需要自行加载并注册字体
+            var font = YooAssets.LoadAssetSync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            FontManager.RegisterFont(new DynamicFont("JTFont", font.AssetObject as Font), "JTFont");
+            UIPackage.unloadBundleByFGUI = false;
         }
     }
 }
