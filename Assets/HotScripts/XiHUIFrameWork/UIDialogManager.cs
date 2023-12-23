@@ -1,5 +1,4 @@
-﻿//#define FGUI_LOAD_AB_MAMUAL_MODE //直接加载ab模式
-using FairyGUI;
+﻿using FairyGUI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,12 +26,6 @@ namespace XiHUI
 			IsBlur = isBlur;
 		}
 	}
-	/*public class UILoadAsync : AsyncOp
-    {
-        public void SetLoadComplete() => Completed = true;
-
-        public bool Completed { get; private set; }
-    }*/
 	/// <summary>
 	/// UI窗口管理器
 	/// </summary>
@@ -105,7 +98,6 @@ namespace XiHUI
 			}
 
 
-
 			// 释放资源句柄列表
 			public void ReleaseHandles()
 			{
@@ -131,30 +123,6 @@ namespace XiHUI
 				return false;
 			}
 		}
-
-		/*public class ComponentLoadAsync : AsyncRequest<GComponent>
-		{
-			public GComponent Result { get; private set; }
-			public bool Completed { get; private set; }
-
-			public void SetResult(GComponent component)
-			{
-				Result = component;
-				Completed = true;
-			}
-		}
-
-		class PackageLoadAsync : AsyncRequest<UIPackageReference>
-		{
-			public UIPackageReference Result { get; private set; }
-			public bool Completed { get; private set; }
-
-			public void SetResult(UIPackageReference package)
-			{
-				Result = package;
-				Completed = true;
-			}
-		}*/
 
 		private static List<string> _persistentPkg = new List<string>();
 		private static List<string> _noAtlasPkg = new List<string>();
@@ -346,13 +314,12 @@ namespace XiHUI
 			//如果需要将字体打包到AssetBundle，那么需要自行加载并注册字体
 			/*Font myFont = myBundle.LoadAsset<Font>(name);
 			FontManager.RegisterFont(new DynamicFont("字体名称", myFont), "字体名称");*/
-
-#if !FGUI_LOAD_AB_MAMUAL_MODE
+			UIPackage.unloadBundleByFGUI = false;
 			var _handles = new List<AssetHandle>(100);
 			object LoadFunc(string name, string extension, System.Type type, out DestroyMethod method)
 			{
 				method = DestroyMethod.None; //注意：这里一定要设置为None
-				string location = "Assets/Res/FairyRes/" + name +"/" + name + extension;
+				string location = "Assets/Res/FairyRes/" + name + "/" + name + extension;
 				var package = YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME);
 				var handle = package.LoadAssetSync(location, type);
 				_handles.Add(handle);
@@ -365,61 +332,6 @@ namespace XiHUI
 			var package = new UIPackageReference(pkg, _handles);
 			package.Reference(reference);
 			return package;
-#else
-			UIPackage.unloadBundleByFGUI = false;
-			System.Func<string, bool> checkFunc = (_) => {
-				return async != null && async.Result != null && async.Result.IsReference(true);
-			};
-
-			var descABOp = AssetLoaderEx.LoadAssetBundleManual(descABName, checkFunc);
-			yield return descABOp;
-			if (descABOp == null || descABOp.Result == null)
-			{
-				async.SetResult(null);
-				Log.Error($"UIPackage LoadUIPackage:[{packageName}] failed! step 1");
-				yield break;
-			}
-
-
-
-			AssetBundle descAB = descABOp.Result;
-			yield return descAB.LoadAllAssetsAsync();
-
-			AssetBundle resAB = null;
-			string resABName = descABName + "_atlas";
-			if (!_noAtlasPkg.Contains(packageName))
-			{
-				var resABOp = AssetLoaderEx.LoadAssetBundleManual(resABName, checkFunc);
-				yield return resABOp;
-				if (resABOp == null || resABOp.Result == null)
-				{
-					async.SetResult(null);
-					Log.Error($"UIPackage LoadUIPackage:[{packageName}] failed! step 2");
-					yield break;
-				}
-				else
-				{
-					yield return resABOp.Result.LoadAllAssetsAsync();
-					resAB = resABOp.Result;
-				}
-			}
-
-			var pkg = resAB != null ? UIPackage.AddPackage(descAB, resAB) : UIPackage.AddPackage(descAB);
-			if (pkg == null)
-			{
-				async.SetResult(null);
-				Log.Error($"UIPackage AddPackage:[{packageName}] failed! step 3");
-				yield break;
-			}
-
-			pkg.LoadAllAssets();
-
-			var abList = resAB != null ? new List<string>(2) { descABName, resABName } : new List<string>(1) { descABName };
-			var package = new UIPackageReference(pkg, abList);
-
-			package.Reference(reference);
-			async.SetResult(package);
-#endif
 		}
 
 		public UIDialog GetDialog(string dialogName)
