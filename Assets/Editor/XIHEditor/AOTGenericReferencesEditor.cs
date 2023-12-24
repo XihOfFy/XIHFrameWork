@@ -35,7 +35,7 @@ public class AvoidStripped : MonoBehaviour
         int len=lines.Length;
         int curLine = -1;
         sb.AppendLine(@"	public void GenericType()
-	{");
+    {");
         while (++curLine < len) { 
             var line = lines[curLine].Trim();
             if (line.Equals("// {{ AOT generic types")) {
@@ -49,7 +49,7 @@ public class AvoidStripped : MonoBehaviour
         }
         sb.AppendLine(@"	}
 public void RefMethods()
-	{");
+    {");
         while (++curLine < len)
         {
             var line = lines[curLine].Trim();

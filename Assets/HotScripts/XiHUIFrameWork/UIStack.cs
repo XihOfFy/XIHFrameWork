@@ -40,11 +40,7 @@ namespace XiHUI
 			if (mode == Mode.Modal)
 			{
 				_modal = new GGraph();
-                //_modal.DrawRect(GRoot.inst.width, GRoot.inst.height, 0, Color.white, new Color(0f, 0.047f, 0.094f, 0.8f));
-                _modal.DrawRect(GRoot.inst.width, GRoot.inst.height, 0, Color.white, new Color(0f, 0f, 0f, 0f));
-#if UNITY_EDITOR
-                Debug.LogWarning($"UIStack Modal 遮罩太黑，调整为0");
-#endif
+                _modal.DrawRect(GRoot.inst.width, GRoot.inst.height, 0, Color.white, new Color(0f, 0.047f, 0.094f, 0.8f));
                 _modal.AddRelation(GRoot.inst, RelationType.Size);
 				_modal.name = _modal.gameObjectName = "Modal";
 				_modal.SetHome(_layer);

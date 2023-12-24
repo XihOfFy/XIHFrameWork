@@ -5,4 +5,7 @@
       <relation target="" sidePair="width-width,height-height"/>
     </text>
   </displayList>
+  <transition name="show">
+    <item time="0" type="Alpha" tween="true" startValue="1" endValue="0" duration="48"/>
+  </transition>
 </component>

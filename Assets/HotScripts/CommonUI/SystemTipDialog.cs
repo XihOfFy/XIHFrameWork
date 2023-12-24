@@ -1,5 +1,6 @@
 using FairyGUI;
 using FairyGUI.Utils;
+using System;
 using UnityEngine;
 using XiHUI;
 
@@ -9,14 +10,16 @@ namespace Hot
     [UIPackageItemExtension("ui://Common/TipItem")]
     class TipItem : GComponent
     {
-        public GTextField tip;
+        GTextField tip;
+        Transition show;
         public override void ConstructFromXML(XML xml)
         {
             UIControlBinding.BindFields(this, this);
         }
-        public void Render(string tipStr)
+        public void Render(string tipStr,Action<TipItem> endPlay)
         {
             tip.text = tipStr;
+            show.Play(()=> endPlay?.Invoke(this));
         }
     }
     public class SystemTipDialog : UIDialog
@@ -24,7 +27,10 @@ namespace Hot
         GList list;
         public void Show(string tipStr)
         {
-            Debug.Log(tipStr);
+            var item = list.AddItemFromPool() as TipItem;
+            item.Render(tipStr,it=> {
+                list.RemoveChildToPool(it);
+            });
         }
     }
 }

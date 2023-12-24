@@ -784,7 +784,7 @@ PlayerSettings:
   webGLDecompressionFallback: 1
   webGLSIMDSupport: 0
   scriptingDefineSymbols:
-    WebGL: UNITY_WX
+    WebGL: UNITY_WX;FAIRYGUI_TMPRO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
