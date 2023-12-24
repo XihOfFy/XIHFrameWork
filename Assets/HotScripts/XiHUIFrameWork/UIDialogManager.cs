@@ -29,7 +29,7 @@ namespace XiHUI
     /// <summary>
     /// UI窗口管理器
     /// </summary>
-    public class UIDialogManager : MonoBehaviour
+    public partial class UIDialogManager : MonoBehaviour
     {
         private static UIDialogManager instance;
         public static UIDialogManager Instance {

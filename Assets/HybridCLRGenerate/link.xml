@@ -30,6 +30,8 @@
     <type fullname="FairyGUI.IFilter" preserve="all" />
     <type fullname="FairyGUI.ListItemRenderer" preserve="all" />
     <type fullname="FairyGUI.NTexture" preserve="all" />
+    <type fullname="FairyGUI.PackageItem" preserve="all" />
+    <type fullname="FairyGUI.PlayCompleteCallback" preserve="all" />
     <type fullname="FairyGUI.RelationType" preserve="all" />
     <type fullname="FairyGUI.TMPFont" preserve="all" />
     <type fullname="FairyGUI.TextFormat" preserve="all" />
@@ -38,6 +40,7 @@
     <type fullname="FairyGUI.UIObjectFactory" preserve="all" />
     <type fullname="FairyGUI.UIPackage" preserve="all" />
     <type fullname="FairyGUI.UIPackage/LoadResource" preserve="all" />
+    <type fullname="FairyGUI.UIPackage/LoadResourceAsync" preserve="all" />
     <type fullname="FairyGUI.Utils.XML" preserve="all" />
     <type fullname="FairyGUI.Window" preserve="all" />
   </assembly>
@@ -57,11 +60,14 @@
     <type fullname="System.Linq.Enumerable" preserve="all" />
   </assembly>
   <assembly fullname="UniTask">
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.PlayerLoopTiming" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
   </assembly>
   <assembly fullname="UniTask.YooAsset">
     <type fullname="Cysharp.Threading.Tasks.OperationHandleBaseExtensions" preserve="all" />
@@ -176,6 +182,7 @@
     <type fullname="System.Reflection.PropertyInfo" preserve="all" />
     <type fullname="System.Reflection.ReflectionTypeLoadException" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.AsyncStateMachineAttribute" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.AsyncVoidMethodBuilder" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.ExtensionAttribute" preserve="all" />

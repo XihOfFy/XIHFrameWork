@@ -47,7 +47,7 @@ namespace Hot
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             await YooAssets.LoadSceneAsync("Assets/Res/HotScene/Home.unity").ToUniTask();
-            UIUtil.OpenDialog<HomeDialog>("Home","Home",Mode.Stack);
+            await UIUtil.OpenDialogAsync<HomeDialog>("Home","Home",Mode.Stack);
         }
     }
 }

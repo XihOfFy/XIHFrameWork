@@ -54,7 +54,7 @@ namespace XiHUtil
         /// 关闭指定列表之外的全部界面
         /// </summary>
         /// <param name="exceptNames">不关闭的界面列表</param>
-        public static void CloseAll(HashSet<string> exceptNames=null)
+        public static void CloseAll(HashSet<string> exceptNames = null)
         {
             UIDialogManager.Instance.CloseAll(exceptNames);
         }
@@ -62,7 +62,7 @@ namespace XiHUtil
         /// 关闭弹框界面
         /// </summary>
         /// <param name="exceptNames"></param>
-        public static void CloseAllPopUI(HashSet<string> exceptNames=null)
+        public static void CloseAllPopUI(HashSet<string> exceptNames = null)
         {
             UIDialogManager.Instance.CloseAllPopUI(exceptNames);
         }
@@ -72,5 +72,5 @@ namespace XiHUtil
             //提示内容
             //OpenDialog<SystemTipDialog>().ShowTip(tip, duration > 0 ? duration : 1.5f);
         }
-        }
+    }
 }
