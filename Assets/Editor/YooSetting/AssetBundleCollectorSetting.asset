@@ -95,3 +95,16 @@ MonoBehaviour:
         FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
+    - GroupName: Default Group
+      GroupDesc: UI
+      AssetTags: Fairy
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/FairyRes
+        CollectorGUID: 3a37eba7c78da924797d94e5a64adf51
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

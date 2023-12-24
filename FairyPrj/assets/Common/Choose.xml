@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0_zplm" name="n0" xy="140,560" size="800,800" group="n5_zplm" type="rect"/>
+    <text id="n3_zplm" name="title" xy="140,565" size="800,104" group="n5_zplm" fontSize="80" align="center" autoSize="none" text="Title"/>
+    <component id="n4_zplm" name="tip" src="zplmc" fileName="ChooseContent.xml" xy="140,670" size="800,600" group="n5_zplm"/>
+    <component id="n1_zplm" name="cancelBtn" src="zplm6" fileName="Button.xml" xy="100,1300" size="400,128" group="n5_zplm">
+      <Button title="Cancel" titleFontSize="64"/>
+    </component>
+    <component id="n2_zplm" name="okBtn" src="zplm6" fileName="Button.xml" xy="580,1300" size="400,128" group="n5_zplm">
+      <Button title="OK" titleFontSize="64"/>
+    </component>
+    <group id="n5_zplm" name="panel" xy="100,560" size="880,868" advanced="true">
+      <relation target="" sidePair="width-width,middle-middle"/>
+    </group>
+  </displayList>
+</component>

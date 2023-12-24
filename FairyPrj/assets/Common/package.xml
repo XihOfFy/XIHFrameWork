@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="4imy7ztw">
+  <resources>
+    <component id="zplm6" name="Button.xml" path="/" exported="true"/>
+    <component id="zplm8" name="SystemTip.xml" path="/" exported="true"/>
+    <component id="zplm9" name="TipItem.xml" path="/" exported="true"/>
+    <component id="zplma" name="Choose.xml" path="/" exported="true"/>
+    <component id="zplmc" name="ChooseContent.xml" path="/" exported="true"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

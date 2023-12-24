@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <component id="n1_zplm" name="startBtn" src="zplm6" fileName="Button.xml" pkg="4imy7ztw" xy="340,1126">
+      <Button title="Start" icon="ui://4imy7ztwzplm0" selectedIcon="ui://4imy7ztwzplm0"/>
+    </component>
+  </displayList>
+</component>

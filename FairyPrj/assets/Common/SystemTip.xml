@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920" opaque="false">
+  <displayList>
+    <list id="n1_zplm" name="list" xy="140,0" size="800,1000" touchable="false" overflow="scroll" defaultItem="ui://4imy7ztwzplm9" align="center" vAlign="bottom" autoClearItems="true">
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

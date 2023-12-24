@@ -31,11 +31,12 @@ namespace XiHUI
     /// </summary>
     public class UIDialogManager : MonoBehaviour
     {
-        public static UIDialogManager instance;
+        private static UIDialogManager instance;
         public static UIDialogManager Instance {
             get {
                 if (instance == null) {
                     instance = new GameObject(nameof(UIDialogManager)).AddComponent<UIDialogManager>();
+                    DontDestroyOnLoad(instance.gameObject);
                 }
                 return instance;
             }
@@ -161,7 +162,6 @@ namespace XiHUI
             {
                 return;
             }
-
             _persistentPkg = commonPackage;
             foreach (var pkg in _persistentPkg)
                 GetUIPackage(pkg);
@@ -177,21 +177,28 @@ namespace XiHUI
 
         private void RegisterAllDialog()
         {
-            var baseType = typeof(UIDialog);
+            var uidialogType = typeof(UIDialog);
+            var fairyType = typeof(GObject);
+            var extType = typeof(UIPackageItemExtensionAttribute);
 
             var types = ReflectUtil.GetAllTypes();
             foreach (var type in types)
             {
-                if (!type.IsClass)
+                if (!type.IsClass || type.IsAbstract || type.IsNested)
                     continue;
-
-                if (type.IsAbstract || type.IsNotPublic || type.IsNested)
-                    continue;
-
-                if (!baseType.IsAssignableFrom(type))
-                    continue;
-
-                _dialogType[type.Name] = type;
+                if (fairyType.IsAssignableFrom(type))
+                {
+                    var attributes = type.GetCustomAttributes(extType, false);
+                    for (int i = 0; i < attributes.Length; i++)
+                    {
+                        var attribute = (UIPackageItemExtensionAttribute)attributes[i];
+                        UIObjectFactory.SetPackageItemExtension(attribute.url, type);
+                    }
+                }
+                else if (uidialogType.IsAssignableFrom(type))
+                {
+                    _dialogType[type.Name] = type;
+                }
             }
         }
 
@@ -315,7 +322,7 @@ namespace XiHUI
             object LoadFunc(string name, string extension, System.Type type, out DestroyMethod method)
             {
                 method = DestroyMethod.None; //注意：这里一定要设置为None
-                string location = "Assets/Res/FairyRes/" + name + "/" + name + extension;
+                string location = "Assets/Res/FairyRes/" + packageName + "/" + name + extension;
                 var package = YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME);
                 var handle = package.LoadAssetSync(location, type);
                 _handles.Add(handle);
