@@ -6,6 +6,7 @@ using FairyGUI;
 using XiHUI;
 using Cysharp.Threading.Tasks;
 using XiHUtil;
+using TMPro;
 #if UNITY_WX
 using WeChatWASM;
 #endif
@@ -29,8 +30,14 @@ namespace Hot
         }
         async UniTaskVoid InitHot() {
             //如果需要将字体打包到AssetBundle，那么需要自行加载并注册字体
-            var font = YooAssets.LoadAssetSync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
-            FontManager.RegisterFont(new DynamicFont("JTFont", font.AssetObject as Font), "JTFont");
+            /*var font = YooAssets.LoadAssetSync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            FontManager.RegisterFont(new DynamicFont("JTFont", font.AssetObject as Font), "JTFont");*/
+
+            //tmp pro 字体
+            var font = YooAssets.LoadAssetSync<TMP_FontAsset>("Assets/Res/Aot2Hot/Font/JTFont.asset");
+            FontManager.RegisterFont(new TMPFont() { fontAsset = font.AssetObject as TMP_FontAsset,name= "JTFont" });
+
+            UIConfig.defaultFont = "JTFont"; //另一个方法是FGUI项目里添加jtfont字体，直接引用，发布时字体不会发布，而是找该字体的注册 https://www.fairygui.com/docs/editor/font
             UIPackage.unloadBundleByFGUI = false;
             UIDialogManager.Instance.InitCommonPackage(new List<string>() { "Common"});
             //UIDialogManager.Instance.InitConfig();

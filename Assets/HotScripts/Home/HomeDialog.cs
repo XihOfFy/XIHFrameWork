@@ -16,7 +16,7 @@ namespace Hot
         void OnStarBtn() {
             UIUtil.OpenDialog<ChooseDialog>("Common", "Choose",Mode.Popup).Show("标题","内容",val=> {
                 UIUtil.OpenDialog<SystemTipDialog>("Common", "SystemTip", Mode.TopMost).Show($"当前选择: {val}");
-            });
+            },"确定","取消");
         }
     }
 }

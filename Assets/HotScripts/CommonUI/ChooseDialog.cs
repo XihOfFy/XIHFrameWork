@@ -23,9 +23,11 @@ namespace Hot
         ChooseContent tip;
         GButton cancelBtn;
         GButton okBtn;
-        public void Show(string titleStr, string tipStr,Action<bool> choose) {
+        public void Show(string titleStr, string tipStr,Action<bool> choose,string okStr,string cancelStr) {
             title.text = titleStr;
             tip.Render(tipStr);
+            okBtn.text = okStr;
+            cancelBtn.text = cancelStr;
             cancelBtn.onClick.Clear();
             okBtn.onClick.Clear();
             void ChooseAct(bool choosed) {

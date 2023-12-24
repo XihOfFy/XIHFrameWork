@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using Aot;
 using UnityEngine;
+using YooAsset;
 
 namespace Hot
 {
@@ -11,6 +11,7 @@ namespace Hot
         private void Awake()
         {
             instance = this;
+            YooAssets.GetPackage(AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
         }
         private void OnDestroy()
         {

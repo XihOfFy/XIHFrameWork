@@ -2,7 +2,7 @@
 <component size="1080,1920">
   <displayList>
     <graph id="n0_zplm" name="n0" xy="140,560" size="800,800" group="n5_zplm" type="rect"/>
-    <text id="n3_zplm" name="title" xy="140,565" size="800,104" group="n5_zplm" fontSize="80" align="center" autoSize="none" text="Title"/>
+    <text id="n3_zplm" name="title" xy="140,565" size="800,104" group="n5_zplm" font="ui://4imy7ztwk6bjd" fontSize="80" align="center" autoSize="none" text="Title"/>
     <component id="n4_zplm" name="tip" src="zplmc" fileName="ChooseContent.xml" xy="140,670" size="800,600" group="n5_zplm"/>
     <component id="n1_zplm" name="cancelBtn" src="zplm6" fileName="Button.xml" xy="100,1300" size="400,128" group="n5_zplm">
       <Button title="Cancel" titleFontSize="64"/>

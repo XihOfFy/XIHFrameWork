@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1080,64" pivot="0.5,0.5" overflow="scroll">
   <displayList>
-    <text id="n0_zplm" name="tip" xy="40,-10" pivot="0.5,0.5" size="1000,84" fontSize="64" align="center" vAlign="middle" ubb="true" autoSize="none" text="tip">
+    <text id="n0_zplm" name="tip" xy="40,-10" pivot="0.5,0.5" size="1000,84" font="ui://4imy7ztwk6bjd" fontSize="64" align="center" vAlign="middle" ubb="true" autoSize="none" text="tip">
       <relation target="" sidePair="width-width,height-height"/>
     </text>
   </displayList>
