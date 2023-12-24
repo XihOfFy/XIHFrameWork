@@ -1,4 +1,5 @@
-﻿using FairyGUI;
+﻿using Cysharp.Threading.Tasks;
+using FairyGUI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -154,17 +155,6 @@ namespace XiHUI
         {
             foreach (var layer in _layers)
                 layer.Value?.SetBlurParams(blurBGScale, blursize);
-        }
-
-        public void InitCommonPackage(List<string> commonPackage)
-        {
-            if (_persistentPkg.Count>0)
-            {
-                return;
-            }
-            _persistentPkg = commonPackage;
-            foreach (var pkg in _persistentPkg)
-                GetUIPackage(pkg);
         }
 
         private void InitLayers()
@@ -404,36 +394,7 @@ namespace XiHUI
         }
 
         private static List<DialogOpenParams> _recoverList = new List<DialogOpenParams>();
-        public void ReLoadAll()
-        {
-            // 关闭所有UI并获取列表
-            _recoverList.Clear();
-            foreach (var stack in _layers.Values)
-                _recoverList.AddRange(stack?.Clear());
-
-            // 卸载所有UI资源包
-            foreach (var pack in _packages)
-            {
-                UIPackage.RemovePackage(pack.Key);
-
-            }
-            _packages.Clear();
-
-            // 恢复UI
-            RecoverUI();
-        }
-
-        void RecoverUI()
-        {
-            if (_persistentPkg != null && _persistentPkg.Count > 0)
-                InitCommonPackage(_persistentPkg);
-
-            foreach (var ui in _recoverList)
-                Open(ui.DialogName, ui.PackageName, ui.ComponentName, ui.Layer, ui.IsFull, ui.IsBlur);
-
-            _recoverList.Clear();
-        }
-
+        
         public void GetLayerList(Mode mode, ref IList<UIDialog> result)
         {
             if (result == null)

@@ -138,5 +138,46 @@ namespace XiHUI
             return package;
 
         }
+        public async UniTask InitCommonPackageAsync(List<string> commonPackage)
+        {
+            if (_persistentPkg.Count > 0)
+            {
+                return;
+            }
+            _persistentPkg = commonPackage;
+            var handles = new List<UniTask>();
+            foreach (var pkg in _persistentPkg)
+                handles.Add(GetUIPackageAsync(pkg));
+            await UniTask.WhenAll(handles);
+        }
+        public async UniTask ReLoadAllAsync()
+        {
+            // 关闭所有UI并获取列表
+            _recoverList.Clear();
+            foreach (var stack in _layers.Values)
+                _recoverList.AddRange(stack?.Clear());
+
+            // 卸载所有UI资源包
+            foreach (var pack in _packages)
+            {
+                UIPackage.RemovePackage(pack.Key);
+
+            }
+            _packages.Clear();
+
+            // 恢复UI
+            await RecoverUIAsync();
+        }
+
+        async UniTask RecoverUIAsync()
+        {
+            if (_persistentPkg != null && _persistentPkg.Count > 0)
+                await InitCommonPackageAsync(_persistentPkg);
+
+            foreach (var ui in _recoverList)
+                Open(ui.DialogName, ui.PackageName, ui.ComponentName, ui.Layer, ui.IsFull, ui.IsBlur);
+
+            _recoverList.Clear();
+        }
     }
 }

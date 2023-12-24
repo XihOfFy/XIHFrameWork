@@ -39,7 +39,7 @@ namespace Hot
 
             UIConfig.defaultFont = "JTFont"; //另一个方法是FGUI项目里添加jtfont字体，直接引用，发布时字体不会发布，而是找该字体的注册 https://www.fairygui.com/docs/editor/font
             UIPackage.unloadBundleByFGUI = false;
-            UIDialogManager.Instance.InitCommonPackage(new List<string>() { "Common"});
+            await UIDialogManager.Instance.InitCommonPackageAsync(new List<string>() { "Common"});
             //UIDialogManager.Instance.InitConfig();
 
 
