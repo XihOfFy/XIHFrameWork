@@ -20,6 +20,10 @@ namespace XiHUtil
             PlayerPrefs.Save();
 #endif
         }
+        public static void Set(string key, bool val)
+        {
+            Set(key,val?1:0);
+        }
         public static void Set(string key, int val)
         {
 #if UNITY_WX_WITHOUT_EDITOR
@@ -45,6 +49,10 @@ namespace XiHUtil
 #else
             return PlayerPrefs.GetString(key, val);
 #endif
+        }
+        public static bool Get(string key, bool val=false)
+        {
+            return Get(key, val?1:0) == 1;
         }
         public static int Get(string key, int val=0)
         {
