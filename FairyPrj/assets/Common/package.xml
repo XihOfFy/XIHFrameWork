@@ -6,7 +6,7 @@
     <component id="zplm9" name="TipItem.xml" path="/" exported="true"/>
     <component id="zplma" name="Choose.xml" path="/" exported="true"/>
     <component id="zplmc" name="ChooseContent.xml" path="/" exported="true"/>
-    <font id="k6bjd" name="JTFont.ttf" path="/" renderMode="sdfaa" samplePointSize="60"/>
+    <font id="k6bjd" name="JTFont.ttf" path="/" renderMode="sdfaa" samplePointSize="90"/>
   </resources>
   <publish name=""/>
 </packageDescription>

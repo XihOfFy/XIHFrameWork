@@ -20,16 +20,22 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// {{ AOT generic types
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<CreateDialogAsync>d__1,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<GetUIPackageAsync>d__3,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<InitCommonPackageAsync>d__5>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<LoadUIComponentAsync>d__2,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<LoadUIPackageAsync>d__4,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<OpenAsync>d__0,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<ReLoadAllAsync>d__6>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUI.UIDialogManager.<RecoverUIAsync>d__7>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUtil.UIUtil.<OpenDialogAsync>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<XiHUtil.UIUtil.<OpenDialogAsync>d__1<object>,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<CreateDialogAsync>d__1,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<GetUIPackageAsync>d__3,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<InitCommonPackageAsync>d__5>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<LoadUIComponentAsync>d__2,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<LoadUIPackageAsync>d__4,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<OpenAsync>d__0,object>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<ReLoadAllAsync>d__6>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUI.UIDialogManager.<RecoverUIAsync>d__7>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUtil.UIUtil.<OpenDialogAsync>d__0,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<XiHUtil.UIUtil.<OpenDialogAsync>d__1<object>,object>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>
@@ -89,6 +95,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.UniTask<System.ValueTuple<byte,System.ValueTuple<byte,object>>>
 	// Cysharp.Threading.Tasks.UniTask<System.ValueTuple<byte,object>>
 	// Cysharp.Threading.Tasks.UniTask<object>
+	// Cysharp.Threading.Tasks.UniTaskCompletionSourceCore<Cysharp.Threading.Tasks.AsyncUnit>
 	// Cysharp.Threading.Tasks.UniTaskCompletionSourceCore<object>
 	// System.Action<Cysharp.Threading.Tasks.UniTask>
 	// System.Action<XiHUI.DialogOpenParams>
@@ -233,6 +240,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	public void RefMethods()
 	{
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,XiHUI.UIDialogManager.<InitCommonPackageAsync>d__5>(Cysharp.Threading.Tasks.UniTask.Awaiter&,XiHUI.UIDialogManager.<InitCommonPackageAsync>d__5&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,XiHUI.UIDialogManager.<ReLoadAllAsync>d__6>(Cysharp.Threading.Tasks.UniTask.Awaiter&,XiHUI.UIDialogManager.<ReLoadAllAsync>d__6&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,XiHUI.UIDialogManager.<RecoverUIAsync>d__7>(Cysharp.Threading.Tasks.UniTask.Awaiter&,XiHUI.UIDialogManager.<RecoverUIAsync>d__7&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,XiHUI.UIDialogManager.<LoadUIPackageAsync>d__4>(Cysharp.Threading.Tasks.UniTask.Awaiter&,XiHUI.UIDialogManager.<LoadUIPackageAsync>d__4&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,XiHUI.UIDialogManager.<CreateDialogAsync>d__1>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,XiHUI.UIDialogManager.<CreateDialogAsync>d__1&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,XiHUI.UIDialogManager.<GetUIPackageAsync>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,XiHUI.UIDialogManager.<GetUIPackageAsync>d__3&)
@@ -240,6 +250,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,XiHUI.UIDialogManager.<OpenAsync>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,XiHUI.UIDialogManager.<OpenAsync>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,XiHUtil.UIUtil.<OpenDialogAsync>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,XiHUtil.UIUtil.<OpenDialogAsync>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,XiHUtil.UIUtil.<OpenDialogAsync>d__1<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,XiHUtil.UIUtil.<OpenDialogAsync>d__1<object>&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<XiHUI.UIDialogManager.<InitCommonPackageAsync>d__5>(XiHUI.UIDialogManager.<InitCommonPackageAsync>d__5&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<XiHUI.UIDialogManager.<ReLoadAllAsync>d__6>(XiHUI.UIDialogManager.<ReLoadAllAsync>d__6&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<XiHUI.UIDialogManager.<RecoverUIAsync>d__7>(XiHUI.UIDialogManager.<RecoverUIAsync>d__7&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<XiHUI.UIDialogManager.<CreateDialogAsync>d__1>(XiHUI.UIDialogManager.<CreateDialogAsync>d__1&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<XiHUI.UIDialogManager.<GetUIPackageAsync>d__3>(XiHUI.UIDialogManager.<GetUIPackageAsync>d__3&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<XiHUI.UIDialogManager.<LoadUIComponentAsync>d__2>(XiHUI.UIDialogManager.<LoadUIComponentAsync>d__2&)
