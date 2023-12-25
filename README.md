@@ -1,6 +1,8 @@
 # XIHFrameWork
 
-> 整合一些快捷开发的插件: HybridCLR、YooAsset、UniTask、DOTween、Unity-Logs-Viewer和RuntimeInspector
+> 整合一些快捷开发的插件: HybridCLR、YooAsset、UniTask、FariyGUI、DOTween、Unity-Logs-Viewer和RuntimeInspector
+> 
+> 整合部分集成功能：XiHNet、XiHSound、XiHUIFrameWork和XiHUtils
 > 
 > 添加一些功能插件: FileEncode、XIHWebServer
 
@@ -68,8 +70,4 @@
 ## 解决
 
 - 对于打包报错，记得检查link.xml是否正确裁剪，有些程序集不能全部保留，必须裁剪掉一部分才能在webgl运行，例如`UnityEngine.CoreModule`不能全保留
-- 微信小游戏缓存设置
-
-```
-
-```
+- 微信小游戏缓存设置：[YooAsset在Unity微信小游戏资源更新的解决方案 - XihOfFy的个人空间 - OSCHINA - 中文开源技术交流社区](https://my.oschina.net/u/4454895/blog/10322562)
