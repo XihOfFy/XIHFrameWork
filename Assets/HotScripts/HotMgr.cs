@@ -7,6 +7,7 @@ using XiHUI;
 using Cysharp.Threading.Tasks;
 using XiHUtil;
 using TMPro;
+using XiHSound;
 #if UNITY_WX
 using WeChatWASM;
 #endif
@@ -48,6 +49,8 @@ namespace Hot
 
             await YooAssets.LoadSceneAsync("Assets/Res/HotScene/Home.unity").ToUniTask();
             await UIUtil.OpenDialogAsync<HomeDialog>("Home","Home",Mode.Stack);
+
+            _ = SoundMgr.Instance;//初始化
         }
     }
 }
