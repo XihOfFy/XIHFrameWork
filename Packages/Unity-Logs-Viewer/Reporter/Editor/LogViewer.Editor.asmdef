@@ -2,7 +2,7 @@
     "name": "LogViewer.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:4e50ebcb923dbe94f8641932dd27dbf7"
+        "LogViewer"
     ],
     "includePlatforms": [
         "Editor"

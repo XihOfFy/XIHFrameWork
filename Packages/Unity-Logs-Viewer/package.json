@@ -1,7 +1,7 @@
 {
-  "name": "xih.fy.logsviewer4newinputsys",
+  "name": "xih.fy.logsviewer",
   "version": "1.0.0",
-  "displayName": "Logs Viewer For New Input System",
+  "displayName": "Logs Viewer",
   "category": "Runtime",
   "keywords": [
     "Logs"
@@ -12,10 +12,5 @@
       "description": "Samples",
       "path": "Reporter/Test~"
     }
-  ],
-  "author": {
-    "name": "xih of fy",
-    "email": "768562568@qq.com",
-    "url": "https://gitee.com/xihoffy/Unity-Logs-Viewer"
-  }
+  ]
 }

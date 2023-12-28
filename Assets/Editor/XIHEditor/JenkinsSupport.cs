@@ -89,8 +89,21 @@ public class JenkinsSupport
                 {
 #if UNITY_WX
                     WXSettings();
-                    if (WXExportError.SUCCEED != WXConvertCore.DoExport())
+                    if (WXExportError.SUCCEED == WXConvertCore.DoExport())
                     {
+                        //为了更好支持分包，默认把 XIHWebServerRes\MiniGame\webgl/**.data.unityweb.bin.txt文件拷贝到 XIHWebServerRes/WebGL 下
+                        var config = UnityUtil.GetEditorConf();
+                        var webglPath = config.ProjectConf.DST + "/webgl";
+                        var files = Directory.GetFiles(webglPath, "*.webgl.data.unityweb.bin.txt");
+                        var dstRoot = $"{WEB_ROOT}/WebGL/";
+                        foreach (var file in files)
+                        {
+                            var dst = dstRoot + Path.GetFileName(file);
+                            Debug.LogWarning($"分包 > {file} > {dst}");
+                            File.Copy(file, dst, true);
+                        }
+                    }
+                    else { 
                         Debug.LogError("转换小游戏失败");
                     }
                     return;
@@ -220,10 +233,20 @@ public class JenkinsSupport
         var config = UnityUtil.GetEditorConf();
 
         //设置输出相对路径
-        config.ProjectConf.DST = "XIHWebServerRes/MiniGame";
+        config.ProjectConf.DST = $"{WEB_ROOT}/MiniGame";
         Debug.LogWarning($"设置小游戏输出相对路径 {config.ProjectConf.DST}");
 
-        //config.ProjectConf.CDN = "http://192.168.7.113:5000/";
+        var remoteCfgPath = $"{WEB_ROOT}/Front/WebGL.json";
+        if (File.Exists(remoteCfgPath))
+        {
+            var fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
+            config.ProjectConf.CDN = fontCfg.defaultHostServer;
+            Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{fontCfg.defaultHostServer}\n 这里设置defaultHostServer而不是cdn是为了平台差异化，不然分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/WebGL");
+        }        
+        else
+        {
+            Debug.LogError($"未找到{remoteCfgPath}文件,CDN保留原始设置");
+        }
 
         //排除缓存为该后缀的文件
         var str = config.ProjectConf.bundleExcludeExtensions;

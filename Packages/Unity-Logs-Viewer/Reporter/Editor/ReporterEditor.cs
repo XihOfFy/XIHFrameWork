@@ -4,8 +4,7 @@ using UnityEditor.Callbacks;
 
 using System.IO;
 using System.Collections;
-using UnityEditor.Build;
-using UnityEditor.Build.Reporting;
+
 
 public class ReporterEditor : Editor
 {
@@ -65,24 +64,32 @@ public class ReporterEditor : Editor
 	}
 }
 
-public class ReporterModificationProcessor : IPreprocessBuildWithReport
+public class ReporterModificationProcessor : UnityEditor.AssetModificationProcessor
 {
-    public int callbackOrder => 1;
-
-    public void OnPreprocessBuild(BuildReport report)
-    {
-		if (!EditorApplication.isCompiling)
+	[InitializeOnLoad]
+	public class BuildInfo
+	{
+		static BuildInfo()
 		{
-			//Debug.Log("Finish Compile");
-			if (!Directory.Exists(Application.dataPath + "/StreamingAssets"))
-			{
-				Directory.CreateDirectory(Application.dataPath + "/StreamingAssets");
-			}
-			string info_path = Application.dataPath + "/StreamingAssets/build_info";
-			StreamWriter build_info = new StreamWriter(info_path);
-			build_info.Write("Build from " + SystemInfo.deviceName + " at " + System.DateTime.Now.ToString());
-			build_info.Close();
+			EditorApplication.update += Update;
 		}
 
+		static bool isCompiling = true;
+		static void Update()
+		{
+          
+			if (!EditorApplication.isCompiling && isCompiling) {
+				//Debug.Log("Finish Compile");
+				if (!Directory.Exists(Application.dataPath + "/StreamingAssets")) {
+					Directory.CreateDirectory(Application.dataPath + "/StreamingAssets");
+				}
+				string info_path = Application.dataPath + "/StreamingAssets/build_info"; 
+				StreamWriter build_info = new StreamWriter(info_path);
+				build_info.Write("Build from " + SystemInfo.deviceName + " at " + System.DateTime.Now.ToString());
+				build_info.Close();
+			}
+
+			isCompiling = EditorApplication.isCompiling;
+		}
 	}
 }
