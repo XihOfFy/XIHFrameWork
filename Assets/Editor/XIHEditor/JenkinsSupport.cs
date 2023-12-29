@@ -9,32 +9,33 @@ using YooAsset.Editor;
 using Aot;
 using System;
 using System.IO;
-using UnityEditor.VersionControl;
 #if UNITY_WX
 using WeChatWASM;
 using static WeChatWASM.WXConvertCore;
 #endif
 
 //需要自行保证YooAsset资源收集规则已经提前设置了
-public class JenkinsSupport 
+public class JenkinsSupport
 {
     //命令行参考: https://docs.unity.cn/cn/2021.1/Manual/CommandLineArguments.html
     //Jenkins安装了Unity插件的话，可以在Editor command line arguments 填写：
     //-quit -nographics -batchmode -buildTarget "${BuildTarget}" -projectPath "${ProjectRoot}" -executeMethod JenkinsSupport.JenkinsBuild buildID="${BUILD_ID}" fullBuild=${UseFullBuild} -logFile "${ProjectRoot}/JenkinsUnityBuildLog.log"
 
-    const string WEB_ROOT ="XIHWebServerRes";
+    const string WEB_ROOT = "XIHWebServerRes";
 
     public static void JenkinsBuild()
     {
         var dic = GetCommandLineArgs();
-        if (dic.ContainsKey("fullBuild")) {
+        if (dic.ContainsKey("fullBuild"))
+        {
             var val = dic["fullBuild"];
             bool.TryParse(val, out var result);
             if (result)
             {
                 FullBuild();
             }
-            else {
+            else
+            {
                 HotBuild();
             }
         }
@@ -47,9 +48,16 @@ public class JenkinsSupport
         FullBuild_WithoutHyCLRGenerateAll();
     }
     [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
-    public static void FullBuild_WithoutHyCLRGenerateAll() {
-        HotBuild();
-
+    public static void FullBuild_WithoutHyCLRGenerateAll()
+    {
+#if UNITY_WX
+        WXSettings();
+        if (WXExportError.SUCCEED != WXConvertCore.DoExport())
+        {
+            Debug.LogError("转换小游戏失败");
+            return;
+        }
+#else
         var curTarget = EditorUserBuildSettings.activeBuildTarget;
         string targetPath = null;
         var buildOptions = BuildOptions.None;
@@ -87,43 +95,21 @@ public class JenkinsSupport
 
             case BuildTarget.WebGL:
                 {
-#if UNITY_WX
-                    WXSettings();
-                    if (WXExportError.SUCCEED == WXConvertCore.DoExport())
-                    {
-                        //为了更好支持分包，默认把 XIHWebServerRes\MiniGame\webgl/**.data.unityweb.bin.txt文件拷贝到 XIHWebServerRes/WebGL 下
-                        var config = UnityUtil.GetEditorConf();
-                        var webglPath = config.ProjectConf.DST + "/webgl";
-                        var files = Directory.GetFiles(webglPath, "*.webgl.data.unityweb.bin.txt");
-                        var dstRoot = $"{WEB_ROOT}/WebGL/";
-                        foreach (var file in files)
-                        {
-                            var dst = dstRoot + Path.GetFileName(file);
-                            Debug.LogWarning($"分包 > {file} > {dst}");
-                            File.Copy(file, dst, true);
-                        }
-                    }
-                    else { 
-                        Debug.LogError("转换小游戏失败");
-                    }
-                    return;
-#else
                     buildOptions = BuildOptions.CompressWithLz4HC;
                     targetPath = $"{WEB_ROOT}/GameWebGL/";
                     if (Directory.Exists(targetPath)) Directory.Delete(targetPath, true);
                     Directory.CreateDirectory(targetPath);
-                    break;
-#endif
                 }
+                break;
         }
-
-
         var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, targetPath, curTarget, buildOptions);
         if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Failed)
         {
             //若是无头模式构建，添加这个行
             //Environment.Exit(-1);
         }
+#endif
+        HotBuild();
     }
 
 
@@ -136,7 +122,12 @@ public class JenkinsSupport
         Debug.LogWarning("拷贝热更Dll");
         DllCopyEditor.CopyDlls(curTarget);
         Debug.LogWarning("YooAsset开始构建");
-        ExecuteYooAssetBuild(curTarget);
+        if (ExecuteYooAssetBuild(curTarget))
+        {
+#if UNITY_WX
+            WXSubpackage(curTarget);
+#endif
+        }
         Debug.LogWarning("完成热更打包");
     }
 
@@ -175,12 +166,13 @@ public class JenkinsSupport
         // 执行构建
         ScriptableBuildPipeline pipeline = new ScriptableBuildPipeline();
         var buildResult = pipeline.Run(buildParameters, true);
-        if (buildResult.Success) {
+        if (buildResult.Success)
+        {
             Debug.LogWarning("打包资源AB成功");
             var dstPath = $"{WEB_ROOT}/{buildTarget}";
             if (Directory.Exists(dstPath)) Directory.Delete(dstPath, true);
             var srcPath = buildResult.OutputPackageDirectory;
-            CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json" ,".xml"});
+            CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json", ".xml" });
             Debug.LogWarning($"拷贝到目标目录:{srcPath} > {dstPath}");
         }
         else
@@ -216,20 +208,22 @@ public class JenkinsSupport
     }
 
     // 从构建命令里获取参数示例
-    private static Dictionary<string,string> GetCommandLineArgs()
+    private static Dictionary<string, string> GetCommandLineArgs()
     {
-        var dic=new Dictionary<string,string>();
+        var dic = new Dictionary<string, string>();
         foreach (string arg in System.Environment.GetCommandLineArgs())
         {
             var kv = arg.Split('=');
-            if (kv.Length == 2) {
+            if (kv.Length == 2)
+            {
                 dic[kv[0]] = kv[1];
             }
         }
         return dic;
     }
 #if UNITY_WX
-    static void WXSettings() {
+    static void WXSettings()
+    {
         var config = UnityUtil.GetEditorConf();
 
         //设置输出相对路径
@@ -242,7 +236,7 @@ public class JenkinsSupport
             var fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
             config.ProjectConf.CDN = fontCfg.defaultHostServer;
             Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{fontCfg.defaultHostServer}\n 这里设置defaultHostServer而不是cdn是为了平台差异化，不然分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/WebGL");
-        }        
+        }
         else
         {
             Debug.LogError($"未找到{remoteCfgPath}文件,CDN保留原始设置");
@@ -253,7 +247,7 @@ public class JenkinsSupport
         var hash = new HashSet<string>(str.Split(";"));
         hash.Remove("");
         hash.Add("version");
-        config.ProjectConf.bundleExcludeExtensions=string.Join(";", hash);
+        config.ProjectConf.bundleExcludeExtensions = string.Join(";", hash);
 
         //缓存www下载中包含WebGL路径的文件
         str = config.ProjectConf.bundlePathIdentifier;
@@ -265,6 +259,25 @@ public class JenkinsSupport
         EditorUtility.SetDirty(config);
         AssetDatabase.SaveAssetIfDirty(config);
         AssetDatabase.Refresh();
+    }
+
+    static void WXSubpackage(BuildTarget buildTarget)
+    {
+        //为了更好支持分包，默认把 XIHWebServerRes\MiniGame\webgl/**.data.unityweb.bin.txt文件拷贝到 XIHWebServerRes/WebGL 下
+        var config = UnityUtil.GetEditorConf();
+        if (config.ProjectConf.assetLoadType == 1) {
+            Debug.LogWarning("当前首包资源加载方式方式为小游戏包内，不需要拷贝到WebGL");
+            return;
+        }
+        var webglPath = config.ProjectConf.DST + "/webgl";
+        var files = Directory.GetFiles(webglPath, "*.webgl.data.unityweb.bin.*");//不同压缩分包后缀不一样，txt；br
+        var dstRoot = $"{WEB_ROOT}/{buildTarget}/";
+        foreach (var file in files)
+        {
+            var dst = dstRoot + Path.GetFileName(file);
+            Debug.LogWarning($"微信小游戏分包 > {file} > {dst}");
+            File.Copy(file, dst, true);
+        }
     }
 #endif
 }
