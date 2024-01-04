@@ -50,15 +50,19 @@ public class JenkinsSupport
     [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
     public static void FullBuild_WithoutHyCLRGenerateAll()
     {
+		HotBuild();//先打热更，方便后期可能资源打入apk；也包含微信更新分包，因为可能只打热更，也需要考虑分包也重新拷贝到cdn
+		var curTarget = EditorUserBuildSettings.activeBuildTarget;
 #if UNITY_WX
         WXSettings();
-        if (WXExportError.SUCCEED != WXConvertCore.DoExport())
+        if (WXExportError.SUCCEED == WXConvertCore.DoExport())
         {
+			WXSubpackage(curTarget);//微信更新分包
+			Debug.LogWarning("转换小游戏成功");
+        }else{
             Debug.LogError("转换小游戏失败");
             return;
-        }
+		}
 #else
-        var curTarget = EditorUserBuildSettings.activeBuildTarget;
         string targetPath = null;
         var buildOptions = BuildOptions.None;
         switch (curTarget)
@@ -109,7 +113,6 @@ public class JenkinsSupport
             //Environment.Exit(-1);
         }
 #endif
-        HotBuild();
     }
 
 
