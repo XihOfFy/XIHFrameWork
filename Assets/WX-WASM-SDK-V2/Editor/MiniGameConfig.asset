@@ -39,6 +39,7 @@ MonoBehaviour:
     loadingBarWidth: 240
     needCheckUpdate: 0
     disableHighPerformanceFallback: 0
+    IOSDevicePixelRatio: 0
   SDKOptions:
     UseFriendRelation: 0
     UseCompressedTexture: 0

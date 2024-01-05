@@ -49,16 +49,7 @@ namespace XiHUtil
         {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            WX.GetFileSystemManager().WriteSync(new WriteSyncOption()
-            {
-                data = content,
-                fd = WX.GetFileSystemManager().OpenSync(new OpenSyncOption()
-                {
-                    filePath = fullPath,
-                    flag = "w+"
-                }),
-                encoding = "utf8"
-            });
+            WX.GetFileSystemManager().WriteFileSync(fullPath, content);
 #else
             File.WriteAllBytes(fullPath, content);
 #endif

@@ -962,6 +962,7 @@ namespace WeChatWASM
                 dataFileSize,
                 IsInstantGameAutoStreaming() ? "true" : "false",
                 (config.CompileOptions.DevelopBuild && config.CompileOptions.enableRenderAnalysis) ? "true" : "false",
+                config.ProjectConf.IOSDevicePixelRatio.ToString(),
             });
 
             List<Rule> replaceList = new List<Rule>(replaceArrayList);

@@ -99,6 +99,11 @@ if (needToastEnableHpMode) {
     //   })
     // }, 10000);
 }
+// @ts-ignore
+if (isIOS && typeof $IOS_DEVICE_PIXEL_RATIO === 'number' && $IOS_DEVICE_PIXEL_RATIO > 0) {
+    // @ts-ignore
+    window.devicePixelRatio = $IOS_DEVICE_PIXEL_RATIO;
+}
 export default () => new Promise((resolve) => {
     if (!isDevtools) {
         if (isPcInvalid

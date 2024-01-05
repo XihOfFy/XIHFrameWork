@@ -404,6 +404,9 @@ WX_RequestMidasPaymentGameItem:function(conf, callbackId) {
 WX_RequestSubscribeLiveActivity:function(conf, callbackId) {
     window.WXWASMSDK.WX_RequestSubscribeLiveActivity(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
 },
+WX_OpenBusinessView:function(conf, callbackId) {
+    window.WXWASMSDK.WX_OpenBusinessView(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
+},
 
 WX_ExitPointerLock:function() {
     window.WXWASMSDK.WX_ExitPointerLock();

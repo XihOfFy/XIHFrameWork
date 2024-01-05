@@ -3309,6 +3309,30 @@ export default {
             },
         });
     },
+    WX_OpenBusinessView(conf, callbackId) {
+        const config = formatJsonStr(conf);
+        wx.openBusinessView({
+            ...config,
+            success(res) {
+                formatResponse('GeneralCallbackResult', res);
+                moduleHelper.send('OpenBusinessViewCallback', JSON.stringify({
+                    callbackId, type: 'success', res: JSON.stringify(res),
+                }));
+            },
+            fail(res) {
+                formatResponse('GeneralCallbackResult', res);
+                moduleHelper.send('OpenBusinessViewCallback', JSON.stringify({
+                    callbackId, type: 'fail', res: JSON.stringify(res),
+                }));
+            },
+            complete(res) {
+                formatResponse('GeneralCallbackResult', res);
+                moduleHelper.send('OpenBusinessViewCallback', JSON.stringify({
+                    callbackId, type: 'complete', res: JSON.stringify(res),
+                }));
+            },
+        });
+    },
     WX_ExitPointerLock() {
         wx.exitPointerLock();
     },

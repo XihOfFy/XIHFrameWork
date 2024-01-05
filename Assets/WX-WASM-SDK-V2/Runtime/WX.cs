@@ -2500,6 +2500,15 @@ namespace WeChatWASM
         }
 
         /// <summary>
+        /// 打开业务页面
+        /// 从基础库 v3.1.0 开始支持
+        /// </summary>
+        public static void OpenBusinessView(OpenBusinessViewOption callback)
+        {
+            WXSDKManagerHandler.Instance.OpenBusinessView(callback);
+        }
+
+        /// <summary>
         /// [wx.exitPointerLock()](https://developers.weixin.qq.com/minigame/dev/api/render/cursor/wx.exitPointerLock.html)
         /// 需要基础库： `3.2.0`
         /// 解除锁定鼠标指针。此接口仅在 Windows、Mac 端支持。
