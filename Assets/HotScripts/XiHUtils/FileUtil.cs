@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace XiHUtil
 {
-    public static class FileUtil 
+    public static class FileUtil
     {
         public static readonly string RootPath;
         public const string SAVE_DIR = "SaveDir";
@@ -37,7 +37,8 @@ namespace XiHUtil
 #endif
         }
 
-        public static void WriteFile(string relativePath, string content) {
+        public static void WriteFile(string relativePath, string content)
+        {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
             WX.GetFileSystemManager().WriteFileSync(fullPath, content);
@@ -60,6 +61,7 @@ namespace XiHUtil
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.GetFileSystemManager().ReadFileSync(fullPath,"utf8");
 #else
+            if (!File.Exists(fullPath)) return "";
             return File.ReadAllText(fullPath, UTF8Encoding.UTF8);
 #endif
         }
@@ -69,6 +71,7 @@ namespace XiHUtil
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.GetFileSystemManager().ReadFileSync(fullPath);
 #else
+            if (!File.Exists(fullPath)) return null;
             return File.ReadAllBytes(fullPath);
 #endif
         }
