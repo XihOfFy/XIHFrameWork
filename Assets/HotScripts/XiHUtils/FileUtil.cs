@@ -58,8 +58,7 @@ namespace XiHUtil
         {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            var bys = WX.GetFileSystemManager().ReadFileSync(fullPath);
-            return UTF8Encoding.UTF8.GetString(bys);
+            return WX.GetFileSystemManager().ReadFileSync(fullPath,"utf8");
 #else
             return File.ReadAllText(fullPath, UTF8Encoding.UTF8);
 #endif
