@@ -40,6 +40,8 @@ const isH5LibVersionValid = compareVersion(SDKVersion, '2.23.1');
 const isIOSH5SystemVersionValid = compareVersion(systemVersion, '14.0');
 // iOS系统版本>=15支持webgl2
 const isIOSWebgl2SystemVersionValid = compareVersion(systemVersion, '15.0');
+// Android客户端版本>=8.0.19支持webgl2
+const isAndroidWebGL2ClientVersionValid = compareVersion(version, '8.0.19');
 // 是否用了webgl2
 const isWebgl2 = () => GameGlobal.managerConfig.contextConfig.contextType === 2;
 // 是否支持BufferURL
@@ -74,7 +76,7 @@ const isIOSH5Invalid = (isH5Renderer && !isH5LibVersionValid) || (!isH5Renderer 
 export const isSupportVideoPlayer = (isIOS && compareVersion(SDKVersion, '3.1.1')) || (isAndroid && compareVersion(SDKVersion, '3.0.0')) || ((isPc || isDevtools) && compareVersion(SDKVersion, '3.2.1'));
 // 视情况添加，没用到对应能力就不需要判断
 // 是否支持webgl2
-const isWebgl2SystemVersionInvalid = () => isIOS && isWebgl2() && !isIOSWebgl2SystemVersionValid;
+const isWebgl2SystemVersionInvalid = () => isWebgl2() && ((!isIOSWebgl2SystemVersionValid && isIOS) || (isAndroid && !isAndroidWebGL2ClientVersionValid));
 // IOS高性能模式2.25.3以上基础库需要手动启动webAudio
 export const webAudioNeedResume = compareVersion(SDKVersion, '2.25.3') && isH5Renderer;
 // 满足iOS高性能条件，但未开通高性能模式
@@ -114,7 +116,7 @@ export default () => new Promise((resolve) => {
             let updateWechat = true;
             let content = '当前微信版本过低\n请更新微信后进行游戏';
             if (isIOS) {
-                if (!isIOSH5SystemVersionValid || isWebgl2SystemVersionInvalid()) {
+                if (!isIOSH5SystemVersionValid || (isWebgl2SystemVersionInvalid() && isIOS)) {
                     content = '当前操作系统版本过低\n请更新iOS系统后进行游戏';
                     updateWechat = false;
                 }

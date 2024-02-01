@@ -332,9 +332,6 @@ WX_StartCompass:function(conf, callbackId) {
 WX_StartDeviceMotionListening:function(conf, callbackId) {
     window.WXWASMSDK.WX_StartDeviceMotionListening(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
 },
-WX_StartGyroscope:function(conf, callbackId) {
-    window.WXWASMSDK.WX_StartGyroscope(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
-},
 WX_StopAccelerometer:function(conf, callbackId) {
     window.WXWASMSDK.WX_StopAccelerometer(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
 },
@@ -352,9 +349,6 @@ WX_StopDeviceMotionListening:function(conf, callbackId) {
 },
 WX_StopFaceDetect:function(conf, callbackId) {
     window.WXWASMSDK.WX_StopFaceDetect(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
-},
-WX_StopGyroscope:function(conf, callbackId) {
-    window.WXWASMSDK.WX_StopGyroscope(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
 },
 WX_UpdateKeyboard:function(conf, callbackId) {
     window.WXWASMSDK.WX_UpdateKeyboard(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
@@ -469,12 +463,6 @@ WX_OnAudioInterruptionEnd:function() {
 WX_OffAudioInterruptionEnd:function() {
     window.WXWASMSDK.WX_OffAudioInterruptionEnd();
 },
-WX_OnBLECharacteristicValueChange:function() {
-    window.WXWASMSDK.WX_OnBLECharacteristicValueChange();
-},
-WX_OffBLECharacteristicValueChange:function() {
-    window.WXWASMSDK.WX_OffBLECharacteristicValueChange();
-},
 WX_OnBLEConnectionStateChange:function() {
     window.WXWASMSDK.WX_OnBLEConnectionStateChange();
 },
@@ -543,12 +531,6 @@ WX_OnError:function() {
 },
 WX_OffError:function() {
     window.WXWASMSDK.WX_OffError();
-},
-WX_OnGyroscopeChange:function() {
-    window.WXWASMSDK.WX_OnGyroscopeChange();
-},
-WX_OffGyroscopeChange:function() {
-    window.WXWASMSDK.WX_OffGyroscopeChange();
 },
 WX_OnHide:function() {
     window.WXWASMSDK.WX_OnHide();

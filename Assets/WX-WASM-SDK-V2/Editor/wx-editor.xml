@@ -450,6 +450,11 @@
             iOS高性能模式自动GC间隔(毫秒)
             </summary>
         </member>
+        <member name="F:WeChatWASM.CompileOptions.enableIOSPerformancePlus">
+            <summary>
+            是否使用iOS高性能Plus
+            </summary>
+        </member>
         <member name="F:WeChatWASM.WXEditorScriptObject.CompressTexture">
             <summary>
             压缩纹理配置

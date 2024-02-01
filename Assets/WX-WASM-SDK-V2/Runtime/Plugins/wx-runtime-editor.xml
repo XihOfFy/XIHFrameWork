@@ -3002,6 +3002,80 @@
             触点相对于页面上边沿的 Y 坐标。
             </summary>
         </member>
+        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.characteristicId">
+            <summary>
+            蓝牙特征的 UUID
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.deviceId">
+            <summary>
+            蓝牙设备 id
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.serviceId">
+            <summary>
+            蓝牙特征对应服务的 UUID
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.value">
+            <summary>
+            特征最新的值
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.OnGyroscopeChangeListenerResult.x">
+            <summary>
+            x 轴的角速度
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.OnGyroscopeChangeListenerResult.y">
+            <summary>
+            y 轴的角速度
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.OnGyroscopeChangeListenerResult.z">
+            <summary>
+            z 轴的角速度
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StartGyroscopeOption.complete">
+            <summary>
+            接口调用结束的回调函数（调用成功、失败都会执行）
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StartGyroscopeOption.fail">
+            <summary>
+            接口调用失败的回调函数
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StartGyroscopeOption.interval">
+            <summary>
+            监听陀螺仪数据回调函数的执行频率
+            可选值：
+            - 'game': 适用于更新游戏的回调频率，在 20ms/次 左右;
+            - 'ui': 适用于更新 UI 的回调频率，在 60ms/次 左右;
+            - 'normal': 普通的回调频率，在 200ms/次 左右;
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StartGyroscopeOption.success">
+            <summary>
+            接口调用成功的回调函数
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StopGyroscopeOption.complete">
+            <summary>
+            接口调用结束的回调函数（调用成功、失败都会执行）
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StopGyroscopeOption.fail">
+            <summary>
+            接口调用失败的回调函数
+            </summary>
+        </member>
+        <member name="F:WeChatWASM.StopGyroscopeOption.success">
+            <summary>
+            接口调用成功的回调函数
+            </summary>
+        </member>
         <member name="F:WeChatWASM.AccountInfo.miniProgram">
             <summary>
             小程序账号信息
@@ -6843,26 +6917,6 @@
             收藏标题，不传则默认使用当前小游戏的昵称。
             </summary>
         </member>
-        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.characteristicId">
-            <summary>
-            蓝牙特征的 UUID
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.deviceId">
-            <summary>
-            蓝牙设备 id
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.serviceId">
-            <summary>
-            蓝牙特征对应服务的 UUID
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.OnBLECharacteristicValueChangeListenerResult.value">
-            <summary>
-            特征最新的值
-            </summary>
-        </member>
         <member name="F:WeChatWASM.OnBLEConnectionStateChangeListenerResult.connected">
             <summary>
             是否处于已连接状态
@@ -7005,21 +7059,6 @@
         <member name="F:WeChatWASM.Error.stack">
             <summary>
             错误调用堆栈
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.OnGyroscopeChangeListenerResult.x">
-            <summary>
-            x 轴的角速度
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.OnGyroscopeChangeListenerResult.y">
-            <summary>
-            y 轴的角速度
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.OnGyroscopeChangeListenerResult.z">
-            <summary>
-            z 轴的角速度
             </summary>
         </member>
         <member name="F:WeChatWASM.OnHandoffListenerResult.query">
@@ -9186,30 +9225,6 @@
             接口调用成功的回调函数
             </summary>
         </member>
-        <member name="F:WeChatWASM.StartGyroscopeOption.complete">
-            <summary>
-            接口调用结束的回调函数（调用成功、失败都会执行）
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.StartGyroscopeOption.fail">
-            <summary>
-            接口调用失败的回调函数
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.StartGyroscopeOption.interval">
-            <summary>
-            监听陀螺仪数据回调函数的执行频率
-            可选值：
-            - 'game': 适用于更新游戏的回调频率，在 20ms/次 左右;
-            - 'ui': 适用于更新 UI 的回调频率，在 60ms/次 左右;
-            - 'normal': 普通的回调频率，在 200ms/次 左右;
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.StartGyroscopeOption.success">
-            <summary>
-            接口调用成功的回调函数
-            </summary>
-        </member>
         <member name="F:WeChatWASM.StopAccelerometerOption.complete">
             <summary>
             接口调用结束的回调函数（调用成功、失败都会执行）
@@ -9296,21 +9311,6 @@
             </summary>
         </member>
         <member name="F:WeChatWASM.StopFaceDetectOption.success">
-            <summary>
-            接口调用成功的回调函数
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.StopGyroscopeOption.complete">
-            <summary>
-            接口调用结束的回调函数（调用成功、失败都会执行）
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.StopGyroscopeOption.fail">
-            <summary>
-            接口调用失败的回调函数
-            </summary>
-        </member>
-        <member name="F:WeChatWASM.StopGyroscopeOption.success">
             <summary>
             接口调用成功的回调函数
             </summary>

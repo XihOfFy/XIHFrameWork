@@ -219,5 +219,9 @@ checkVersion().then((enable) => {
         gameManager.startGame();
         GameGlobal.manager = gameManager;
         GameGlobal.events.on('launchOperaPushMsgToWasm', (callback, args) => GameGlobal.WXWASMSDK.WXLaunchOperaBridgeToC(callback, args));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        GameGlobal.events.on('createWorker', (worker) => {
+            // worker created
+        });
     }
 });

@@ -155,97 +155,6 @@ export function formatResponse(type, data, id) {
     });
     return data;
 }
-export function formatResponseNew(type, data) {
-    if (!data) {
-        data = {};
-    }
-    if (type === 'ArrayBuffer') {
-        return Array.from(new Uint8Array(data));
-    }
-    if (typeof data !== 'object') {
-        return {};
-    }
-    const conf = ResType[type]; 
-    if (!conf) {
-        return data;
-    }
-    
-    Object.keys(conf).forEach((key) => {
-        if (data[key] === null || typeof data[key] === 'undefined') { 
-            if (typeof typeMap[conf[key]] === 'undefined') {
-                data[key] = {};
-                if (ResType[conf[key]]) {
-                    formatResponse(conf[key], data[key]);
-                }
-            }
-            else {
-                data[key] = typeMap[conf[key]];
-            }
-        }
-        else if (conf[key] === 'long') {
-            data[key] = parseInt(data[key], 10);
-        }
-        else if (conf[key] === 'number' && typeof data[key] === 'string') {
-            data[key] = Number(data[key]);
-        }
-        else if (conf[key] === 'string' && typeof data[key] === 'number') {
-            data[key] = `${data[key]}`;
-        }
-        else if (conf[key] === 'bool' && (typeof data[key] === 'number' || typeof data[key] === 'string')) {
-            data[key] = !!data[key];
-        }
-        else if (data[key] instanceof ArrayBuffer) {
-            data[key] = Array.from(new Uint8Array(data[key]));
-        }
-        else if (typeof data[key] === 'object' && conf[key] === 'object') {
-            Object.keys(data[key]).forEach((v) => {
-                if (typeof data[key][v] === 'object') {
-                    data[key][v] = JSON.stringify(data[key][v]);
-                }
-                else {
-                    data[key][v] += '';
-                }
-            });
-        }
-        else if (typeof data[key] === 'object' && conf[key]) {
-            
-            const array = conf[key].match(/(.+)\[\]/);
-            if (array) {
-                for (const itemKey of Object.keys(data[key])) {
-                    if (array[1] === 'string') {
-                        data[key][itemKey] = `${data[key][itemKey]}`;
-                    }
-                    else if (array[1] === 'number') {
-                        data[key][itemKey] = Number(data[key][itemKey]);
-                    }
-                    else {
-                        formatResponse(array[1], data[key][itemKey]);
-                    }
-                }
-            }
-            else {
-                formatResponse(conf[key], data[key]);
-            }
-        }
-    });
-    
-    if (conf.anyKeyWord) {
-        return data;
-    }
-    
-    Object.keys(data).forEach((key) => {
-        if (typeof conf[key] === 'undefined') {
-            delete data[key];
-        }
-        else {
-            const getType = interfaceTypeMap[conf[key]];
-            if (getType && getType !== typeof data[key]) {
-                data[key] = typeMap[conf[key]];
-            }
-        }
-    });
-    return data;
-}
 export function formatJsonStr(str, type) {
     if (!str) {
         return {};
@@ -281,6 +190,25 @@ export function formatJsonStr(str, type) {
     catch (e) {
         return str;
     }
+}
+function isBase64(str) {
+    const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+    return base64Pattern.test(str);
+}
+function base64ToArrayBuffer(base64) {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+function convertBase64ToData(input) {
+    if (isBase64(input)) {
+        return base64ToArrayBuffer(input);
+    }
+    return input;
 }
 export function cacheArrayBuffer(callbackId, data) {
     tempCacheObj[callbackId] = data;
@@ -322,30 +250,46 @@ export function offEventCallback(list, callback, id) {
     list[id].forEach(callback);
     delete list[id];
 }
-function isBase64(str) {
-    const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
-    return base64Pattern.test(str);
+function allocateAndSet(byteArray) {
+    const ptr = GameGlobal.Module._malloc(byteArray.length);
+    GameGlobal.Module.HEAPU8.set(byteArray, ptr);
+    return ptr;
 }
-function base64ToArrayBuffer(base64) {
-    const binaryString = atob(base64);
-    const len = binaryString.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
+
+function convertNumberToPointer(num, ArrayType = Float64Array) {
+    const byteArray = numberToUint8Array(num, ArrayType);
+    return allocateAndSet(byteArray);
+}
+function convertArrayBufferToPointer(arrayBuffer) {
+    const byteArray = new Uint8Array(arrayBuffer);
+    return allocateAndSet(byteArray);
+}
+function convertStringToPointer(str) {
+    const byteArray = GameGlobal.Module.lengthBytesUTF8(str) + 1;
+    const ptr = GameGlobal.Module._malloc(byteArray);
+    GameGlobal.Module.stringToUTF8(str, ptr, byteArray);
+    return ptr;
+}
+export function convertDataToPointer(data) {
+    if (typeof data === 'number') {
+        return convertNumberToPointer(data);
     }
-    return bytes.buffer;
-}
-function convertBase64ToData(input) {
-    if (isBase64(input)) {
-        return base64ToArrayBuffer(input);
+    if (typeof data === 'string') {
+        return convertStringToPointer(data);
     }
-    return input;
+    if (data instanceof ArrayBuffer) {
+        return convertArrayBufferToPointer(data);
+    }
+    return 0;
 }
-export function stringToUint8ArrayWithLength(str) {
-    const strBytesLength = GameGlobal.Module.lengthBytesUTF8(str) + 1; 
-    const strPtr = GameGlobal.Module._malloc(strBytesLength); 
-    GameGlobal.Module.stringToUTF8(str, strPtr, strBytesLength); 
-    const strBytes = new Uint8Array(GameGlobal.Module.HEAPU8.buffer, strPtr, strBytesLength - 1); 
+
+function numberToUint8Array(num, ArrayType = Float64Array) {
+    return new Uint8Array(new ArrayType([num]).buffer);
+}
+function stringToUint8ArrayWithLength(str) {
+    const strPtr = convertStringToPointer(str);
+    const strBytesLength = GameGlobal.Module.lengthBytesUTF8(str);
+    const strBytes = new Uint8Array(GameGlobal.Module.HEAPU8.buffer, strPtr, strBytesLength);
     const lengthBytes = new Uint8Array(4); 
     new DataView(lengthBytes.buffer).setUint32(0, strBytes.length, true); 
     const result = new Uint8Array(4 + strBytes.length);
@@ -354,32 +298,48 @@ export function stringToUint8ArrayWithLength(str) {
     GameGlobal.Module._free(strPtr); 
     return result;
 }
-export function numberToUint8Array(num, ArrayType = Float64Array) {
-    return new Uint8Array(new ArrayType([num]).buffer);
-}
-export function serializeLocalInfo(localInfo) {
-    const addressByteArray = stringToUint8ArrayWithLength(localInfo.address);
-    const familyByteArray = stringToUint8ArrayWithLength(localInfo.family);
-    const portByteArray = numberToUint8Array(localInfo.port, Uint32Array);
-    const byteArray = new Uint8Array(addressByteArray.length + familyByteArray.length + portByteArray.length);
+function createUint8ArrayFromByteArrays(byteArrays) {
+    const totalLength = byteArrays.reduce((sum, byteArray) => sum + byteArray.length, 0);
+    const result = new Uint8Array(totalLength);
     let offset = 0;
-    byteArray.set(addressByteArray, offset);
-    offset += addressByteArray.length;
-    byteArray.set(familyByteArray, offset);
-    offset += familyByteArray.length;
-    byteArray.set(portByteArray, offset);
-    return byteArray;
+    byteArrays.forEach((byteArray) => {
+        result.set(byteArray, offset);
+        offset += byteArray.length;
+    });
+    return result;
 }
-export function serializeRemoteInfo(remoteInfo) {
-    const addressByteArray = stringToUint8ArrayWithLength(remoteInfo.address);
-    const familyByteArray = stringToUint8ArrayWithLength(remoteInfo.family);
-    const portByteArray = numberToUint8Array(remoteInfo.port, Uint32Array);
-    const byteArray = new Uint8Array(addressByteArray.length + familyByteArray.length + portByteArray.length);
-    let offset = 0;
-    byteArray.set(addressByteArray, offset);
-    offset += addressByteArray.length;
-    byteArray.set(familyByteArray, offset);
-    offset += familyByteArray.length;
-    byteArray.set(portByteArray, offset);
-    return byteArray;
+
+function touchToUint8Array(touch) {
+    return createUint8ArrayFromByteArrays([
+        numberToUint8Array(touch.clientX, Float32Array),
+        numberToUint8Array(touch.clientY, Float32Array),
+        numberToUint8Array(touch.force),
+        numberToUint8Array(touch.identifier, Uint32Array),
+        numberToUint8Array(touch.pageX, Float32Array),
+        numberToUint8Array(touch.pageY, Float32Array),
+    ]);
+}
+function touchesToUint8Array(touches) {
+    return createUint8ArrayFromByteArrays(touches.map(touchToUint8Array));
+}
+function onTouchStartListenerResultToUint8Array(result) {
+    return createUint8ArrayFromByteArrays([
+        touchesToUint8Array(result.touches),
+        touchesToUint8Array(result.changedTouches),
+        numberToUint8Array(result.timeStamp, Uint32Array),
+    ]);
+}
+export function convertOnTouchStartListenerResultToPointer(result) {
+    return allocateAndSet(onTouchStartListenerResultToUint8Array(result));
+}
+
+function infoToUint8Array(info) {
+    return createUint8ArrayFromByteArrays([
+        stringToUint8ArrayWithLength(info.address),
+        stringToUint8ArrayWithLength(info.family),
+        numberToUint8Array(info.port, Uint32Array)
+    ]);
+}
+export function convertInfoToPointer(info) {
+    return allocateAndSet(infoToUint8Array(info));
 }

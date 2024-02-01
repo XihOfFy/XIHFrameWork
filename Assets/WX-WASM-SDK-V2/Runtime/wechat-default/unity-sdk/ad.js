@@ -291,7 +291,7 @@ export default {
             return '{}';
         }
         if (typeof ads[id].reportShareBehavior === 'undefined') {
-            return;
+            return '{}';
         }
         const config = formatJsonStr(conf);
         return JSON.stringify(ads[id].reportShareBehavior(config));

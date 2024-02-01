@@ -4,7 +4,6 @@ import { uid, formatResponse, formatJsonStr, onEventCallback, offEventCallback, 
 let OnAccelerometerChangeList;
 let OnAudioInterruptionBeginList;
 let OnAudioInterruptionEndList;
-let OnBLECharacteristicValueChangeList;
 let OnBLEConnectionStateChangeList;
 let OnBLEMTUChangeList;
 let OnBLEPeripheralConnectionStateChangedList;
@@ -16,7 +15,6 @@ let OnCompassChangeList;
 let OnDeviceMotionChangeList;
 let OnDeviceOrientationChangeList;
 let OnErrorList;
-let OnGyroscopeChangeList;
 let OnHideList;
 let OnInteractiveStorageModifiedList;
 let OnKeyDownList;
@@ -2733,30 +2731,6 @@ export default {
             },
         });
     },
-    WX_StartGyroscope(conf, callbackId) {
-        const config = formatJsonStr(conf);
-        wx.startGyroscope({
-            ...config,
-            success(res) {
-                formatResponse('GeneralCallbackResult', res);
-                moduleHelper.send('StartGyroscopeCallback', JSON.stringify({
-                    callbackId, type: 'success', res: JSON.stringify(res),
-                }));
-            },
-            fail(res) {
-                formatResponse('GeneralCallbackResult', res);
-                moduleHelper.send('StartGyroscopeCallback', JSON.stringify({
-                    callbackId, type: 'fail', res: JSON.stringify(res),
-                }));
-            },
-            complete(res) {
-                formatResponse('GeneralCallbackResult', res);
-                moduleHelper.send('StartGyroscopeCallback', JSON.stringify({
-                    callbackId, type: 'complete', res: JSON.stringify(res),
-                }));
-            },
-        });
-    },
     WX_StopAccelerometer(conf, callbackId) {
         const config = formatJsonStr(conf);
         wx.stopAccelerometer({
@@ -2896,30 +2870,6 @@ export default {
             complete(res) {
                 formatResponse('GeneralCallbackResult', res);
                 moduleHelper.send('StopFaceDetectCallback', JSON.stringify({
-                    callbackId, type: 'complete', res: JSON.stringify(res),
-                }));
-            },
-        });
-    },
-    WX_StopGyroscope(conf, callbackId) {
-        const config = formatJsonStr(conf);
-        wx.stopGyroscope({
-            ...config,
-            success(res) {
-                formatResponse('GeneralCallbackResult', res);
-                moduleHelper.send('StopGyroscopeCallback', JSON.stringify({
-                    callbackId, type: 'success', res: JSON.stringify(res),
-                }));
-            },
-            fail(res) {
-                formatResponse('GeneralCallbackResult', res);
-                moduleHelper.send('StopGyroscopeCallback', JSON.stringify({
-                    callbackId, type: 'fail', res: JSON.stringify(res),
-                }));
-            },
-            complete(res) {
-                formatResponse('GeneralCallbackResult', res);
-                moduleHelper.send('StopGyroscopeCallback', JSON.stringify({
                     callbackId, type: 'complete', res: JSON.stringify(res),
                 }));
             },
@@ -3426,23 +3376,6 @@ export default {
             wx.offAudioInterruptionEnd(v);
         });
     },
-    WX_OnBLECharacteristicValueChange() {
-        if (!OnBLECharacteristicValueChangeList) {
-            OnBLECharacteristicValueChangeList = [];
-        }
-        const callback = (res) => {
-            formatResponse('OnBLECharacteristicValueChangeListenerResult', res);
-            const resStr = JSON.stringify(res);
-            moduleHelper.send('_OnBLECharacteristicValueChangeCallback', resStr);
-        };
-        OnBLECharacteristicValueChangeList.push(callback);
-        wx.onBLECharacteristicValueChange(callback);
-    },
-    WX_OffBLECharacteristicValueChange() {
-        (OnBLECharacteristicValueChangeList || []).forEach((v) => {
-            wx.offBLECharacteristicValueChange(v);
-        });
-    },
     WX_OnBLEConnectionStateChange() {
         if (!OnBLEConnectionStateChangeList) {
             OnBLEConnectionStateChangeList = [];
@@ -3636,23 +3569,6 @@ export default {
     WX_OffError() {
         (OnErrorList || []).forEach((v) => {
             wx.offError(v);
-        });
-    },
-    WX_OnGyroscopeChange() {
-        if (!OnGyroscopeChangeList) {
-            OnGyroscopeChangeList = [];
-        }
-        const callback = (res) => {
-            formatResponse('OnGyroscopeChangeListenerResult', res);
-            const resStr = JSON.stringify(res);
-            moduleHelper.send('_OnGyroscopeChangeCallback', resStr);
-        };
-        OnGyroscopeChangeList.push(callback);
-        wx.onGyroscopeChange(callback);
-    },
-    WX_OffGyroscopeChange() {
-        (OnGyroscopeChangeList || []).forEach((v) => {
-            wx.offGyroscopeChange(v);
         });
     },
     WX_OnHide() {

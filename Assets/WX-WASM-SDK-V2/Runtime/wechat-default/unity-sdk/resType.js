@@ -655,13 +655,6 @@ export const ResType = {
         query: 'string',
         title: 'string',
     },
-    OnBLECharacteristicValueChangeListenerResult: {
-        characteristicId: 'string',
-        deviceId: 'string',
-        serviceId: 'string',
-        value: 'arrayBuffer',
-        arrayBufferLength: 'number',
-    },
     OnBLEConnectionStateChangeListenerResult: {
         connected: 'bool',
         deviceId: 'string',
@@ -715,11 +708,6 @@ export const ResType = {
     Error: {
         message: 'string',
         stack: 'string',
-    },
-    OnGyroscopeChangeListenerResult: {
-        x: 'number',
-        y: 'number',
-        z: 'number',
     },
     OnHandoffListenerResult: {
         query: 'string',
