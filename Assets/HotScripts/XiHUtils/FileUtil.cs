@@ -75,5 +75,13 @@ namespace XiHUtil
             return File.ReadAllBytes(fullPath);
 #endif
         }
+        public static void DeleteFile(string relativePath) {
+            var fullPath = SavePath + "/" + relativePath;
+#if UNITY_WX_WITHOUT_EDITOR
+            WX.GetFileSystemManager().UnlinkSync(fullPath);
+#else
+            if (File.Exists(fullPath)) File.Delete(fullPath);
+#endif
+        }
     }
 }

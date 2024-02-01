@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using FairyGUI;
+using Hot;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace XiHUI
     /// </summary>
     public partial class UIDialogManager
     {
-        public async UniTask<UIDialog> OpenAsync(string dialogName, string packageName, string componentName, Mode layer = 0, bool isFull = true, bool isBlur = false)
+        public async UniTask<UIDialog> OpenAsync(string dialogName, string packageName, string componentName, Mode layer = 0, bool isFull = true, bool isBlur = false, params string[] dependencyUIPackages)
         {
             if (!_dialogType.TryGetValue(dialogName, out var type))
                 return null;
@@ -35,11 +36,11 @@ namespace XiHUI
                 dialog = Activator.CreateInstance(type) as UIDialog;
                 dialog.SetOpenParams(new DialogOpenParams(dialogName, packageName, componentName, layer, isFull, isBlur));
                 stack.Push(dialog);
-                return await CreateDialogAsync(dialogName, packageName, componentName, layer, isFull, isBlur);
+                return await CreateDialogAsync(dialogName, packageName, componentName, layer, isFull, isBlur, dependencyUIPackages);
             }
         }
 
-        private async UniTask<UIDialog> CreateDialogAsync(string dialogName, string packageName, string componentName, Mode layer, bool isFull, bool isBlur)
+        private async UniTask<UIDialog> CreateDialogAsync(string dialogName, string packageName, string componentName, Mode layer, bool isFull, bool isBlur, params string[] dependencyUIPackages)
         {
             if (!_layers.TryGetValue(layer, out var stack))
                 return null;
@@ -47,6 +48,15 @@ namespace XiHUI
             var dialog = stack.Get(dialogName);
             if (dialog == null || dialog.State != State.Loading)
                 return null;
+
+            if (dependencyUIPackages.Length > 0) {
+                var tks = new List<UniTask>();
+                foreach (var dependency in dependencyUIPackages)
+                {
+                    tks.Add(GetDependenceUIPackageAsync(dependency, dialog));
+                }
+                await UniTask.WhenAll(tks);
+            }
 
             var compent = await LoadUIComponentAsync(packageName, componentName, dialog);
 
@@ -79,6 +89,10 @@ namespace XiHUI
             var obj = package.Reference(null).CreateObject(componentName);
             return obj.asCom;
         }
+        public UniTask GetDependenceUIPackageAsync(string packageName, UIDialog reference)
+        {
+            return GetUIPackageAsync(packageName, reference);
+        }
 
         private async UniTask<UIPackageReference> GetUIPackageAsync(string packageName, UIDialog reference = null)
         {
@@ -106,32 +120,18 @@ namespace XiHUI
             var handle = yoores.LoadAssetAsync<TextAsset>(locationPreffix + "_fui.bytes");
             await handle.ToUniTask();
             _handles.Add(handle);
-            var uniHandles = new List<UniTask>(2);
+            //var uniHandles = new List<UniTask>(2);
             var pkg = UIPackage.AddPackage((handle.AssetObject as TextAsset).bytes, string.Empty,async (name, extension, type, item) =>
             {
                 string path = locationPreffix + "_" + name + extension;
                 var subHandle = yoores.LoadAssetAsync(path,type);
                 var uniTask = subHandle.ToUniTask();
-                uniHandles.Add(uniTask);
+                //uniHandles.Add(uniTask);
                 _handles.Add(subHandle);
                 await uniTask;
-                /*if (type == typeof(Texture))
-                {
-                    if (item != null && item.texture != null)
-                        item.texture.Reload(handle.AssetObject as Texture, null);
-                }
-                else if (type == typeof(AudioClip))
-                {
-                    if (item != null && item.audioClip != null)
-                        item.audioClip.Reload(handle.AssetObject as AudioClip);
-                }
-                else
-                {
-                    Debug.LogError($"UIPackage LoadUIPackageItem:{path} error! resCfg:{name} {extension} {type}");
-                }*/
                 item.owner.SetItemAsset(item, subHandle.AssetObject, DestroyMethod.None);//注意：这里一定要设置为None
             });
-            await UniTask.WhenAll(uniHandles);
+            //await UniTask.WhenAll(uniHandles);
             pkg.LoadAllAssets();
             var package = new UIPackageReference(pkg, _handles);
             package.Reference(reference);

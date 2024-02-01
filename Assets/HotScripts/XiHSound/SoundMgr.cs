@@ -5,6 +5,9 @@ using System.Linq;
 using UnityEngine;
 using XiHUtil;
 using YooAsset;
+#if UNITY_WX
+using WeChatWASM;
+#endif
 
 namespace XiHSound
 {
@@ -68,8 +71,7 @@ namespace XiHSound
 
         float bgmVolume;
         float soundVolume;
-        //db  -80 到 20 
-        //音效 0-1
+        //db  -80 到 20
         public float BgmVolume
         {
             get => bgmVolume; set
@@ -115,8 +117,10 @@ namespace XiHSound
             audioMixer=asset.AssetObject as AudioMixer;
             musicSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("Master/Music")[0];
             soundSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("Master/Sound")[0];*/
-            BgmVolume = PlayerPrefsUtil.Get(BGM_VOLUME, 1.0f);
-            SoundVolume = PlayerPrefsUtil.Get(SOUND_VOLUME, 1.0f);
+            bgmVolume = PlayerPrefsUtil.Get(BGM_VOLUME, 1.0f);
+            musicSource.volume = bgmVolume;
+            soundVolume = PlayerPrefsUtil.Get(SOUND_VOLUME, 1.0f);
+            soundSource.volume = soundVolume;
         }
         public void ReleaseAll() {
             var set=new HashSet<string>();
@@ -150,11 +154,20 @@ namespace XiHSound
             {
                 handle = YooAssets.LoadAssetAsync<AudioClip>(bgmAB);
                 await handle.ToUniTask();
-                abHandles.Add(bgmAB, handle);
+                //await可能触发多次,再判断一次
+                if (abHandles.ContainsKey(bgmAB))
+                {
+                    handle.Release();
+                    handle = abHandles[bgmAB];
+                }
+                else
+                {
+                    abHandles.Add(bgmAB, handle);
+                }
             }
             PlayBGM(handle.AssetObject as AudioClip);
         }
-        public void PlayBGM(AudioClip bgm)
+        void PlayBGM(AudioClip bgm)
         {
             if (!bgmEnable || bgm == null) return;
             musicSource.Stop();
@@ -182,11 +195,19 @@ namespace XiHSound
             else {
                 handle = YooAssets.LoadAssetAsync<AudioClip>(soundAB);
                 await handle.ToUniTask();
-                abHandles.Add(soundAB, handle);
+                //await可能触发多次,再判断一次
+                if (abHandles.ContainsKey(soundAB))
+                {
+                    handle.Release();
+                    handle = abHandles[soundAB];
+                }
+                else {
+                    abHandles.Add(soundAB, handle);
+                }
             }
             PlaySound(handle.AssetObject as AudioClip);
         }
-        public void PlaySound(AudioClip sound)
+        void PlaySound(AudioClip sound)
         {
             if (!soundEnable || sound == null) return;
             soundSource.PlayOneShot(sound, soundVolume);
@@ -195,7 +216,11 @@ namespace XiHSound
         public async void PlayVibrate(int times=1) {
             while (--times >= 0) {
                 if (!vibrate) return;
+#if UNITY_ANDROID || UNITY_IOS
                 Handheld.Vibrate();
+#elif UNITY_WX
+                WX.VibrateShort(new VibrateShortOption() { type = "medium" });
+#endif
                 await UniTask.Delay(500);
             }
         }

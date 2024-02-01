@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Hot;
+using System.Collections.Generic;
 using XiHUI;
 
 namespace XiHUtil
 {
     public static partial class UIUtil
     {
-        public static UIDialog OpenDialog(string dialogName, string packageName, string compName, Mode mode = Mode.TopMost, bool isFull = true, bool isBlur = false)
+        /*public static UIDialog OpenDialog(string dialogName, string packageName, string compName, Mode mode = Mode.TopMost, bool isFull = true, bool isBlur = false)
         {
             return UIDialogManager.Instance.Open(dialogName, packageName, compName, mode, isFull, isBlur);
         }
@@ -13,7 +14,7 @@ namespace XiHUtil
         public static T OpenDialog<T>(string packageName, string compName, Mode mode = Mode.TopMost, bool isFull = true, bool isBlur = false) where T : UIDialog
         {
             return OpenDialog(typeof(T).Name, packageName, compName, mode, isFull, isBlur) as T;
-        }
+        }*/
 
         public static void CloseDialog<T>() where T : UIDialog
         {
@@ -66,11 +67,10 @@ namespace XiHUtil
         {
             UIDialogManager.Instance.CloseAllPopUI(exceptNames);
         }
-        public static void ShowSystemTip(string tip, float duration = 0)
+        public static async void ShowSystemTip(string tip)
         {
-            UnityEngine.Debug.Log(tip);
             //提示内容
-            //OpenDialog<SystemTipDialog>().ShowTip(tip, duration > 0 ? duration : 1.5f);
+            (await OpenDialogAsync<SystemTipDialog>("Common", "SystemTip", Mode.TopMost)).Show(tip);
         }
     }
 }

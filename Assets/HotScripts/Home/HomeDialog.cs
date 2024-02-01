@@ -1,4 +1,4 @@
-using FairyGUI;
+﻿using FairyGUI;
 using XiHUI;
 using XiHUtil;
 
@@ -15,7 +15,7 @@ namespace Hot
 
         async void OnStarBtn() {
             (await UIUtil.OpenDialogAsync<ChooseDialog>("Common", "Choose", Mode.Popup)).Show("标题","内容", async val => {
-                (await UIUtil.OpenDialogAsync<SystemTipDialog>("Common", "SystemTip", Mode.TopMost)).Show($"当前选择: {val}");
+                UIUtil.ShowSystemTip($"当前选择: {val}");
             },"确定","取消");
         }
     }
