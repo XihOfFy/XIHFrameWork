@@ -50,18 +50,19 @@ public class JenkinsSupport
     [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
     public static void FullBuild_WithoutHyCLRGenerateAll()
     {
-		HotBuild();//先打热更，方便后期可能资源打入apk；也包含微信更新分包，因为可能只打热更，也需要考虑分包也重新拷贝到cdn
-		var curTarget = EditorUserBuildSettings.activeBuildTarget;
+        var curTarget = EditorUserBuildSettings.activeBuildTarget;
+        HotBuild();//还是觉得有必要放打包前，方便打包时可以插入一些资源到包体内;但是微信需要分包时，打包后也要拷贝分包
+
 #if UNITY_WX
         WXSettings();
         if (WXExportError.SUCCEED == WXConvertCore.DoExport())
         {
-			WXSubpackage(curTarget);//微信更新分包
-			Debug.LogWarning("转换小游戏成功");
-        }else{
+            WXSubpackage(curTarget);//微信需要分包时，打包后也要拷贝分包
+        }
+        else {
             Debug.LogError("转换小游戏失败");
             return;
-		}
+        }
 #else
         string targetPath = null;
         var buildOptions = BuildOptions.None;
@@ -114,26 +115,32 @@ public class JenkinsSupport
         }
 #endif
     }
-
-
     [MenuItem("XIHUtil/Jenkins/HotBuild")]
     public static void HotBuild()
     {
         var curTarget = EditorUserBuildSettings.activeBuildTarget;
+
+        Debug.LogError("发布FGUI,只有专业版支持命令行。所以先自己先提前发布吧");
+        //BuildFairyGUI();
+        Debug.LogWarning("输出Tmpl");
+        AssetDatabase.Refresh();
         Debug.LogWarning("开始热更构建");
         CompileDllCommand.CompileDll(curTarget);
         Debug.LogWarning("拷贝热更Dll");
         DllCopyEditor.CopyDlls(curTarget);
+        AssetDatabase.Refresh();
         Debug.LogWarning("YooAsset开始构建");
         if (ExecuteYooAssetBuild(curTarget))
         {
 #if UNITY_WX
             WXSubpackage(curTarget);
 #endif
+            Debug.LogWarning("完成热更打包 成功");
         }
-        Debug.LogWarning("完成热更打包");
+        else {
+            Debug.LogWarning("完成热更打包 失败");
+        }
     }
-
     static bool ExecuteYooAssetBuild(BuildTarget buildTarget)
     {
         var PackageName = AotConfig.PACKAGE_NAME;
@@ -185,12 +192,22 @@ public class JenkinsSupport
         return buildResult.Success;
     }
 
+    //只有专业版支持，算了。自己先提前发布吧
+    static void BuildFairyGUI() {
+        var exePath = "D:\\Devkit\\FairyGUI-Editor\\FairyGUI-Editor.exe";
+        if (!File.Exists(exePath)) {
+            Debug.LogError("未找到FairyGUI-Editor安装目录，需要自行先发布");
+            return;
+        }
+        //FairyGUI-Editor -batchmode -p project_desc_file [-b package_names] [-t branch_name] [-o output_path] [-logFile log_file_path] https://fairygui.com/docs/editor/publish
+        ProcessUtil.Run(exePath, "-batchmode -p ./FGUIProject.fairy -logFile ./fgui.txt", "",false);
+    }
+
     private static string GetDefaultPackageVersion()
     {
         int totalMinutes = DateTime.Now.Hour * 60 + DateTime.Now.Minute;
         return DateTime.Now.ToString("yyyy-MM-dd") + "-" + totalMinutes;
     }
-
     private static void CopyDirs(string sour, string dst, HashSet<string> exclude)
     {
         var files = Directory.GetFiles(sour);
@@ -209,7 +226,6 @@ public class JenkinsSupport
             CopyDirs(dir, $"{dst}/{dn}", exclude);
         }
     }
-
     // 从构建命令里获取参数示例
     private static Dictionary<string, string> GetCommandLineArgs()
     {
