@@ -22,7 +22,7 @@ namespace HybridCLR.Editor.Commands
 
         static BuildOptions GetBuildPlayerOptions(BuildTarget buildTarget)
         {
-            BuildOptions options = BuildOptions.BuildScriptsOnly;
+            BuildOptions options = BuildOptions.None;
             bool development = EditorUserBuildSettings.development;
             if (development)
             {
@@ -81,8 +81,15 @@ namespace HybridCLR.Editor.Commands
 #elif UNITY_EDITOR_WIN
             bool oldCreateSolution = UnityEditor.WindowsStandalone.UserBuildSettings.createSolution;
 #endif
+#if TUANJIE_2022
+            bool oldOpenHarmonyProj = EditorUserBuildSettings.exportAsOpenHarmonyProject;
+#endif
             bool oldBuildScriptsOnly = EditorUserBuildSettings.buildScriptsOnly;
             EditorUserBuildSettings.buildScriptsOnly = true;
+
+            string location = GetLocationPathName(outputPath, target);
+            string oldBuildLocation = EditorUserBuildSettings.GetBuildLocation(target);
+            EditorUserBuildSettings.SetBuildLocation(target, location);
 
             switch (target)
             {
@@ -101,11 +108,21 @@ namespace HybridCLR.Editor.Commands
 #endif
                     break;
                 }
+#if TUANJIE_2022
+                case BuildTarget.HMIAndroid:
+#endif
                 case BuildTarget.Android:
                 {
                     EditorUserBuildSettings.exportAsGoogleAndroidProject = true;
                     break;
                 }
+#if TUANJIE_2022
+                case BuildTarget.OpenHarmony:
+                {
+                    EditorUserBuildSettings.exportAsOpenHarmonyProject = true;
+                    break;
+                }
+#endif
             }
 
             Debug.Log($"GenerateStripedAOTDlls build option:{buildOptions}");
@@ -113,7 +130,7 @@ namespace HybridCLR.Editor.Commands
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
             {
                 scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
-                locationPathName = GetLocationPathName(outputPath, target),
+                locationPathName = location,
                 options = buildOptions,
                 target = target,
                 targetGroup = BuildPipeline.GetBuildTargetGroup(target),
@@ -122,6 +139,8 @@ namespace HybridCLR.Editor.Commands
             var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
 
             EditorUserBuildSettings.buildScriptsOnly = oldBuildScriptsOnly;
+            EditorUserBuildSettings.SetBuildLocation(target, oldBuildLocation);
+
             switch (target)
             {
                 case BuildTarget.StandaloneWindows:
@@ -139,11 +158,21 @@ namespace HybridCLR.Editor.Commands
 #endif
                         break;
                     }
+#if TUANJIE_2022
+                case BuildTarget.HMIAndroid:
+#endif
                 case BuildTarget.Android:
                 {
                     EditorUserBuildSettings.exportAsGoogleAndroidProject = oldExportAndroidProj;
                     break;
                 }
+#if TUANJIE_2022
+                case BuildTarget.OpenHarmony:
+                {
+                    EditorUserBuildSettings.exportAsOpenHarmonyProject = oldOpenHarmonyProj;
+                    break;
+                }
+#endif
             }
 
             if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)

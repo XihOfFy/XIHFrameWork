@@ -1,5 +1,45 @@
 # 发布日志
 
+## 5.0.0
+
+发布日期 2024.1.26.
+
+### Runtime
+
+- [new] 恢复对2019支持
+- [fix] 修复未按依赖顺序加载dll，由于在创建Image时缓存了当时的程序集列表，如果被依赖的程序集在本程序集后加载，延迟访问时由于不在缓存程序集列表而出现TypeLoadedException的bug
+
+
+### Editor
+
+- [new] 恢复对2019支持
+- [new] 支持2019版本在iOS平台以源码形式构建
+- [new] 新增 AOTAssemblyMetadataStripper用于剔除AOT dll中非泛型函数元数据
+- [new] 新增 MissingMetadataChecker检查裁剪类型或者函数丢失的问题
+- [opt] 优化 AOTReference计算，如果泛型的所有泛型参数都是class约束，则不加入到需要补充元数据的集合
+- [change] 为了支持团结引擎而作了一些调整（注意，支持团结引擎的il2cpp_plus分支并未公开）
+
+## 4.0.15
+
+发布日期 2024.1.2.
+
+### Runtime
+
+- [fix] 修复计算未完全实例化的泛型类时将VAR和MVAR类型参数大小计算成sizeof(void*)，导致计算出无效且过大的instance，在执行LayoutFieldsLocked过程中调用UpdateInstanceSizeForGenericClass错误地使用泛型基类instance覆盖设置了实例类型的instance值的严重bug
+- [change] 支持打印热更新栈，虽然顺序不太正确
+- [change] 使用HYBRIDCLR_MALLOC之类分配函数替换IL2CPP_MALLOC
+- [refactor] 重构Config接口，统一通过GetRuntimeOption和SetRuntimeOption获取和设置选项
+- [opt] 删除NewValueTypeVar和NewValueTypeInterpVar指令不必要的对结构memset操作
+
+### Editor
+
+- [fix] 修复Additional Compiler Arguments中输入 -nullable:enable 之后，Editor抛出InvalidCastException的bug。来自报告 https://github.com/focus-creative-games/hybridclr/issues/116
+- [fix] 修复某些情况下报错：BuildFailedException: Build path contains a project previously built without the "Create Visual Studio Solution"
+- [opt] 优化桥接函数生成，将同构的struct映射到同一个结构，减少了30-35%的桥接函数数量
+- [change] StripAOTDllCommand导出时不再设置BuildScriptsOnly选项
+- [change] 调整Installer窗口的显示内容
+- [refactor] RuntimeApi中设置hybridclr参数的功能统一通过GetRuntimeOption和SetRuntimeOption函数
+
 ## 4.0.14
 
 发布日期 2023.12.11.

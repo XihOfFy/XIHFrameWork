@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HybridCLR.Editor.UnityBinFileReader;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,12 +12,15 @@ using UnityEditor.Build.Reporting;
 using UnityEditor.Il2Cpp;
 using UnityEditor.UnityLinker;
 using UnityEngine;
+using UnityFS;
 
 namespace HybridCLR.Editor.BuildProcessors
 {
     public class PatchScriptingAssemblyList :
 #if UNITY_ANDROID
         IPostGenerateGradleAndroidProject,
+#elif UNITY_OPENHARMONY
+        UnityEditor.OpenHarmony.IPostGenerateOpenHarmonyProject,
 #endif
         IPostprocessBuildWithReport
 #if !UNITY_2021_1_OR_NEWER && UNITY_WEBGL
@@ -45,11 +49,20 @@ namespace HybridCLR.Editor.BuildProcessors
             }
         }
 
+#if UNITY_OPENHARMONY
+
+        public void OnPostGenerateOpenHarmonyProject(string path)
+        {
+            OnPostGenerateGradleAndroidProject(path);
+        }
+
+#endif
+
         public void OnPostprocessBuild(BuildReport report)
         {
             // 如果target为Android,由于已经在OnPostGenerateGradelAndroidProject中处理过，
             // 这里不再重复处理
-#if !UNITY_ANDROID && !UNITY_WEBGL
+#if !UNITY_ANDROID && !UNITY_WEBGL && !UNITY_OPENHARMONY
             PathScriptingAssembilesFile(report.summary.outputPath);
 #endif
         }
@@ -79,7 +92,11 @@ namespace HybridCLR.Editor.BuildProcessors
                 path = Path.GetDirectoryName(path);
                 Debug.Log($"[PatchScriptingAssemblyList] get path parent:{path}");
             }
+#if UNITY_2020_1_OR_NEWER
             AddHotFixAssembliesToScriptingAssembliesJson(path);
+#else
+            AddHotFixAssembliesToBinFile(path);
+#endif
         }
 
         private void AddHotFixAssembliesToScriptingAssembliesJson(string path)
@@ -105,6 +122,59 @@ namespace HybridCLR.Editor.BuildProcessors
                 patcher.AddScriptingAssemblies(SettingsUtil.HotUpdateAssemblyFilesIncludePreserved);
                 patcher.Save(file);
             }
+        }
+        private void AddHotFixAssembliesToBinFile(string path)
+        {
+#if UNITY_STANDALONE_OSX
+            path = Path.GetDirectoryName(path);
+#endif
+            if (AddHotFixAssembliesToGlobalgamemanagers(path))
+            {
+                return;
+            }
+            if (AddHotFixAssembliesTodataunity3d(path))
+            {
+                return;
+            }
+            Debug.LogError($"[PatchScriptingAssemblyList] can not find file '{SettingsUtil.GlobalgamemanagersBinFile}' or '{SettingsUtil.Dataunity3dBinFile}' in '{path}'");
+        }
+
+        private bool AddHotFixAssembliesToGlobalgamemanagers(string path)
+        {
+            string[] binFiles = Directory.GetFiles(path, SettingsUtil.GlobalgamemanagersBinFile, SearchOption.AllDirectories);
+
+            if (binFiles.Length == 0)
+            {
+                return false;
+            }
+
+            foreach (string binPath in binFiles)
+            {
+                var binFile = new UnityBinFile();
+                binFile.Load(binPath);
+                binFile.AddScriptingAssemblies(SettingsUtil.HotUpdateAssemblyFilesIncludePreserved);
+                binFile.Save(binPath);
+                Debug.Log($"[PatchScriptingAssemblyList] patch {binPath}");
+            }
+            return true;
+        }
+
+        private bool AddHotFixAssembliesTodataunity3d(string path)
+        {
+            string[] binFiles = Directory.GetFiles(path, SettingsUtil.Dataunity3dBinFile, SearchOption.AllDirectories);
+
+            if (binFiles.Length == 0)
+            {
+                return false;
+            }
+
+            foreach (string binPath in binFiles)
+            {
+                var patcher = new Dataunity3dPatcher();
+                patcher.ApplyPatch(binPath, SettingsUtil.HotUpdateAssemblyFilesIncludePreserved);
+                Debug.Log($"[PatchScriptingAssemblyList] patch {binPath}");
+            }
+            return true;
         }
 
 #if UNITY_WEBGL

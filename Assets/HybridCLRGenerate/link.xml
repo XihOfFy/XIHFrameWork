@@ -12,6 +12,7 @@
     <type fullname="FairyGUI.Controller" preserve="all" />
     <type fullname="FairyGUI.DestroyMethod" preserve="all" />
     <type fullname="FairyGUI.DisplayObject" preserve="all" />
+    <type fullname="FairyGUI.DynamicFont" preserve="all" />
     <type fullname="FairyGUI.EventCallback0" preserve="all" />
     <type fullname="FairyGUI.EventCallback1" preserve="all" />
     <type fullname="FairyGUI.EventContext" preserve="all" />
@@ -33,7 +34,6 @@
     <type fullname="FairyGUI.PackageItem" preserve="all" />
     <type fullname="FairyGUI.PlayCompleteCallback" preserve="all" />
     <type fullname="FairyGUI.RelationType" preserve="all" />
-    <type fullname="FairyGUI.TMPFont" preserve="all" />
     <type fullname="FairyGUI.TextFormat" preserve="all" />
     <type fullname="FairyGUI.Transition" preserve="all" />
     <type fullname="FairyGUI.UIConfig" preserve="all" />
@@ -52,6 +52,8 @@
   <assembly fullname="System">
     <type fullname="System.Collections.Generic.LinkedListNode`1" preserve="all" />
     <type fullname="System.Collections.Generic.LinkedList`1" preserve="all" />
+    <type fullname="System.Collections.Generic.Queue`1" preserve="all" />
+    <type fullname="System.Collections.Generic.Queue`1/Enumerator" preserve="all" />
     <type fullname="System.Net.IPAddress" preserve="all" />
     <type fullname="System.Net.IPEndPoint" preserve="all" />
   </assembly>
@@ -74,8 +76,12 @@
     <type fullname="Cysharp.Threading.Tasks.OperationHandleBaseExtensions" preserve="all" />
   </assembly>
   <assembly fullname="Unity.TextMeshPro">
-    <type fullname="TMPro.TMP_FontAsset" preserve="all" />
     <type fullname="TMPro.TMP_Text" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AudioModule">
+    <type fullname="UnityEngine.AudioClip" preserve="all" />
+    <type fullname="UnityEngine.AudioListener" preserve="all" />
+    <type fullname="UnityEngine.AudioSource" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="UnityEngine.Application" preserve="all" />
@@ -97,11 +103,16 @@
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />
+    <type fullname="UnityEngine.WaitForSecondsRealtime" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.TextRenderingModule">
+    <type fullname="UnityEngine.Font" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UI">
     <type fullname="UnityEngine.UI.Image" preserve="all" />
   </assembly>
   <assembly fullname="Wx">
+    <type fullname="WeChatWASM.WX" preserve="all" />
     <type fullname="WeChatWASM.WXBase" preserve="all" />
   </assembly>
   <assembly fullname="YooAsset">
@@ -200,8 +211,8 @@
     <type fullname="System.Security.Cryptography.SymmetricAlgorithm" preserve="all" />
     <type fullname="System.String" preserve="all" />
     <type fullname="System.StringComparison" preserve="all" />
-    <type fullname="System.Text.Encoding" preserve="all" />
     <type fullname="System.Text.StringBuilder" preserve="all" />
+    <type fullname="System.Threading.CancellationToken" preserve="all" />
     <type fullname="System.Threading.Interlocked" preserve="all" />
     <type fullname="System.Type" preserve="all" />
     <type fullname="System.UInt32" preserve="all" />
@@ -211,17 +222,15 @@
   </assembly>
   <assembly fullname="wx-runtime">
     <type fullname="WeChatWASM.GeneralCallbackResult" preserve="all" />
-    <type fullname="WeChatWASM.OpenSyncOption" preserve="all" />
     <type fullname="WeChatWASM.TCPSocketConnectOption" preserve="all" />
     <type fullname="WeChatWASM.TCPSocketOnMessageListenerResult" preserve="all" />
     <type fullname="WeChatWASM.UDPSocketConnectOption" preserve="all" />
     <type fullname="WeChatWASM.UDPSocketOnMessageListenerResult" preserve="all" />
     <type fullname="WeChatWASM.UDPSocketSendOption" preserve="all" />
+    <type fullname="WeChatWASM.VibrateShortOption" preserve="all" />
     <type fullname="WeChatWASM.WXEnv" preserve="all" />
     <type fullname="WeChatWASM.WXFileSystemManager" preserve="all" />
     <type fullname="WeChatWASM.WXTCPSocket" preserve="all" />
     <type fullname="WeChatWASM.WXUDPSocket" preserve="all" />
-    <type fullname="WeChatWASM.WriteResult" preserve="all" />
-    <type fullname="WeChatWASM.WriteSyncOption" preserve="all" />
   </assembly>
 </linker>
