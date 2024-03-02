@@ -167,6 +167,11 @@ namespace XiHSound
             }
             PlayBGM(handle.AssetObject as AudioClip);
         }
+        public void StopBGM() {
+            if (!bgmEnable) return;
+            musicSource.Stop();
+            //StartCoroutine(nameof(IEStopBGM));
+        }
         void PlayBGM(AudioClip bgm)
         {
             if (!bgmEnable || bgm == null) return;

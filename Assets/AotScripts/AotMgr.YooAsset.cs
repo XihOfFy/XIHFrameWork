@@ -118,7 +118,7 @@ namespace Aot
         /// </summary>
         private class BuildinQueryServices : IBuildinQueryServices
         {
-            public bool Query(string packageName, string fileName)
+            public bool Query(string packageName, string fileName, string fileCRC)
             {
                 //Debug.Log($"BuildinQueryServices {packageName} >> {fileName}");
                 return false;

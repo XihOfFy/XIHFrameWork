@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Aot;
+using Cysharp.Threading.Tasks;
 using FairyGUI;
 using System;
 using System.Collections.Generic;
@@ -313,8 +314,7 @@ namespace XiHUI
             {
                 method = DestroyMethod.None; //注意：这里一定要设置为None
                 string location = "Assets/Res/FairyRes/" + packageName + "/" + name + extension;
-                var package = YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME);
-                var handle = package.LoadAssetSync(location, type);
+                var handle = YooAssets.LoadAssetSync(location, type);
                 _handles.Add(handle);
                 return handle.AssetObject;
             }

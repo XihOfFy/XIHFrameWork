@@ -204,7 +204,10 @@ namespace XiHUI
 			{
 				var dialog = _stack[i];
 				if (dialog == null || dialog.State != State.Open)
+				{
+					if (dialog.State == State.Hide) show = true;//因为有的UI只是hide，但是调用Open无法展示,因为parent隐藏了，所以这里设置一下
 					continue;
+				}
 
 				var go = dialog.Content;
 

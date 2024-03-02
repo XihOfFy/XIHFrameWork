@@ -1,4 +1,4 @@
-﻿#if !UNITY_WX || UNITY_EDITOR
+﻿#if !UNITY_WEBGL || UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Net;

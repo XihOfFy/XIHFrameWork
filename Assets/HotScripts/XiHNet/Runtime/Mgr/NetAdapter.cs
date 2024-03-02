@@ -16,7 +16,7 @@ namespace XiHNet
         {
             switch (protocol)
             {
-#if !UNITY_WX || UNITY_EDITOR
+#if !UNITY_WEBGL || UNITY_EDITOR
                 case NetworkProtocol.Kcp:
                     netClient = new KcpClient(iPEnd);
                     break;

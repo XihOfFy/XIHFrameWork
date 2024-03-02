@@ -116,15 +116,14 @@ namespace XiHUI
         {
             var _handles = new List<AssetHandle>(100);
             string locationPreffix = "Assets/Res/FairyRes/" + packageName + "/" + packageName;
-            var yoores = YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME);
-            var handle = yoores.LoadAssetAsync<TextAsset>(locationPreffix + "_fui.bytes");
+            var handle = YooAssets.LoadAssetAsync<TextAsset>(locationPreffix + "_fui.bytes");
             await handle.ToUniTask();
             _handles.Add(handle);
             //var uniHandles = new List<UniTask>(2);
             var pkg = UIPackage.AddPackage((handle.AssetObject as TextAsset).bytes, string.Empty,async (name, extension, type, item) =>
             {
                 string path = locationPreffix + "_" + name + extension;
-                var subHandle = yoores.LoadAssetAsync(path,type);
+                var subHandle = YooAssets.LoadAssetAsync(path,type);
                 var uniTask = subHandle.ToUniTask();
                 //uniHandles.Add(uniTask);
                 _handles.Add(subHandle);
