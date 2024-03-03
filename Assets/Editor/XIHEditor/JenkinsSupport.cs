@@ -122,8 +122,8 @@ public class JenkinsSupport
 
         Debug.LogError("发布FGUI,只有专业版支持命令行。所以先自己先提前发布吧");
         //BuildFairyGUI();
-        Debug.LogWarning("输出Tmpl");
-        AssetDatabase.Refresh();
+        //Debug.LogWarning("输出Tmpl");
+        //AssetDatabase.Refresh();
         Debug.LogWarning("开始热更构建");
         CompileDllCommand.CompileDll(curTarget);
         Debug.LogWarning("拷贝热更Dll");

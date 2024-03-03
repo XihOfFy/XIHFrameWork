@@ -29,35 +29,11 @@ MonoBehaviour:
       AssetTags: Aot2Hot
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Aot2Hot/Scene
-        CollectorGUID: a0e6b4191c0f86d42b5ccfa6bff41bda
+      - CollectPath: Assets/Res/Aot2Hot
+        CollectorGUID: a23ead36b4dbbc84d8c34880c17c58c3
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectScene
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Res/Aot2Hot/Raw
-        CollectorGUID: 0617fb888a512414dae4e59b4e980136
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Res/Aot2Hot/Font
-        CollectorGUID: 56a9ab4bda6e3ed49a2ecbc5c1f4bc8d
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Res/Aot2Hot/Res
-        CollectorGUID: d8d032cd296912847a3e00941a48a977
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackTopDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -66,19 +42,11 @@ MonoBehaviour:
       AssetTags: RawFile
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Raw/Hot
-        CollectorGUID: 5b95201c58052624dae4fa4d2e3f5546
+      - CollectPath: Assets/Res/Raw
+        CollectorGUID: 62df3bae15c0973468f192f758df2973
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Res/Raw/Aot
-        CollectorGUID: e0c8f8fbad229c4469d4ed7f78edb4ad
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackTopDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

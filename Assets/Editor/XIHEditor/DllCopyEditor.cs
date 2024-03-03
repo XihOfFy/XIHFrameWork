@@ -1,4 +1,5 @@
 ﻿using HybridCLR.Editor;
+using HybridCLR.Editor.HotUpdate;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,8 @@ public class DllCopyEditor
     }
     static void CopyAotDll(string dstPath, BuildTarget target)
     {
+        CheckAccessMissingMetadata(dstPath, target);
+
         List<string> dlls = SettingsUtil.AOTAssemblyNames;
         string sourPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
         if (!Directory.Exists(sourPath))
@@ -48,9 +51,32 @@ public class DllCopyEditor
                 Debug.LogError($"CopyDll {ph}不存在");
                 continue;
             }
-            File.Copy(ph, $"{dstPath}/{dll}.bytes");
+            HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, $"{dstPath}/{dll}.bytes");
+            //File.Copy(ph, $"{dstPath}/{dll}.bytes");
         }
         Debug.LogWarning($"拷贝无需加密的Aotdlls到 {dstPath}");
+    }
+    static void CheckAccessMissingMetadata(string aotDir, BuildTarget target)
+    {
+        // aotDir指向 构建主包时生成的裁剪aot dll目录，而不是最新的SettingsUtil.GetAssembliesPostIl2CppStripDir(target)目录。
+        // 一般来说，发布热更新包时，由于中间可能调用过generate/all，SettingsUtil.GetAssembliesPostIl2CppStripDir(target)目录中包含了最新的aot dll，
+        // 肯定无法检查出类型或者函数裁剪的问题。
+        // 需要在构建完主包后，将当时的aot dll保存下来，供后面补充元数据或者裁剪检查。
+
+        // 第2个参数excludeDllNames为要排除的aot dll。一般取空列表即可。对于旗舰版本用户，
+        // excludeDllNames需要为dhe程序集列表，因为dhe 程序集会进行热更新，热更新代码中
+        // 引用的dhe程序集中的类型或函数肯定存在。
+        var checker = new MissingMetadataChecker(aotDir, new List<string>());
+        string hotUpdateDir = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
+        foreach (var dll in SettingsUtil.HotUpdateAssemblyFilesExcludePreserved)
+        {
+            string dllPath = $"{hotUpdateDir}/{dll}";
+            bool notAnyMissing = checker.Check(dllPath);
+            if (!notAnyMissing)
+            {
+                throw new UnityException("CheckAccessMissingMetadata:旧版元数据无法满足新的热更dll需求，需要重新出包！");
+            }
+        }
     }
     static void CopyHotDll(bool isAot2Hot, string dstPath, BuildTarget target)
     {
