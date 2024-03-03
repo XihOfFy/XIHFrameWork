@@ -5,14 +5,14 @@
   "designResolutionY": 1920,
   "devices": [
     {
-      "name": "1080*1920",
-      "resolutionX": 1080,
-      "resolutionY": 1920
+      "name": "1920*1080",
+      "resolutionX": 1920,
+      "resolutionY": 1080
     },
     {
-      "name": "1200*2400",
-      "resolutionX": 1200,
-      "resolutionY": 2400
+      "name": "2400*1200",
+      "resolutionX": 2400,
+      "resolutionY": 1200
     },
     {
       "name": "1600*1200",

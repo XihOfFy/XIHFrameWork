@@ -2,6 +2,7 @@
 <component size="1080,1920" opaque="false">
   <displayList>
     <list id="n1_zplm" name="list" xy="140,0" size="800,1000" touchable="false" overflow="scroll" defaultItem="ui://4imy7ztwzplm9" align="center" vAlign="bottom" autoClearItems="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <item/>
       <item/>
       <item/>

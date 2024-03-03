@@ -11,7 +11,7 @@
       <Button title="OK" titleFontSize="64"/>
     </component>
     <group id="n5_zplm" name="panel" xy="100,560" size="880,868" advanced="true">
-      <relation target="" sidePair="width-width,middle-middle"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
     </group>
   </displayList>
 </component>
