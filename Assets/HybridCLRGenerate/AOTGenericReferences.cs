@@ -214,6 +214,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Comparison<Cysharp.Threading.Tasks.UniTask>
 	// System.Comparison<XiHUI.DialogOpenParams>
 	// System.Comparison<object>
+	// System.Func<byte>
 	// System.Func<int>
 	// System.Func<object,byte>
 	// System.Func<object,object>
@@ -279,7 +280,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,XiHUI.UIDialogManager.<>c__DisplayClass5_0.<<LoadUIPackageAsync>b__0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter&,XiHUI.UIDialogManager.<>c__DisplayClass5_0.<<LoadUIPackageAsync>b__0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,Hot.HomeDialog.<OnStarBtn>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,Hot.HomeDialog.<OnStarBtn>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,XiHUtil.UIUtil.<ShowSystemTip>d__12>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,XiHUtil.UIUtil.<ShowSystemTip>d__12&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Hot.HomeDialog.<>c.<<OnStarBtn>b__2_0>d>(Hot.HomeDialog.<>c.<<OnStarBtn>b__2_0>d&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Hot.HomeDialog.<OnStarBtn>d__2>(Hot.HomeDialog.<OnStarBtn>d__2&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<XiHSound.SoundMgr.<PlayVibrate>d__43>(XiHSound.SoundMgr.<PlayVibrate>d__43&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<XiHUI.UIDialogManager.<>c__DisplayClass5_0.<<LoadUIPackageAsync>b__0>d>(XiHUI.UIDialogManager.<>c__DisplayClass5_0.<<LoadUIPackageAsync>b__0>d&)

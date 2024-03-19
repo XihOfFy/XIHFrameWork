@@ -13,7 +13,7 @@ namespace Aot
         public const string PACKAGE_NAME = "DefaultPackage";
         public static FrontConfig frontConfig = new FrontConfig();
         public static string GetFrontUrl() {
-            string url = Resources.Load<XIHFrontSetting>(nameof(XIHFrontSetting)).front;
+            string url = GetHotFrontUrlPrefix();
             if (!url.EndsWith("/")) url += "/";
 #if UNITY_EDITOR
             url += $"{UnityEditor.EditorUserBuildSettings.activeBuildTarget}.json";
@@ -27,6 +27,31 @@ namespace Aot
             else
                 url += "StandaloneWindows64.json";
 #endif
+            var epochTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var unixTime = (long)(DateTime.UtcNow - epochTime).TotalSeconds;
+            url += "?ts=" + unixTime;
+            return url;
+        }
+
+        static string GetHotFrontUrlPrefix()
+        {
+            string url = "";
+            //尝试本地文件获取url
+            try
+            {
+                url = AotFileUtil.ReadFile(AotFileUtil.SAVE_FRONT);
+                url.Trim();
+            }
+            catch (Exception e) { 
+                Debug.LogException(e);
+            }
+            if (string.IsNullOrEmpty(url) || !url.StartsWith("http"))
+            {
+                url = Resources.Load<XIHFrontSetting>(nameof(XIHFrontSetting)).front;
+            }
+            else { 
+                Debug.Log($"使用外置的Front地址：{url}");
+            }
             return url;
         }
 

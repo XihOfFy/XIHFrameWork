@@ -7,7 +7,8 @@
         "UniTask.YooAsset",
         "YooAsset",
         "HybridCLR.Runtime",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UnityLogsViwer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

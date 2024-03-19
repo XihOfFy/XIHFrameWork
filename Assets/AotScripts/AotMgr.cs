@@ -13,14 +13,14 @@ namespace Aot
         {
             StartLogo();
 
-#if UNITY_WEBGL
 #if UNITY_EDITOR
             playMode = EPlayMode.EditorSimulateMode;
 #else
+#if UNITY_WEBGL
             playMode = EPlayMode.WebPlayMode;
-#endif
 #else
             playMode = EPlayMode.HostPlayMode;
+#endif
 #endif
 
             if (EPlayMode.WebPlayMode == playMode || EPlayMode.HostPlayMode == playMode)

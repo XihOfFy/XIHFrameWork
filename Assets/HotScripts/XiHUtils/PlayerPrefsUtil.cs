@@ -15,9 +15,13 @@ namespace XiHUtil
         public static void Set(string key, string val) {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageSetStringSync(key, val);
+#elif UNITY_DY
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.SetString(key, val);
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.Save();
 #else
-            PlayerPrefs.SetString(key, val);
-            PlayerPrefs.Save();
+            
+            UnityEngine.PlayerPrefs.SetString(key, val);
+            UnityEngine.PlayerPrefs.Save();
 #endif
         }
         public static void Set(string key, bool val)
@@ -28,26 +32,34 @@ namespace XiHUtil
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageSetIntSync(key, val);
+#elif UNITY_DY
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.SetInt(key, val);
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.Save();
 #else
-            PlayerPrefs.SetInt(key, val);
-            PlayerPrefs.Save();
+            UnityEngine.PlayerPrefs.SetInt(key, val);
+            UnityEngine.PlayerPrefs.Save();
 #endif
         }
         public static void Set(string key, float val)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageSetFloatSync(key, val);
+#elif UNITY_DY
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.SetFloat(key, val);
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.Save();
 #else
-            PlayerPrefs.SetFloat(key, val);
-            PlayerPrefs.Save();
+            UnityEngine.PlayerPrefs.SetFloat(key, val);
+            UnityEngine.PlayerPrefs.Save();
 #endif
         }
         public static string Get(string key, string val="")
         {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageGetStringSync(key, val);
+#elif UNITY_DY
+            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.GetString(key, val);
 #else
-            return PlayerPrefs.GetString(key, val);
+            return UnityEngine.PlayerPrefs.GetString(key, val);
 #endif
         }
         public static bool Get(string key, bool val=false)
@@ -58,41 +70,51 @@ namespace XiHUtil
         {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageGetIntSync(key, val);
+#elif UNITY_DY
+            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.GetInt(key, val);
 #else
-            return PlayerPrefs.GetInt(key, val);
+            return UnityEngine.PlayerPrefs.GetInt(key, val);
 #endif
         }
         public static float Get(string key, float val=0)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageGetFloatSync(key, val);
+#elif UNITY_DY
+            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.GetFloat(key, val);
 #else
-            return PlayerPrefs.GetFloat(key, val);
+            return UnityEngine.PlayerPrefs.GetFloat(key, val);
 #endif
         }
         public static void DeleteKey(string key)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageDeleteKeySync(key);
+#elif UNITY_DY
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.DeleteKey(key);
 #else
-            PlayerPrefs.DeleteKey(key);
-            PlayerPrefs.Save();
+            UnityEngine.PlayerPrefs.DeleteKey(key);
+            UnityEngine.PlayerPrefs.Save();
 #endif
         }
         public static void DeleteAllKey()
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageDeleteAllSync();
+#elif UNITY_DY
+            StarkSDKSpace.StarkSDK.API.PlayerPrefs.DeleteAll();
 #else
-            PlayerPrefs.DeleteAll();
-            PlayerPrefs.Save();
+            UnityEngine.PlayerPrefs.DeleteAll();
+            UnityEngine.PlayerPrefs.Save();
 #endif
         }
         public static bool HasKey(string key) {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageHasKeySync(key);
+#elif UNITY_DY
+            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.HasKey(key);
 #else
-            return PlayerPrefs.HasKey(key);
+            return UnityEngine.PlayerPrefs.HasKey(key);
 #endif
         }
     }

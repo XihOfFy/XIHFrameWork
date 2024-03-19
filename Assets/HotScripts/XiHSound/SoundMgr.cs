@@ -129,8 +129,12 @@ namespace XiHSound
             var all = abHandles.Keys.ToList();
             foreach (var key in all) {
                 if (set.Contains(key)) continue;
-                abHandles[key].Release();
-                abHandles.Remove(key);
+                var tmp = abHandles[key];
+                if (tmp.IsDone)
+                {
+                    tmp.Release();
+                    abHandles.Remove(key);
+                }
             }
             YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
         }
@@ -149,21 +153,13 @@ namespace XiHSound
             if (abHandles.ContainsKey(bgmAB))
             {
                 handle = abHandles[bgmAB];
+                await UniTask.WaitUntil(() => handle.IsDone);
             }
             else
             {
                 handle = YooAssets.LoadAssetAsync<AudioClip>(bgmAB);
+                abHandles.Add(bgmAB, handle);
                 await handle.ToUniTask();
-                //await可能触发多次,再判断一次
-                if (abHandles.ContainsKey(bgmAB))
-                {
-                    handle.Release();
-                    handle = abHandles[bgmAB];
-                }
-                else
-                {
-                    abHandles.Add(bgmAB, handle);
-                }
             }
             PlayBGM(handle.AssetObject as AudioClip);
         }
@@ -196,19 +192,12 @@ namespace XiHSound
             if (abHandles.ContainsKey(soundAB))
             {
                 handle = abHandles[soundAB];
+                await UniTask.WaitUntil(() => handle.IsDone);
             }
             else {
                 handle = YooAssets.LoadAssetAsync<AudioClip>(soundAB);
+                abHandles.Add(soundAB, handle);
                 await handle.ToUniTask();
-                //await可能触发多次,再判断一次
-                if (abHandles.ContainsKey(soundAB))
-                {
-                    handle.Release();
-                    handle = abHandles[soundAB];
-                }
-                else {
-                    abHandles.Add(soundAB, handle);
-                }
             }
             PlaySound(handle.AssetObject as AudioClip);
         }

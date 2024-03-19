@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using TMPro;
-using System.Linq;
 using YooAsset;
-using HybridCLR;
-using System.Reflection;
 using Aot;
 using System.Collections;
 using UnityEngine.UI;
 using System;
 using Object = UnityEngine.Object;
+using HybridCLR;
+using System.Reflection;
 
 namespace Aot2Hot
 {
@@ -19,9 +18,15 @@ namespace Aot2Hot
         public Image progerssImg;
         private void Awake()
         {
-            tip.text = "加载中... 请稍等";
+            tip.text = "请稍等一会";
             progerssImg.fillAmount = 0;
             StartCoroutine(nameof(IEAwake));
+#if USE_GM
+            var report = GameObject.FindObjectOfType<Reporter>(true);
+            if (report != null) {
+                report.gameObject.SetActive(true);
+            }
+#endif
         }
         IEnumerator IEAwake()
         {
@@ -36,10 +41,12 @@ namespace Aot2Hot
                 StartCoroutine(nameof(DownloadHotRes));
             }
         }
-
+        //string[] suffixArr = new string[] { "._. . . . .", ". ._. . . .", ". . ._. . .", ". . . ._. .",  ". . . . ._." };
         void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
         {
-            tip.text = $"正在下载({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB";
+            //tip.text = $"正在拼命加载中。。。({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB";
+            //tip.text = $"正在拼命加载资源中 {suffixArr[currentDownloadCount%6]}";
+            tip.text = "正在拼命加载资源中...";
             if (totalDownloadBytes > 0) {
                 progerssImg.fillAmount = 1.0f * currentDownloadBytes / totalDownloadBytes;
             }
@@ -77,8 +84,8 @@ namespace Aot2Hot
             }
             rawHotOp.Release();
 
-            Debug.Log($"成功加载热更程序集和元数据");
-            yield return YooAssets.LoadSceneAsync("Assets/Res/HotScene/HotInit.unity");
+            //Debug.Log($"成功加载热更程序集和元数据");
+            var handle= YooAssets.LoadSceneAsync("Assets/Res/HotScene/HotInit.unity");
         }
     }
 }

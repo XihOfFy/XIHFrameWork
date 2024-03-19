@@ -15,6 +15,13 @@ namespace XiHUtil
         public static readonly string RootPath;
         public const string SAVE_DIR = "SaveDir";
         public static readonly string SavePath;
+
+
+#if UNITY_WX_WITHOUT_EDITOR
+        static WXFileSystemManager fileSystemManager;
+#elif UNITY_DY
+        static StarkSDKSpace.StarkFileSystemManager fileSystemManager;
+#endif
         static FileUtil()
         {
 #if UNITY_EDITOR
@@ -23,6 +30,8 @@ namespace XiHUtil
             RootPath = Application.streamingAssetsPath;
 #elif UNITY_WX
             RootPath = WX.env.USER_DATA_PATH;
+//#elif UNITY_DY
+//            RootPath = StarkSDKSpace.StarkFileSystemManager.USER_DATA_PATH;
 #else
             RootPath = Application.persistentDataPath;
 #endif
@@ -30,8 +39,13 @@ namespace XiHUtil
 #if UNITY_EDITOR
             SavePath = SAVE_DIR;
 #endif
+
 #if UNITY_WX_WITHOUT_EDITOR
-            WX.GetFileSystemManager().MkdirSync(SavePath, true);//js error dont need catch
+            fileSystemManager = WX.GetFileSystemManager();
+            fileSystemManager.MkdirSync(SavePath, true);//js error dont need catch
+#elif UNITY_DY
+            fileSystemManager = StarkSDKSpace.StarkSDK.API.GetStarkFileSystemManager();
+            fileSystemManager.MkdirSync(SavePath, true);
 #else
             if (!Directory.Exists(SavePath)) Directory.CreateDirectory(SavePath);
 #endif
@@ -41,7 +55,9 @@ namespace XiHUtil
         {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            WX.GetFileSystemManager().WriteFileSync(fullPath, content);
+            fileSystemManager.WriteFileSync(fullPath, content);
+#elif UNITY_DY
+            fileSystemManager.WriteFileSync(fullPath, content);
 #else
             File.WriteAllText(fullPath, content, UTF8Encoding.UTF8);
 #endif
@@ -50,7 +66,9 @@ namespace XiHUtil
         {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            WX.GetFileSystemManager().WriteFileSync(fullPath, content);
+            fileSystemManager.WriteFileSync(fullPath, content);
+#elif UNITY_DY
+            fileSystemManager.WriteFileSync(fullPath, content);
 #else
             File.WriteAllBytes(fullPath, content);
 #endif
@@ -59,7 +77,13 @@ namespace XiHUtil
         {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            return WX.GetFileSystemManager().ReadFileSync(fullPath,"utf8");
+            var exist = "access:ok".Equals(fileSystemManager.AccessSync(fullPath));
+            if (!exist) return "";
+            return fileSystemManager.ReadFileSync(fullPath,"utf8");
+#elif UNITY_DY
+            var exist = fileSystemManager.AccessSync(fullPath);
+            if (!exist) return "";
+            return fileSystemManager.ReadFileSync(fullPath, "utf8");
 #else
             if (!File.Exists(fullPath)) return "";
             return File.ReadAllText(fullPath, UTF8Encoding.UTF8);
@@ -69,7 +93,13 @@ namespace XiHUtil
         {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            return WX.GetFileSystemManager().ReadFileSync(fullPath);
+            var exist = "access:ok".Equals(fileSystemManager.AccessSync(fullPath));
+            if (!exist) return null;
+            return fileSystemManager.ReadFileSync(fullPath);
+#elif UNITY_DY
+            var exist = fileSystemManager.AccessSync(fullPath);
+            if (!exist) return null;
+            return fileSystemManager.ReadFileSync(fullPath);
 #else
             if (!File.Exists(fullPath)) return null;
             return File.ReadAllBytes(fullPath);
@@ -78,7 +108,9 @@ namespace XiHUtil
         public static void DeleteFile(string relativePath) {
             var fullPath = SavePath + "/" + relativePath;
 #if UNITY_WX_WITHOUT_EDITOR
-            WX.GetFileSystemManager().UnlinkSync(fullPath);
+            fileSystemManager.UnlinkSync(fullPath);
+#elif UNITY_DY
+            fileSystemManager.UnlinkSync(fullPath);
 #else
             if (File.Exists(fullPath)) File.Delete(fullPath);
 #endif
