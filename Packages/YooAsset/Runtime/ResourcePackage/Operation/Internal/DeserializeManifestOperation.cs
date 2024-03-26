@@ -142,9 +142,9 @@ namespace YooAsset
                                 Manifest.AssetPathMapping1.Add(location, packageAsset.AssetPath);
 
                             // 添加无后缀名路径的映射
-                            string locationWithoutExtension = Path.ChangeExtension(location, null);
-                            if (ReferenceEquals(location, locationWithoutExtension) == false)
+                            if (Path.HasExtension(location))
                             {
+                                string locationWithoutExtension = PathUtility.RemoveExtension(location);
                                 if (Manifest.AssetPathMapping1.ContainsKey(locationWithoutExtension))
                                     YooLogger.Warning($"Location have existed : {locationWithoutExtension}");
                                 else
@@ -190,7 +190,6 @@ namespace YooAsset
                     Manifest.BundleList = new List<PackageBundle>(_packageBundleCount);
                     Manifest.BundleDic1 = new Dictionary<string, PackageBundle>(_packageBundleCount);
                     Manifest.BundleDic2 = new Dictionary<string, PackageBundle>(_packageBundleCount);
-                    Manifest.BundleDic3 = new Dictionary<string, PackageBundle>(_packageBundleCount);
                     _progressTotalValue = _packageBundleCount;
                     _steps = ESteps.DeserializeBundleList;
                 }
@@ -213,8 +212,8 @@ namespace YooAsset
                         Manifest.BundleDic2.Add(packageBundle.FileName, packageBundle);
 
                         // 注意：原始文件可能存在相同的CacheGUID
-                        if (Manifest.BundleDic3.ContainsKey(packageBundle.CacheGUID) == false)
-                            Manifest.BundleDic3.Add(packageBundle.CacheGUID, packageBundle);
+                        if (Manifest.CacheGUIDs.Contains(packageBundle.CacheGUID) == false)
+                            Manifest.CacheGUIDs.Add(packageBundle.CacheGUID);
 
                         _packageBundleCount--;
                         Progress = 1f - _packageBundleCount / _progressTotalValue;

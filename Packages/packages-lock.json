@@ -182,7 +182,7 @@
       }
     },
     "unity.fairygui": {
-      "version": "file:FairyGUI-unity-4.3.0",
+      "version": "file:FairyGUI-unity",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

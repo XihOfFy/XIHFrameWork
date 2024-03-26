@@ -15,7 +15,7 @@ MonoBehaviour:
   ProjectConf:
     projectName: TryAndUp
     Appid: wxdb969b951fdef68f
-    CDN: http://192.168.31.152:5000/WebGL
+    CDN: https://gitee.com/xihoffy/PublicAccess/raw/master/WebGL
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 

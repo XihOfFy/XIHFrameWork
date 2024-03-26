@@ -15,10 +15,7 @@ namespace YooAsset
 #elif UNITY_IPHONE
             return StringUtility.Format("file://{0}", path);
 #elif UNITY_ANDROID
-            if (path.StartsWith("jar:file//"))
-                return path;
-            else
-                return StringUtility.Format("jar:file://{0}", path);
+            return path;
 #elif UNITY_STANDALONE_OSX
             return new System.Uri(path).ToString();
 #elif UNITY_STANDALONE

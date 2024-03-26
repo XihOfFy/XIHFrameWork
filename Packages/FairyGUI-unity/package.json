@@ -1,0 +1,21 @@
+{
+  "name": "unity.fairygui",
+  "version": "5.0.0",
+  "displayName": "FairyGUI",
+  "description": "FairyGUI unity",
+  "category": "Runtime",
+  "keywords": [
+    "FairyGUI"
+  ],
+  "samples": [
+    {
+      "displayName": "Examples",
+      "description": "包含各种使用示例",
+      "path": "Examples~"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/fairygui/FairyGUI-unity/releases",
+    "type": "git"
+  }
+}
