@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEditor;
 using UnityEngine;
 using HybridCLR.Editor;
@@ -9,6 +8,7 @@ using YooAsset.Editor;
 using Aot;
 using System;
 using System.IO;
+using System.Reflection;
 #if UNITY_WX
 using WeChatWASM;
 using static WeChatWASM.WXConvertCore;
@@ -44,6 +44,12 @@ public class JenkinsSupport
     [MenuItem("XIHUtil/Jenkins/FullBuild")]
     public static void FullBuild()
     {
+        //因为 HybridCLR 内会改变exportAsGoogleAndroidProject 值，如果遇到打包失败，则无法还原
+        var curTarget = EditorUserBuildSettings.activeBuildTarget;
+        if (curTarget == BuildTarget.Android)
+        {
+            EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
+        }
         PrebuildCommand.GenerateAll();
         FullBuild_WithoutHyCLRGenerateAll();
     }
@@ -52,7 +58,13 @@ public class JenkinsSupport
     {
         var curTarget = EditorUserBuildSettings.activeBuildTarget;
         HotBuild();//还是觉得有必要放打包前，方便打包时可以插入一些资源到包体内;但是微信需要分包时，打包后也要拷贝分包
-
+        if (curTarget == BuildTarget.WebGL)
+        {
+#if !UNITY_DY
+            Debug.LogWarning("设置webgl的图片压缩格式为ASTC");
+            EditorUserBuildSettings.webGLBuildSubtarget = WebGLTextureSubtarget.ASTC;
+#endif
+        }
 #if UNITY_WX
         WXSettings();
         if (WXExportError.SUCCEED == WXConvertCore.DoExport())
@@ -108,6 +120,7 @@ public class JenkinsSupport
                 break;
         }
         var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, targetPath, curTarget, buildOptions);
+        Debug.Log($"构建结果: {report.summary.result}");
         if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Failed)
         {
             //若是无头模式构建，添加这个行
@@ -137,7 +150,8 @@ public class JenkinsSupport
 #endif
             Debug.LogWarning("完成热更打包 成功");
         }
-        else {
+        else
+        {
             Debug.LogWarning("完成热更打包 失败");
         }
     }
@@ -156,9 +170,14 @@ public class JenkinsSupport
         var buildinFileCopyParams = "";
         //var compressOption = AssetBundleBuilderSetting.GetPackageCompressOption(PackageName, BuildPipeline);
         var compressOption = ECompressOption.LZ4;
+        var outDir = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+        if (Directory.Exists(outDir)) {
+            Debug.LogWarning($"清空AB构建目录:{outDir}");
+            Directory.Delete(outDir, true);
+        }
 
         ScriptableBuildParameters buildParameters = new ScriptableBuildParameters();
-        buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+        buildParameters.BuildOutputRoot = outDir;
         buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
         buildParameters.BuildPipeline = BuildPipeline.ToString();
         buildParameters.BuildTarget = buildTarget;
@@ -193,14 +212,16 @@ public class JenkinsSupport
     }
 
     //只有专业版支持，算了。自己先提前发布吧
-    static void BuildFairyGUI() {
+    static void BuildFairyGUI()
+    {
         var exePath = "D:\\Devkit\\FairyGUI-Editor\\FairyGUI-Editor.exe";
-        if (!File.Exists(exePath)) {
+        if (!File.Exists(exePath))
+        {
             Debug.LogError("未找到FairyGUI-Editor安装目录，需要自行先发布");
             return;
         }
         //FairyGUI-Editor -batchmode -p project_desc_file [-b package_names] [-t branch_name] [-o output_path] [-logFile log_file_path] https://fairygui.com/docs/editor/publish
-        ProcessUtil.Run(exePath, "-batchmode -p ./FGUIProject.fairy -logFile ./fgui.txt", "",false);
+        ProcessUtil.Run(exePath, "-batchmode -p ./FGUIProject.fairy -logFile ./fgui.txt", "", false);
     }
 
     private static string GetDefaultPackageVersion()
@@ -244,9 +265,10 @@ public class JenkinsSupport
     static void WXSettings()
     {
         var config = UnityUtil.GetEditorConf();
-
+        var outDir = $"{WEB_ROOT}/MiniGame";
+        if(Directory.Exists(outDir))Directory.Delete(outDir,true);
         //设置输出相对路径
-        config.ProjectConf.DST = $"{WEB_ROOT}/MiniGame";
+        config.ProjectConf.DST = outDir;
         Debug.LogWarning($"设置小游戏输出相对路径 {config.ProjectConf.DST}");
 
         var remoteCfgPath = $"{WEB_ROOT}/Front/WebGL.json";
@@ -266,6 +288,8 @@ public class JenkinsSupport
         var hash = new HashSet<string>(str.Split(";"));
         hash.Remove("");
         hash.Add("version");
+        //hash.Add("cfg");
+        hash.Add("json");
         config.ProjectConf.bundleExcludeExtensions = string.Join(";", hash);
 
         //缓存www下载中包含WebGL路径的文件

@@ -202,22 +202,33 @@ namespace XiHUI
         void TickReference(bool considerTime)
         {
             _removeList.Clear();
+            bool gc = false;
             foreach (var key in _packages.Keys)
             {
                 var pkg = _packages[key];
 
                 if (pkg == null || !pkg.IsReference(considerTime)) { 
                     _removeList.Add(key);
-                    pkg.ReleaseHandles();
                 }
             }
 
             foreach (var key in _removeList)
             {
                 UIPackage.RemovePackage(key);
+                var pkg = _packages[key];
+                pkg.ReleaseHandles();
 
                 Debug.Log($"[UIDialogManager] remove {key}");
-                _packages.Remove(key);	
+                _packages.Remove(key);
+                gc = true;
+            }
+
+            if (gc) {
+                YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
+                GC.Collect();
+#if UNITY_WX
+            WeChatWASM.WX.TriggerGC();
+#endif
             }
         }
 

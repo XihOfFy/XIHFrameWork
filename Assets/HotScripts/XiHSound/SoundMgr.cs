@@ -11,7 +11,7 @@ using WeChatWASM;
 
 namespace XiHSound
 {
-    public class SoundMgr : MonoBehaviour
+    public partial class SoundMgr : MonoBehaviour
     {
         protected static SoundMgr instance;
         public static SoundMgr Instance
@@ -94,8 +94,8 @@ namespace XiHSound
         }
 
         Dictionary<string, AssetHandle> abHandles;
-        Queue<string> recentBgmUseQue;
-        Queue<string> recentSoundUseQue;
+        FIFO recentBgmUseQue;
+        FIFO recentSoundUseQue;
         private void Awake()
         {
             unitSec = new WaitForSecondsRealtime(0.1f);
@@ -106,8 +106,8 @@ namespace XiHSound
             soundEnable =PlayerPrefsUtil.Get(SOUND_ENABLE, true);
             vibrate = PlayerPrefsUtil.Get(VIBRATE_ENABLE, true);
             abHandles = new Dictionary<string, AssetHandle>();
-            recentBgmUseQue = new Queue<string>();
-            recentSoundUseQue = new Queue<string>();
+            recentBgmUseQue = new FIFO(1);
+            recentSoundUseQue = new FIFO(16);
             InitAudioMixer();
         }
         void InitAudioMixer()
@@ -122,38 +122,21 @@ namespace XiHSound
             soundVolume = PlayerPrefsUtil.Get(SOUND_VOLUME, 1.0f);
             soundSource.volume = soundVolume;
         }
-        public void ReleaseAll() {
-            var set=new HashSet<string>();
-            foreach (var str in recentBgmUseQue) set.Add(str);
-            foreach (var str in recentSoundUseQue) set.Add(str);
-            var all = abHandles.Keys.ToList();
-            foreach (var key in all) {
-                if (set.Contains(key)) continue;
-                var tmp = abHandles[key];
-                if (tmp.IsDone)
-                {
-                    tmp.Release();
-                    abHandles.Remove(key);
-                }
-            }
-            YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
-        }
         public async UniTaskVoid PlayBGM(string bgmAB)
         {
             if (!bgmEnable) return;
             AssetHandle handle;
-            recentBgmUseQue.Enqueue(bgmAB);
-            int maxCount = 4;//自行控制数量
-            if (recentBgmUseQue.Count > maxCount)
-            {
-                maxCount >>= 1;
-                while (--maxCount > 0) recentBgmUseQue.Dequeue();
-                ReleaseAll();
-            }
             if (abHandles.ContainsKey(bgmAB))
             {
                 handle = abHandles[bgmAB];
-                await UniTask.WaitUntil(() => handle.IsDone);
+                await UniTask.WaitUntil(() => handle.IsDone || !handle.IsValid);
+                if (!handle.IsValid)
+                {
+                    abHandles.Remove(bgmAB);
+                    PlayBGM(bgmAB).Forget();
+                    Debug.LogWarning($"此音效ID {bgmAB} 已经释放，无法继续播放");
+                    return;
+                }
             }
             else
             {
@@ -161,6 +144,7 @@ namespace XiHSound
                 abHandles.Add(bgmAB, handle);
                 await handle.ToUniTask();
             }
+            recentBgmUseQue.InAndOut(bgmAB, abHandles);
             PlayBGM(handle.AssetObject as AudioClip);
         }
         public void StopBGM() {
@@ -181,24 +165,25 @@ namespace XiHSound
         {
             if (!soundEnable) return;
             AssetHandle handle;
-            recentSoundUseQue.Enqueue(soundAB);
-            int maxCount = 8;//自行控制数量
-            if (recentSoundUseQue.Count > maxCount)
-            {
-                maxCount >>= 1;
-                while (--maxCount > 0) recentSoundUseQue.Dequeue();
-                ReleaseAll();
-            }
+
             if (abHandles.ContainsKey(soundAB))
             {
                 handle = abHandles[soundAB];
-                await UniTask.WaitUntil(() => handle.IsDone);
+                await UniTask.WaitUntil(() => handle.IsDone || !handle.IsValid);
+                if (!handle.IsValid)
+                {
+                    abHandles.Remove(soundAB);
+                    PlaySound(soundAB).Forget();
+                    Debug.LogWarning($"此音效ID {soundAB} 已经释放，无法继续播放");
+                    return;
+                }
             }
             else {
                 handle = YooAssets.LoadAssetAsync<AudioClip>(soundAB);
                 abHandles.Add(soundAB, handle);
                 await handle.ToUniTask();
             }
+            recentSoundUseQue.InAndOut(soundAB, abHandles);
             PlaySound(handle.AssetObject as AudioClip);
         }
         void PlaySound(AudioClip sound)
@@ -207,15 +192,23 @@ namespace XiHSound
             soundSource.PlayOneShot(sound, soundVolume);
             //AudioSource.PlayClipAtPoint(sound,Vector3.zero,1);
         }
-        public async void PlayVibrate(int times=1) {
+        public void PlayVibrate(int times=1) {
             while (--times >= 0) {
                 if (!vibrate) return;
 #if UNITY_ANDROID || UNITY_IOS
                 Handheld.Vibrate();
+#elif UNITY_DY
+                if (Application.platform == RuntimePlatform.Android && !StarkSDKSpace.CanIUse.Vibrate)
+                {
+                    UnityEngine.Debug.LogError("当前宿主的Container版本过低，不可使用该接口");
+                }
+                else {
+                    long[] pattern = { 0, 100, 1000, 300 };
+                    StarkSDKSpace.StarkSDK.API.Vibrate(pattern);
+                }
 #elif UNITY_WX
                 WX.VibrateShort(new VibrateShortOption() { type = "medium" });
 #endif
-                await UniTask.Delay(500);
             }
         }
         Coroutine bgmCor;
@@ -279,6 +272,46 @@ namespace XiHSound
             }
             musicSource.Stop();
             bgmCor = null;
+        }
+
+
+        class FIFO {
+            Dictionary<string, uint> dic;
+            int mCount;
+            uint order = 0;
+            public FIFO(int maxCount)
+            {
+                dic = new Dictionary<string, uint>();
+                mCount = maxCount<1?1:maxCount;
+            }
+            public void InAndOut(string item, Dictionary<string, AssetHandle> abHandles)
+            {
+                dic[item] = ++order;
+                if (dic.Count > mCount)
+                {
+                    var kvs = dic.OrderBy(kv => kv.Value).ToList();
+                    var maxIdx = (mCount + 1) >> 1;
+                    foreach (var kv in kvs)
+                    {
+                        if (--maxIdx >= 0)
+                        {
+                            var key = kv.Key;
+                            var tmp = abHandles[key];
+                            if (tmp.IsDone)
+                            {
+                                tmp.Release();
+                                abHandles.Remove(key);
+                                dic.Remove(key);
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
+                }
+            }
         }
     }
 }
