@@ -4,7 +4,6 @@ using Hot;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using XiHUtil;
 using YooAsset;
 
 namespace XiHUI
@@ -24,7 +23,16 @@ namespace XiHUI
 
             var dialog = stack.Get(dialogName);
             if (dialog != null && dialog.State == State.Loading)
-                return null;
+            { 
+                await UniTask.WaitUntil(()=>dialog.State != State.Loading);
+                if (dialog.State == State.Close)
+                {
+                    dialog = null;
+                }
+                else {
+                    return dialog;
+                }
+            }
 
             if (dialog != null)
             {
@@ -36,19 +44,12 @@ namespace XiHUI
                 dialog = Activator.CreateInstance(type) as UIDialog;
                 dialog.SetOpenParams(new DialogOpenParams(dialogName, packageName, componentName, layer, isFull, isBlur));
                 stack.Push(dialog);
-                return await CreateDialogAsync(dialogName, packageName, componentName, layer, isFull, isBlur, dependencyUIPackages);
+                return await CreateDialogAsync(dialog, packageName, componentName, stack, isFull, isBlur, dependencyUIPackages);
             }
         }
 
-        private async UniTask<UIDialog> CreateDialogAsync(string dialogName, string packageName, string componentName, Mode layer, bool isFull, bool isBlur, params string[] dependencyUIPackages)
+        private async UniTask<UIDialog> CreateDialogAsync(UIDialog dialog, string packageName, string componentName, UIStack stack, bool isFull, bool isBlur, params string[] dependencyUIPackages)
         {
-            if (!_layers.TryGetValue(layer, out var stack))
-                return null;
-
-            var dialog = stack.Get(dialogName);
-            if (dialog == null || dialog.State != State.Loading)
-                return null;
-
             if (dependencyUIPackages.Length > 0) {
                 var tks = new List<UniTask>();
                 foreach (var dependency in dependencyUIPackages)
@@ -66,14 +67,11 @@ namespace XiHUI
                 return null;
             }
 
-            // 加载完成了，打开之前再判断UI是否还处于打开状态
-            if (dialog != null && dialog.State == State.Loading)
-            {
-                UIControlBinding.BindFields(dialog, compent);
-                dialog.Open(compent, isFull, isBlur);
-                stack.Push(dialog);
-                dialog.Open();
-            }
+            UIControlBinding.BindFields(dialog, compent);
+            dialog.Open(compent, isFull, isBlur);
+            stack.Push(dialog);
+            dialog.Open();
+
             return dialog;
         }
 

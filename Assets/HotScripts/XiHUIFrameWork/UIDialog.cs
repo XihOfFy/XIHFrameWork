@@ -90,7 +90,7 @@ namespace XiHUI
                 Content.name = dialogName;
                 Content.fairyBatching = false;
 #if UNITY_EDITOR
-                Debug.LogWarning($"关闭 fairyBatching 避免动效UI展示错误");
+                Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
 #endif
             }
 
