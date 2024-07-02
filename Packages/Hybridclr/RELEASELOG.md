@@ -1,5 +1,124 @@
 # 发布日志
 
+## 6.2.0
+
+发布日期 2024.7.1.
+
+### Runtime
+
+- [merge] 合并2021.3.27f1-2021.3.40f1版本改动
+- [opt] 优化metadata元数据内存，内存占用减少了20-25%
+- [opt] 优化枚举类型调用GetHashCode的实现，不再产生GC
+
+## 6.1.0
+
+发布日期 2024.6.17.
+
+### Runtime
+
+- [merge] 合并2022.3.23f1-2022.3.33f1版本改动，修复对2022.3.33版本不兼容的问题
+- [new] 支持2022.3.33版本新增支持的函数返回值Attribute
+- [fix] 修复解释部分FieldInfo调用GetFieldMarshaledSizeForField时崩溃的bug
+
+### Editor
+
+- [fix] 升级dnlib版本，修复ModuleMD保存dll时将未加Assembly限定的mscorlib程序集中类型的程序集设置为当前程序集的严重bug
+- [fix] 修复`Generate/LinkXml`生成的link.xml中对UnityEngine.Debug preserve all导致在Unity 2023及更高版本的iOS、visionOS等平台上出现Undefined symbols for architecture arm64: "CheckApplicationIntegrity(IntegrityCheckLevel)" 编译错误的问题。此bug由Unity引起，我们通过在生成link.xml时忽略UnityEngine.Debug类来临时解决这个问题
+
+## 6.0.0
+
+发布日期 2024.6.11.
+
+### Runtime
+
+- [new] 支持Unity 6000.x.y及Unity 2023.2.x版本
+- [refactor] 合并ReversePInvokeMethodStub到MethodBridge，同时将MetadataModule中ReversePInvoke相关代码移到InterpreterModule
+- [new] 支持MonoPInvokeCallback函数的参数或返回类型为struct类型
+
+### Editor
+
+- [new] 支持Unity 6000.x.y及Unity 2023.2.x版本
+- [new] 支持MonoPInvokeCallback函数的参数或返回类型为struct类型
+- [new] 新增GeneratedAOTGenericReferenceExcludeExistsAOTClassAndMethods，计算热更新引用的AOT泛型类型和函数时排除掉AOT中已经存在的泛型和函数，最终生成更精准的补充元数据程序集列表
+- [fix] 修复在某些不支持visionOS的Unity版本上CopyStrippedAOTAssemblies类有编译错误的bug
+- [fix] 修复计算 MonoPInvokeCallback的CallingConvention时，如果delegate在其他程序集中定义，会被错误当作Winapi，导致wrapper签名计算错误的bug
+- [fix] PatchScriptingAssemblyList.cs在Unity 2023+版本webgl平台的编译错误
+- [fix] 修复计算Native2Manager桥接函数未考虑到MonoPInvokeCallback函数，导致从lua或者其他语言调用c#热更新函数有时候会出现UnsupportedNative2ManagedMethod的bug
+- [refactor] 合并ReversePInvokeMethodStub到MethodBridge，同时将MetadataModule中ReversePInvoke相关代码移到InterpreterModule
+- [opt] 打包时检查生成桥接函数时的development选项与当前development选项一致。`Generate/All`之后切换development选项再打包，将会产生严重的崩溃
+- [opt] `Generate/All`在生成之前检查是否已经安装HybridCLR
+
+
+## 5.4.1
+
+发布日期 2024.5.30.
+
+### Editor
+
+- [new] 支持visionOS平台
+- [fix][**严重**] 修复计算 MonoPInvokeCallback的CallingConvention时，如果delegate在其他程序集中定义，会被错误当作Winapi，导致wrapper签名计算错误的bug
+- [fix] 修复tvOS平台使用了错误的Unity-iPhone.xcodeproj路径导致找不到project.pbxproj的bug
+
+
+## 5.4.0
+
+发布日期 2024.5.20.
+
+### Runtime
+
+- [new] ReversePInvoke支持CallingConvention
+- [fix] 修复当参数个数为0时，由于argIdxs未赋值，calli的argBasePtr=argIdx[0]导致函数栈帧指向错误位置的bug
+- [fix] 修复MetadataModule::GetReversePInvokeWrappe中ComputeSignature可能死锁的bug
+- [fix] 修复AOT基类虚函数implements热更新interface函数时，虚函数调用使用CallInterpVirtual导致运行异常的bug
+- [fix] 修复Transform中 PREFIX1前缀指令的子指令有部分缺失并且未按指令号排序的问题
+- [fix] 修复no.{x} prefix指令长3字节，但Transform中错误当作2字节处理的bug
+- [fix] 修复unaligned.{x} prefix指令长3字节，但Transform中错误当作2字节处理的bug
+- [opt] 删除 Interpreter_Execute中不必要的INIT_CLASS操作，因为PREPARE_NEW_FRAME_FROM_NATIVE中一定会检查
+- [opt] 不再缓存非泛型函数的MethodBody，优化内存
+- [opt] **优化补充元数据内存**，大约节省了2.8倍元数据dll大小的内存
+- [refactor] Image::_rawImage字段的类型由RawImage改为RawImage*
+
+### Editor
+
+- [new] ReversePInvoke支持CallingConvention
+- [fix] 修复计算struct等价性时，将struct平铺展开计算等价，在某些平台并不适用的bug。例如 struct A { uint8_t x; A2 y; } struct A2 { uint8_t x; int32_t y;}; 跟 struct B {uint8_t x; uint8_t y; int32_t z;} 在x86_64 abi下并不等价
+- [fix] 修复当Append xcode项目到现存的xcode项目时，第1次会导致'Run Script'命令被重复追加，从第2次起将会找不到--external-lib-il2-cpp而打印错误日志的bug
+
+## 5.3.0
+
+发布日期 2024.4.22.
+
+### Runtime
+
+- [fix] 修复WebGL平台MachineState::CollectFramesWithoutDuplicates错误地使用hybridclr::metadata::IsInterpreterMethod移除热更新函数，导致补充元数据函数没有移除，StackFrames列表越来越长，打印Stack时死循环的bug。调整实现，统一使用il2cpp::vm::StackTrace::PushFrame及PopFrame实现完美的解释器栈打印。缺点是调用解释器函数增加了维护栈的开销
+- [fix] 修复StringUtils::Utf16ToUtf8未正确处理maxinumSize==0，导致InterpreterImage::ConvertConstValue中转换长度为0的string时巨幅溢出的严重bug
+- [fix] 修复__ReversePInvokeMethod_XXX函数未设置Il2CppThreadContext，导致从native线程回调时获取Thread变量崩溃的bug
+- [merge] 合并 2021.3.34-2021.3.37f1 il2cpp改动
+- [merge] 合并 2022.3.19-2022.3.23f1 il2cpp改动
+
+### Editor
+
+- [fix] 修复导出tvOS工程时未修改xcode工程设置，导致打包失败的bug
+- [fix] 修复构建tvOS目标时未复制裁剪AOT dll，导致生成桥接函数失败的bug
+- [fix] 解决StripAOTDllCommand生成的临时项目的locationPathName不规范导致与某些插件如Embeded Browser不兼容的问题
+- [fix] 修复团结引擎1.1.0起删除TUANJIE_2022宏导致没有复制裁剪后的AOT程序集的bug
+- [fix] 修复__ReversePInvokeMethod_XXX函数未设置Il2CppThreadContext，导致从native线程回调时获取Thread变量崩溃的bug
+- [fix] 修复iOS平台开启development build选项时出现mono相关头文件找不到的bug
+
+## 5.2.1
+
+发布日期 2024.4.7.
+
+### Runtime
+
+- [fix] 修复WebGL平台不打印堆栈日志的bug
+- [fix] 修复RuntimeConfig::GetRuntimeOption获取InterpreterThreadExceptionFlowSize错误返回s_threadFrameStackSize的bug
+
+### Editor
+
+- [opt] LoadModule中设置 mod.EnableTypeDefFindCache = true，计算桥接函数的时间缩短为原来的1/3
+- [fix] 修复团结引擎导出iOS平台xcode工程文件名改名为Tuanjie-iPhone.xcodeproj导致构建xcode工程失败的bug
+
 ## 5.2.0
 
 发布日期 2024.3.25.

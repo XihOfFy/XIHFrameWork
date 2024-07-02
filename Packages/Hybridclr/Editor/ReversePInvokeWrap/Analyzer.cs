@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CallingConvention = System.Runtime.InteropServices.CallingConvention;
 using UnityEngine;
 
 namespace HybridCLR.Editor.ReversePInvokeWrap
@@ -21,7 +22,11 @@ namespace HybridCLR.Editor.ReversePInvokeWrap
     {
         public MethodDesc Method { get; set; }
 
+        public CallingConvention Callvention { get; set; }
+
         public int Count { get; set; }
+
+        public string Signature { get; set; }
     }
 
     public class Analyzer
@@ -30,6 +35,8 @@ namespace HybridCLR.Editor.ReversePInvokeWrap
         private readonly List<ModuleDefMD> _rootModules = new List<ModuleDefMD>();
 
         private readonly List<RawReversePInvokeMethodInfo> _reversePInvokeMethods = new List<RawReversePInvokeMethodInfo>();
+
+        public List<RawReversePInvokeMethodInfo> ReversePInvokeMethods => _reversePInvokeMethods;
 
         public Analyzer(AssemblyCache cache, List<string> assemblyNames)
         {
@@ -68,36 +75,6 @@ namespace HybridCLR.Editor.ReversePInvokeWrap
                     });
                 }
             }
-        }
-
-        public List<ABIReversePInvokeMethodInfo> BuildABIMethods()
-        {
-            var methodsBySig = new Dictionary<string, ABIReversePInvokeMethodInfo>();
-            var typeCreator = new TypeCreator();
-            foreach(var method in _reversePInvokeMethods)
-            {
-                MethodDesc desc = new MethodDesc
-                {
-                    MethodDef = method.Method,
-                    ReturnInfo = new ReturnInfo { Type = typeCreator.CreateTypeInfo(method.Method.ReturnType)},
-                    ParamInfos = method.Method.Parameters.Select(p => new ParamInfo { Type = typeCreator.CreateTypeInfo(p.Type)}).ToList(),
-                };
-                desc.Init();
-                if (!methodsBySig.TryGetValue(desc.Sig, out var arm))
-                {
-                    arm = new ABIReversePInvokeMethodInfo()
-                    {
-                        Method = desc,
-                        Count = 0,
-                    };
-                    methodsBySig.Add(desc.Sig, arm);
-                }
-                int preserveCount = method.GenerationAttribute != null ? (int)method.GenerationAttribute.ConstructorArguments[0].Value : 1;
-                arm.Count += preserveCount;
-            }
-            var methods = methodsBySig.Values.ToList();
-            methods.Sort((a, b) => String.CompareOrdinal(a.Method.Sig, b.Method.Sig));
-            return methods;
         }
 
         public void Run()

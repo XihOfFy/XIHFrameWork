@@ -1,6 +1,7 @@
 ﻿using dnlib.DotNet;
 using HybridCLR.Editor.ABI;
 using HybridCLR.Editor.Meta;
+using HybridCLR.Editor.ReversePInvokeWrap;
 using HybridCLR.Editor.Template;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using TypeInfo = HybridCLR.Editor.ABI.TypeInfo;
+using CallingConvention = System.Runtime.InteropServices.CallingConvention;
+using System.Security.Cryptography;
 
 namespace HybridCLR.Editor.MethodBridge
 {
@@ -25,13 +28,21 @@ namespace HybridCLR.Editor.MethodBridge
             public string OutputFile { get; set; }
 
             public IReadOnlyCollection<GenericMethod> GenericMethods { get; set; }
+
+            public List<RawReversePInvokeMethodInfo> ReversePInvokeMethods { get; set; }
+
+            public bool Development { get; set; }
         }
 
         private readonly List<GenericMethod> _genericMethods;
 
+        private readonly List<RawReversePInvokeMethodInfo> _originalReversePInvokeMethods;
+
         private readonly string _templateCode;
 
         private readonly string _outputFile;
+
+        private readonly bool _development;
 
         private readonly TypeCreator _typeCreator;
 
@@ -41,15 +52,19 @@ namespace HybridCLR.Editor.MethodBridge
 
         private readonly HashSet<MethodDesc> _adjustThunkMethodSet = new HashSet<MethodDesc>();
 
+        private List<ABIReversePInvokeMethodInfo> _reversePInvokeMethods;
+
         public Generator(Options options)
         {
             List<(GenericMethod, string)> genericMethodInfo = options.GenericMethods.Select(m => (m, m.ToString())).ToList();
             genericMethodInfo.Sort((a, b) => string.CompareOrdinal(a.Item2, b.Item2));
             _genericMethods = genericMethodInfo.Select(m => m.Item1).ToList();
+            _originalReversePInvokeMethods = options.ReversePInvokeMethods;
             
             _templateCode = options.TemplateCode;
             _outputFile = options.OutputFile;
             _typeCreator = new TypeCreator();
+            _development = options.Development;
         }
 
         private readonly Dictionary<string, TypeInfo> _sig2Types = new Dictionary<string, TypeInfo>();
@@ -167,11 +182,22 @@ namespace HybridCLR.Editor.MethodBridge
             }
         }
 
-        public void PrepareMethods()
+        private void PrepareMethodBridges()
         {
-            foreach(var method in _genericMethods)
+            foreach (var method in _genericMethods)
             {
                 ProcessMethod(method.Method, method.KlassInst, method.MethodInst);
+            }
+            foreach (var reversePInvokeMethod in _originalReversePInvokeMethods)
+            {
+                MethodDef method = reversePInvokeMethod.Method;
+                ICorLibTypes corLibTypes = method.Module.CorLibTypes;
+
+                var returnType = MetaUtil.ToShareTypeSig(corLibTypes, method.ReturnType);
+                var parameters = method.Parameters.Select(p => MetaUtil.ToShareTypeSig(corLibTypes, p.Type)).ToList();
+                var sharedMethod = CreateMethodDesc(method, true, returnType, parameters);
+                sharedMethod.Init();
+                AddNative2ManagedMethod(sharedMethod);
             }
         }
 
@@ -288,7 +314,7 @@ namespace HybridCLR.Editor.MethodBridge
             var sigBuf = new StringBuilder();
             foreach (var field in ati.fields)
             {
-                sigBuf.Append(GetOrCalculateTypeInfoSignature(ToIsomorphicType(field)));
+                sigBuf.Append("{" + GetOrCalculateTypeInfoSignature(ToIsomorphicType(field)) + "}");
             }
             return ati.signature = sigBuf.ToString();
         }
@@ -370,11 +396,92 @@ namespace HybridCLR.Editor.MethodBridge
             return methodMap.Values.ToList();
         }
 
+
+
+        private static string MakeSignature(MethodDesc desc, CallingConvention CallingConventionention)
+        {
+            string convStr = ((char)('A' + (int)CallingConventionention - 1)).ToString();
+            return $"{convStr}{desc.Sig}";
+        }
+
+        private static CallingConvention GetCallingConvention(MethodDef method)
+        {
+            var monoPInvokeCallbackAttr = method.CustomAttributes.FirstOrDefault(ca => ca.AttributeType.Name == "MonoPInvokeCallbackAttribute");
+            if (monoPInvokeCallbackAttr == null)
+            {
+                return CallingConvention.Winapi;
+            }
+            object delegateTypeSig = monoPInvokeCallbackAttr.ConstructorArguments[0].Value;
+
+            TypeDef delegateTypeDef;
+            if (delegateTypeSig is ClassSig classSig)
+            {
+                delegateTypeDef = classSig.TypeDefOrRef.ResolveTypeDefThrow();
+            }
+            else if (delegateTypeSig is GenericInstSig genericInstSig)
+            {
+                delegateTypeDef = genericInstSig.GenericType.TypeDefOrRef.ResolveTypeDefThrow();
+            }
+            else
+            {
+                delegateTypeDef = null;
+            }
+
+            if (delegateTypeDef == null)
+            {
+                throw new NotSupportedException($"Unsupported delegate type: {delegateTypeSig}");
+            }
+            var attr = delegateTypeDef.CustomAttributes.FirstOrDefault(ca => ca.AttributeType.FullName == "System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute");
+            if (attr == null)
+            {
+                return CallingConvention.Winapi;
+            }
+            var conv = attr.ConstructorArguments[0].Value;
+            return (CallingConvention)conv;
+        }
+
+        private List<ABIReversePInvokeMethodInfo> BuildABIMethods(List<RawReversePInvokeMethodInfo> rawMethods)
+        {
+            var methodsBySig = new Dictionary<string, ABIReversePInvokeMethodInfo>();
+            foreach (var method in rawMethods)
+            {
+                var sharedMethod = new MethodDesc
+                {
+                    MethodDef = method.Method,
+                    ReturnInfo = new ReturnInfo { Type = _typeCreator.CreateTypeInfo(method.Method.ReturnType) },
+                    ParamInfos = method.Method.Parameters.Select(p => new ParamInfo { Type = _typeCreator.CreateTypeInfo(p.Type) }).ToList(),
+                };
+                sharedMethod.Init();
+                sharedMethod = ToIsomorphicMethod(sharedMethod);
+
+                CallingConvention callingConv = GetCallingConvention(method.Method);
+                string signature = MakeSignature(sharedMethod, callingConv);
+
+                if (!methodsBySig.TryGetValue(signature, out var arm))
+                {
+                    arm = new ABIReversePInvokeMethodInfo()
+                    {
+                        Method = sharedMethod,
+                        Signature = signature,
+                        Count = 0,
+                        Callvention = callingConv,
+                    };
+                    methodsBySig.Add(signature, arm);
+                }
+                int preserveCount = method.GenerationAttribute != null ? (int)method.GenerationAttribute.ConstructorArguments[0].Value : 1;
+                arm.Count += preserveCount;
+            }
+            var newMethods = methodsBySig.Values.ToList();
+            newMethods.Sort((a, b) => string.CompareOrdinal(a.Signature, b.Signature));
+            return newMethods;
+        }
+
         private void BuildOptimizedMethods()
         {
             _managed2NativeMethodList = ToUniqueOrderedList(_managed2NativeMethodList0);
             _native2ManagedMethodList = ToUniqueOrderedList(_native2ManagedMethodList0);
             _adjustThunkMethodList = ToUniqueOrderedList(_adjustThunkMethodList0);
+            _reversePInvokeMethods = BuildABIMethods(_originalReversePInvokeMethods);
         }
 
         private void OptimizationTypesAndMethods()
@@ -389,7 +496,12 @@ namespace HybridCLR.Editor.MethodBridge
         {
             var frr = new FileRegionReplace(_templateCode);
 
-            List<string> lines = new List<string>(20_0000);
+            List<string> lines = new List<string>(20_0000)
+            {
+                "\n",
+                $"// DEVELOPMENT={(_development ? 1 : 0)}",
+                "\n"
+            };
 
             var classInfos = new List<ClassInfo>();
             var classTypeSet = new HashSet<TypeInfo>();
@@ -424,6 +536,8 @@ namespace HybridCLR.Editor.MethodBridge
 
             GenerateAdjustThunkStub(_adjustThunkMethodList, lines);
 
+            GenerateReversePInvokeWrappers(_reversePInvokeMethods, lines);
+
             frr.Replace("CODE", string.Join("\n", lines));
 
             Directory.CreateDirectory(Path.GetDirectoryName(_outputFile));
@@ -431,8 +545,69 @@ namespace HybridCLR.Editor.MethodBridge
             frr.Commit(_outputFile);
         }
 
+        private static string GetIl2cppCallConventionName(CallingConvention conv)
+        {
+            switch (conv)
+            {
+                case 0:
+                case CallingConvention.Winapi:
+                    return "DEFAULT_CALL";
+                case CallingConvention.Cdecl:
+                    return "CDECL";
+                case CallingConvention.StdCall:
+                    return "STDCALL";
+                case CallingConvention.ThisCall:
+                    return "THISCALL";
+                case CallingConvention.FastCall:
+                    return "FASTCALL";
+                default:
+                    throw new NotSupportedException($"Unsupported CallingConvention {conv}");
+            }
+        }
+
+        private void GenerateReversePInvokeWrappers(List<ABIReversePInvokeMethodInfo> methods, List<string> lines)
+        {
+            int methodIndex = 0;
+            var stubCodes = new List<string>();
+            foreach (var methodInfo in methods)
+            {
+                MethodDesc method = methodInfo.Method;
+                string il2cppCallConventionName = GetIl2cppCallConventionName(methodInfo.Callvention);
+                string paramDeclaringListWithoutMethodInfoStr = string.Join(", ", method.ParamInfos.Select(p => $"{p.Type.GetTypeName()} __arg{p.Index}"));
+                string paramNameListWithoutMethodInfoStr = string.Join(", ", method.ParamInfos.Select(p => $"__arg{p.Index}").Concat(new string[] { "method" }));
+                string paramTypeListWithMethodInfoStr = string.Join(", ", method.ParamInfos.Select(p => $"{p.Type.GetTypeName()}").Concat(new string[] { "const MethodInfo*" }));
+                string methodTypeDef = $"typedef {method.ReturnInfo.Type.GetTypeName()} (*Callback)({paramTypeListWithMethodInfoStr})";
+                for (int i = 0; i < methodInfo.Count; i++, methodIndex++)
+                {
+                    lines.Add($@"
+{method.ReturnInfo.Type.GetTypeName()} {il2cppCallConventionName} __ReversePInvokeMethod_{methodIndex}({paramDeclaringListWithoutMethodInfoStr})
+{{
+    il2cpp::vm::ScopedThreadAttacher _vmThreadHelper;
+    const MethodInfo* method = InterpreterModule::GetMethodInfoByReversePInvokeWrapperIndex({methodIndex});
+    {methodTypeDef};
+    {(method.ReturnInfo.IsVoid ? "" : "return ")}((Callback)(method->methodPointerCallByInterp))({paramNameListWithoutMethodInfoStr});
+}}
+        ");
+                    stubCodes.Add($"\t{{\"{methodInfo.Signature}\", (Il2CppMethodPointer)__ReversePInvokeMethod_{methodIndex}}},");
+                }
+                Debug.Log($"[ReversePInvokeWrap.Generator] method:{method.MethodDef} wrapperCount:{methodInfo.Count}");
+            }
+
+            lines.Add(@"
+const ReversePInvokeMethodData hybridclr::interpreter::g_reversePInvokeMethodStub[]
+{
+");
+            lines.AddRange(stubCodes);
+
+            lines.Add(@"
+    {nullptr, nullptr},
+};
+");
+        }
+
         public void Generate()
         {
+            PrepareMethodBridges();
             CollectTypesAndMethods();
             OptimizationTypesAndMethods();
             GenerateCode();
@@ -678,7 +853,7 @@ namespace HybridCLR.Editor.MethodBridge
 
         public void GenerateStructureSignatureStub(List<TypeInfo> types, List<string> lines)
         {
-            lines.Add("FullName2Signature hybridclr::interpreter::g_fullName2SignatureStub[] = {");
+            lines.Add("const FullName2Signature hybridclr::interpreter::g_fullName2SignatureStub[] = {");
             foreach (var type in types)
             {
                 TypeInfo isoType = ToIsomorphicType(type);
@@ -691,7 +866,7 @@ namespace HybridCLR.Editor.MethodBridge
         public void GenerateManaged2NativeStub(List<MethodDesc> methods, List<string> lines)
         {
             lines.Add($@"
-Managed2NativeMethodInfo hybridclr::interpreter::g_managed2nativeStub[] = 
+const Managed2NativeMethodInfo hybridclr::interpreter::g_managed2nativeStub[] = 
 {{
 ");
 
@@ -707,7 +882,7 @@ Managed2NativeMethodInfo hybridclr::interpreter::g_managed2nativeStub[] =
         public void GenerateNative2ManagedStub(List<MethodDesc> methods, List<string> lines)
         {
             lines.Add($@"
-Native2ManagedMethodInfo hybridclr::interpreter::g_native2managedStub[] = 
+const Native2ManagedMethodInfo hybridclr::interpreter::g_native2managedStub[] = 
 {{
 ");
 
@@ -723,7 +898,7 @@ Native2ManagedMethodInfo hybridclr::interpreter::g_native2managedStub[] =
         public void GenerateAdjustThunkStub(List<MethodDesc> methods, List<string> lines)
         {
             lines.Add($@"
-NativeAdjustThunkMethodInfo hybridclr::interpreter::g_adjustThunkStub[] = 
+const NativeAdjustThunkMethodInfo hybridclr::interpreter::g_adjustThunkStub[] = 
 {{
 ");
 

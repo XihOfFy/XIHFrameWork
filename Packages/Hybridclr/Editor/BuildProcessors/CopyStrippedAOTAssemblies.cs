@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-using UnityEditor.Il2Cpp;
 using UnityEditor.UnityLinker;
 using UnityEngine;
+#if !UNITY_2021_1_OR_NEWER
+using UnityEditor.Il2Cpp;
+#endif
 
 namespace HybridCLR.Editor.BuildProcessors
 {
@@ -36,8 +38,14 @@ namespace HybridCLR.Editor.BuildProcessors
                 case BuildTarget.Android:
                     return $"{projectDir}/Library/Bee/artifacts/Android/ManagedStripped";
                 case BuildTarget.iOS:
-                    return $"{projectDir}/Library/Bee/artifacts/iOS/ManagedStripped";
-                    case BuildTarget.WebGL:
+#if UNITY_TVOS
+                case BuildTarget.tvOS:
+#endif
+#if UNITY_VISIONOS
+                case BuildTarget.VisionOS:
+#endif
+                return $"{projectDir}/Library/Bee/artifacts/iOS/ManagedStripped";
+                case BuildTarget.WebGL:
                     return $"{projectDir}/Library/Bee/artifacts/WebGL/ManagedStripped";
                 case BuildTarget.StandaloneOSX:
                     return $"{projectDir}/Library/Bee/artifacts/MacStandalonePlayerBuildProgram/ManagedStripped";
@@ -45,9 +53,11 @@ namespace HybridCLR.Editor.BuildProcessors
                     return $"{projectDir}/Library/Bee/artifacts/PS4PlayerBuildProgram/ManagedStripped";
                 case BuildTarget.PS5:
                     return $"{projectDir}/Library/Bee/artifacts/PS5PlayerBuildProgram/ManagedStripped";
-#if TUANJIE_2022
+#if UNITY_WEIXINMINIGAME
                 case BuildTarget.WeixinMiniGame:
                     return $"{projectDir}/Library/Bee/artifacts/WeixinMiniGame/ManagedStripped";
+#endif
+#if UNITY_OPENHARMONY
                 case BuildTarget.OpenHarmony:
                     return $"{projectDir}/Library/Bee/artifacts/OpenHarmonyPlayerBuildProgram/ManagedStripped";
 #endif
@@ -64,9 +74,10 @@ namespace HybridCLR.Editor.BuildProcessors
         }
 
         public void OnBeforeConvertRun(BuildReport report, Il2CppBuildPipelineData data)
-        {            
+        {
             // 此回调只在 2020中调用
-            CopyStripDlls(GetStripAssembliesDir2020(data.target), data.target);
+            BuildTarget target = report.summary.platform;
+            CopyStripDlls(GetStripAssembliesDir2020(target), target);
         }
 #endif
 
@@ -94,7 +105,7 @@ namespace HybridCLR.Editor.BuildProcessors
         public void OnPostprocessBuild(BuildReport report)
         {
 #if UNITY_2021_1_OR_NEWER
-            BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
+            BuildTarget target = report.summary.platform;
             string srcStripDllPath = GetStripAssembliesDir2021(target);
             if (!string.IsNullOrEmpty(srcStripDllPath) && Directory.Exists(srcStripDllPath))
             {
@@ -105,7 +116,7 @@ namespace HybridCLR.Editor.BuildProcessors
 
         public void OnPreprocessBuild(BuildReport report)
         {
-            BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
+            BuildTarget target = report.summary.platform;
             var dstPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
             BashUtil.RecreateDir(dstPath);
         }

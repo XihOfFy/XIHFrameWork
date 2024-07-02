@@ -7,25 +7,19 @@ using UnityEditor.Build;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-#if UNITY_2022_2_OR_NEWER && UNITY_IOS
+#if UNITY_2022 && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS)
 
 namespace HybridCLR.Editor.BuildProcessors
 {
     public static class AddLil2cppSourceCodeToXcodeproj2022OrNewer
     {
-        //[MenuItem("HybridCLR/Modfiyxcode")]
-        //public static void Modify()
-        //{
-        //    OnPostProcessBuild(BuildTarget.iOS, $"{SettingsUtil.ProjectDir}/Build-iOS");
-        //}
 
         [PostProcessBuild]
         public static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
         {
-            if (target != BuildTarget.iOS || !HybridCLRSettings.Instance.enable)
+            if (!HybridCLRSettings.Instance.enable)
                 return;
-
-            string pbxprojFile = $"{pathToBuiltProject}/Unity-iPhone.xcodeproj/project.pbxproj";
+            string pbxprojFile = BuildProcessorUtil.GetXcodeProjectFile(pathToBuiltProject);
             RemoveExternalLibil2cppOption(pbxprojFile);
             CopyLibil2cppToXcodeProj(pathToBuiltProject);
         }
@@ -34,15 +28,25 @@ namespace HybridCLR.Editor.BuildProcessors
         {
             string pbxprojContent = File.ReadAllText(pbxprojFile, Encoding.UTF8);
             string removeBuildOption = @"--external-lib-il2-cpp=\""$PROJECT_DIR/Libraries/libil2cpp.a\""";
-            if (!pbxprojContent.Contains(removeBuildOption))
+            if (pbxprojContent.Contains(removeBuildOption))
             {
-                //throw new BuildFailedException("modified project.pbxproj fail");
-                Debug.LogError("[AddLil2cppSourceCodeToXcodeproj] modified project.pbxproj fail");
-                return;
+                pbxprojContent = pbxprojContent.Replace(removeBuildOption, "");
+                Debug.Log($"[AddLil2cppSourceCodeToXcodeproj] remove il2cpp build option '{removeBuildOption}' from file '{pbxprojFile}'");
             }
-            pbxprojContent = pbxprojContent.Replace(removeBuildOption, "");
+            else
+            {
+                Debug.LogWarning($"[AddLil2cppSourceCodeToXcodeproj] project.pbxproj remove building option:'{removeBuildOption}' fail. This may occur when 'Append' to existing xcode project in building");
+            }
+
+            int strShellScriptIndex1 = pbxprojContent.IndexOf("/* ShellScript */,");
+            int strShellScriptIndex2 = pbxprojContent.IndexOf("/* ShellScript */,", strShellScriptIndex1 + 10);
+            if (strShellScriptIndex2 >= 0)
+            {
+                pbxprojContent = pbxprojContent.Remove(strShellScriptIndex1, strShellScriptIndex2 - strShellScriptIndex1);
+                Debug.LogWarning($"[AddLil2cppSourceCodeToXcodeproj] remove duplicated '/* ShellScript */' from file '{pbxprojFile}'");
+            }
+
             File.WriteAllText(pbxprojFile, pbxprojContent, Encoding.UTF8);
-            Debug.Log($"[AddLil2cppSourceCodeToXcodeproj] remove il2cpp build option '{removeBuildOption}' from file '{pbxprojFile}'");
         }
 
         private static void CopyLibil2cppToXcodeProj(string pathToBuiltProject)

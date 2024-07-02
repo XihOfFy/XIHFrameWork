@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace HybridCLR.Editor.Meta
 {
-    public abstract class AssemblyCacheBase : IDisposable
+    public abstract class AssemblyCacheBase
     {
         private readonly IAssemblyResolver _assemblyPathResolver;
         private readonly ModuleContext _modCtx;
         private readonly AssemblyResolver _asmResolver;
-        private bool disposedValue;
         private bool _loadedNetstandard;
 
 
@@ -91,32 +90,10 @@ namespace HybridCLR.Editor.Meta
         {
             //Debug.Log($"do load module:{dllPath}");
             ModuleDefMD mod = ModuleDefMD.Load(File.ReadAllBytes(dllPath), _modCtx);
+            mod.EnableTypeDefFindCache = true;
             _asmResolver.AddToCache(mod);
             _loadedModulesIncludeNetstandard.Add(mod);
             return mod;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    foreach (var mod in _loadedModulesIncludeNetstandard)
-                    {
-                        mod.Dispose();
-                    }
-                    _loadedModulesIncludeNetstandard.Clear();
-                    LoadedModules.Clear();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
     }
 }

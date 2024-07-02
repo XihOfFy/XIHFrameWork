@@ -1,4 +1,5 @@
-﻿using HybridCLR.Editor.Installer;
+﻿using HybridCLR.Editor.BuildProcessors;
+using HybridCLR.Editor.Installer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,11 +57,11 @@ namespace HybridCLR.Editor.Commands
             switch(target)
             {
                 case BuildTarget.StandaloneWindows:
-                case BuildTarget.StandaloneWindows64: return $"{buildDir}/{target}";
+                case BuildTarget.StandaloneWindows64: return $"{buildDir}/{PlayerSettings.productName}.exe";
                 case BuildTarget.StandaloneOSX: return buildDir;
                 case BuildTarget.iOS: return buildDir;
                 case BuildTarget.Android: return buildDir;
-                case BuildTarget.StandaloneLinux64: return buildDir;
+                case BuildTarget.StandaloneLinux64: return $"{buildDir}/{PlayerSettings.productName}";
                 default: return buildDir;
             }
         }
@@ -81,103 +82,113 @@ namespace HybridCLR.Editor.Commands
 #elif UNITY_EDITOR_WIN
             bool oldCreateSolution = UnityEditor.WindowsStandalone.UserBuildSettings.createSolution;
 #endif
-#if TUANJIE_2022
+#if TUANJIE_2022_3_OR_NEWER
             bool oldOpenHarmonyProj = EditorUserBuildSettings.exportAsOpenHarmonyProject;
 #endif
             bool oldBuildScriptsOnly = EditorUserBuildSettings.buildScriptsOnly;
-            EditorUserBuildSettings.buildScriptsOnly = true;
 
-            string location = GetLocationPathName(outputPath, target);
             string oldBuildLocation = EditorUserBuildSettings.GetBuildLocation(target);
-            EditorUserBuildSettings.SetBuildLocation(target, location);
-
-            switch (target)
+            try
             {
-                case BuildTarget.StandaloneWindows:
-                case BuildTarget.StandaloneWindows64:
+                CheckSettings.DisableMethodBridgeDevelopmentFlagChecking = true;
+                EditorUserBuildSettings.buildScriptsOnly = true;
+
+                string location = GetLocationPathName(outputPath, target);
+                EditorUserBuildSettings.SetBuildLocation(target, location);
+
+                switch (target)
                 {
-#if UNITY_EDITOR_WIN
-                    UnityEditor.WindowsStandalone.UserBuildSettings.createSolution = true;
-#endif
+                    case BuildTarget.StandaloneWindows:
+                    case BuildTarget.StandaloneWindows64:
+                    {
+    #if UNITY_EDITOR_WIN
+                        UnityEditor.WindowsStandalone.UserBuildSettings.createSolution = true;
+    #endif
+                            break;
+                    }
+                    case BuildTarget.StandaloneOSX:
+                    {
+    #if UNITY_EDITOR_OSX
+                        UnityEditor.OSXStandalone.UserBuildSettings.createXcodeProject = true;
+    #endif
                         break;
+                    }
+    #if TUANJIE_2022_3_OR_NEWER
+                    case BuildTarget.HMIAndroid:
+    #endif
+                    case BuildTarget.Android:
+                    {
+                        EditorUserBuildSettings.exportAsGoogleAndroidProject = true;
+                        break;
+                    }
+    #if TUANJIE_2022_3_OR_NEWER
+                    case BuildTarget.OpenHarmony:
+                    {
+                        EditorUserBuildSettings.exportAsOpenHarmonyProject = true;
+                        break;
+                    }
+    #endif
                 }
-                case BuildTarget.StandaloneOSX:
+
+                Debug.Log($"GenerateStripedAOTDlls build option:{buildOptions}");
+
+                BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
                 {
-#if UNITY_EDITOR_OSX
-                    UnityEditor.OSXStandalone.UserBuildSettings.createXcodeProject = true;
-#endif
-                    break;
-                }
-#if TUANJIE_2022
-                case BuildTarget.HMIAndroid:
-#endif
-                case BuildTarget.Android:
+                    scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
+                    locationPathName = location,
+                    options = buildOptions,
+                    target = target,
+                    targetGroup = BuildPipeline.GetBuildTargetGroup(target),
+                };
+
+                var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+
+
+                if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
                 {
-                    EditorUserBuildSettings.exportAsGoogleAndroidProject = true;
-                    break;
+                    throw new Exception("GenerateStripedAOTDlls failed");
                 }
-#if TUANJIE_2022
-                case BuildTarget.OpenHarmony:
-                {
-                    EditorUserBuildSettings.exportAsOpenHarmonyProject = true;
-                    break;
-                }
-#endif
             }
-
-            Debug.Log($"GenerateStripedAOTDlls build option:{buildOptions}");
-
-            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
+            finally
             {
-                scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
-                locationPathName = location,
-                options = buildOptions,
-                target = target,
-                targetGroup = BuildPipeline.GetBuildTargetGroup(target),
-            };
+                CheckSettings.DisableMethodBridgeDevelopmentFlagChecking = false;
+                EditorUserBuildSettings.buildScriptsOnly = oldBuildScriptsOnly;
+                EditorUserBuildSettings.SetBuildLocation(target, oldBuildLocation);
 
-            var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-
-            EditorUserBuildSettings.buildScriptsOnly = oldBuildScriptsOnly;
-            EditorUserBuildSettings.SetBuildLocation(target, oldBuildLocation);
-
-            switch (target)
-            {
-                case BuildTarget.StandaloneWindows:
-                case BuildTarget.StandaloneWindows64:
+                switch (target)
+                {
+                    case BuildTarget.StandaloneWindows:
+                    case BuildTarget.StandaloneWindows64:
                     {
 #if UNITY_EDITOR_WIN
-                    UnityEditor.WindowsStandalone.UserBuildSettings.createSolution = oldCreateSolution;
+                        UnityEditor.WindowsStandalone.UserBuildSettings.createSolution = oldCreateSolution;
 #endif
                         break;
                     }
-                case BuildTarget.StandaloneOSX:
+                    case BuildTarget.StandaloneOSX:
                     {
 #if UNITY_EDITOR_OSX
-                        UnityEditor.OSXStandalone.UserBuildSettings.createXcodeProject = oldCreateSolution;
+                            UnityEditor.OSXStandalone.UserBuildSettings.createXcodeProject = oldCreateSolution;
 #endif
                         break;
                     }
-#if TUANJIE_2022
-                case BuildTarget.HMIAndroid:
+#if TUANJIE_2022_3_OR_NEWER
+                    case BuildTarget.HMIAndroid:
 #endif
-                case BuildTarget.Android:
-                {
-                    EditorUserBuildSettings.exportAsGoogleAndroidProject = oldExportAndroidProj;
-                    break;
-                }
-#if TUANJIE_2022
-                case BuildTarget.OpenHarmony:
-                {
-                    EditorUserBuildSettings.exportAsOpenHarmonyProject = oldOpenHarmonyProj;
-                    break;
-                }
+                    case BuildTarget.Android:
+                    {
+                        EditorUserBuildSettings.exportAsGoogleAndroidProject = oldExportAndroidProj;
+                        break;
+                    }
+#if TUANJIE_2022_3_OR_NEWER
+                    case BuildTarget.OpenHarmony:
+                    {
+                        EditorUserBuildSettings.exportAsOpenHarmonyProject = oldOpenHarmonyProj;
+                        break;
+                    }
 #endif
-            }
-
-            if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
-            {
-                throw new Exception("GenerateStripedAOTDlls failed");
+                }
             }
             Debug.Log($"GenerateStripedAOTDlls target:{target} path:{outputPath}");
         }

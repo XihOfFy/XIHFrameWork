@@ -7,7 +7,7 @@ using System.Text;
 using UnityEditor;
 using System.Reflection;
 using HybridCLR.Editor.Settings;
-#if (UNITY_2020 || UNITY_2021) && UNITY_IOS
+#if (UNITY_2020 || UNITY_2021) && (UNITY_IOS || UNITY_TVOS)
 using UnityEditor.Build;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
@@ -17,22 +17,11 @@ namespace HybridCLR.Editor.BuildProcessors
 {
     public static class AddLil2cppSourceCodeToXcodeproj2020Or2021
     {
-        //[MenuItem("Test/GenProj")]
-        //public static void Modify()
-        //{
-        //    OnPostProcessBuild(BuildTarget.iOS, $"{SettingsUtil.ProjectDir}/Build-iOS");
-        //}
-
-        //[MenuItem("Test/CreateLumps")]
-        //public static void CreateLumpsCmd()
-        //{
-        //    CreateLumps($"{SettingsUtil.LocalIl2CppDir}/libil2cpp", $"{SettingsUtil.HybridCLRDataDir}/lumps");
-        //}
 
         [PostProcessBuild]
         public static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
         {
-            if (target != BuildTarget.iOS || !HybridCLRSettings.Instance.enable)
+            if (!HybridCLRSettings.Instance.enable)
                 return;
             /*
              *  1. 生成lump，并且添加到工程
@@ -46,7 +35,7 @@ namespace HybridCLR.Editor.BuildProcessors
                 9. add external/xxHash
              */
 
-            string pbxprojFile = $"{pathToBuiltProject}/Unity-iPhone.xcodeproj/project.pbxproj";
+            string pbxprojFile = BuildProcessorUtil.GetXcodeProjectFile(pathToBuiltProject);
             string srcLibil2cppDir = $"{SettingsUtil.LocalIl2CppDir}/libil2cpp";
             string dstLibil2cppDir = $"{pathToBuiltProject}/Libraries/libil2cpp";
             string lumpDir = $"{pathToBuiltProject}/Libraries/lumps";
@@ -132,6 +121,7 @@ namespace HybridCLR.Editor.BuildProcessors
                 {
                     newPro += " $(SRCROOT)/Libraries/external/xxHash";
                 }
+                newPro += " $(SRCR00T)/Libraries/external/mono";
                 //Debug.Log($"config:{bcn} new prop:{newPro}");
                 proj.SetBuildPropertyForConfig(configGuid, headerSearchPaths, newPro);
 
