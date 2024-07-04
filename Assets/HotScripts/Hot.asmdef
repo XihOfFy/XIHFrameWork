@@ -10,7 +10,8 @@
         "HybridCLR.Runtime",
         "Unity.TextMeshPro",
         "Wx",
-        "FairyGUI"
+        "FairyGUI",
+        "Luban.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

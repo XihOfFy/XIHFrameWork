@@ -6,6 +6,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.code-philosophy.luban": {
+      "version": "file:Luban_unity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.cysharp.unitask": {
       "version": "file:UniTask",
       "depth": 0,
