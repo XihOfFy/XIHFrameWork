@@ -1,22 +1,11 @@
 ﻿using FairyGUI;
 using System;
 using System.Collections.Generic;
+using Tmpl;
 using UnityEngine;
 
 namespace XiHUI
 {
-    public enum Mode
-    {
-        None = 0,
-
-        Stack,      // 全屏栈窗口
-        Popup,      // 弹出式子窗口
-        Modal,      // 模态弹出框
-        TopMost,    // 顶层窗口(如Loading)
-
-        Max
-    }
-
     public enum State
     {
         None = 0,
@@ -34,7 +23,7 @@ namespace XiHUI
     {
         public State State { get; private set; }
 
-        public DialogOpenParams OpenParams { get; private set; }
+        public UIParam OpenParams { get; private set; }
 
         public string dialogName { get; protected set; }
 
@@ -59,7 +48,7 @@ namespace XiHUI
         {
         }
 
-        internal void SetOpenParams(DialogOpenParams openParams)
+        internal void SetOpenParams(UIParam openParams)
         {
             OpenParams = openParams;
             dialogName = OpenParams.DialogName;

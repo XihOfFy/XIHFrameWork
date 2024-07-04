@@ -21,8 +21,8 @@ MonoBehaviour:
     EnableAddressable: 0
     LocationToLower: 0
     IncludeAssetGUID: 0
-    IgnoreDefaultType: 1
     AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: Aot2Hot
       GroupDesc: "Aot2Hot\u7684\u5168\u90E8\u8D44\u6E90"
@@ -65,7 +65,7 @@ MonoBehaviour:
         UserData: 
     - GroupName: Default Group
       GroupDesc: UI
-      AssetTags: Fairy
+      AssetTags: UI
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/FairyRes
@@ -73,6 +73,19 @@ MonoBehaviour:
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Tmpl
+      GroupDesc: "\u914D\u7F6E"
+      AssetTags: Tmpl
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Tmpl
+        CollectorGUID: 8e2be00b96fb9d5459fda1f1a21ae201
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

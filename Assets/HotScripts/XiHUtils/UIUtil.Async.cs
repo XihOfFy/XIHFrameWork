@@ -1,18 +1,21 @@
 ﻿using Cysharp.Threading.Tasks;
+using Tmpl;
 using XiHUI;
 
 namespace XiHUtil
 {
     public static partial class UIUtil
     {
-        public async static UniTask<UIDialog> OpenDialogAsync(string dialogName, string packageName, string componentName, Mode layer = 0, bool isFull = true, bool isBlur = false, params string[] dependencyUIPackages)
+        async static UniTask<UIDialog> OpenDialogAsync(UIParam param)
         {
-            return await UIDialogManager.Instance.OpenAsync(dialogName, packageName, componentName, layer, isFull, isBlur, dependencyUIPackages);
+            return await UIDialogManager.Instance.OpenAsync(param);
         }
 
-        public async static UniTask<T> OpenDialogAsync<T>(string packageName, string componentName, Mode layer = 0, bool isFull = true, bool isBlur = false, params string[] dependencyUIPackages) where T : UIDialog
+        public async static UniTask<T> OpenDialogAsync<T>() where T : UIDialog
         {
-            return await OpenDialogAsync(typeof(T).Name, packageName, componentName, layer, isFull, isBlur, dependencyUIPackages) as T;
+            var key = typeof(T).Name;
+            var parmas = Tables.Instance.TbUIParam.Get(key);
+            return await OpenDialogAsync(parmas) as T;
         }
         /*public async static void LoadScene(string path) {
             (await OpenDialogAsync<SceneChangeDialog>()).Show(path).Forget();

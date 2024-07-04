@@ -3,31 +3,14 @@ using Cysharp.Threading.Tasks;
 using FairyGUI;
 using System;
 using System.Collections.Generic;
+using Tmpl;
+using Tmpl.UI;
 using UnityEngine;
 using XiHUtil;
 using YooAsset;
 
 namespace XiHUI
 {
-    public struct DialogOpenParams
-    {
-        public string DialogName { get; private set; }
-        public string PackageName { get; private set; }
-        public string ComponentName { get; private set; }
-        public Mode Layer { get; private set; }
-        public bool IsFull { get; private set; }
-        public bool IsBlur { get; private set; }
-
-        public DialogOpenParams(string dialogName, string packageName, string componentName, Mode layer, bool isFull, bool isBlur)
-        {
-            DialogName = dialogName;
-            PackageName = packageName;
-            ComponentName = componentName;
-            Layer = layer;
-            IsFull = isFull;
-            IsBlur = isBlur;
-        }
-    }
     /// <summary>
     /// UI窗口管理器
     /// </summary>
@@ -233,15 +216,15 @@ namespace XiHUI
         }
 
 
-        public UIDialog Open(string dialogName,string packageName, string componentName, Mode layer = 0, bool isFull = true, bool isBlur = false)
+        public UIDialog Open(UIParam param)
         {
-            if (!_dialogType.TryGetValue(dialogName, out var type))
+            if (!_dialogType.TryGetValue(param.DialogName, out var type))
                 return null;
 
-            if (!_layers.TryGetValue(layer, out var stack))
+            if (!_layers.TryGetValue(param.Layer, out var stack))
                 return null;
 
-            var dialog = stack.Get(dialogName);
+            var dialog = stack.Get(param.DialogName);
             if (dialog != null && dialog.State == State.Loading)
                 return null;
 
@@ -253,22 +236,22 @@ namespace XiHUI
             else
             {
                 dialog = Activator.CreateInstance(type) as UIDialog;
-                dialog.SetOpenParams(new DialogOpenParams(dialogName, packageName, componentName, layer, isFull, isBlur));
+                dialog.SetOpenParams(param);
                 stack.Push(dialog);
-                return CreateDialog(dialogName, packageName, componentName, layer, isFull, isBlur);
+                return CreateDialog(param);
             }
         }
 
-        private UIDialog CreateDialog(string dialogName, string packageName, string componentName, Mode layer, bool isFull, bool isBlur)
+        private UIDialog CreateDialog(UIParam param)
         {
-            if (!_layers.TryGetValue(layer, out var stack))
+            if (!_layers.TryGetValue(param.Layer, out var stack))
                 return null;
 
-            var dialog = stack.Get(dialogName);
+            var dialog = stack.Get(param.DialogName);
             if (dialog == null || dialog.State != State.Loading)
                 return null;
 
-            var compent = LoadUIComponent(packageName, componentName, dialog);
+            var compent = LoadUIComponent(param.PackageName, param.ComponentName, dialog);
 
             if (compent == null)
             {
@@ -280,7 +263,7 @@ namespace XiHUI
             if (dialog != null && dialog.State == State.Loading)
             {
                 UIControlBinding.BindFields(dialog, compent);
-                dialog.Open(compent, isFull, isBlur);
+                dialog.Open(compent, param.IsFull, param.IsBlur);
                 stack.Push(dialog);
                 dialog.Open();
             }
@@ -404,7 +387,7 @@ namespace XiHUI
             }
         }
 
-        private static List<DialogOpenParams> _recoverList = new List<DialogOpenParams>();
+        private static List<UIParam> _recoverList = new List<UIParam>();
         
         public void GetLayerList(Mode mode, ref IList<UIDialog> result)
         {

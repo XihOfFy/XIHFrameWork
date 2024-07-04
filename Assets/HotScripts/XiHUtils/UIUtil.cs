@@ -70,7 +70,7 @@ namespace XiHUtil
         public static async void ShowSystemTip(string tip)
         {
             //提示内容
-            (await OpenDialogAsync<SystemTipDialog>("Common", "SystemTip", Mode.TopMost)).Show(tip);
+            (await OpenDialogAsync<SystemTipDialog>()).Show(tip);
         }
     }
 }

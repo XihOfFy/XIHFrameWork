@@ -65,7 +65,7 @@ public class AOTGenericReferencesEditor
         "System.Linq.EnumerableSorter<",
         "System.Linq.OrderedEnumerable<",
 
-        "XiHUI.DialogOpenParams",
+        "XiHUI.UIParam",
         "System.Linq.Enumerable.",
         "System.Linq.OrderedEnumerable.",
     };

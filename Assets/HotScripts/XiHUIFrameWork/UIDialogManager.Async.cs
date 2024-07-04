@@ -3,6 +3,7 @@ using FairyGUI;
 using Hot;
 using System;
 using System.Collections.Generic;
+using Tmpl;
 using UnityEngine;
 using YooAsset;
 
@@ -13,15 +14,15 @@ namespace XiHUI
     /// </summary>
     public partial class UIDialogManager
     {
-        public async UniTask<UIDialog> OpenAsync(string dialogName, string packageName, string componentName, Mode layer = 0, bool isFull = true, bool isBlur = false, params string[] dependencyUIPackages)
+        public async UniTask<UIDialog> OpenAsync(UIParam param)
         {
-            if (!_dialogType.TryGetValue(dialogName, out var type))
+            if (!_dialogType.TryGetValue(param.DialogName, out var type))
                 return null;
 
-            if (!_layers.TryGetValue(layer, out var stack))
+            if (!_layers.TryGetValue(param.Layer, out var stack))
                 return null;
 
-            var dialog = stack.Get(dialogName);
+            var dialog = stack.Get(param.DialogName);
             if (dialog != null && dialog.State == State.Loading)
             { 
                 await UniTask.WaitUntil(()=>dialog.State != State.Loading);
@@ -42,24 +43,24 @@ namespace XiHUI
             else
             {
                 dialog = Activator.CreateInstance(type) as UIDialog;
-                dialog.SetOpenParams(new DialogOpenParams(dialogName, packageName, componentName, layer, isFull, isBlur));
+                dialog.SetOpenParams(param);
                 stack.Push(dialog);
-                return await CreateDialogAsync(dialog, packageName, componentName, stack, isFull, isBlur, dependencyUIPackages);
+                return await CreateDialogAsync(dialog, stack, param);
             }
         }
 
-        private async UniTask<UIDialog> CreateDialogAsync(UIDialog dialog, string packageName, string componentName, UIStack stack, bool isFull, bool isBlur, params string[] dependencyUIPackages)
+        private async UniTask<UIDialog> CreateDialogAsync(UIDialog dialog, UIStack stack, UIParam param)
         {
-            if (dependencyUIPackages.Length > 0) {
+            if (param.DependencyPackages.Count > 0) {
                 var tks = new List<UniTask>();
-                foreach (var dependency in dependencyUIPackages)
+                foreach (var dependency in param.DependencyPackages)
                 {
                     tks.Add(GetDependenceUIPackageAsync(dependency, dialog));
                 }
                 await UniTask.WhenAll(tks);
             }
 
-            var compent = await LoadUIComponentAsync(packageName, componentName, dialog);
+            var compent = await LoadUIComponentAsync(param.PackageName, param.ComponentName, dialog);
 
             if (compent == null)
             {
@@ -68,7 +69,7 @@ namespace XiHUI
             }
 
             UIControlBinding.BindFields(dialog, compent);
-            dialog.Open(compent, isFull, isBlur);
+            dialog.Open(compent, param.IsFull, param.IsBlur);
             stack.Push(dialog);
             dialog.Open();
 
@@ -172,7 +173,7 @@ namespace XiHUI
                 await InitCommonPackageAsync(_persistentPkg);
 
             foreach (var ui in _recoverList)
-                Open(ui.DialogName, ui.PackageName, ui.ComponentName, ui.Layer, ui.IsFull, ui.IsBlur);
+                Open(ui);
 
             _recoverList.Clear();
         }

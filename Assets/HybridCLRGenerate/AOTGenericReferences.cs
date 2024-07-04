@@ -102,14 +102,14 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.UniTaskCompletionSourceCore<object>
 	// System.Action<Cysharp.Threading.Tasks.UniTask>
 	// System.Action<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Action<XiHUI.DialogOpenParams>
+	// System.Action<XiHUI.UIParam>
 	// System.Action<byte>
 	// System.Action<int,object>
 	// System.Action<int>
 	// System.Action<object>
 	// System.Collections.Generic.ArraySortHelper<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.ArraySortHelper<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.ArraySortHelper<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.ArraySortHelper<XiHUI.UIParam>
 	// System.Collections.Generic.ArraySortHelper<object>
 	// System.Collections.Generic.Comparer<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.Comparer<System.Collections.Generic.KeyValuePair<object,uint>>
@@ -121,7 +121,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Comparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>
 	// System.Collections.Generic.Comparer<System.ValueTuple<byte,System.ValueTuple<byte,object>>>
 	// System.Collections.Generic.Comparer<System.ValueTuple<byte,object>>
-	// System.Collections.Generic.Comparer<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.Comparer<XiHUI.UIParam>
 	// System.Collections.Generic.Comparer<byte>
 	// System.Collections.Generic.Comparer<object>
 	// System.Collections.Generic.Comparer<uint>
@@ -164,30 +164,30 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.ICollection<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.ICollection<XiHUI.UIParam>
 	// System.Collections.Generic.ICollection<object>
 	// System.Collections.Generic.IComparer<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.IComparer<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.IComparer<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.IComparer<XiHUI.UIParam>
 	// System.Collections.Generic.IComparer<object>
 	// System.Collections.Generic.IComparer<uint>
 	// System.Collections.Generic.IEnumerable<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.IEnumerable<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.IEnumerable<XiHUI.UIParam>
 	// System.Collections.Generic.IEnumerable<object>
 	// System.Collections.Generic.IEnumerator<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.IEnumerator<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.IEnumerator<XiHUI.UIParam>
 	// System.Collections.Generic.IEnumerator<object>
 	// System.Collections.Generic.IEqualityComparer<int>
 	// System.Collections.Generic.IEqualityComparer<object>
 	// System.Collections.Generic.IList<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.IList<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.IList<XiHUI.UIParam>
 	// System.Collections.Generic.IList<object>
 	// System.Collections.Generic.KeyValuePair<int,object>
 	// System.Collections.Generic.KeyValuePair<object,object>
@@ -197,11 +197,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.LinkedListNode<object>
 	// System.Collections.Generic.List.Enumerator<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.List.Enumerator<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.List.Enumerator<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.List.Enumerator<XiHUI.UIParam>
 	// System.Collections.Generic.List.Enumerator<object>
 	// System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.Generic.List<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.List<XiHUI.UIParam>
 	// System.Collections.Generic.List<object>
 	// System.Collections.Generic.ObjectComparer<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.ObjectComparer<System.Collections.Generic.KeyValuePair<object,uint>>
@@ -212,7 +212,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>
 	// System.Collections.Generic.ObjectComparer<System.ValueTuple<byte,System.ValueTuple<byte,object>>>
 	// System.Collections.Generic.ObjectComparer<System.ValueTuple<byte,object>>
-	// System.Collections.Generic.ObjectComparer<XiHUI.DialogOpenParams>
+	// System.Collections.Generic.ObjectComparer<XiHUI.UIParam>
 	// System.Collections.Generic.ObjectComparer<byte>
 	// System.Collections.Generic.ObjectComparer<object>
 	// System.Collections.Generic.ObjectComparer<uint>
@@ -231,11 +231,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectEqualityComparer<ushort>
 	// System.Collections.ObjectModel.ReadOnlyCollection<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.ObjectModel.ReadOnlyCollection<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Collections.ObjectModel.ReadOnlyCollection<XiHUI.DialogOpenParams>
+	// System.Collections.ObjectModel.ReadOnlyCollection<XiHUI.UIParam>
 	// System.Collections.ObjectModel.ReadOnlyCollection<object>
 	// System.Comparison<Cysharp.Threading.Tasks.UniTask>
 	// System.Comparison<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Comparison<XiHUI.DialogOpenParams>
+	// System.Comparison<XiHUI.UIParam>
 	// System.Comparison<object>
 	// System.Func<System.Collections.Generic.KeyValuePair<object,uint>,uint>
 	// System.Func<byte>
@@ -257,7 +257,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Nullable<long>
 	// System.Predicate<Cysharp.Threading.Tasks.UniTask>
 	// System.Predicate<System.Collections.Generic.KeyValuePair<object,uint>>
-	// System.Predicate<XiHUI.DialogOpenParams>
+	// System.Predicate<XiHUI.UIParam>
 	// System.Predicate<object>
 	// System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>>>
 	// System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>>

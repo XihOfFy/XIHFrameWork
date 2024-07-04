@@ -2,6 +2,8 @@
 using FairyGUI;
 using System.Collections.Generic;
 using UnityEngine;
+using Tmpl.UI;
+using Tmpl;
 
 
 namespace XiHUI
@@ -157,9 +159,9 @@ namespace XiHUI
 		/// 关闭全部UI
 		/// </summary>
 		/// <param name="exceptNames">关闭全部UI时的排除列表</param>
-		private List<DialogOpenParams> _temp = new List<DialogOpenParams>();
+		private List<UIParam> _temp = new List<UIParam>();
         readonly static HashSet<string> defaultExceptDialogs=new HashSet<string>() { };//不会随场景跳转而关闭的UI
-        public List<DialogOpenParams> Clear(HashSet<string> exceptNames = null)
+        public List<UIParam> Clear(HashSet<string> exceptNames = null)
 		{
 			if (exceptNames == null) exceptNames = defaultExceptDialogs;
             _temp.Clear();

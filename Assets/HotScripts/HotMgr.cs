@@ -8,6 +8,9 @@ using Cysharp.Threading.Tasks;
 using XiHUtil;
 using TMPro;
 using XiHSound;
+using Tmpl;
+using SimpleJSON;
+
 #if UNITY_WX
 using WeChatWASM;
 #endif
@@ -31,7 +34,8 @@ namespace Hot
         }
         async UniTaskVoid InitHot() {
             //如果需要将字体打包到AssetBundle，那么需要自行加载并注册字体
-            var font = YooAssets.LoadAssetSync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            var font = YooAssets.LoadAssetAsync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            await font.ToUniTask();
             FontManager.RegisterFont(new DynamicFont("JTFont", font.AssetObject as Font), "JTFont");
 /*
             //tmp pro 字体 有点糊，先用上面字体
@@ -43,12 +47,15 @@ namespace Hot
             await UIDialogManager.Instance.InitCommonPackageAsync(new List<string>() { "Common"});
             //UIDialogManager.Instance.InitConfig();
 
+            await Tables.LoadAllTmpl();
+            var datat = Tables.Instance.TbUIParam.DataList;
+            foreach (var data in datat) Debug.Log(data);
 
             DontDestroyOnLoad(this.gameObject);//包含事件监听组件EventSystem AudioListener
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             await YooAssets.LoadSceneAsync("Assets/Res/HotScene/Home.unity").ToUniTask();
-            await UIUtil.OpenDialogAsync<HomeDialog>("Home","Home",Mode.Stack);
+            await UIUtil.OpenDialogAsync<HomeDialog>();
 
             _ = SoundMgr.Instance;//初始化
         }

@@ -1,0 +1,38 @@
+[
+  {
+    "dialog_name": "SceneChangeDialog",
+    "package_name": "SceneChange",
+    "component_name": "SceneChange",
+    "dependency_packages": [],
+    "layer": 4,
+    "isFull": true,
+    "isBlur": false
+  },
+  {
+    "dialog_name": "SystemTipDialog",
+    "package_name": "Common",
+    "component_name": "SystemTip",
+    "dependency_packages": [],
+    "layer": 4,
+    "isFull": true,
+    "isBlur": false
+  },
+  {
+    "dialog_name": "ChooseDialog",
+    "package_name": "Common",
+    "component_name": "Choose",
+    "dependency_packages": [],
+    "layer": 2,
+    "isFull": true,
+    "isBlur": false
+  },
+  {
+    "dialog_name": "HomeDialog",
+    "package_name": "Home",
+    "component_name": "Home",
+    "dependency_packages": [],
+    "layer": 1,
+    "isFull": true,
+    "isBlur": false
+  }
+]

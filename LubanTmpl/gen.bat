@@ -1,11 +1,15 @@
 set WORKSPACE=..
-set LUBAN_DLL=%WORKSPACE%\Tools\Luban\Luban.dll
+set LUBAN_DLL=%WORKSPACE%\LubanTmpl\Tools\Luban.dll
 set CONF_ROOT=.
+set OUT_DATA=..\Assets\Res\Tmpl
+set OUT_CODE=..\Assets\HotScripts\Luban\Tmpl
 
 dotnet %LUBAN_DLL% ^
-    -t all ^
+    -t client ^
+	-c cs-simple-json ^
     -d json ^
     --conf %CONF_ROOT%\luban.conf ^
-    -x outputDataDir=output
+	-x outputCodeDir=%OUT_CODE% ^
+    -x outputDataDir=%OUT_DATA%
 
 pause
