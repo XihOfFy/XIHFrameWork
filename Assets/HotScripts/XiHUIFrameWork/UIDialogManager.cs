@@ -1,6 +1,7 @@
 ﻿using Aot;
 using Cysharp.Threading.Tasks;
 using FairyGUI;
+using Hot;
 using System;
 using System.Collections.Generic;
 using Tmpl;
@@ -207,11 +208,7 @@ namespace XiHUI
             }
 
             if (gc) {
-                YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
-                GC.Collect();
-#if UNITY_WX
-            WeChatWASM.WX.TriggerGC();
-#endif
+                PlatformUtil.TriggerGC();
             }
         }
 
