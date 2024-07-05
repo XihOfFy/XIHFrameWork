@@ -48,8 +48,6 @@ namespace Hot
             //UIDialogManager.Instance.InitConfig();
 
             await Tables.LoadAllTmpl();
-            var datat = Tables.Instance.TbUIParam.DataList;
-            foreach (var data in datat) Debug.Log(data);
 
             DontDestroyOnLoad(this.gameObject);//包含事件监听组件EventSystem AudioListener
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
