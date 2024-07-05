@@ -32,7 +32,9 @@
 
 ## 首次运行
 
-- 进入`LubanTmpl`文件夹，执行`gen.bat`，生成必要的配置代码和配置到`Assets/HotScripts/Luban/Tmpl/`和`Assets/Res/Tmpl/`
+- 进入`LubanTmpl`文件夹，执行`gen.bat`，生成必要的配置代码和配置到`Assets/HotScripts/Luban/Tmpl/`和`Assets/Res/Tmpl/`文件夹
+
+- 进入`FairyPrj`文件夹，使用[FairyGUI](https://fairygui.com/download)打开`FGUIProject.fairy`项目文件，打开后在左上角找到`文件>发布设置...`菜单栏，点击后弹出界面左下角，点击`全部发布`，UI文件将自动发布到`Assets/Res/FairyRes`文件夹
 
 - 调整`Assets/Resources/{nameof(XIHFrontSetting)}.asset`中的web地址路径（或者删除，运行后重新生成本地Web路径），若存在`XIHWebServerRes\Front`文件夹，先全部删除，第一次运行会自动生成
   
