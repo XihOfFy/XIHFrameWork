@@ -32,6 +32,8 @@
 
 ## 首次运行
 
+- 进入`LubanTmpl`文件夹，执行`gen.bat`，生成必要的配置代码和配置到`Assets/HotScripts/Luban/Tmpl/`和`Assets/Res/Tmpl/`
+
 - 调整`Assets/Resources/{nameof(XIHFrontSetting)}.asset`中的web地址路径（或者删除，运行后重新生成本地Web路径），若存在`XIHWebServerRes\Front`文件夹，先全部删除，第一次运行会自动生成
   
   Windows下菜单栏 XIHUtil/Server/WebSvr 即可开启本地web服务；
