@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#define USE_TMP_FONT
+using UnityEngine;
 using TMPro;
 using YooAsset;
 using Aot;
@@ -8,6 +9,7 @@ using System;
 using Object = UnityEngine.Object;
 using HybridCLR;
 using System.Reflection;
+using FairyGUI;
 
 namespace Aot2Hot
 {
@@ -15,7 +17,7 @@ namespace Aot2Hot
     public partial class Aot2HotMgr : MonoBehaviour
     {
         public TMP_Text tip;
-        public Image progerssImg;
+        public UnityEngine.UI.Image progerssImg;
         private void Awake()
         {
             tip.text = "请稍等一会";
@@ -30,7 +32,32 @@ namespace Aot2Hot
         }
         IEnumerator IEAwake()
         {
-            yield return YooAssets.LoadAllAssetsAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            var assets = YooAssets.LoadAllAssetsAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            yield return assets;
+#if USE_TMP_FONT
+            TMP_FontAsset font = null;
+#else
+            Font font = null;
+#endif
+            foreach (var ass in assets.AllAssetObjects) {
+#if USE_TMP_FONT
+                if (ass is TMP_FontAsset f)
+#else
+                if (ass is Font f)
+#endif
+                {
+                    font = f;
+                    break;
+                }
+            }
+#if USE_TMP_FONT
+            FontManager.RegisterFont(new TMPFont() { fontAsset = font, name = "JTFont" });//tmp pro 字体 有点糊
+#else
+            FontManager.RegisterFont(new DynamicFont("JTFont", font), "JTFont");
+#endif
+            UIConfig.defaultFont = "JTFont"; //另一个方法是FGUI项目里添加jtfont字体，直接引用，发布时字体不会发布，而是找该字体的注册 https://www.fairygui.com/docs/editor/font
+            UIPackage.unloadBundleByFGUI = false;
+
             var localVer = new Version(Application.version);
             var remteVer = new Version(AotConfig.frontConfig.focusVersion);
             if (remteVer.CompareTo(localVer) > 0)

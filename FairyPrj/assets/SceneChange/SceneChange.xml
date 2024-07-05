@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0_oc04" name="n0" xy="0,0" size="1080,1920" alpha="0.8" type="rect" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_oc04" name="tip" xy="166,1426" size="748,64" fontSize="32" color="#ffffff" align="center" autoSize="none" text="正在切换场景。。。">
+      <relation target="" sidePair="width-width,bottom-bottom"/>
+    </text>
+  </displayList>
+</component>

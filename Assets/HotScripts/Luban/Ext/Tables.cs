@@ -34,7 +34,7 @@ namespace Tmpl
             });
             asHandle.Release();
             await UniTask.Yield();//避免内存占用峰值高，GC一下
-            PlatformUtil.TriggerGC();
+            PlatformUtil.TriggerGC().Forget();
         }
     }
 }

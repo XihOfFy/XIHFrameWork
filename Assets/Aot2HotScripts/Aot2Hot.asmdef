@@ -8,7 +8,8 @@
         "YooAsset",
         "HybridCLR.Runtime",
         "Unity.TextMeshPro",
-        "UnityLogsViwer"
+        "LogViewer",
+        "FairyGUI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

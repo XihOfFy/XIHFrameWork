@@ -1,0 +1,11 @@
+{
+  "name": "my-plugin",
+  "displayName": "通用插件",
+  "description": "主要用于测试功能",
+  "version": "1.0",
+  "author": {
+    "name": "Administrator"
+  },
+  "icon": "",
+  "main": "main.js"
+}

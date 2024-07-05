@@ -9,7 +9,6 @@ namespace Hot
         GButton startBtn;
         protected override void InitComponent()
         {
-            base.InitComponent();
             startBtn.onClick.Add(OnStarBtn);
         }
 
