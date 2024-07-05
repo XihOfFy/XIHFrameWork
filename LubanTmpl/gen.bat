@@ -6,8 +6,8 @@ set OUT_CODE=..\Assets\HotScripts\Luban\Tmpl
 
 dotnet %LUBAN_DLL% ^
     -t client ^
-	-c cs-simple-json ^
-    -d json ^
+	-c cs-bin ^
+    -d bin ^
     --conf %CONF_ROOT%\luban.conf ^
 	-x outputCodeDir=%OUT_CODE% ^
     -x outputDataDir=%OUT_DATA%

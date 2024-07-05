@@ -2,7 +2,6 @@
 using FairyGUI;
 using System.Collections.Generic;
 using UnityEngine;
-using Tmpl.UI;
 using Tmpl;
 
 
