@@ -5,9 +5,8 @@ using System.Linq;
 using UnityEngine;
 using XiHUtil;
 using YooAsset;
-#if UNITY_WX
-using WeChatWASM;
-#endif
+using Tmpl;
+using Hot;
 
 namespace XiHSound
 {
@@ -59,9 +58,11 @@ namespace XiHSound
                 soundEnable = value;
             }
         }
-        public bool Vibrate {
+        public bool Vibrate
+        {
             get => vibrate;
-            set{
+            set
+            {
                 PlayerPrefsUtil.Set(VIBRATE_ENABLE, value);
                 vibrate = value;
             }
@@ -93,9 +94,9 @@ namespace XiHSound
             }
         }
 
-        Dictionary<string, AssetHandle> abHandles;
-        FIFO recentBgmUseQue;
-        FIFO recentSoundUseQue;
+        Dictionary<int, AssetHandle> abHandles;
+        LRU recentBgmUseQue;
+        LRU recentSoundUseQue;
         private void Awake()
         {
             unitSec = new WaitForSecondsRealtime(0.1f);
@@ -103,11 +104,11 @@ namespace XiHSound
             musicSource = gameObject.AddComponent<AudioSource>();
             soundSource = gameObject.AddComponent<AudioSource>();
             bgmEnable = PlayerPrefsUtil.Get(BGM_ENABLE, true);
-            soundEnable =PlayerPrefsUtil.Get(SOUND_ENABLE, true);
+            soundEnable = PlayerPrefsUtil.Get(SOUND_ENABLE, true);
             vibrate = PlayerPrefsUtil.Get(VIBRATE_ENABLE, true);
-            abHandles = new Dictionary<string, AssetHandle>();
-            recentBgmUseQue = new FIFO(1);
-            recentSoundUseQue = new FIFO(16);
+            abHandles = new Dictionary<int, AssetHandle>();
+            recentBgmUseQue = new LRU(1);
+            recentSoundUseQue = new LRU(16);
             InitAudioMixer();
         }
         void InitAudioMixer()
@@ -122,32 +123,43 @@ namespace XiHSound
             soundVolume = PlayerPrefsUtil.Get(SOUND_VOLUME, 1.0f);
             soundSource.volume = soundVolume;
         }
-        public async UniTaskVoid PlayBGM(string bgmAB)
+        public void PlayBGM(int bgId)
+        {
+            PlayBGMById(bgId).Forget();
+        }
+        async UniTaskVoid PlayBGMById(int bgId)
         {
             if (!bgmEnable) return;
-            AssetHandle handle;
-            if (abHandles.ContainsKey(bgmAB))
+            var cfg = Tables.Instance.TbAudio.Get(bgId);
+            if (cfg == null)
             {
-                handle = abHandles[bgmAB];
+                Debug.LogError("无此音乐ID：" + bgId);
+                return;
+            }
+            AssetHandle handle;
+            if (abHandles.ContainsKey(bgId))
+            {
+                handle = abHandles[bgId];
                 await UniTask.WaitUntil(() => handle.IsDone || !handle.IsValid);
                 if (!handle.IsValid)
                 {
-                    abHandles.Remove(bgmAB);
-                    PlayBGM(bgmAB).Forget();
-                    Debug.LogWarning($"此音效ID {bgmAB} 已经释放，无法继续播放");
+                    abHandles.Remove(bgId);
+                    PlayBGMById(bgId).Forget();
+                    Debug.LogWarning($"此音效ID {bgId} 已经释放，无法继续播放");
                     return;
                 }
             }
             else
             {
-                handle = YooAssets.LoadAssetAsync<AudioClip>(bgmAB);
-                abHandles.Add(bgmAB, handle);
+                handle = YooAssets.LoadAssetAsync<AudioClip>(cfg.Path);
+                abHandles.Add(bgId, handle);
                 await handle.ToUniTask();
             }
-            recentBgmUseQue.InAndOut(bgmAB, abHandles);
+            recentBgmUseQue.InAndOut(bgId, abHandles);
             PlayBGM(handle.AssetObject as AudioClip);
         }
-        public void StopBGM() {
+        public void StopBGM()
+        {
             if (!bgmEnable) return;
             musicSource.Stop();
             //StartCoroutine(nameof(IEStopBGM));
@@ -161,29 +173,40 @@ namespace XiHSound
             musicSource.loop = true;
             musicSource.Play();
         }
-        public async UniTaskVoid PlaySound(string soundAB)
+        public void PlaySound(int soundId)
+        {
+            PlaySoundById(soundId).Forget();
+        }
+        async UniTaskVoid PlaySoundById(int soundId)
         {
             if (!soundEnable) return;
+            var cfg = Tables.Instance.TbAudio.Get(soundId);
+            if (cfg == null)
+            {
+                Debug.LogError("无此音效ID：" + soundId);
+                return;
+            }
             AssetHandle handle;
 
-            if (abHandles.ContainsKey(soundAB))
+            if (abHandles.ContainsKey(soundId))
             {
-                handle = abHandles[soundAB];
+                handle = abHandles[soundId];
                 await UniTask.WaitUntil(() => handle.IsDone || !handle.IsValid);
                 if (!handle.IsValid)
                 {
-                    abHandles.Remove(soundAB);
-                    PlaySound(soundAB).Forget();
-                    Debug.LogWarning($"此音效ID {soundAB} 已经释放，无法继续播放");
+                    abHandles.Remove(soundId);
+                    PlaySoundById(soundId).Forget();
+                    Debug.LogWarning($"此音效ID {soundId} 已经释放，无法继续播放");
                     return;
                 }
             }
-            else {
-                handle = YooAssets.LoadAssetAsync<AudioClip>(soundAB);
-                abHandles.Add(soundAB, handle);
+            else
+            {
+                handle = YooAssets.LoadAssetAsync<AudioClip>(cfg.Path);
+                abHandles.Add(soundId, handle);
                 await handle.ToUniTask();
             }
-            recentSoundUseQue.InAndOut(soundAB, abHandles);
+            recentSoundUseQue.InAndOut(soundId, abHandles);
             PlaySound(handle.AssetObject as AudioClip);
         }
         void PlaySound(AudioClip sound)
@@ -192,27 +215,16 @@ namespace XiHSound
             soundSource.PlayOneShot(sound, soundVolume);
             //AudioSource.PlayClipAtPoint(sound,Vector3.zero,1);
         }
-        public void PlayVibrate(int times=1) {
-            while (--times >= 0) {
+        public void PlayVibrate(int times = 1)
+        {
+            while (--times >= 0)
+            {
                 if (!vibrate) return;
-#if UNITY_ANDROID || UNITY_IOS
-                Handheld.Vibrate();
-#elif UNITY_DY
-                if (Application.platform == RuntimePlatform.Android && !StarkSDKSpace.CanIUse.Vibrate)
-                {
-                    UnityEngine.Debug.LogError("当前宿主的Container版本过低，不可使用该接口");
-                }
-                else {
-                    long[] pattern = { 0, 100, 1000, 300 };
-                    StarkSDKSpace.StarkSDK.API.Vibrate(pattern);
-                }
-#elif UNITY_WX
-                WX.VibrateShort(new VibrateShortOption() { type = "medium" });
-#endif
+                PlatformUtil.Vibrate();
             }
         }
         Coroutine bgmCor;
-        void MuteBgm(bool mute)
+        public void MuteBgm(bool mute)
         {
             if (bgmCor != null) StopCoroutine(bgmCor);
             if (mute)
@@ -275,16 +287,17 @@ namespace XiHSound
         }
 
 
-        class FIFO {
-            Dictionary<string, uint> dic;
+        class LRU
+        {
+            Dictionary<int, uint> dic;
             int mCount;
             uint order = 0;
-            public FIFO(int maxCount)
+            public LRU(int maxCount)
             {
-                dic = new Dictionary<string, uint>();
-                mCount = maxCount<1?1:maxCount;
+                dic = new Dictionary<int, uint>();
+                mCount = maxCount < 1 ? 1 : maxCount;
             }
-            public void InAndOut(string item, Dictionary<string, AssetHandle> abHandles)
+            public void InAndOut(int item, Dictionary<int, AssetHandle> abHandles)
             {
                 dic[item] = ++order;
                 if (dic.Count > mCount)
@@ -309,8 +322,8 @@ namespace XiHSound
                             break;
                         }
                     }
-                    YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
                 }
+                PlatformUtil.TriggerGC().Forget();
             }
         }
     }

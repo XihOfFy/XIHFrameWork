@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEngine;
 using WeChatWASM;
 using YooAsset;
 
@@ -24,6 +25,17 @@ namespace Hot
             WX.SetPreferredFramesPerSecond(frame);//有些ios手机30帧可能会出现画面闪屏情况
 #else
             Application.targetFrameRate = frame;
+#endif
+        }
+
+        internal static void Vibrate()
+        {
+#if UNITY_WX
+            WX.VibrateShort(new VibrateShortOption() { type = "medium" });
+#elif UNITY_ANDROID || UNITY_IOS
+            Handheld.Vibrate();
+#else
+            Debug.LogWarning("当前平台不支持震动");
 #endif
         }
     }

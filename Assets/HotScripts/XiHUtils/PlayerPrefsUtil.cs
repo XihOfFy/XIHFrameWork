@@ -1,7 +1,7 @@
 ﻿#if UNITY_WX && !UNITY_EDITOR
 #define UNITY_WX_WITHOUT_EDITOR
 #endif
-#if UNITY_WX
+#if UNITY_WX_WITHOUT_EDITOR
 using WeChatWASM;
 #endif
 using System.Collections;

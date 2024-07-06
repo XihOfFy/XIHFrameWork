@@ -11,7 +11,6 @@ namespace Hot
         private void Awake()
         {
             instance = this;
-            YooAssets.GetPackage(AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
         }
         private void OnDestroy()
         {

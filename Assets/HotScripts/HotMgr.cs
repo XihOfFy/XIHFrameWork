@@ -21,8 +21,6 @@ namespace Hot
 
         private void Awake()
         {
-            YooAssets.GetPackage(AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
-
 #if UNITY_WX
             WX.InitSDK(_ => {
                 Debug.Log($" WX.InitSDK:{_}");
@@ -37,8 +35,8 @@ namespace Hot
             //UIDialogManager.Instance.InitConfig();
 
             await Tables.LoadAllTmpl();
-            _ = SoundMgr.Instance;//初始化音频
-
+            SoundMgr.Instance.PlayBGM(1);//初始化音频，并播放一个音乐
+            
             DontDestroyOnLoad(this.gameObject);//包含事件监听组件EventSystem AudioListener
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             PlatformUtil.SetFramePerSecond(60);

@@ -63,9 +63,9 @@ MonoBehaviour:
         FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
-    - GroupName: Default Group
-      GroupDesc: UI
-      AssetTags: UI
+    - GroupName: Fairy
+      GroupDesc: FairyUI
+      AssetTags: Fairy
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/FairyRes
@@ -83,6 +83,27 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/Res/Tmpl
         CollectorGUID: 8e2be00b96fb9d5459fda1f1a21ae201
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Audio
+      GroupDesc: "\u97F3\u9891"
+      AssetTags: Audio
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Audio/Music
+        CollectorGUID: 24e2451e76452ff4fa8326218ebb21a2
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Audio/Sound
+        CollectorGUID: f01e57e308cb64f43bd53c3b77aeb5a8
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
