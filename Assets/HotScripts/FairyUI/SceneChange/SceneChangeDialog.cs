@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+ï»¿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using XiHUI;
@@ -14,11 +14,11 @@ namespace Hot
         GTextField tip;
 
         /// <summary>
-        /// Ìø×ª³¡¾°£¬ÇÒÍê±ÏºóÖ±½Ó´ò¿ª¶ÔÓ¦½çÃæ
+        /// è·³è½¬åœºæ™¯ï¼Œä¸”å®Œæ¯•åç›´æ¥æ‰“å¼€å¯¹åº”ç•Œé¢
         /// </summary>
-        /// <typeparam name="T">Ìø×ªºóµÄ½çÃæ</typeparam>
-        /// <param name="path">³¡¾°Â·¾¶</param>
-        /// <param name="keepDialogs">½çÃæ²»»áÒòÎªÇĞ»»³¡¾°¶ø¹Ø±Õ</param>
+        /// <typeparam name="T">è·³è½¬åçš„ç•Œé¢</typeparam>
+        /// <param name="path">åœºæ™¯è·¯å¾„</param>
+        /// <param name="keepDialogs">ç•Œé¢ä¸ä¼šå› ä¸ºåˆ‡æ¢åœºæ™¯è€Œå…³é—­</param>
         /// <returns></returns>
         public UniTask<T> Show<T>(string path, HashSet<string> keepDialogs = null) where T : UIDialog
         {
@@ -26,7 +26,7 @@ namespace Hot
             loadQue.Enqueue(() => {
                 return Show(tcs, path, keepDialogs);
             });
-            if (loadQue.Count > 1) return tcs.Task;//µÈ´ı
+            if (loadQue.Count > 1) return tcs.Task;//ç­‰å¾…
             return Show(tcs, path, keepDialogs);
         }
 
@@ -40,10 +40,10 @@ namespace Hot
         }
 
         /// <summary>
-        /// Ìø×ª³¡¾°
+        /// è·³è½¬åœºæ™¯
         /// </summary>
-        /// <param name="path">³¡¾°Â·¾¶</param>
-        /// <param name="keepDialogs">½çÃæ²»»áÒòÎªÇĞ»»³¡¾°¶ø¹Ø±Õ</param>
+        /// <param name="path">åœºæ™¯è·¯å¾„</param>
+        /// <param name="keepDialogs">ç•Œé¢ä¸ä¼šå› ä¸ºåˆ‡æ¢åœºæ™¯è€Œå…³é—­</param>
         /// <returns></returns>
         public UniTask<SceneChangeDialog> Show(string path, HashSet<string> keepDialogs=null)
         {
@@ -51,7 +51,7 @@ namespace Hot
             loadQue.Enqueue(() => {
                 return Show(tcs, path, keepDialogs);
             });
-            if (loadQue.Count > 1) return tcs.Task;//µÈ´ı
+            if (loadQue.Count > 1) return tcs.Task;//ç­‰å¾…
             return Show(tcs, path, keepDialogs);
         }
         async UniTask<SceneChangeDialog> Show(UniTaskCompletionSource<SceneChangeDialog> tcs, string path, HashSet<string> keepDialogs)
@@ -63,11 +63,11 @@ namespace Hot
         }
         async UniTask _show(string path, HashSet<string> keepDialogs)
         {
-            tip.SetText("ÕıÔÚ¼ÓÔØ³¡¾°:"+ path);
-            await UniTask.Yield();//µÈ´ıÒ»Ö¡£¬·½±ãÉÏÒ»¸öUIÕ¹Ê¾Íê±Ï
+            tip.SetText("æ­£åœ¨åŠ è½½åœºæ™¯:"+ path);
+            await UniTask.Yield();//ç­‰å¾…ä¸€å¸§ï¼Œæ–¹ä¾¿ä¸Šä¸€ä¸ªUIå±•ç¤ºå®Œæ¯•
             if (keepDialogs == null) keepDialogs = new HashSet<string>() { nameof(SceneChangeDialog) };
             else keepDialogs.Add(nameof(SceneChangeDialog));
-            UIUtil.CloseAll(keepDialogs);//¿ÉÒÔ×Ô¼º¿¼ÂÇ¼ÓÈëÄÄĞ©UI£¬Ìø×ª³¡¾°²»»á¹Ø±ÕµÄ
+            UIUtil.CloseAll(keepDialogs);//å¯ä»¥è‡ªå·±è€ƒè™‘åŠ å…¥å“ªäº›UIï¼Œè·³è½¬åœºæ™¯ä¸ä¼šå…³é—­çš„
             await UniTask.Yield();
             await YooAssets.LoadSceneAsync(path).ToUniTask();
         }
@@ -80,7 +80,7 @@ namespace Hot
                 return;
             }
             Close();
-            PlatformUtil.TriggerGC().Forget();
+            PlatformUtil.TriggerGC();
         }
     }
 }

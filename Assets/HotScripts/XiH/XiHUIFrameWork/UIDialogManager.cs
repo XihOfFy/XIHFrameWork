@@ -207,7 +207,7 @@ namespace XiHUI
             }
 
             if (gc) {
-                PlatformUtil.TriggerGC().Forget();
+                PlatformUtil.TriggerGC();
             }
         }
 

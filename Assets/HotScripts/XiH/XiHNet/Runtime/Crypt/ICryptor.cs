@@ -1,4 +1,4 @@
-namespace XiHNet
+﻿namespace XiHNet
 {
     /// <summary>
     /// 网络层加密/解密接口

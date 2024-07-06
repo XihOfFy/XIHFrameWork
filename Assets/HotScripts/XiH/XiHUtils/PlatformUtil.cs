@@ -1,28 +1,36 @@
+ï»¿#if UNITY_WX && !UNITY_EDITOR
+#define UNNITY_WX_WITHOUT_EDITOR
+#endif
 using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
-using WeChatWASM;
 using YooAsset;
+#if UNNITY_WX_WITHOUT_EDITOR
+using WeChatWASM;
+#endif
 
-namespace Hot
+namespace XiHUtil
 {
     public class PlatformUtil
     {
+        public static void TriggerGC() {
+            InnerTriggerGC().Forget();
+        }
         static bool gcing = false;
-        public static async UniTaskVoid TriggerGC() {
+        static async UniTaskVoid InnerTriggerGC() {
             if (gcing) return;
             gcing = true;
             await UniTask.Yield();
             gcing = false;
             YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
             GC.Collect();
-#if UNITY_WX
+#if UNNITY_WX_WITHOUT_EDITOR
             WeChatWASM.WX.TriggerGC();
 #endif
         }
         public static void SetFramePerSecond(int frame) {
-#if UNITY_WX
-            WX.SetPreferredFramesPerSecond(frame);//ÓĞĞ©iosÊÖ»ú30Ö¡¿ÉÄÜ»á³öÏÖ»­ÃæÉÁÆÁÇé¿ö
+#if UNNITY_WX_WITHOUT_EDITOR
+            WX.SetPreferredFramesPerSecond(frame);//æœ‰äº›iosæ‰‹æœº30å¸§å¯èƒ½ä¼šå‡ºç°ç”»é¢é—ªå±æƒ…å†µ
 #else
             Application.targetFrameRate = frame;
 #endif
@@ -30,12 +38,12 @@ namespace Hot
 
         internal static void Vibrate()
         {
-#if UNITY_WX
+#if UNNITY_WX_WITHOUT_EDITOR
             WX.VibrateShort(new VibrateShortOption() { type = "medium" });
 #elif UNITY_ANDROID || UNITY_IOS
             Handheld.Vibrate();
 #else
-            Debug.LogWarning("µ±Ç°Æ½Ì¨²»Ö§³ÖÕğ¶¯");
+            Debug.LogWarning("å½“å‰å¹³å°ä¸æ”¯æŒéœ‡åŠ¨");
 #endif
         }
     }

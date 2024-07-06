@@ -1,4 +1,4 @@
-//#define JSON_LOAD
+ï»¿//#define JSON_LOAD
 using Cysharp.Threading.Tasks;
 using Hot;
 using Luban;
@@ -6,6 +6,7 @@ using SimpleJSON;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using XiHUtil;
 using YooAsset;
 
 namespace Tmpl
@@ -33,8 +34,8 @@ namespace Tmpl
 #endif
             });
             asHandle.Release();
-            await UniTask.Yield();//±ÜÃâÄÚ´æÕ¼ÓÃ·åÖµ¸ß£¬GCÒ»ÏÂ
-            PlatformUtil.TriggerGC().Forget();
+            await UniTask.Yield();//é¿å…å†…å­˜å ç”¨å³°å€¼é«˜ï¼ŒGCä¸€ä¸‹
+            PlatformUtil.TriggerGC();
         }
     }
 }

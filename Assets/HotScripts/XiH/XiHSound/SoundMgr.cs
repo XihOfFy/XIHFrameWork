@@ -304,6 +304,7 @@ namespace XiHSound
                 {
                     var kvs = dic.OrderBy(kv => kv.Value).ToList();
                     var maxIdx = (mCount + 1) >> 1;
+                    bool gc = false;
                     foreach (var kv in kvs)
                     {
                         if (--maxIdx >= 0)
@@ -315,6 +316,7 @@ namespace XiHSound
                                 tmp.Release();
                                 abHandles.Remove(key);
                                 dic.Remove(key);
+                                gc = true;
                             }
                         }
                         else
@@ -322,8 +324,8 @@ namespace XiHSound
                             break;
                         }
                     }
+                    if (gc) PlatformUtil.TriggerGC();
                 }
-                PlatformUtil.TriggerGC().Forget();
             }
         }
     }
