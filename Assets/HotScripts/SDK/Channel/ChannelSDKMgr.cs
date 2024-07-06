@@ -1,11 +1,10 @@
 ﻿using System;
-using XiHUtil;
 namespace Hot
 {
-    public class ChannelSDKMgr:Singleton<ChannelSDKMgr>
+    public static class ChannelSDKMgr
     {
-        public readonly IChannelSDK sdkBase;
-        public ChannelSDKMgr() {
+        public static readonly IChannelSDK sdkBase;
+        static ChannelSDKMgr() {
 #if UNITY_EDITOR
             sdkBase = new InternalSDK();
 #elif UNITY_WX
