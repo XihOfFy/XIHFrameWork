@@ -40,7 +40,6 @@ namespace Aot
             try
             {
                 url = AotFileUtil.ReadFile(AotFileUtil.SAVE_FRONT);
-                url.Trim();
             }
             catch (Exception e) { 
                 Debug.LogException(e);
@@ -52,7 +51,7 @@ namespace Aot
             else { 
                 Debug.Log($"使用外置的Front地址：{url}");
             }
-            return url;
+            return url.Trim();
         }
 
 #if UNITY_EDITOR
