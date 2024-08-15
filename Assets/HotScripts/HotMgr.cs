@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using XiHUtil;
 using XiHSound;
 using Tmpl;
+using Aot;
+using YooAsset;
 
 namespace Hot
 {
@@ -19,6 +21,8 @@ namespace Hot
             ChannelSDKMgr.sdkBase.Init(res => {
                 InitHot().Forget();
             });
+            var pkg = YooAssets.GetPackage(AotConfig.PACKAGE_NAME);
+            pkg.ClearUnusedCacheFilesAsync();
         }
         async UniTaskVoid InitHot() {
             await Tables.LoadAllTmpl();//初始化配置,放在第一
