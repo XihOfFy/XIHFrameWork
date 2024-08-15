@@ -1,12 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XiHUtil;
 using YooAsset;
 using Tmpl;
-using Hot;
 
 namespace XiHSound
 {
@@ -27,11 +25,11 @@ namespace XiHSound
             }
         }
 
-        public const string BGM_ENABLE = "BGMEnable";
-        public const string SOUND_ENABLE = "SoundEnable";
-        public const string VIBRATE_ENABLE = "VibrateEnable";
-        public const string BGM_VOLUME = "BgmVolume";
-        public const string SOUND_VOLUME = "SoundVolume";
+        const string BGM_ENABLE = "BGMEnable";
+        const string SOUND_ENABLE = "SoundEnable";
+        const string VIBRATE_ENABLE = "VibrateEnable";
+        const string BGM_VOLUME = "BgmVolume";
+        const string SOUND_VOLUME = "SoundVolume";
 
         AudioListener listener;
         AudioSource soundSource;
@@ -40,14 +38,13 @@ namespace XiHSound
         bool bgmEnable;
         bool soundEnable;
         bool vibrate;
-        WaitForSecondsRealtime unitSec;
         public bool BgmEnable
         {
             get => bgmEnable; set
             {
                 PlayerPrefsUtil.Set(BGM_ENABLE, value);
                 bgmEnable = value;
-                MuteBgm(value);
+                BgmVolume = value ? 1 : 0;
             }
         }
         public bool SoundEnable
@@ -56,6 +53,7 @@ namespace XiHSound
             {
                 PlayerPrefsUtil.Set(SOUND_ENABLE, value);
                 soundEnable = value;
+                SoundVolume = value ? 1 : 0;
             }
         }
         public bool Vibrate
@@ -97,9 +95,9 @@ namespace XiHSound
         Dictionary<int, AssetHandle> abHandles;
         LRU recentBgmUseQue;
         LRU recentSoundUseQue;
+        int curBgId;
         private void Awake()
         {
-            unitSec = new WaitForSecondsRealtime(0.1f);
             listener = gameObject.AddComponent<AudioListener>();
             musicSource = gameObject.AddComponent<AudioSource>();
             soundSource = gameObject.AddComponent<AudioSource>();
@@ -110,6 +108,7 @@ namespace XiHSound
             recentBgmUseQue = new LRU(1);
             recentSoundUseQue = new LRU(16);
             InitAudioMixer();
+            curBgId = int.MinValue;
         }
         void InitAudioMixer()
         {
@@ -125,14 +124,17 @@ namespace XiHSound
         }
         public void PlayBGM(int bgId)
         {
+            if (curBgId == bgId) return;
+            curBgId = bgId;
             PlayBGMById(bgId).Forget();
         }
         async UniTaskVoid PlayBGMById(int bgId)
         {
-            if (!bgmEnable) return;
+            //if (!bgmEnable) return;
             var cfg = Tables.Instance.TbAudio.Get(bgId);
             if (cfg == null)
             {
+                StopBGM();
                 Debug.LogError("无此音乐ID：" + bgId);
                 return;
             }
@@ -156,17 +158,18 @@ namespace XiHSound
                 await handle.ToUniTask();
             }
             recentBgmUseQue.InAndOut(bgId, abHandles);
-            PlayBGM(handle.AssetObject as AudioClip);
+            if (curBgId == bgId) PlayBGM(handle.AssetObject as AudioClip);
         }
         public void StopBGM()
         {
-            if (!bgmEnable) return;
+            //if (!bgmEnable) return;
             musicSource.Stop();
-            //StartCoroutine(nameof(IEStopBGM));
+            curBgId = int.MinValue;
         }
         void PlayBGM(AudioClip bgm)
         {
-            if (!bgmEnable || bgm == null) return;
+            //if (!bgmEnable || bgm == null) return;
+            if (bgm == null) return;
             musicSource.Stop();
             musicSource.volume = bgmVolume;
             musicSource.clip = bgm;
@@ -223,70 +226,6 @@ namespace XiHSound
                 PlatformUtil.Vibrate();
             }
         }
-        Coroutine bgmCor;
-        public void MuteBgm(bool mute)
-        {
-            if (bgmCor != null) StopCoroutine(bgmCor);
-            if (mute)
-            {
-                bgmCor = StartCoroutine(nameof(MuteCor));
-            }
-            else
-            {
-                bgmCor = StartCoroutine(nameof(UnMuteCor));
-            }
-        }
-        IEnumerator MuteCor()
-        {
-            float dlt = 0.05f;
-            var unit = new WaitForSecondsRealtime(0.1f);
-            while (musicSource.volume > 0)
-            {
-                musicSource.volume -= dlt;
-                yield return unit;
-            }
-            musicSource.Stop();
-            bgmCor = null;
-        }
-        IEnumerator UnMuteCor()
-        {
-            float dlt = 0.05f;
-            var unit = new WaitForSecondsRealtime(0.1f);
-            musicSource.Play();
-            while (musicSource.volume < bgmVolume)
-            {
-                musicSource.volume += dlt;
-                yield return unit;
-            }
-            musicSource.volume = bgmVolume;
-            bgmCor = null;
-        }
-        IEnumerator IEPlayBGM()
-        {
-            float dlt = 0.04f;
-            musicSource.volume = 0;
-            musicSource.Play();
-            while (musicSource.volume < bgmVolume)
-            {
-                musicSource.volume += dlt;
-                yield return unitSec;
-            }
-            musicSource.volume = bgmVolume;
-            bgmCor = null;
-        }
-        IEnumerator IEStopBGM()
-        {
-            float dlt = -0.04f;
-            while (musicSource.volume > 0.05f)
-            {
-                musicSource.volume += dlt;
-                yield return unitSec;
-            }
-            musicSource.Stop();
-            bgmCor = null;
-        }
-
-
         class LRU
         {
             Dictionary<int, uint> dic;
