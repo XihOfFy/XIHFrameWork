@@ -166,10 +166,12 @@ namespace XiHSound
             musicSource.Stop();
             curBgId = int.MinValue;
         }
-        public void PauseBGM() {
+        public void PauseBGM()
+        {
             musicSource.Pause();
         }
-        public void UnPause() {
+        public void UnPause()
+        {
             musicSource.UnPause();
         }
         void PlayBGM(AudioClip bgm)
