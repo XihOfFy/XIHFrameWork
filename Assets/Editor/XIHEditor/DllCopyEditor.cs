@@ -33,7 +33,12 @@ public class DllCopyEditor
     static void CopyAotDll(string dstPath, BuildTarget target)
     {
         var bakupPath = dstPath + "~";
-        CheckAccessMissingMetadata(bakupPath, target);
+        try
+        {
+            CheckAccessMissingMetadata(bakupPath, target);
+        }
+        catch { 
+        }
         if (Directory.Exists(bakupPath)) Directory.Delete(bakupPath, true);
         Directory.CreateDirectory(bakupPath);
 

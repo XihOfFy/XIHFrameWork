@@ -33,6 +33,7 @@ MonoBehaviour:
   - UnityEngine.AssetBundleModule
   - UnityEngine.CoreModule
   - UnityEngine.JSONSerializeModule
+  - Mono.Security
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
