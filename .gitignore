@@ -64,7 +64,11 @@ XIHWebServerRes/
 UserSettings/
 yoo/
 Assets/HotScripts/Luban/Tmpl/
+Assets/Res/Aot2Hot/Raw/
 Assets/Res/FairyRes/
+Assets/Res/Raw/Aot/
+Assets/Res/Raw/Aot~/
+Assets/Res/Raw/Hot/
 Assets/Res/Tmpl/
 Assets/StreamingAssets/*
 Assets/StreamingAssets.meta

@@ -22,8 +22,7 @@ namespace HybridCLR.Editor.HotUpdate
 
             _hotUpdateAssNames = new HashSet<string>(hotUpdateAssNames ?? new List<string>());
             _aotAssNames = new HashSet<string>();
-            foreach (var aotFile in Directory.GetFiles(aotDllDir, "*.bytes"))
-            //foreach (var aotFile in Directory.GetFiles(aotDllDir, "*.dll"))
+            foreach (var aotFile in Directory.GetFiles(aotDllDir, "*.dll"))
             {
                 string aotAssName = Path.GetFileNameWithoutExtension(aotFile);
                 if (_hotUpdateAssNames.Contains(aotAssName))

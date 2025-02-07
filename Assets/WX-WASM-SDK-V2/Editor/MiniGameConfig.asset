@@ -19,7 +19,7 @@ MonoBehaviour:
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 
-    DST: C:\Work\Thirds\XIHFrameWork\XIHWebServerRes/MiniGame
+    DST: XIHWebServerRes/MiniGame
     StreamCDN: 
     bundleHashLength: 32
     bundlePathIdentifier: StreamingAssets;WebGL

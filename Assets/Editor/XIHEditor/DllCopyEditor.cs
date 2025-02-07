@@ -32,7 +32,10 @@ public class DllCopyEditor
     }
     static void CopyAotDll(string dstPath, BuildTarget target)
     {
-        CheckAccessMissingMetadata(dstPath, target);
+        var bakupPath = dstPath + "~";
+        CheckAccessMissingMetadata(bakupPath, target);
+        if (Directory.Exists(bakupPath)) Directory.Delete(bakupPath, true);
+        Directory.CreateDirectory(bakupPath);
 
         List<string> dlls = SettingsUtil.AOTAssemblyNames;
         string sourPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
@@ -51,8 +54,8 @@ public class DllCopyEditor
                 Debug.LogError($"CopyDll {ph}不存在");
                 continue;
             }
+            File.Copy(ph, $"{bakupPath}/{dll}.dll",true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
             HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, $"{dstPath}/{dll}.bytes");
-            //File.Copy(ph, $"{dstPath}/{dll}.bytes");
         }
         Debug.LogWarning($"拷贝无需加密的Aotdlls到 {dstPath}");
     }
