@@ -19,7 +19,9 @@ public class AudioAssetImport : AssetPostprocessor
         if (importer == null) return;
 
         importer.forceToMono = true;
+#if !UNITY_2022_2_OR_NEWER
         importer.preloadAudioData = false;
+#endif
         var set = importer.defaultSampleSettings;
         set.loadType = AudioClipLoadType.CompressedInMemory;
         set.compressionFormat = AudioCompressionFormat.Vorbis;
