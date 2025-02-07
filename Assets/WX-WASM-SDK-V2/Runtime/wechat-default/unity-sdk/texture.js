@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-properties */
+/* eslint-disable no-plusplus */
 import canvasContext from './canvas-context';
 const downloadedTextures = {};
 const downloadingTextures = {};
@@ -121,6 +124,7 @@ const mod = {
             //   err("压缩纹理下载失败！url:"+url);
             mod.reTryRemoteImageFile(path, width, height, limitType);
         };
+        xmlhttp.setRequestHeader('wechatminigame-skipclean', '1');
         xmlhttp.send(null);
     },
     callbackPngFile(path, cid) {
@@ -156,6 +160,7 @@ const mod = {
                 xmlhttp.onerror = function () {
                     mod.reTryRemoteImageFile(path, width, height);
                 };
+                xmlhttp.setRequestHeader('wechatminigame-skipclean', '1');
                 xmlhttp.send(null);
             }
             else {
@@ -236,6 +241,7 @@ GameGlobal.ParalleLDownloadTexture = function (filename) {
                 const p = `${GameGlobal.manager.assetPath}/Textures/${f}/${v.w}/${v.p}.txt`;
                 http.open('GET', p, true);
                 http.responseType = 'arraybuffer';
+                http.setRequestHeader('wechatminigame-skipclean', '1');
                 http.send();
             }
         });
@@ -248,16 +254,13 @@ canvasContext.addCreatedListener(() => {
     if (GameGlobal.USED_TEXTURE_COMPRESSION) {
         mod.getSupportedExtensions();
         if (GameGlobal.TextureCompressedFormat === '' || GameGlobal.TextureCompressedFormat === 'pvr') {
-            wx.getSystemInfo({
-                success(res) {
-                    if (res.platform === 'ios') {
-                        wx.showModal({
-                            title: '提示',
-                            content: '当前操作系统版本过低，建议您升级至最新版本。',
-                        });
-                    }
-                },
-            });
+            const { platform } = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync();
+            if (platform === 'ios') {
+                wx.showModal({
+                    title: '提示',
+                    content: '当前操作系统版本过低，建议您升级至最新版本。',
+                });
+            }
         }
     }
     wx.onNetworkStatusChange((res) => {

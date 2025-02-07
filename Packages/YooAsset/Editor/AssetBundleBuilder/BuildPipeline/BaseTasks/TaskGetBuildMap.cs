@@ -12,16 +12,16 @@ namespace YooAsset.Editor
         /// <summary>
         /// 生成资源构建上下文
         /// </summary>
-        public BuildMapContext CreateBuildMap(BuildParameters buildParameters)
+        public BuildMapContext CreateBuildMap(bool simulateBuild, BuildParameters buildParameters)
         {
             BuildMapContext context = new BuildMapContext();
-            var buildMode = buildParameters.BuildMode;
             var packageName = buildParameters.PackageName;
 
             Dictionary<string, BuildAssetInfo> allBuildAssetInfos = new Dictionary<string, BuildAssetInfo>(1000);
 
             // 1. 获取所有收集器收集的资源
-            var collectResult = AssetBundleCollectorSettingData.Setting.GetPackageAssets(buildMode, packageName);
+            bool useAssetDependencyDB = buildParameters.UseAssetDependencyDB;
+            var collectResult = AssetBundleCollectorSettingData.Setting.GetPackageAssets(simulateBuild, useAssetDependencyDB, packageName);
             List<CollectAssetInfo> allCollectAssets = collectResult.CollectAssets;
 
             // 2. 剔除未被引用的依赖项资源
@@ -56,9 +56,9 @@ namespace YooAsset.Editor
                 string bundleName = collectAssetInfo.BundleName;
                 foreach (var dependAsset in collectAssetInfo.DependAssets)
                 {
-                    if (allBuildAssetInfos.ContainsKey(dependAsset.AssetPath))
+                    if (allBuildAssetInfos.TryGetValue(dependAsset.AssetPath, out var value))
                     {
-                        allBuildAssetInfos[dependAsset.AssetPath].AddReferenceBundleName(bundleName);
+                        value.AddReferenceBundleName(bundleName);
                     }
                     else
                     {

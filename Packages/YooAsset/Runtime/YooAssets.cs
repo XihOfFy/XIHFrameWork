@@ -53,28 +53,6 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 销毁资源系统
-        /// </summary>
-        public static void Destroy()
-        {
-            if (_isInitialize)
-            {
-                OperationSystem.DestroyAll();
-
-                foreach (var package in _packages)
-                {
-                    package.DestroyPackage();
-                }
-                _packages.Clear();
-
-                _isInitialize = false;
-                if (_driver != null)
-                    GameObject.Destroy(_driver);
-                YooLogger.Log($"{nameof(YooAssets)} destroy all !");
-            }
-        }
-
-        /// <summary>
         /// 更新资源系统
         /// </summary>
         internal static void Update()
@@ -90,6 +68,18 @@ namespace YooAsset
             }
         }
 
+        /// <summary>
+        /// 应用程序退出处理
+        /// </summary>
+        internal static void OnApplicationQuit()
+        {
+            // 说明：在编辑器下确保播放被停止时IO类操作被终止。
+            foreach (var package in _packages)
+            {
+                OperationSystem.ClearPackageOperation(package.PackageName);
+            }
+            OperationSystem.DestroyAll();
+        }
 
         /// <summary>
         /// 创建资源包
@@ -116,7 +106,7 @@ namespace YooAsset
             CheckException(packageName);
             var package = GetPackageInternal(packageName);
             if (package == null)
-                YooLogger.Error($"Not found resource package : {packageName}");
+                YooLogger.Error($"Can not found resource package : {packageName}");
             return package;
         }
 
@@ -131,19 +121,36 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 销毁资源包
+        /// 移除资源包
         /// </summary>
         /// <param name="packageName">资源包名称</param>
-        public static void DestroyPackage(string packageName)
+        public static bool RemovePackage(string packageName)
         {
             CheckException(packageName);
             ResourcePackage package = GetPackageInternal(packageName);
             if (package == null)
-                return;
+                return false;
 
-            YooLogger.Log($"Destroy resource package : {packageName}");
+            return RemovePackage(package);
+        }
+
+        /// <summary>
+        /// 移除资源包
+        /// </summary>
+        /// <param name="package">资源包实例对象</param>
+        public static bool RemovePackage(ResourcePackage package)
+        {
+            CheckException(package);
+            string packageName = package.PackageName;
+            if (package.InitializeStatus != EOperationStatus.None)
+            {
+                YooLogger.Error($"The resource package {packageName} has not been destroyed, please call the method {nameof(ResourcePackage.DestroyAsync)} to destroy!");
+                return false;
+            }
+
+            YooLogger.Log($"Remove resource package : {packageName}");
             _packages.Remove(package);
-            package.DestroyPackage();
+            return true;
         }
 
         /// <summary>
@@ -185,22 +192,22 @@ namespace YooAsset
             if (string.IsNullOrEmpty(packageName))
                 throw new Exception("Package name is null or empty !");
         }
+        private static void CheckException(ResourcePackage package)
+        {
+            if (_isInitialize == false)
+                throw new Exception($"{nameof(YooAssets)} not initialize !");
+
+            if (package == null)
+                throw new Exception("Package instance is null !");
+        }
 
         #region 系统参数
         /// <summary>
-        /// 设置下载系统参数，下载失败后清理文件的HTTP错误码
-        /// </summary>
-        public static void SetDownloadSystemClearFileResponseCode(List<long> codes)
-        {
-            DownloadHelper.ClearFileResponseCodes = codes;
-        }
-
-        /// <summary>
         /// 设置下载系统参数，自定义下载请求
         /// </summary>
-        public static void SetDownloadSystemUnityWebRequest(DownloadRequestDelegate requestDelegate)
+        public static void SetDownloadSystemUnityWebRequest(UnityWebRequestDelegate createDelegate)
         {
-            DownloadHelper.RequestDelegate = requestDelegate;
+            DownloadSystemHelper.UnityWebRequestCreater = createDelegate;
         }
 
         /// <summary>
@@ -214,14 +221,6 @@ namespace YooAsset
                 YooLogger.Warning($"MaxTimeSlice minimum value is 10 milliseconds.");
             }
             OperationSystem.MaxTimeSlice = milliseconds;
-        }
-
-        /// <summary>
-        /// 设置缓存系统参数，禁用缓存在WebGL平台
-        /// </summary>
-        public static void SetCacheSystemDisableCacheOnWebGL()
-        {
-            CacheHelper.DisableUnityCacheOnWebGL = true;
         }
         #endregion
 

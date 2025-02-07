@@ -8,11 +8,6 @@ namespace YooAsset
     internal class DebugBundleInfo : IComparer<DebugBundleInfo>, IComparable<DebugBundleInfo>
     {
         /// <summary>
-        /// 包裹名
-        /// </summary>
-        public string PackageName { set; get; }
-
-        /// <summary>
         /// 资源包名称
         /// </summary>
         public string BundleName;
@@ -25,7 +20,7 @@ namespace YooAsset
         /// <summary>
         /// 加载状态
         /// </summary>
-        public string Status;
+        public EOperationStatus Status;
 
         public int CompareTo(DebugBundleInfo other)
         {

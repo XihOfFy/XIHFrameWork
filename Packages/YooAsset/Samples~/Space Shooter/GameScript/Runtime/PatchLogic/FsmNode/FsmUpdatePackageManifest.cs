@@ -4,9 +4,6 @@ using UnityEngine;
 using UniFramework.Machine;
 using YooAsset;
 
-/// <summary>
-/// 更新资源清单
-/// </summary>
 public class FsmUpdatePackageManifest : IStateNode
 {
     private StateMachine _machine;
@@ -17,7 +14,7 @@ public class FsmUpdatePackageManifest : IStateNode
     }
     void IStateNode.OnEnter()
     {
-        PatchEventDefine.PatchStatesChange.SendEventMessage("更新资源清单！");
+        PatchEventDefine.PatchStepsChange.SendEventMessage("更新资源清单！");
         GameManager.Instance.StartCoroutine(UpdateManifest());
     }
     void IStateNode.OnUpdate()
@@ -29,24 +26,21 @@ public class FsmUpdatePackageManifest : IStateNode
 
     private IEnumerator UpdateManifest()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
-
         var packageName = (string)_machine.GetBlackboardValue("PackageName");
         var packageVersion = (string)_machine.GetBlackboardValue("PackageVersion");
         var package = YooAssets.GetPackage(packageName);
-        bool savePackageVersion = true;
-        var operation = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);
+        var operation = package.UpdatePackageManifestAsync(packageVersion);
         yield return operation;
 
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(operation.Error);
-            PatchEventDefine.PatchManifestUpdateFailed.SendEventMessage();
+            PatchEventDefine.PackageManifestUpdateFailed.SendEventMessage();
             yield break;
         }
         else
         {
-            _machine.ChangeState<FsmCreatePackageDownloader>();
+            _machine.ChangeState<FsmCreateDownloader>();
         }
     }
 }

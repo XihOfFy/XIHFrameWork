@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { formatJsonStr, uid, onEventCallback, offEventCallback, getListObject, convertInfoToPointer, formatResponse, convertDataToPointer } from '../utils';
 const TCPSocketList = {};
 const wxTCPSocketBindWifiList = {};
@@ -141,12 +142,12 @@ function WX_TCPSocketOnMessage(id, needInfo) {
         if (needInfo) {
             const localInfoPtr = convertInfoToPointer(res.localInfo);
             const remoteInfoPtr = convertInfoToPointer(res.remoteInfo);
-            GameGlobal.Module.dynCall_viiiii(wxTCPSocketOnMessageCallback, idPtr, messagePtr, res.message.byteLength, localInfoPtr, remoteInfoPtr);
+            GameGlobal.Module.dynCall_viiiii(wxTCPSocketOnMessageCallback, idPtr, messagePtr, res.message.length || res.message.byteLength, localInfoPtr, remoteInfoPtr);
             GameGlobal.Module._free(localInfoPtr);
             GameGlobal.Module._free(remoteInfoPtr);
         }
         else {
-            GameGlobal.Module.dynCall_viiiii(wxTCPSocketOnMessageCallback, idPtr, messagePtr, res.message.byteLength, 0, 0);
+            GameGlobal.Module.dynCall_viiiii(wxTCPSocketOnMessageCallback, idPtr, messagePtr, res.message.length || res.message.byteLength, 0, 0);
         }
         GameGlobal.Module._free(idPtr);
         GameGlobal.Module._free(messagePtr);

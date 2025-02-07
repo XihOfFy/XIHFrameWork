@@ -24,35 +24,44 @@ namespace Aot
             InitializeParameters createParameters = null;
             if (playMode == EPlayMode.EditorSimulateMode)
             {
-                createParameters = new EditorSimulateModeParameters()
-                {
-                    SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.ScriptableBuildPipeline.ToString(), AotConfig.PACKAGE_NAME)
-                };
+
+                var buildResult = EditorSimulateModeHelper.SimulateBuild(AotConfig.PACKAGE_NAME);
+                var packageRoot = buildResult.PackageRootDirectory;
+                var editorFileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
+                var initParameters = new EditorSimulateModeParameters();
+                initParameters.EditorFileSystemParameters = editorFileSystemParams;
+                createParameters = initParameters;
             }
             // 单机运行模式
             else if (playMode == EPlayMode.OfflinePlayMode)
             {
-                createParameters = new OfflinePlayModeParameters();
+                var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                var initParameters = new OfflinePlayModeParameters();
+                initParameters.BuildinFileSystemParameters = buildinFileSystemParams;
+                createParameters = initParameters;
             }
             // 联机运行模式
             else if (playMode == EPlayMode.HostPlayMode)
             {
-                createParameters = new HostPlayModeParameters()
-                {
-                    RemoteServices = new RemoteServices(),
-                    BuildinQueryServices = new BuildinQueryServices()
-                };
+                var remoteServices = new RemoteServices();
+                var cacheFileSystemParams = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
+                //var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                var initParameters = new HostPlayModeParameters();
+                //initParameters.BuildinFileSystemParameters = buildinFileSystemParams;//这里根据游戏来确定，释放启用内置的文件查询，因为优化包体，内置可能不需要含资源
+                initParameters.CacheFileSystemParameters = cacheFileSystemParams;
+                createParameters = initParameters;
             }
             // WebGL运行模式
             else if (playMode == EPlayMode.WebPlayMode)
             {
-                createParameters = new WebPlayModeParameters()
-                {
-                    RemoteServices = new RemoteServices(),
-                    BuildinQueryServices = new BuildinQueryServices()
-                };
-                //因为微信小游戏平台的特殊性，需要关闭WebGL的缓存系统，使用微信自带的缓存系统。
-                YooAssets.SetCacheSystemDisableCacheOnWebGL();
+                var remoteServices = new RemoteServices();
+                var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
+                var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
+
+                var initParameters = new WebPlayModeParameters();
+                initParameters.WebServerFileSystemParameters = webServerFileSystemParams;
+                initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
+                createParameters = initParameters;
             }
             //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
             //createParameters.DecryptionServices = new DecryptionServices();
@@ -71,31 +80,34 @@ namespace Aot
         //解密接口            
         //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
         //这个也用不上了
-        private class DecryptionServices : IDecryptionServices
+        /*private class DecryptionServices : IDecryptionServices
         {
-            public AssetBundle LoadAssetBundle(DecryptFileInfo fileInfo, out Stream managedStream)
+            public DecryptResult LoadAssetBundle(DecryptFileInfo fileInfo)
             {
-                /*if (fileInfo.BundleName.EndsWith(".rawfile"))
-                {
-                    EncryptResult result = new EncryptResult();
-                    result.Encrypted = true;
-                    result.EncryptedData = XIHDecryptionServices.ProcessRawFile(File.ReadAllBytes(fileInfo.FileLoadPath));
-                }
-                else
-                {
-                    EncryptResult result = new EncryptResult();
-                    result.Encrypted = false;
-                }*/
-                managedStream = new MemoryStream(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath))) ;
-                return AssetBundle.LoadFromStream(managedStream);
+                var res = new DecryptResult();
+                res.Result = AssetBundle.LoadFromMemory(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath)));
+                return res;
             }
 
-            public AssetBundleCreateRequest LoadAssetBundleAsync(DecryptFileInfo fileInfo, out Stream managedStream)
+            public DecryptResult LoadAssetBundleAsync(DecryptFileInfo fileInfo)
             {
-                managedStream = new MemoryStream(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath)));
-                return AssetBundle.LoadFromStreamAsync(managedStream);
+                var res = new DecryptResult();
+                var managedStream = new MemoryStream(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath)));
+                res.CreateRequest = AssetBundle.LoadFromStreamAsync(managedStream);
+                res.ManagedStream = managedStream;
+                return res;
             }
-        }
+
+            public byte[] ReadFileData(DecryptFileInfo fileInfo)
+            {
+                return XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath));
+            }
+
+            public string ReadFileText(DecryptFileInfo fileInfo)
+            {
+                return File.ReadAllText(fileInfo.FileLoadPath);
+            }
+        }*/
         /// <summary>
         /// 远端资源地址查询服务类
         /// </summary>
@@ -110,28 +122,13 @@ namespace Aot
                 return AotConfig.frontConfig.fallbackHostServer + "/" + fileName; 
             }
         }
-        /// <summary>
-        /// 小游戏启动时加载StreamingAsset内资源会被转换为www请求，此时走小游戏缓存可直接返回之前下载的资源
-        /// 微信小游戏对于CDN下，带有StreamingAsset的资源可以缓存，所以我们设置YooAsset的下载路径和小游戏读取内置路径的url保持一致即可，
-        /// 这样即时首包不包含任何内容，我们触发正常的YooAsset下载，也会被微信缓存了
-        /// 所以为了先缓存资源，游戏启动需要先完成资源更新，将远程StreamingAsset资源全部缓存到本地，后面就不需要再从远程获取了
-        /// </summary>
-        private class BuildinQueryServices : IBuildinQueryServices
-        {
-            public bool Query(string packageName, string fileName, string fileCRC)
-            {
-                //Debug.Log($"BuildinQueryServices {packageName} >> {fileName}");
-                return false;
-            }
-        }
 
         //获取资源版本
         async UniTaskVoid UpdatePackageVersionAsync(ResourcePackage package)
         {
-            var yooOp = package.UpdatePackageVersionAsync();
-            var uniOp = yooOp.ToUniTask();
-            await uniOp;
-            if (uniOp.Status == UniTaskStatus.Succeeded)
+            var yooOp = package.RequestPackageVersionAsync();
+            await yooOp.ToUniTask();
+            if (yooOp.Status == EOperationStatus.Succeed)
             {
                 //更新成功
                 Debug.Log($"Updated package Version : {yooOp.PackageVersion}");
@@ -145,10 +142,9 @@ namespace Aot
         //UpdatePackageManifest
         async UniTaskVoid UpdatePackageManifest(ResourcePackage package,string packageVersion)
         {
-            var yooOp = package.UpdatePackageManifestAsync(packageVersion,true);
-            var uniOp = yooOp.ToUniTask();
-            await uniOp;
-            if (uniOp.Status == UniTaskStatus.Succeeded)
+            var yooOp = package.UpdatePackageManifestAsync(packageVersion,10);
+            await yooOp.ToUniTask();
+            if (yooOp.Status == EOperationStatus.Succeed)
             {
                 //更新成功
                 DownloadAot2HotRes(package).Forget();
@@ -165,8 +161,8 @@ namespace Aot
             var downloader = package.CreateResourceDownloader("Aot2Hot", downloadingMaxNum, failedTryAgain);
 
             //注册回调方法，这里AOT使用这个是避免裁剪，不然HOT找不到该方法了
-            downloader.OnDownloadErrorCallback = OnDownloadError;
-            downloader.OnDownloadProgressCallback = OnDownloadProgress;
+            downloader.DownloadErrorCallback = OnDownloadError;
+            downloader.DownloadUpdateCallback = OnDownloadProgress;
 
             //没有需要下载的资源
             if (downloader.TotalDownloadCount == 0)
@@ -188,13 +184,13 @@ namespace Aot
                 QuitGame();
             }
         }
-        void OnDownloadError(string fileName, string error)
+        void OnDownloadError(DownloadErrorData error)
         {
-            Debug.LogError($"OnDownloadError:{fileName} > {error}");
+            Debug.LogError($"OnDownloadError:{error.FileName} > {error.ErrorInfo}");
         }
-        void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
+        void OnDownloadProgress(DownloadUpdateData updateData)
         {
-            Debug.LogWarning($"正在下载({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB");
+            Debug.LogWarning($"正在下载({updateData.CurrentDownloadCount}/{updateData.TotalDownloadCount}): {(updateData.CurrentDownloadCount >> 10)}KB/{(updateData.TotalDownloadCount >> 10)}KB");
         }
     }
 }

@@ -1,6 +1,7 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/naming-convention */
-const { version, SDKVersion, platform, system } = wx.getSystemInfoSync();
+const { version, SDKVersion } = wx.getAppBaseInfo ? wx.getAppBaseInfo() : wx.getSystemInfoSync();
+const { platform, system } = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync();
 const accountInfo = wx.getAccountInfoSync();
 const envVersion = accountInfo?.miniProgram?.envVersion;
 function compareVersion(v1, v2) {
@@ -16,6 +17,7 @@ function compareVersion(v1, v2) {
             .map(v => v.padStart(2, '0'))
             .join(''));
 }
+export const isDebug = false;
 export const isPc = platform === 'windows' || platform === 'mac';
 export const isIOS = platform === 'ios';
 export const isAndroid = platform === 'android';
@@ -38,8 +40,8 @@ const isLibVersionValid = compareVersion(SDKVersion, '2.17.0');
 const isH5LibVersionValid = compareVersion(SDKVersion, '2.23.1');
 // 压缩纹理需要iOS系统版本>=14.0，检测到不支持压缩纹理时会提示升级系统
 const isIOSH5SystemVersionValid = compareVersion(systemVersion, '14.0');
-// iOS系统版本>=15支持webgl2
-const isIOSWebgl2SystemVersionValid = compareVersion(systemVersion, '15.0');
+// iOS系统版本>=15支持webgl2，高性能模式+无此系统要求
+const isIOSWebgl2SystemVersionValid = compareVersion(systemVersion, '15.0') || GameGlobal.isIOSHighPerformanceModePlus;
 // Android客户端版本>=8.0.19支持webgl2
 const isAndroidWebGL2ClientVersionValid = compareVersion(version, '8.0.19');
 // 是否用了webgl2
@@ -61,6 +63,10 @@ const isPcBrotliInvalid = isPc && !compareVersion(SDKVersion, $LOAD_DATA_FROM_SU
 const isMobileBrotliInvalid = isMobile && !compareVersion(SDKVersion, '2.21.1');
 // @ts-ignore
 const isBrotliInvalid = $COMPRESS_DATA_PACKAGE && (isPcBrotliInvalid || isMobileBrotliInvalid);
+// iOS系统版本>=17.5时，小游戏退后台会导致异常
+export const isIOS175 = compareVersion(systemVersion, '17.5') || isH5Renderer;
+// 是否支持开放数据域渲染模式，使用ScreenCanvas模式可以优化ToTempFilePath的使用
+export const isSupportSharedCanvasMode = compareVersion(SDKVersion, '3.6.6');
 // 是否能以iOS高性能模式运行
 // 请勿修改GameGlobal.canUseH5Renderer赋值！！！
 GameGlobal.canUseH5Renderer = isH5Renderer && isH5LibVersionValid;
@@ -105,6 +111,16 @@ if (needToastEnableHpMode) {
 if (isIOS && typeof $IOS_DEVICE_PIXEL_RATIO === 'number' && $IOS_DEVICE_PIXEL_RATIO > 0) {
     // @ts-ignore
     window.devicePixelRatio = $IOS_DEVICE_PIXEL_RATIO;
+}
+else if (isPc) {
+    try {
+        if (window.devicePixelRatio < 2) {
+            window.devicePixelRatio = 2;
+        }
+    }
+    catch (e) {
+        console.warn(e);
+    }
 }
 export default () => new Promise((resolve) => {
     if (!isDevtools) {

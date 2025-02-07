@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { formatTouchEvent, convertOnTouchStartListenerResultToPointer } from '../utils';
 let wxOnTouchCancelCallback;
 let wxOnTouchEndCallback;
@@ -5,8 +6,8 @@ let wxOnTouchMoveCallback;
 let wxOnTouchStartCallback;
 function handleTouchEvent(res, callback) {
     const dataPtr = convertOnTouchStartListenerResultToPointer({
-        touches: res.touches.map(v => formatTouchEvent(v)),
-        changedTouches: res.changedTouches.map(v => formatTouchEvent(v)),
+        touches: res.touches.map(v => formatTouchEvent(v, res.type)),
+        changedTouches: res.changedTouches.map(v => formatTouchEvent(v, res.type, 1)),
         timeStamp: parseInt(res.timeStamp.toString(), 10),
     });
     GameGlobal.Module.dynCall_viii(callback, dataPtr, res.touches.length, res.changedTouches.length);

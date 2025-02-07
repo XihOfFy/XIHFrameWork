@@ -1,6 +1,4 @@
 // @ts-nocheck
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 const unityNamespace = {
     canvas: GameGlobal.canvas,
     // cache width
@@ -47,6 +45,18 @@ const unityNamespace = {
     usedAutoStreaming: $USED_AUTO_STREAMING,
     // 是否显示渲染日志(dev only)
     enableRenderAnalysisLog: $ENABLE_RENDER_ANALYSIS_LOG,
+    // 是否dotnet runtime
+    useDotnetRuntime: $USE_DOTNET_RUNTIME,
+    // 是否用了多线程brotli压缩
+    useBrotliMT: $USE_BROTLI_MT,
+    // Boot config配置，包含例如wait-for-native-debugger、player-connection-ip等信息
+    bootConfig: '$BOOT_CONFIG_INFO',
+    // 是否以Development Build构建
+    isDevelopmentBuild: $Is_Development_Build,
+    // 是否以Profiling Build导出
+    isProfilingBuild: $Is_Profiling_Build,
+    // 预留的堆内存
+    unityHeapReservedMemory: $UnityHeapReservedMemory,
 };
 // 最佳实践检测配置
 unityNamespace.monitorConfig = {
@@ -99,32 +109,77 @@ unityNamespace.isErasableFile = function (info) {
     }
     return true;
 };
-const { version, SDKVersion, platform, renderer, system } = wx.getSystemInfoSync();
-unityNamespace.version = version;
-unityNamespace.SDKVersion = SDKVersion;
-unityNamespace.platform = platform;
-unityNamespace.renderer = renderer;
-unityNamespace.system = system;
-unityNamespace.isPc = platform === 'windows' || platform === 'mac';
-unityNamespace.isDevtools = platform === 'devtools';
-unityNamespace.isMobile = !unityNamespace.isPc && !unityNamespace.isDevtools;
-unityNamespace.isH5Renderer = unityNamespace.isMobile && unityNamespace.renderer === 'h5';
-unityNamespace.isIOS = platform === 'ios';
-unityNamespace.isAndroid = platform === 'android';
 GameGlobal.WebAssembly = GameGlobal.WXWebAssembly;
 GameGlobal.unityNamespace = GameGlobal.unityNamespace || unityNamespace;
 GameGlobal.realtimeLogManager = wx.getRealtimeLogManager();
 GameGlobal.logmanager = wx.getLogManager({ level: 0 });
+// 提前监听错误并打日志
+function bindGloblException() {
+    // 默认上报小游戏实时日志与用户反馈日志(所有error日志+小程序框架异常)
+    wx.onError((result) => {
+        // 若manager已初始化，则直接用manager打日志即可
+        if (GameGlobal.manager) {
+            GameGlobal.manager.printErr(result.message);
+        }
+        else {
+            GameGlobal.realtimeLogManager.error(result);
+            const isErrorObj = result && result.stack;
+            GameGlobal.logmanager.warn(isErrorObj ? result.stack : result);
+            console.error('onError:', result);
+        }
+    });
+    wx.onUnhandledRejection((result) => {
+        GameGlobal.realtimeLogManager.error(result);
+        const isErrorObj = result && result.reason && result.reason.stack;
+        GameGlobal.logmanager.warn(isErrorObj ? result.reason.stack : result.reason);
+        console.error('unhandledRejection:', result.reason);
+    });
+    // 上报初始信息
+    function printSystemInfo(appBaseInfo, deviceInfo) {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { version, SDKVersion } = appBaseInfo;
+        const { platform, system } = deviceInfo;
+        unityNamespace.version = version;
+        unityNamespace.SDKVersion = SDKVersion;
+        unityNamespace.platform = platform;
+        unityNamespace.system = system;
+        unityNamespace.isPc = platform === 'windows' || platform === 'mac';
+        unityNamespace.isDevtools = platform === 'devtools';
+        unityNamespace.isMobile = !unityNamespace.isPc && !unityNamespace.isDevtools;
+        unityNamespace.isH5Renderer = GameGlobal.isIOSHighPerformanceMode;
+        unityNamespace.isIOS = platform === 'ios';
+        unityNamespace.isAndroid = platform === 'android';
+        const bootinfo = {
+            renderer: GameGlobal.isIOSHighPerformanceMode ? 'h5' : '',
+            isH5Plus: GameGlobal.isIOSHighPerformanceModePlus || false,
+            abi: deviceInfo.abi || '',
+            brand: deviceInfo.brand,
+            model: deviceInfo.model,
+            platform: deviceInfo.platform,
+            system: deviceInfo.system,
+            version: appBaseInfo.version,
+            SDKVersion: appBaseInfo.SDKVersion,
+            benchmarkLevel: deviceInfo.benchmarkLevel,
+        };
+        GameGlobal.realtimeLogManager.info('game starting', bootinfo);
+        GameGlobal.logmanager.info('game starting', bootinfo);
+        console.info('game starting', bootinfo);
+    }
+    const appBaseInfo = wx.getAppBaseInfo ? wx.getAppBaseInfo() : wx.getSystemInfoSync();
+    const deviceInfo = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync();
+    printSystemInfo(appBaseInfo, deviceInfo);
+}
+bindGloblException();
 // eslint-disable-next-line no-multi-assign
 GameGlobal.onCrash = GameGlobal.unityNamespace.onCrash = function () {
     GameGlobal.manager.showAbort();
-    const sysInfo = wx.getSystemInfoSync();
+    const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
     wx.createFeedbackButton({
         type: 'text',
         text: '提交反馈',
         style: {
-            left: (sysInfo.screenWidth - 184) / 2,
-            top: sysInfo.screenHeight / 3 + 140,
+            left: (windowInfo.screenWidth - 184) / 2,
+            top: windowInfo.screenHeight / 3 + 140,
             width: 184,
             height: 40,
             lineHeight: 40,

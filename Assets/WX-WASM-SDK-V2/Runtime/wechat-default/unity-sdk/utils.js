@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import moduleHelper from './module-helper';
 import { ResType } from './resType';
 import { ResTypeOther } from './resTypeOther';
@@ -12,6 +13,7 @@ function realUid(length = 20, char = true) {
     return id.join('');
 }
 const identifierCache = [];
+const clearIdTicker = {};
 const tempCacheObj = {};
 const typeMap = {
     array: [],
@@ -30,36 +32,39 @@ const interfaceTypeMap = {
     object: 'object',
 };
 export const uid = () => realUid(20, true);
-export function formatIdentifier(identifier) {
-    if (identifier >= 0 && Math.abs(identifier) < 2147483648) {
-        return Math.round(identifier);
+export function formatIdentifier(identifier, eventType, changed) {
+    if (changed && clearIdTicker[identifier]) {
+        clearTimeout(clearIdTicker[identifier]);
+        delete clearIdTicker[identifier];
     }
-    
-    for (const key in identifierCache) {
-        if (identifierCache[key] && identifierCache[key].key === identifier) {
-            return identifierCache[key].value;
+    let id = identifierCache.indexOf(identifier);
+    if (id <= -1) {
+        for (let key = 0; key < identifierCache.length; key++) {
+            if (identifierCache[key] === null) {
+                identifierCache[key] = identifier;
+                id = key;
+                break;
+            }
         }
     }
-    let value = parseInt(`${Math.random() * 2147483648}`, 10);
-    
-    while (identifierCache.some(v => v.value === value)) {
-        value += 1;
+    if (id <= -1) {
+        identifierCache.push(identifier);
+        id = identifierCache.length - 1;
     }
-    identifierCache.push({
-        key: identifier,
-        value,
-    });
-    if (identifierCache.length > 30) {
-        identifierCache.shift();
+    if (changed && (eventType === 'touchend' || eventType === 'touchcancel')) {
+        clearIdTicker[identifier] = setTimeout(() => {
+            identifierCache[id] = null;
+            delete clearIdTicker[identifier];
+        }, 50);
     }
-    return value;
+    return id;
 }
-export function formatTouchEvent(v) {
+export function formatTouchEvent(v, type, changed) {
     return {
         clientX: v.clientX * window.devicePixelRatio,
         clientY: (window.innerHeight - v.clientY) * window.devicePixelRatio,
         force: v.force,
-        identifier: formatIdentifier(v.identifier),
+        identifier: formatIdentifier(v.identifier, type, changed),
         pageX: v.pageX * window.devicePixelRatio,
         pageY: (window.innerHeight - v.pageY) * window.devicePixelRatio,
     };
@@ -101,6 +106,9 @@ export function formatResponse(type, data, id) {
         }
         else if (conf[key] === 'string' && typeof data[key] === 'number') {
             data[key] = `${data[key]}`;
+        }
+        else if (conf[key] === 'string' && typeof data[key] === 'object') {
+            data[key] = JSON.stringify(data[key]);
         }
         else if (conf[key] === 'bool' && (typeof data[key] === 'number' || typeof data[key] === 'string')) {
             data[key] = !!data[key];
@@ -167,6 +175,9 @@ export function formatResponse(type, data, id) {
             }
         }
     });
+    if ((type === 'SystemInfo' || type === 'WindowInfo') && data.pixelRatio) {
+        data.pixelRatio = window.devicePixelRatio;
+    }
     return data;
 }
 export function formatJsonStr(str, type) {
@@ -225,6 +236,9 @@ function convertBase64ToData(input) {
     return input;
 }
 export function cacheArrayBuffer(callbackId, data) {
+    if (!callbackId || !data) {
+        return;
+    }
     tempCacheObj[callbackId] = data;
 }
 export function setArrayBuffer(buffer, offset, callbackId) {
@@ -291,7 +305,7 @@ export function convertDataToPointer(data) {
     if (typeof data === 'string') {
         return convertStringToPointer(data);
     }
-    if (data instanceof ArrayBuffer) {
+    if (data instanceof ArrayBuffer || typeof data === 'object') {
         return convertArrayBufferToPointer(data);
     }
     return 0;
@@ -362,4 +376,26 @@ export function stringifyRes(obj) {
         return '{}';
     }
     return JSON.stringify(obj);
+}
+export function getDefaultData(canvas, conf) {
+    const config = formatJsonStr(conf);
+    if (typeof config.x === 'undefined') {
+        config.x = 0;
+    }
+    if (typeof config.y === 'undefined') {
+        config.y = 0;
+    }
+    if (typeof config.width === 'undefined' || config.width === 0) {
+        config.width = canvas.width;
+    }
+    if (typeof config.height === 'undefined' || config.height === 0) {
+        config.height = canvas.height;
+    }
+    if (typeof config.destWidth === 'undefined' || config.destWidth === 0) {
+        config.destWidth = canvas.width;
+    }
+    if (typeof config.destHeight === 'undefined' || config.destHeight === 0) {
+        config.destHeight = canvas.height;
+    }
+    return config;
 }

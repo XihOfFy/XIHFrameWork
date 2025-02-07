@@ -37,7 +37,7 @@ namespace WeChatWASM
         /// <summary>
         /// Gets 云函数
         /// </summary>
-        public static Cloud cloud
+        public static WXCloud cloud
         {
             get
             {
@@ -264,31 +264,31 @@ namespace WeChatWASM
         /// <param name="param">param各字段说明详见这里，https://developers.weixin.qq.com/minigame/dev/api/ad/wx.createBannerAd.html </param>
         /// <returns>对banner广告做操作的对象，详见 https://developers.weixin.qq.com/minigame/dev/api/ad/BannerAd.html </returns>
         /// <example>
-        /// // 底部banner广告示例
-        ///        var sysInfo = WX.GetSystemInfoSync();
-        ///         var banner = WX.CreateBannerAd(new WXCreateBannerAdParam()
+        ///     // 底部banner广告示例
+        ///     var windowInfo = WX.GetWindowInfo();
+        ///     var banner = WX.CreateBannerAd(new WXCreateBannerAdParam()
+        ///     {
+        ///         adUnitId = "adunit-2e20328227ca771b",
+        ///         adIntervals = 30,
+        ///         style = new Style()
         ///         {
-        ///             adUnitId = "adunit-2e20328227ca771b",
-        ///            adIntervals = 30,
-        ///             style = new Style()
-        ///             {
-        ///                 left = 0,
-        ///                 top = sysInfo.windowHeight - 100,
-        ///                 width = sysInfo.windowWidth,
-        ///                 height = 100
-        ///             }
-        ///        });
-        ///         banner.OnError((WXADErrorResponse res)=>
-        ///         {
-        ///             Debug.Log("bannerad error response");
-        ///         });
-        ///         banner.OnLoad(()=> {
-        ///             banner.Show();
-        ///         });
+        ///             left = 0,
+        ///             top = windowInfo.windowHeight - 100,
+        ///             width = windowInfo.windowWidth,
+        ///             height = 100
+        ///         }
+        ///     });
+        ///     banner.OnError((WXADErrorResponse res)=>
+        ///     {
+        ///         Debug.Log("bannerad error response");
+        ///     });
+        ///     banner.OnLoad(()=> {
+        ///         banner.Show();
+        ///     });
         ///     banner.OnResize((WXADResizeResponse res) =>
         ///     {
-        ///         //拉取的广告可能跟设置的不一样，需要动态调整位置
-        ///         banner.style.top = sysInfo.windowHeight - res.height;
+        ///         // 拉取的广告可能跟设置的不一样，需要动态调整位置
+        ///         banner.style.top = windowInfo.windowHeight - res.height;
         ///     });
         /// </example>
         public static WXBannerAd CreateBannerAd(WXCreateBannerAdParam param)
@@ -446,9 +446,9 @@ namespace WeChatWASM
         /// 获取开放数据域，关系链相关可以参看 https://developers.weixin.qq.com/minigame/dev/guide/open-ability/open-data.html
         /// </summary>
         /// <returns>开放数据域对象</returns>
-        public static WXOpenDataContext GetOpenDataContext()
+        public static WXOpenDataContext GetOpenDataContext(OpenDataContextOption option = null)
         {
-            return new WXOpenDataContext();
+            return new WXOpenDataContext(option);
         }
 
         /// <summary>
@@ -1081,6 +1081,42 @@ namespace WeChatWASM
             WXSDKManagerHandler.Instance.OffGyroscopeChange(result);
         }
 #endregion
+        /// <summary>
+        /// [wx.setPreferredFramesPerSecond(number fps)](https://developers.weixin.qq.com/minigame/dev/api/render/frame/wx.setPreferredFramesPerSecond.html)
+        /// 可以修改渲染帧率。默认渲染帧率为 60 帧每秒。修改后，requestAnimationFrame 的回调频率会发生改变。
+        /// </summary>
+        public static void SetPreferredFramesPerSecond(double fps)
+        {
+            WXSDKManagerHandler.Instance.SetPreferredFramesPerSecond(fps);
+        }
+        /// <summary>
+        /// 设置分辨率
+        /// </summary>
+        public static void SetDevicePixelRatio(double ratio)
+        {
+            WXSDKManagerHandler.Instance.SetDevicePixelRatio(ratio);
+        }
+
+        public static void CallJSFunction(string sdkName, string functionName, params object[] args)
+        {
+            WXSDKManagerHandler.CallJSFunction(sdkName, functionName, args);
+        }
+
+        public static string CallJSFunctionWithReturn(string sdkName, string functionName, params object[] args)
+        {
+            return WXSDKManagerHandler.CallJSFunctionWithReturn(sdkName, functionName, args);
+        }
+
+        // TODO: 声明错误临时处理
+        /// <summary>
+        /// [wx.reserveChannelsLive(Object object)](https://developers.weixin.qq.com/minigame/dev/api/open-api/channels/wx.reserveChannelsLive.html)
+        /// 需要基础库： `2.19.0`
+        /// 预约视频号直播
+        /// </summary>
+        public static void ReserveChannelsLive(ReserveChannelsLiveOption option)
+        {
+            WXSDKManagerHandler.Instance.ReserveChannelsLive(option);
+        }
     }
 }
 #endif

@@ -198,7 +198,7 @@ var WXAssetBundleLibrary = {
     }();
     
     WXFS.cache = new WXFileCache(ttl, capacity);
-    if(!unityNamespace.isAndroid) {
+    if(unityNamespace.isIOS && unityNamespace.isH5Renderer) {
       WXFS.cache.RegularCleaning(1);
     }
 
@@ -249,6 +249,7 @@ var WXAssetBundleLibrary = {
       if(WXFS._url2path.has(url)){
         return WXFS._url2path.get(url);
       }
+      url = url.replaceAll(' ', '%20')
       if(url.startsWith('/vfs_streamingassets/')){
         var path = url.replace('/vfs_streamingassets/', wx.env.USER_DATA_PATH + "/__GAME_FILE_CACHE/StreamingAssets/");
       }
@@ -268,6 +269,10 @@ var WXAssetBundleLibrary = {
         var err_msg = !!e ? e.toString() : 'unknown';
       }
       var expected_size = WXFS.disk.get(path);
+      if(expected_size === 0){
+        WXFS.disk.set(path, res.byteLength);
+        expected_size = res.byteLength;
+      }
       if(!res || res.byteLength != expected_size){
         var wxab_error = {
           stage: WXFS.WXABErrorSteps['kLoadBundleFromFile'],
@@ -307,12 +312,16 @@ var WXAssetBundleLibrary = {
     return buffer;
   },
 
-  UnCleanbyPath: function (ptr) {
+  UnCleanbyPath: function (ptr, fromFile) {
     var url = UTF8ToString(ptr);
     var path = WXFS.url2path(url);
+    if(fromFile && !GameGlobal.manager.fs.accessSync(path)){
+      return false;
+    }
     if(!WXFS.disk.has(path)){
       WXFS.disk.set(path, 0);
     }
+    return true;
   },
 
   UnloadbyPath: function (ptr) {

@@ -69,13 +69,13 @@ namespace Aot2Hot
             }
         }
         //string[] suffixArr = new string[] { "._. . . . .", ". ._. . . .", ". . ._. . .", ". . . ._. .",  ". . . . ._." };
-        void OnDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
+        void OnDownloadProgress(DownloadUpdateData updateData)
         {
-            //tip.text = $"正在拼命加载中。。。({currentDownloadCount}/{totalDownloadCount}): {(currentDownloadBytes >> 10)}KB/{(totalDownloadBytes >> 10)}KB";
-            //tip.text = $"正在拼命加载资源中 {suffixArr[currentDownloadCount%6]}";
-            tip.text = "正在拼命加载资源中...";
-            if (totalDownloadBytes > 0) {
-                progerssImg.fillAmount = 1.0f * currentDownloadBytes / totalDownloadBytes;
+            tip.text = $"下载资源中。。。({updateData.CurrentDownloadCount}/{updateData.TotalDownloadCount}): {(updateData.CurrentDownloadCount >> 10)}KB/{(updateData.TotalDownloadCount >> 10)}KB";
+            //tip.text = $"下载资源中 {suffixArr[currentDownloadCount%6]}";
+            if (updateData.TotalDownloadCount > 0)
+            {
+                progerssImg.fillAmount = 1.0f * updateData.CurrentDownloadCount / updateData.TotalDownloadBytes;
             }
         }
         void TryReDownload() {

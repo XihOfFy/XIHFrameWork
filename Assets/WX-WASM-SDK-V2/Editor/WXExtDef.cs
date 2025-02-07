@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
@@ -51,6 +52,11 @@ namespace WeChatWASM
 #else
             WXExtEnvDef.SETDEF("UNITY_EDITOR_OSX", false);
 #endif
+#if UNITY_EDITOR_LINUX
+            WXExtEnvDef.SETDEF("UNITY_EDITOR_LINUX", true);
+#else
+            WXExtEnvDef.SETDEF("UNITY_EDITOR_LINUX", false);
+#endif
 #if UNITY_2020
             WXExtEnvDef.SETDEF("UNITY_2020", true);
 #else
@@ -65,6 +71,11 @@ namespace WeChatWASM
             WXExtEnvDef.SETDEF("UNITY_2022", true);
 #else
             WXExtEnvDef.SETDEF("UNITY_2022", false);
+#endif
+#if UNITY_6000
+            WXExtEnvDef.SETDEF("UNITY_6000", true);
+#else
+            WXExtEnvDef.SETDEF("UNITY_6000", false);
 #endif
 #if UNITY_2022_2_OR_NEWER
             WXExtEnvDef.SETDEF("UNITY_2022_2_OR_NEWER", true);
@@ -86,6 +97,11 @@ namespace WeChatWASM
 #else
             WXExtEnvDef.SETDEF("TUANJIE_2022_3_OR_NEWER", false);
 #endif
+#if UNITY_6000_0_OR_NEWER
+            WXExtEnvDef.SETDEF("UNITY_6000_0_OR_NEWER", true);
+#else
+            WXExtEnvDef.SETDEF("UNITY_6000_0_OR_NEWER", false);
+#endif
 #if PLATFORM_WEIXINMINIGAME
             WXExtEnvDef.SETDEF("PLATFORM_WEIXINMINIGAME", true);
 #else
@@ -105,6 +121,42 @@ namespace WeChatWASM
             // #endif
             //                 return null;
             //             });
+            WXExtEnvDef.RegisterAction("WXConvertCore.UseIL2CPP", (args) =>
+            {
+                return WXConvertCore.UseIL2CPP;
+            });
+            WXExtEnvDef.RegisterAction("UnityUtil.GetWxSDKRootPath", (args) =>
+            {
+#if UNITY_2018
+                return Path.Combine(Application.dataPath, "WX-WASM-SDK-V2");
+#else
+                var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(WXExtEnvDef).Assembly);
+                if (packageInfo == null)
+                {
+                    return Path.Combine(Application.dataPath, "WX-WASM-SDK-V2");
+                }
+                string packagePath = packageInfo.assetPath;
+                if (packageInfo.name == "WXSDK")
+                {
+                    packagePath += "/Resources";
+                }
+                DirectoryInfo dir = new DirectoryInfo(packagePath);
+                return dir.FullName;
+#endif
+            });
+            WXExtEnvDef.RegisterAction("UnityUtil.IsAssets", (args) =>
+            {
+#if UNITY_2018
+                return true;
+#else
+                var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(WXExtEnvDef).Assembly);
+                if (packageInfo == null)
+                {
+                    return true;
+                }
+                return false;
+#endif
+            });
         }
     }
 }

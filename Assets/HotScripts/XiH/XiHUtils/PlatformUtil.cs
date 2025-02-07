@@ -14,7 +14,8 @@ namespace XiHUtil
     public class PlatformUtil
     {
         public static void TriggerGC() {
-            InnerTriggerGC().Forget();
+            //暂时不主动触发GC，让系统自己回收
+            //InnerTriggerGC().Forget();
         }
         static bool gcing = false;
         static async UniTaskVoid InnerTriggerGC() {
@@ -22,7 +23,7 @@ namespace XiHUtil
             gcing = true;
             await UniTask.Yield();
             gcing = false;
-            YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssets();
+            YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssetsAsync().ToUniTask().Forget();
             GC.Collect();
 #if UNNITY_WX_WITHOUT_EDITOR
             WeChatWASM.WX.TriggerGC();

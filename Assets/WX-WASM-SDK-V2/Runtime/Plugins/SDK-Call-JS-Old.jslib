@@ -30,7 +30,7 @@ mergeInto(LibraryManager.library, {
             GameGlobal.memprofiler = emscriptenMemoryProfiler
             GameGlobal.memprofiler.onDump = function () {
             var fs = wx.getFileSystemManager();
-            var allocation_used=GameGlobal.memprofiler.allocationsAtLoc; 
+            var allocation_used = GameGlobal.memprofiler.allocationsAtLoc; 
             if (typeof allocation_used === "undefined") allocation_used=GameGlobal.memprofiler.allocationSiteStatistics;
             var calls = [];
             for (var i in allocation_used) {
@@ -232,6 +232,16 @@ mergeInto(LibraryManager.library, {
         stringToUTF8(returnStr, buffer, bufferSize);
         return buffer;
     },
+    WXOpenDataToTempFilePath: function (conf, s, f, c) {
+        window.WXWASMSDK.WXOpenDataToTempFilePath(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c))
+    },
+    WXOpenDataToTempFilePathSync: function (conf) {
+        var returnStr = window.WXWASMSDK.WXOpenDataToTempFilePathSync(_WXPointer_stringify_adaptor(conf));
+        var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
+    },
     WXGetUserDataPath: function () {
         var returnStr = window.WXWASMSDK.WXGetUserDataPath();
         var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
@@ -252,6 +262,9 @@ mergeInto(LibraryManager.library, {
         var buffer = _malloc(bufferSize);
         stringToUTF8(returnStr, buffer, bufferSize);
         return buffer;
+    },
+    WXGetOpenDataContext: function (mode) {
+        window.WXWASMSDK.WXGetOpenDataContext(_WXPointer_stringify_adaptor(mode));
     },
     WXDataContextPostMessage: function (msg) {
         window.WXWASMSDK.WXDataContextPostMessage(_WXPointer_stringify_adaptor(msg));
@@ -309,19 +322,6 @@ mergeInto(LibraryManager.library, {
     },
     WXReportUserBehaviorBranchAnalytics: function (branchId, branchDim, eventType) {
         window.WXWASMSDK.WXReportUserBehaviorBranchAnalytics(_WXPointer_stringify_adaptor(branchId), _WXPointer_stringify_adaptor(branchDim), eventType);
-    },
-    WXCallFunction: function (name, data, conf, s, f, c) {
-        window.WXWASMSDK.WXCallFunction(_WXPointer_stringify_adaptor(name), _WXPointer_stringify_adaptor(data), _WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c));
-    },
-    WXCallFunctionInit: function (conf) {
-        window.WXWASMSDK.WXCallFunctionInit(_WXPointer_stringify_adaptor(conf));
-    },
-    WXCloudID: function (cloudID) {
-        var returnStr = window.WXWASMSDK.WXCloudID(_WXPointer_stringify_adaptor(cloudID));
-        var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
-        var buffer = _malloc(bufferSize);
-        stringToUTF8(returnStr, buffer, bufferSize);
-        return buffer;
     },
     WXCreateInnerAudioContext: function (src, loop, startTime, autoplay, volume, playbackRate, needDownload) {
         var returnStr = window.WXWASMSDK.WXCreateInnerAudioContext(_WXPointer_stringify_adaptor(src), loop, startTime, autoplay, volume, playbackRate, needDownload);
@@ -508,7 +508,11 @@ mergeInto(LibraryManager.library, {
         if (typeof TOTAL_MEMORY !== "undefined") {
             return TOTAL_MEMORY
         }
-        return buffer.byteLength;
+        if (wasmMemory && wasmMemory.buffer) {
+            return wasmMemory.buffer.byteLength;
+        }
+        console.error('Fail to find wasmMemory.buffer, TotalMemorySize is not correct.');
+        return 0;
     },
     WXGetTotalStackSize: function() {
         return TOTAL_STACK;
@@ -551,9 +555,13 @@ mergeInto(LibraryManager.library, {
                     GameGlobal.avgExFrameTime = exTotalTime / 60;
                     frameCount = 0;
                     exTotalTime = 0;
+                  } else if (typeof GameGlobal.avgExFrameTime === "undefined") {
+                    GameGlobal.avgExFrameTime = exTotalTime / frameCount; 
                   }
                 };
             }();
+            //Set initial value to 0 for preventing GameGlobal.avgExFrameTime from being undefined in Unity 2019
+            GameGlobal.avgExFrameTime = 0;
         } 
         return GameGlobal.avgExFrameTime
     },
@@ -783,7 +791,11 @@ mergeInto(LibraryManager.library, {
         window.WXWASMSDK.WX_OperateGameRecorderVideo(_WXPointer_stringify_adaptor(option));
     },
     WXChatCreate: function (option) {
-        return window.WXWASMSDK.WXChatCreate(_WXPointer_stringify_adaptor(option));
+        var returnStr = window.WXWASMSDK.WXChatCreate(_WXPointer_stringify_adaptor(option));
+        var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
     },
     WXChatHide: function () {
         window.WXWASMSDK.WXChatHide();
@@ -988,5 +1000,78 @@ mergeInto(LibraryManager.library, {
     },
     WX_RegisterOnBLECharacteristicValueChangeCallback: function(callback) {
         window.WXWASMSDK.WX_RegisterOnBLECharacteristicValueChangeCallback(callback);
+    },
+    WX_SetDevicePixelRatio: function(ratio) {
+        window.devicePixelRatio = ratio;
+    },
+    WX_CallJSFunction: function (sdkName, functionName, args) {
+        var sdk = _WXPointer_stringify_adaptor(sdkName);
+        var func = _WXPointer_stringify_adaptor(functionName);
+        var formattedArgs = JSON.parse(_WXPointer_stringify_adaptor(args));
+        GameGlobal[sdk][func].apply(GameGlobal[sdk], formattedArgs);
+    },
+    WX_CallJSFunctionWithReturn: function (sdkName, functionName, args) {
+        var sdk = _WXPointer_stringify_adaptor(sdkName);
+        var func = _WXPointer_stringify_adaptor(functionName);
+        var formattedArgs = JSON.parse(_WXPointer_stringify_adaptor(args));
+        var res = GameGlobal[sdk][func].apply(GameGlobal[sdk], formattedArgs);
+        var resStr = JSON.stringify(res);
+        var bufferSize = lengthBytesUTF8(resStr || '') + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8((resStr || ''), buffer, bufferSize);
+        return buffer;
+    },
+    WX_CloudCloud: function (option) {
+        window.WXWASMSDK.WX_CloudCloud(_WXPointer_stringify_adaptor(option));
+    },
+    WX_CloudInit: function (option) {
+        window.WXWASMSDK.WX_CloudInit(_WXPointer_stringify_adaptor(option));
+    },
+    WX_CloudCallFunction: function(env, option, callbackId) {
+        window.WXWASMSDK.WX_CloudCallFunction(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+    },
+    WX_CloudCloudID: function (env, cloudID) {
+        var returnStr = window.WXWASMSDK.WX_CloudCloudID(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(cloudID));
+        var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
+    },
+    WX_CloudCallContainer: function(env, option, callbackId) {
+        window.WXWASMSDK.WX_CloudCallContainer(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+    },
+    WX_CloudUploadFile: function(env, option, callbackId) {
+        window.WXWASMSDK.WX_CloudUploadFile(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+    },
+    WX_CloudDownloadFile: function(env, option, callbackId) {
+        window.WXWASMSDK.WX_CloudDownloadFile(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+    },
+    WX_CloudGetTempFileURL: function(env, option, callbackId) {
+        window.WXWASMSDK.WX_CloudGetTempFileURL(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+    },
+    WX_CloudDeleteFile: function(env, option, callbackId) {
+        window.WXWASMSDK.WX_CloudDeleteFile(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+    },
+    WX_CloudCDNString: function(env, target, isJSON) {
+        if (isJSON) {
+            target = JSON.parse(_WXPointer_stringify_adaptor(target));
+        } else {
+            target = _WXPointer_stringify_adaptor(target);
+        }
+        var returnStr = window.WXWASMSDK.WX_CloudCDN(_WXPointer_stringify_adaptor(env), target);
+        var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
+    },
+    WX_CloudCDNBuffer: function(env, targetPtr, targetLength) {
+        var returnStr = window.WXWASMSDK.WX_CloudCDN(_WXPointer_stringify_adaptor(env), HEAPU8.buffer.slice(targetPtr, targetPtr + targetLength));
+        var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(returnStr, buffer, bufferSize);
+        return buffer;
+    },
+    WX_SetPreferredFramesPerSecond: function(fps) {
+        window.WXWASMSDK.WX_SetPreferredFramesPerSecond(fps);
     }
 });

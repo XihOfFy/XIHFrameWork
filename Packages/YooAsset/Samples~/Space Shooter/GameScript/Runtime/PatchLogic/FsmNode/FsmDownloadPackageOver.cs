@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniFramework.Machine;
 
-/// <summary>
-/// 下载完毕
-/// </summary>
 internal class FsmDownloadPackageOver : IStateNode
 {
     private StateMachine _machine;
@@ -16,7 +13,8 @@ internal class FsmDownloadPackageOver : IStateNode
     }
     void IStateNode.OnEnter()
     {
-        _machine.ChangeState<FsmClearPackageCache>();
+        PatchEventDefine.PatchStepsChange.SendEventMessage("资源文件下载完毕！");
+        _machine.ChangeState<FsmClearCacheBundle>();
     }
     void IStateNode.OnUpdate()
     {

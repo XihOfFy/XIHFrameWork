@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { formatJsonStr, uid, onEventCallback, offEventCallback, getListObject, convertDataToPointer, convertInfoToPointer, formatResponse } from '../utils';
 const UDPSocketList = {};
 const wxUDPSocketCloseList = {};
@@ -102,12 +103,12 @@ function WX_UDPSocketOnMessage(id, needInfo) {
         if (needInfo) {
             const localInfoPtr = convertInfoToPointer(res.localInfo);
             const remoteInfoPtr = convertInfoToPointer(res.remoteInfo);
-            GameGlobal.Module.dynCall_viiiii(wxUDPSocketOnMessageCallback, idPtr, messagePtr, res.message.byteLength, localInfoPtr, remoteInfoPtr);
+            GameGlobal.Module.dynCall_viiiii(wxUDPSocketOnMessageCallback, idPtr, messagePtr, res.message.length || res.message.byteLength, localInfoPtr, remoteInfoPtr);
             GameGlobal.Module._free(localInfoPtr);
             GameGlobal.Module._free(remoteInfoPtr);
         }
         else {
-            GameGlobal.Module.dynCall_viiiii(wxUDPSocketOnMessageCallback, idPtr, messagePtr, res.message.byteLength, 0, 0);
+            GameGlobal.Module.dynCall_viiiii(wxUDPSocketOnMessageCallback, idPtr, messagePtr, res.message.length || res.message.byteLength, 0, 0);
         }
         GameGlobal.Module._free(idPtr);
         GameGlobal.Module._free(messagePtr);
@@ -150,12 +151,33 @@ function WX_UDPSocketSetTTL(id, ttl) {
     }
     obj.setTTL(ttl);
 }
-function WX_UDPSocketWrite(id) {
+function WX_UDPSocketWriteString(id, data, param) {
     const obj = getUDPSocketObject(id);
     if (!obj) {
         return;
     }
-    obj.write();
+    const config = formatJsonStr(param);
+    obj.write({
+        address: config.address,
+        message: data,
+        port: config.port,
+        setBroadcast: config.setBroadcast,
+    });
+}
+function WX_UDPSocketWriteBuffer(id, dataPtr, dataLength, param) {
+    const obj = getUDPSocketObject(id);
+    if (!obj) {
+        return;
+    }
+    const config = formatJsonStr(param);
+    obj.write({
+        address: config.address,
+        message: GameGlobal.Module.HEAPU8.buffer.slice(dataPtr, dataPtr + dataLength),
+        port: config.port,
+        length: config.length,
+        offset: config.offset,
+        setBroadcast: config.setBroadcast,
+    });
 }
 function WX_UDPSocketBind(id, param) {
     const obj = getUDPSocketObject(id);
@@ -184,6 +206,7 @@ export default {
     WX_UDPSocketSendString,
     WX_UDPSocketSendBuffer,
     WX_UDPSocketSetTTL,
-    WX_UDPSocketWrite,
+    WX_UDPSocketWriteString,
+    WX_UDPSocketWriteBuffer,
     WX_RegisterUDPSocketOnMessageCallback,
 };

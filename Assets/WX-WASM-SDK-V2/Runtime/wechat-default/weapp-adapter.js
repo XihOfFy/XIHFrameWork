@@ -76,8 +76,7 @@ const isWK = false;
                 _window.canvas.addEventListener = _window.addEventListener;
                 _window.canvas.removeEventListener = _window.removeEventListener;
             }
-            const _wx$getSystemInfoSync = wx.getSystemInfoSync();
-            const { platform } = _wx$getSystemInfoSync;
+            const { platform } = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync();
             // 开发者工具无法重定义 window
             if (platform === 'devtools') {
                 for (const key in _window) {
@@ -223,13 +222,10 @@ const isWK = false;
         function _interopRequireDefault(obj) {
             return obj && obj.__esModule ? obj : { default: obj };
         }
-        const _wx$getSystemInfoSync = wx.getSystemInfoSync();
-        const { screenWidth } = _wx$getSystemInfoSync;
-        const { screenHeight } = _wx$getSystemInfoSync;
-        const { devicePixelRatio } = _wx$getSystemInfoSync;
+        const { screenWidth, screenHeight, pixelRatio } = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
         const innerWidth = exports.innerWidth = screenWidth;
         const innerHeight = exports.innerHeight = screenHeight;
-        exports.devicePixelRatio = devicePixelRatio;
+        exports.devicePixelRatio = pixelRatio;
         const screen = exports.screen = {
             availWidth: innerWidth,
             availHeight: innerHeight,
@@ -247,9 +243,18 @@ const isWK = false;
             value: true,
         });
         let performance = void 0;
+        let ori_performance = wx.getPerformance();
         const initTime = Date.now();
+        const ori_initTime = ori_performance.now();
         const clientPerfAdapter = Object.assign({}, {
             now: function now() {
+                if (GameGlobal.unityNamespace.isDevelopmentBuild
+                    && GameGlobal.unityNamespace.isProfilingBuild
+                    && !GameGlobal.unityNamespace.isDevtools
+                    && !GameGlobal.isIOSHighPerformanceMode) {
+                    // 由于wx.getPerformance()获取到的是微秒级，因此这里需要/1000.0，进行单位的统一
+                    return (ori_performance.now() - ori_initTime) * 0.001;
+                }
                 return (Date.now() - initTime);
             },
         });
@@ -1186,16 +1191,18 @@ const isWK = false;
             this.stopPropagation = _util.noop;
             this.type = type;
         };
-        function formatTouchEvent(v) {
-            v.identifier = formatIdentifier(v.identifier);
-            return v;
+        function formatTouchEvent(v, type, changed) {
+            return {
+                ...v,
+                identifier: formatIdentifier(v.identifier, type, changed)
+            };
         }
         function touchEventHandlerFactory(type) {
             return function (event) {
                 const touchEvent = new TouchEvent(type);
-                touchEvent.touches = event.touches.map(v => formatTouchEvent(v));
-                touchEvent.targetTouches = Array.prototype.slice.call(event.touches).map(v => formatTouchEvent(v));
-                touchEvent.changedTouches = event.changedTouches.map(v => formatTouchEvent(v));
+                touchEvent.touches = event.touches.map(v => formatTouchEvent(v, event.type));
+                touchEvent.targetTouches = Array.prototype.slice.call(event.touches).map(v => formatTouchEvent(v, event.type));
+                touchEvent.changedTouches = event.changedTouches.map(v => formatTouchEvent(v, event.type, 1));
                 touchEvent.timeStamp = event.timeStamp;
                 _document2.default.dispatchEvent(touchEvent);
             };
@@ -1214,8 +1221,7 @@ const isWK = false;
         });
         const _util = __webpack_require__(9);
         // TODO 需要 wx.getSystemInfo 获取更详细信息
-        const _wx$getSystemInfoSync = wx.getSystemInfoSync();
-        const { platform } = _wx$getSystemInfoSync;
+        const { platform } = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync();
         const navigator = {
             platform,
             language: 'zh-cn',

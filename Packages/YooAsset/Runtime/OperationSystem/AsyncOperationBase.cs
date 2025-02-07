@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,16 +8,19 @@ namespace YooAsset
 {
     public abstract class AsyncOperationBase : IEnumerator, IComparable<AsyncOperationBase>
     {
-        // 用户请求的回调
         private Action<AsyncOperationBase> _callback;
-
-        // 是否已经完成
-        internal bool IsFinish = false;
+        private string _packageName = null;
+        private int _whileFrame = 1000;
 
         /// <summary>
-        /// 所属包裹
+        /// 等待异步执行完成
         /// </summary>
-        public string PackageName { private set; get; }
+        internal bool IsWaitForAsyncComplete = false;
+
+        /// <summary>
+        /// 是否已经完成
+        /// </summary>
+        internal bool IsFinish = false;
 
         /// <summary>
         /// 优先级
@@ -37,6 +41,17 @@ namespace YooAsset
         /// 处理进度
         /// </summary>
         public float Progress { get; protected set; }
+
+        /// <summary>
+        /// 所属包裹名称
+        /// </summary>
+        public string PackageName
+        {
+            get
+            {
+                return _packageName;
+            }
+        }
 
         /// <summary>
         /// 是否已经完成
@@ -86,11 +101,17 @@ namespace YooAsset
 
         internal abstract void InternalOnStart();
         internal abstract void InternalOnUpdate();
-        internal virtual void InternalOnAbort() { }
+        internal virtual void InternalOnAbort()
+        {
+        }
+        internal virtual void InternalWaitForAsyncComplete()
+        {
+            throw new System.NotImplementedException(this.GetType().Name);
+        }
 
         internal void SetPackageName(string packageName)
         {
-            PackageName = packageName;
+            _packageName = packageName;
         }
         internal void SetStart()
         {
@@ -116,9 +137,31 @@ namespace YooAsset
             {
                 Status = EOperationStatus.Failed;
                 Error = "user abort";
-                YooLogger.Warning($"Async operaiton has been abort : {this.GetType().Name}");
+                YooLogger.Warning($"Async operaiton {this.GetType().Name} has been abort !");
                 InternalOnAbort();
             }
+        }
+
+        /// <summary>
+        /// 执行While循环
+        /// </summary>
+        protected bool ExecuteWhileDone()
+        {
+            if (IsDone == false)
+            {
+                // 执行更新逻辑
+                InternalOnUpdate();
+
+                // 当执行次数用完时
+                _whileFrame--;
+                if (_whileFrame <= 0)
+                {
+                    Status = EOperationStatus.Failed;
+                    Error = $"Operation {this.GetType().Name} failed to wait for async complete !";
+                    YooLogger.Error(Error);
+                }
+            }
+            return IsDone;
         }
 
         /// <summary>
@@ -127,6 +170,18 @@ namespace YooAsset
         protected void ClearCompletedCallback()
         {
             _callback = null;
+        }
+
+        /// <summary>
+        /// 等待异步执行完毕
+        /// </summary>
+        public void WaitForAsyncComplete()
+        {
+            if (IsDone)
+                return;
+
+            IsWaitForAsyncComplete = true;
+            InternalWaitForAsyncComplete();
         }
 
         #region 排序接口实现

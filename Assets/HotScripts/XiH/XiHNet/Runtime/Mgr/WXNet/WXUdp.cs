@@ -52,7 +52,10 @@ namespace XiHNet
                 address = ipAddr,
                 port = _endPoint.Port
             });
-            socket.Write();
+            socket.Write(new UDPSocketSendOption() { 
+                address = ipAddr,
+                port = _endPoint.Port
+            });
             OnConnect();
         }
         public override void Request(byte[] data)

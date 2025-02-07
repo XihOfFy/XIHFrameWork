@@ -1,9 +1,12 @@
-import { isH5Renderer, isSupportVideoPlayer, isPc, isDevtools } from '../../check-version';
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable @typescript-eslint/naming-convention */
+import { isH5Renderer, isSupportVideoPlayer, isDebug, isPc, isDevtools } from '../../check-version';
 let FrameworkData = null;
-const isWebVideo = isH5Renderer || isPc || isDevtools;
-const isDebug = false;
+
+const isWebVideo = (isH5Renderer && !GameGlobal.isIOSHighPerformanceModePlus) || isPc || isDevtools;
 const needCache = true;
 const cacheVideoDecoder = [];
+const supportVideoFrame = !!GameGlobal.isIOSHighPerformanceModePlus;
 const videoInstances = {};
 function _JS_Video_CanPlayFormat(format, data) {
     
@@ -26,9 +29,9 @@ function jsVideoEnded() {
     if (isDebug) {
         console.log('jsVideoEnded');
     }
-    
+    // @ts-ignore
     if (this.onendedCallback) {
-        
+        // @ts-ignore
         dynCall_vi(this.onendedCallback, this.onendedRef);
     }
 }
@@ -41,9 +44,9 @@ function _JS_Video_Create(url) {
         console.log('_JS_Video_Create', source);
     }
     if (isWebVideo) {
-        
+        // @ts-ignore
         const video = GameGlobal.manager.createWKVideo(source, FrameworkData.GLctx);
-        
+        // eslint-disable-next-line no-plusplus
         videoInstances[++videoInstanceIdCounter] = video;
     }
     else {
@@ -52,31 +55,37 @@ function _JS_Video_Create(url) {
             videoDecoder = cacheVideoDecoder.pop();
         }
         else {
-            
+            // @ts-ignore 8.0.38客户端+3.0.0基础库，才能正常使用type参数
             videoDecoder = wx.createVideoDecoder({
                 type: 'wemedia',
             });
         }
-        
+        // eslint-disable-next-line no-plusplus
         const videoInstance = {
             videoDecoder,
             videoWidth: 0,
             videoHeight: 0,
             isReady: false,
+            stoped: false,
             paused: false,
             ended: false,
             seeking: false,
             duration: 1,
         };
-        
+        // eslint-disable-next-line no-plusplus
         videoInstances[++videoInstanceIdCounter] = videoInstance;
+        
+        videoDecoder.remove();
         videoDecoder.on('start', (res) => {
             if (isDebug) {
                 console.warn('wxVideoDecoder start:', res);
             }
             videoInstance.paused = false;
+            videoInstance.stoped = false;
             if (!videoInstance.isReady) {
-                videoInstance.duration = res.video?.duration ?? 0;
+                if (res.video && res.video.duration) {
+                    videoInstance.duration = res.video.duration / 1000;
+                }
                 videoInstance.videoWidth = res.width ?? 0;
                 videoInstance.videoHeight = res.height ?? 0;
                 videoInstance.isReady = true;
@@ -87,12 +96,7 @@ function _JS_Video_Create(url) {
             if (isDebug) {
                 console.warn('wxVideoDecoder stop:', res);
             }
-            videoInstance.paused = true;
-        });
-        videoDecoder.on('seek', (res) => {
-            if (isDebug) {
-                console.warn('wxVideoDecoder seek:', res);
-            }
+            videoInstance.stoped = true;
         });
         videoDecoder.on('bufferchange', (res) => {
             if (isDebug) {
@@ -111,22 +115,44 @@ function _JS_Video_Create(url) {
                 videoInstance.onended?.();
             }
         });
-        
+        // @ts-ignore
         videoDecoder.on('frame', (res) => {
-            
-            
+            // @ts-ignore
             videoInstance.currentTime = res.pts / 1000;
-            videoInstance.frameData = new Uint8ClampedArray(res.data);
+            
+            if (supportVideoFrame) {
+                
+                videoInstance.frameData?.close?.();
+            }
+            videoInstance.frameData = res;
         });
-        videoInstance.play = () => videoDecoder.start({
+        const startOption = {
             source,
-        });
+        };
+        if (supportVideoFrame) {
+            startOption.videoDataType = 2;
+        }
+        videoInstance.play = () => {
+            if (videoInstance.seeking) {
+                videoInstance.seeking = false;
+            }
+            if (videoInstance.paused) {
+                videoInstance.paused = false;
+                videoDecoder.wait(false);
+            }
+            else {
+                videoDecoder.start(startOption);
+            }
+        };
         videoInstance.pause = () => {
-            videoDecoder.stop();
+            videoDecoder.wait(true);
+            videoInstance.paused = true;
         };
         videoInstance.seek = (time) => {
-            
+            // @ts-ignore
             videoDecoder.avSync.seek({ stamp: time });
+            videoInstance.seeking = true;
+            videoDecoder.emitter.emit('seek', {});
         };
         videoInstance.play();
         videoInstance.destroy = () => {
@@ -143,8 +169,10 @@ function _JS_Video_Create(url) {
             delete videoInstance.videoDecoder;
             delete videoInstance.onendedCallback;
             delete videoInstance.frameData;
+            videoInstance.stoped = false;
             videoInstance.paused = false;
             videoInstance.ended = false;
+            videoInstance.seeking = false;
             videoInstance.currentTime = 0;
             videoInstance.onended = null;
         };
@@ -203,7 +231,7 @@ function _JS_Video_IsPlaying(video) {
         return v.isPlaying;
     }
     const v = videoInstances[video];
-    return v.isReady && !v.paused && !v.ended;
+    return v.isReady && !v.stoped && !v.paused && !v.ended;
 }
 function _JS_Video_IsReady(video) {
     const v = videoInstances[video];
@@ -218,14 +246,14 @@ function _JS_Video_Pause(video) {
         console.log('_JS_Video_Pause');
     }
     const v = videoInstances[video];
-    v.pause();
     if (v.loopEndPollInterval) {
         clearInterval(v.loopEndPollInterval);
     }
+    v.pause();
 }
 function _JS_Video_SetLoop(video, loop = false) {
     if (isDebug) {
-        console.log('_JS_Video_SetLoop', video);
+        console.log('_JS_Video_SetLoop', video, loop);
     }
     const v = videoInstances[video];
     if (v.loopEndPollInterval) {
@@ -236,8 +264,16 @@ function _JS_Video_SetLoop(video, loop = false) {
         
         v.loopEndPollInterval = setInterval(() => {
             if (typeof v.currentTime !== 'undefined' && typeof v.lastSeenPlaybackTime !== 'undefined') {
-                if (v.currentTime < v.lastSeenPlaybackTime) {
-                    jsVideoEnded.apply(v);
+                const cur = Math.floor(v.currentTime);
+                const last = Math.floor(v.lastSeenPlaybackTime);
+                if (cur < last) {
+                    const dur = v.duration;
+                    const margin = 0.2;
+                    const closeToBegin = margin * dur;
+                    const closeToEnd = dur - closeToBegin;
+                    if (cur < closeToBegin && last > closeToEnd) {
+                        jsVideoEnded.apply(v);
+                    }
                 }
             }
             v.lastSeenPlaybackTime = v.currentTime;
@@ -304,10 +340,11 @@ function _JS_Video_SetMute(video, muted) {
     const v = videoInstances[video];
     v.muted = muted || jsVideoAllAudioTracksAreDisabled(v);
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function _JS_Video_SetPlaybackRate(video, rate) {
-    if (isDebug) {
-        console.log('_JS_Video_SetPlaybackRate', video, rate);
-    }
+    
+    
+    
     
     
     
@@ -393,7 +430,16 @@ function _JS_Video_UpdateToTexture(video, tex) {
             v.render();
         }
         else {
-            GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalFormat, v.videoWidth, v.videoHeight, 0, format, GLctx.UNSIGNED_BYTE, v.frameData);
+            
+            const data = v.frameData?.data;
+            const source = supportVideoFrame ? data : new Uint8ClampedArray(data);
+            
+            if (supportVideoFrame) {
+                GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalFormat, format, GLctx.UNSIGNED_BYTE, source);
+            }
+            else {
+                GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalFormat, v.videoWidth, v.videoHeight, 0, format, GLctx.UNSIGNED_BYTE, source);
+            }
         }
         v.previousUploadedWidth = width;
         v.previousUploadedHeight = height;
@@ -404,7 +450,15 @@ function _JS_Video_UpdateToTexture(video, tex) {
             v.render();
         }
         else {
-            GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalFormat, v.videoWidth, v.videoHeight, 0, format, GLctx.UNSIGNED_BYTE, v.frameData);
+            const data = v.frameData?.data;
+            const source = supportVideoFrame ? data : new Uint8ClampedArray(data);
+            
+            if (supportVideoFrame) {
+                GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalFormat, format, GLctx.UNSIGNED_BYTE, source);
+            }
+            else {
+                GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalFormat, v.videoWidth, v.videoHeight, 0, format, GLctx.UNSIGNED_BYTE, source);
+            }
         }
     }
     GLctx.pixelStorei(GLctx.UNPACK_FLIP_Y_WEBGL, false);

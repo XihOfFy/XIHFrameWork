@@ -31,15 +31,16 @@ namespace HybridCLR.Editor.Commands
             Directory.Delete(il2cppBuildCachePath, true);
         }
 
-        private static void GenerateMethodBridgeCppFile(IReadOnlyCollection<GenericMethod> genericMethods, List<RawReversePInvokeMethodInfo> reversePInvokeMethods,  string outputFile)
+        private static void GenerateMethodBridgeCppFile(IReadOnlyCollection<GenericMethod> genericMethods, List<RawReversePInvokeMethodInfo> reversePInvokeMethods, IReadOnlyCollection<RawCalliMethodSignatureInfo> calliMethodSignatures, string tempFile, string outputFile)
         {
-            string templateCode = File.ReadAllText(outputFile, Encoding.UTF8);
+            string templateCode = File.ReadAllText(tempFile, Encoding.UTF8);
             var g = new Generator(new Generator.Options()
             {
                 TemplateCode = templateCode,
                 OutputFile = outputFile,
                 GenericMethods = genericMethods,
                 ReversePInvokeMethods = reversePInvokeMethods,
+                CalliMethodSignatures = calliMethodSignatures,
                 Development = EditorUserBuildSettings.development,
             });
 
@@ -80,9 +81,13 @@ namespace HybridCLR.Editor.Commands
             var reversePInvokeAnalyzer = new ReversePInvokeWrap.Analyzer(cache, hotUpdateDlls);
             reversePInvokeAnalyzer.Run();
 
+            var calliAnalyzer = new CalliAnalyzer(cache, hotUpdateDlls);
+            calliAnalyzer.Run();
+
+            string templateFile = $"{SettingsUtil.TemplatePathInPackage}/MethodBridge.cpp.tpl";
             string outputFile = $"{SettingsUtil.GeneratedCppDir}/MethodBridge.cpp";
 
-            GenerateMethodBridgeCppFile(methodBridgeAnalyzer.GenericMethods, reversePInvokeAnalyzer.ReversePInvokeMethods, outputFile);
+            GenerateMethodBridgeCppFile(methodBridgeAnalyzer.GenericMethods, reversePInvokeAnalyzer.ReversePInvokeMethods, calliAnalyzer.CalliMethodSignatures, templateFile, outputFile);
 
             CleanIl2CppBuildCache();
         }

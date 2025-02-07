@@ -9,6 +9,8 @@ using Aot;
 using System;
 using System.IO;
 using System.Reflection;
+using YooAsset;
+
 #if UNITY_WX
 using WeChatWASM;
 using static WeChatWASM.WXConvertCore;
@@ -157,56 +159,50 @@ public class JenkinsSupport
     }
     static bool ExecuteYooAssetBuild(BuildTarget buildTarget)
     {
-        var PackageName = AotConfig.PACKAGE_NAME;
-        var BuildPipeline = EBuildPipeline.ScriptableBuildPipeline;
+        Debug.Log($"开始构建 : {buildTarget}");
 
-        //var buildMode = AssetBundleBuilderSetting.GetPackageBuildMode(PackageName, BuildPipeline);
-        var buildMode = EBuildMode.IncrementalBuild;
-        //var fileNameStyle = AssetBundleBuilderSetting.GetPackageFileNameStyle(PackageName, BuildPipeline);
-        var fileNameStyle = EFileNameStyle.BundleName_HashName;
-        //var buildinFileCopyOption = AssetBundleBuilderSetting.GetPackageBuildinFileCopyOption(PackageName, BuildPipeline);
-        var buildinFileCopyOption = EBuildinFileCopyOption.None;
-        //var buildinFileCopyParams = AssetBundleBuilderSetting.GetPackageBuildinFileCopyParams(PackageName, BuildPipeline);
-        var buildinFileCopyParams = "";
-        //var compressOption = AssetBundleBuilderSetting.GetPackageCompressOption(PackageName, BuildPipeline);
-        var compressOption = ECompressOption.LZ4;
-        var outDir = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
-        if (Directory.Exists(outDir)) {
-            Debug.LogWarning($"清空AB构建目录:{outDir}");
-            Directory.Delete(outDir, true);
+        var buildoutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+        var streamingAssetsRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
+
+        if (Directory.Exists(buildoutputRoot))
+        {
+            Debug.LogWarning($"清空AB构建目录:{buildoutputRoot}");
+            Directory.Delete(buildoutputRoot, true);
         }
 
-        ScriptableBuildParameters buildParameters = new ScriptableBuildParameters();
-        buildParameters.BuildOutputRoot = outDir;
-        buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
-        buildParameters.BuildPipeline = BuildPipeline.ToString();
+        // 构建参数
+        var buildParameters = new ScriptableBuildParameters();
+        buildParameters.BuildOutputRoot = buildoutputRoot;
+        buildParameters.BuildinFileRoot = streamingAssetsRoot;
+        buildParameters.BuildPipeline = EBuildPipeline.ScriptableBuildPipeline.ToString();
+        buildParameters.BuildBundleType = (int)EBuildBundleType.AssetBundle; //必须指定资源包类型
         buildParameters.BuildTarget = buildTarget;
-        buildParameters.BuildMode = buildMode;
-        buildParameters.PackageName = PackageName;
+        buildParameters.PackageName = AotConfig.PACKAGE_NAME;
         buildParameters.PackageVersion = GetDefaultPackageVersion();
         buildParameters.VerifyBuildingResult = true;
-        buildParameters.FileNameStyle = fileNameStyle;
-        buildParameters.BuildinFileCopyOption = buildinFileCopyOption;
-        buildParameters.BuildinFileCopyParams = buildinFileCopyParams;
-        buildParameters.EncryptionServices = new EncryptionNone();
-        buildParameters.CompressOption = compressOption;
-
+        buildParameters.EnableSharePackRule = false; //启用共享资源构建模式，兼容1.5x版本
+        buildParameters.FileNameStyle = EFileNameStyle.BundleName_HashName;
+        buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
+        buildParameters.BuildinFileCopyParams = string.Empty;
+        buildParameters.EncryptionServices = null;
+        buildParameters.CompressOption = ECompressOption.LZ4;
+        buildParameters.ClearBuildCacheFiles = false; //不清理构建缓存，启用增量构建，可以提高打包速度！
+        buildParameters.UseAssetDependencyDB = true; //使用资源依赖关系数据库，可以提高打包速度！
 
         // 执行构建
-        ScriptableBuildPipeline pipeline = new ScriptableBuildPipeline();
+        var pipeline = new ScriptableBuildPipeline();
         var buildResult = pipeline.Run(buildParameters, true);
         if (buildResult.Success)
         {
-            Debug.LogWarning("打包资源AB成功");
             var dstPath = $"{WEB_ROOT}/{buildTarget}";
             if (Directory.Exists(dstPath)) Directory.Delete(dstPath, true);
             var srcPath = buildResult.OutputPackageDirectory;
             CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json", ".xml" });
-            Debug.LogWarning($"拷贝到目标目录:{srcPath} > {dstPath}");
+            Debug.LogWarning($"构建成功,拷贝到目标目录:{srcPath} > {dstPath}");
         }
         else
         {
-            Debug.LogError($"YooAsset 构建失败 : {buildResult.FailedTask}");
+            Debug.LogError($"构建失败 : {buildResult.ErrorInfo}");
         }
         return buildResult.Success;
     }

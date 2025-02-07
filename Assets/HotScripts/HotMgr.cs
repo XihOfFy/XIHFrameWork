@@ -22,7 +22,8 @@ namespace Hot
                 InitHot().Forget();
             });
             var pkg = YooAssets.GetPackage(AotConfig.PACKAGE_NAME);
-            pkg.ClearUnusedCacheFilesAsync();
+            pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
+            pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles);
         }
         async UniTaskVoid InitHot() {
             await Tables.LoadAllTmpl();//初始化配置,放在第一
