@@ -7,7 +7,8 @@
         "YooAsset",
         "HybridCLR.Runtime",
         "Unity.TextMeshPro",
-        "Wx"
+        "Wx",
+        "YooAsset.RuntimeExtension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

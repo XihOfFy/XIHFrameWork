@@ -55,11 +55,18 @@ namespace Aot
             else if (playMode == EPlayMode.WebPlayMode)
             {
                 var remoteServices = new RemoteServices();
-                var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
+                //var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
+#if UNITY_WX
+                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateWechatFileSystemParameters(remoteServices);
+#else
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
+#endif
+
 
                 var initParameters = new WebPlayModeParameters();
-                initParameters.WebServerFileSystemParameters = webServerFileSystemParams;
+#if !UNITY_WX
+                //initParameters.WebServerFileSystemParameters = webServerFileSystemParams;
+#endif
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
                 createParameters = initParameters;
             }
