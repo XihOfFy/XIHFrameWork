@@ -11,6 +11,15 @@ namespace Aot
 {
     public partial class AotMgr
     {
+        public static string GetYooEditorSimulateManifestPath(string packageName)
+        {
+#if UNITY_EDITOR
+            //若不存在，执行YooEditorSimulateModeHelperWindow类中的"YooAsset/YooEditorSimulateModeHelperBuild (耗时)"菜单栏
+            return $"XIHWebServerRes/Bundles/{UnityEditor.EditorUserBuildSettings.activeBuildTarget}/{packageName}/Simulate";
+#else 
+            throw new FileNotFoundException("GetYooEditorSimulateManifestPath Simulate");
+#endif
+        }
         //为了保持全平台一致逻辑，所以都使用webgl 小游戏的处理方式，不需要首包资源，全部通过下载
         async UniTaskVoid InitYooAssetStart()
         {
@@ -28,8 +37,7 @@ namespace Aot
             if (playMode == EPlayMode.EditorSimulateMode)
             {
 
-                var buildResult = EditorSimulateModeHelper.SimulateBuild(AotConfig.PACKAGE_NAME);
-                var packageRoot = buildResult.PackageRootDirectory;
+                var packageRoot = GetYooEditorSimulateManifestPath(AotConfig.PACKAGE_NAME);
                 var editorFileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
                 var initParameters = new EditorSimulateModeParameters();
                 initParameters.EditorFileSystemParameters = editorFileSystemParams;
