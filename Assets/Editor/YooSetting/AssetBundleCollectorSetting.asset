@@ -110,3 +110,16 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: ShaderVariants
+      GroupDesc: "\u53D8\u4F53"
+      AssetTags: ShaderVariants
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/ShaderVariants
+        CollectorGUID: bfe5460834bc67845b3f8022757db3ff
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

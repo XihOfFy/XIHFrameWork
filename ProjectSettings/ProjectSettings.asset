@@ -163,6 +163,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.Xih.XIHFrameWork
     Standalone: com.DefaultCompany.2DProject
+    iPhone: com.Xih.XIHFrameWork
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -528,15 +529,17 @@ PlayerSettings:
     tvOS: 1
   m_BuildTargetGroupLightmapEncodingQuality:
   - m_BuildTarget: WebGL
-    m_EncodingQuality: 1
+    m_EncodingQuality: 0
   m_BuildTargetGroupHDRCubemapEncodingQuality:
   - m_BuildTarget: WebGL
-    m_EncodingQuality: 1
+    m_EncodingQuality: 0
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetGroupLoadStoreDebugModeSettings: []
   m_BuildTargetNormalMapEncoding: []
   m_BuildTargetDefaultTextureCompressionFormat:
   - m_BuildTarget: Android
+    m_Format: 3
+  - m_BuildTarget: WebGL
     m_Format: 3
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
@@ -781,7 +784,7 @@ PlayerSettings:
   webGLEmscriptenArgs: ' -s EXPORTED_FUNCTIONS=_sbrk,_emscripten_stack_get_base,_emscripten_stack_get_end
     -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s TOTAL_MEMORY=256MB -s EXPORTED_RUNTIME_METHODS=''["ccall","cwrap","stackTrace","addRunDependency","removeRunDependency","FS_createPath","FS_createDataFile","stackTrace","writeStackCookie","checkStackCookie","lengthBytesUTF8","stringToUTF8"]'''
   webGLModulesDirectory: 
-  webGLTemplate: PROJECT:WXTemplate2022
+  webGLTemplate: APPLICATION:Default
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 2
@@ -797,7 +800,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    WebGL: UNITY_WX;FAIRYGUI_TMPRO;WEIXINMINIGAME
+    WebGL: FAIRYGUI_TMPRO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -920,4 +923,4 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 2

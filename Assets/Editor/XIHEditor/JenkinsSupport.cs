@@ -206,7 +206,7 @@ public class JenkinsSupport
             var dstPath = $"{WEB_ROOT}/{buildTarget}";
             if (Directory.Exists(dstPath)) Directory.Delete(dstPath, true);
             var srcPath = buildResult.OutputPackageDirectory;
-            CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json", ".xml" });
+            CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json", ".xml", ".report" });
             Debug.LogWarning($"构建成功,拷贝到目标目录:{srcPath} > {dstPath}");
         }
         else

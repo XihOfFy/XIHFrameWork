@@ -6,10 +6,10 @@ namespace Hot
     {
         public static readonly IChannelSDK sdkBase;
         static ChannelSDKMgr() {
-#if UNITY_EDITOR
-            sdkBase = new InternalSDK();
-#elif UNITY_WX
+#if UNITY_WX
             sdkBase = new WXSDK();
+#else
+            sdkBase = new InternalSDK();
 #endif
         }
     }

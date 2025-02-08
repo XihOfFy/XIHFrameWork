@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8cd97d0dc3c1ab4fb2310366a1cf4af, type: 3}
   m_Name: XIHFrontSetting
   m_EditorClassIdentifier: 
-  front: https://gitee.com/xihoffy/PublicAccess/raw/master/Front/
+  front: http://192.168.2.192:5000/Front/
