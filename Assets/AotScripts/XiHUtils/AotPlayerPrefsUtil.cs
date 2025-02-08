@@ -13,29 +13,38 @@ namespace Aot.XiHUtil
     public class AotPlayerPrefsUtil
     {
         public const string GAME_RES_VERSION = nameof(GAME_RES_VERSION);
-        public static void Set(string key, string val) {
+        public static void Set(string key, string val)
+        {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageSetStringSync(key, val);
+#elif UNITY_HW_QG
+            HWWASM.QG.LocalStorage.SetItem(key, val);
 #elif UNITY_DY
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.SetString(key, val);
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.Save();
+            TTSDK.TT.PlayerPrefs.SetString(key, val);
+            TTSDK.TT.PlayerPrefs.Save();
+#elif UNITY_KS
+            KSWASM.KS.StorageSetStringSync(key, val);
 #else
-            
+
             UnityEngine.PlayerPrefs.SetString(key, val);
             UnityEngine.PlayerPrefs.Save();
 #endif
         }
         public static void Set(string key, bool val)
         {
-            Set(key,val?1:0);
+            Set(key, val ? 1 : 0);
         }
         public static void Set(string key, int val)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageSetIntSync(key, val);
+#elif UNITY_HW_QG
+            HWWASM.QG.LocalStorage.SetItem(key, val.ToString());
 #elif UNITY_DY
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.SetInt(key, val);
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.Save();
+            TTSDK.TT.PlayerPrefs.SetInt(key, val);
+            TTSDK.TT.PlayerPrefs.Save();
+#elif UNITY_KS
+            KSWASM.KS.StorageSetIntSync(key, val);
 #else
             UnityEngine.PlayerPrefs.SetInt(key, val);
             UnityEngine.PlayerPrefs.Save();
@@ -45,44 +54,62 @@ namespace Aot.XiHUtil
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageSetFloatSync(key, val);
+#elif UNITY_HW_QG
+            HWWASM.QG.LocalStorage.SetItem(key, val.ToString());
 #elif UNITY_DY
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.SetFloat(key, val);
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.Save();
+            TTSDK.TT.PlayerPrefs.SetFloat(key, val);
+            TTSDK.TT.PlayerPrefs.Save();
+#elif UNITY_KS
+            KSWASM.KS.StorageSetFloatSync(key, val);
 #else
             UnityEngine.PlayerPrefs.SetFloat(key, val);
             UnityEngine.PlayerPrefs.Save();
 #endif
         }
-        public static string Get(string key, string val="")
+        public static string Get(string key, string val = "")
         {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageGetStringSync(key, val);
+#elif UNITY_HW_QG
+            return HWWASM.QG.LocalStorage.GetItem(key);
 #elif UNITY_DY
-            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.GetString(key, val);
+            return TTSDK.TT.PlayerPrefs.GetString(key, val);
+#elif UNITY_KS
+            return KSWASM.KS.StorageGetStringSync(key,val);
 #else
             return UnityEngine.PlayerPrefs.GetString(key, val);
 #endif
         }
-        public static bool Get(string key, bool val=false)
+        public static bool Get(string key, bool val = false)
         {
-            return Get(key, val?1:0) == 1;
+            return Get(key, val ? 1 : 0) == 1;
         }
-        public static int Get(string key, int val=0)
+        public static int Get(string key, int val = 0)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageGetIntSync(key, val);
+#elif UNITY_HW_QG
+            int.TryParse(HWWASM.QG.LocalStorage.GetItem(key),out var res);
+            return res;
 #elif UNITY_DY
-            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.GetInt(key, val);
+            return TTSDK.TT.PlayerPrefs.GetInt(key, val);
+#elif UNITY_KS
+            return KSWASM.KS.StorageGetIntSync(key, val);
 #else
             return UnityEngine.PlayerPrefs.GetInt(key, val);
 #endif
         }
-        public static float Get(string key, float val=0)
+        public static float Get(string key, float val = 0)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageGetFloatSync(key, val);
+#elif UNITY_HW_QG
+            float.TryParse(HWWASM.QG.LocalStorage.GetItem(key), out var res);
+            return res;
 #elif UNITY_DY
-            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.GetFloat(key, val);
+            return TTSDK.TT.PlayerPrefs.GetFloat(key, val);
+#elif UNITY_KS
+            return KSWASM.KS.StorageGetFloatSync(key, val);
 #else
             return UnityEngine.PlayerPrefs.GetFloat(key, val);
 #endif
@@ -91,8 +118,12 @@ namespace Aot.XiHUtil
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageDeleteKeySync(key);
+#elif UNITY_HW_QG
+            HWWASM.QG.LocalStorage.RemoveItem(key);
 #elif UNITY_DY
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.DeleteKey(key);
+            TTSDK.TT.PlayerPrefs.DeleteKey(key);
+#elif UNITY_KS
+            KSWASM.KS.StorageDeleteKeySync(key);
 #else
             UnityEngine.PlayerPrefs.DeleteKey(key);
             UnityEngine.PlayerPrefs.Save();
@@ -102,18 +133,30 @@ namespace Aot.XiHUtil
         {
 #if UNITY_WX_WITHOUT_EDITOR
             WX.StorageDeleteAllSync();
+#elif UNITY_HW_QG
+            HWWASM.QG.LocalStorage.Clear();
 #elif UNITY_DY
-            StarkSDKSpace.StarkSDK.API.PlayerPrefs.DeleteAll();
+            TTSDK.TT.PlayerPrefs.DeleteAll();
+#elif UNITY_KS
+            KSWASM.KS.StorageDeleteAllSync();
 #else
             UnityEngine.PlayerPrefs.DeleteAll();
             UnityEngine.PlayerPrefs.Save();
 #endif
         }
-        public static bool HasKey(string key) {
+        public static bool HasKey(string key)
+        {
 #if UNITY_WX_WITHOUT_EDITOR
             return WX.StorageHasKeySync(key);
+#elif UNITY_HW_QG
+            //HWWASM.QG.LocalStorage.StorageHasKeySync(key);
+            var res = HWWASM.QG.LocalStorage.GetItem(key);
+            Debug.LogError("华为不存在key的判断");
+            return !string.IsNullOrEmpty(res);
 #elif UNITY_DY
-            return StarkSDKSpace.StarkSDK.API.PlayerPrefs.HasKey(key);
+            return TTSDK.TT.PlayerPrefs.HasKey(key);
+#elif UNITY_KS
+            return KSWASM.KS.StorageHasKeySync(key);
 #else
             return UnityEngine.PlayerPrefs.HasKey(key);
 #endif
