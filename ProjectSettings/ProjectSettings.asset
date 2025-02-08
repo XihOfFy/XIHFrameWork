@@ -797,7 +797,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    WebGL: UNITY_WX;FAIRYGUI_TMPRO
+    WebGL: UNITY_WX;FAIRYGUI_TMPRO;WEIXINMINIGAME
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

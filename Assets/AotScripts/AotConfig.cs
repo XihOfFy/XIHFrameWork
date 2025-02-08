@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using UnityEngine;
+using Aot.XiHUtil;
 
 #if UNITY_EDITOR
 using UnityEditor;

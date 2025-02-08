@@ -14,20 +14,21 @@ namespace XiHUtil
     public class PlatformUtil
     {
         public static void TriggerGC() {
-            //暂时不主动触发GC，让系统自己回收
-            //InnerTriggerGC().Forget();
+            InnerTriggerGC().Forget();
         }
         static bool gcing = false;
         static async UniTaskVoid InnerTriggerGC() {
             if (gcing) return;
             gcing = true;
-            await UniTask.Yield();
+            //await UniTask.Yield();
+            await UniTask.Delay(TimeSpan.FromSeconds(30));//延迟卸载未使用的AB包
             gcing = false;
             YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).UnloadUnusedAssetsAsync().ToUniTask().Forget();
-            GC.Collect();
+            //暂时不主动触发GC，让系统自己回收
+/*            GC.Collect();
 #if UNNITY_WX_WITHOUT_EDITOR
             WeChatWASM.WX.TriggerGC();
-#endif
+#endif*/
         }
         public static void SetFramePerSecond(int frame) {
 #if UNNITY_WX_WITHOUT_EDITOR

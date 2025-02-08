@@ -10,6 +10,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using YooAsset;
+using Aot.XiHUtil;
+
 
 #if UNITY_WX
 using WeChatWASM;
@@ -184,7 +186,14 @@ public class JenkinsSupport
         buildParameters.FileNameStyle = EFileNameStyle.BundleName_HashName;
         buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
         buildParameters.BuildinFileCopyParams = string.Empty;
+
+#if UNITY_WEBGL
         buildParameters.EncryptionServices = null;
+        //buildParameters.EncryptionServices = new EncryptionNone();
+#else
+        buildParameters.EncryptionServices = new AotMgr.EncryptionServices();
+#endif
+
         buildParameters.CompressOption = ECompressOption.LZ4;
         buildParameters.ClearBuildCacheFiles = false; //不清理构建缓存，启用增量构建，可以提高打包速度！
         buildParameters.UseAssetDependencyDB = true; //使用资源依赖关系数据库，可以提高打包速度！

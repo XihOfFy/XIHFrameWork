@@ -7,6 +7,7 @@ using XiHSound;
 using Tmpl;
 using Aot;
 using YooAsset;
+using Aot.XiHUtil;
 
 namespace Hot
 {
@@ -14,16 +15,20 @@ namespace Hot
     {
         private void Awake()
         {
+
             DontDestroyOnLoad(this.gameObject);//包含事件监听组件EventSystem AudioListener
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
-            PlatformUtil.SetFramePerSecond(60);
+            //PlatformUtil.SetFramePerSecond(60);根据游戏需要确定是否锁帧
+
+            var pkg = YooAssets.GetPackage(AotConfig.PACKAGE_NAME);
+            // 注意：下载完成之后再保存本地版本
+            AotPlayerPrefsUtil.Set(AotPlayerPrefsUtil.GAME_RES_VERSION, pkg.GetPackageVersion());
+            pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
+            pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles);
 
             ChannelSDKMgr.sdkBase.Init(res => {
                 InitHot().Forget();
             });
-            var pkg = YooAssets.GetPackage(AotConfig.PACKAGE_NAME);
-            pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
-            pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles);
         }
         async UniTaskVoid InitHot() {
             await Tables.LoadAllTmpl();//初始化配置,放在第一

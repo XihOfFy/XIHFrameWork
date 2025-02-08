@@ -1,6 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Aot.XiHUtil;
+using Cysharp.Threading.Tasks;
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using YooAsset;
 
@@ -35,7 +38,9 @@ namespace Aot
             // 单机运行模式
             else if (playMode == EPlayMode.OfflinePlayMode)
             {
-                var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                //使用加密
+                var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(new DecryptionServices());
+                //var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
                 var initParameters = new OfflinePlayModeParameters();
                 initParameters.BuildinFileSystemParameters = buildinFileSystemParams;
                 createParameters = initParameters;
@@ -43,8 +48,8 @@ namespace Aot
             // 联机运行模式
             else if (playMode == EPlayMode.HostPlayMode)
             {
-                var remoteServices = new RemoteServices();
-                var cacheFileSystemParams = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
+                //使用加密
+                var cacheFileSystemParams = FileSystemParameters.CreateDefaultCacheFileSystemParameters(new RemoteServices(), new DecryptionServices());
                 //var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
                 var initParameters = new HostPlayModeParameters();
                 //initParameters.BuildinFileSystemParameters = buildinFileSystemParams;//这里根据游戏来确定，释放启用内置的文件查询，因为优化包体，内置可能不需要含资源
@@ -70,8 +75,6 @@ namespace Aot
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
                 createParameters = initParameters;
             }
-            //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
-            //createParameters.DecryptionServices = new DecryptionServices();
 
             var initializationOperation = package.InitializeAsync(createParameters);
             await initializationOperation.ToUniTask();
@@ -84,37 +87,61 @@ namespace Aot
 
             UpdatePackageVersionAsync(package).Forget();
         }
-        //解密接口            
+        //解密接口 针对非webgl平台和非小游戏native方案        
         //web 不支持ab加密，所以对于原始资源，我们自行加密，然后打ab
-        //这个也用不上了
-        /*private class DecryptionServices : IDecryptionServices
+        private class DecryptionServices : IDecryptionServices
         {
             public DecryptResult LoadAssetBundle(DecryptFileInfo fileInfo)
             {
                 var res = new DecryptResult();
-                res.Result = AssetBundle.LoadFromMemory(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath)));
+                var offset = fileInfo.BundleName.ToLower().Sum(c => c);
+                res.Result = AssetBundle.LoadFromFile(fileInfo.FileLoadPath, fileInfo.FileLoadCRC, (ulong)offset);
                 return res;
             }
 
             public DecryptResult LoadAssetBundleAsync(DecryptFileInfo fileInfo)
             {
                 var res = new DecryptResult();
-                var managedStream = new MemoryStream(XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath)));
-                res.CreateRequest = AssetBundle.LoadFromStreamAsync(managedStream);
-                res.ManagedStream = managedStream;
+                var offset = fileInfo.BundleName.ToLower().Sum(c => c);
+                res.CreateRequest = AssetBundle.LoadFromFileAsync(fileInfo.FileLoadPath, fileInfo.FileLoadCRC, (ulong)offset);
                 return res;
             }
-
+            //原生文件不进行加密,或已经加密存储过
             public byte[] ReadFileData(DecryptFileInfo fileInfo)
             {
-                return XIHDecryptionServices.Decrypt(File.ReadAllBytes(fileInfo.FileLoadPath));
+                return AotFileUtil.ReadFileBytes(fileInfo.FileLoadPath);
             }
-
+            //原生文件不进行加密,或已经加密存储过
             public string ReadFileText(DecryptFileInfo fileInfo)
             {
-                return File.ReadAllText(fileInfo.FileLoadPath);
+                return AotFileUtil.ReadFile(fileInfo.FileLoadPath);
             }
-        }*/
+        }
+#if UNITY_EDITOR
+        public class EncryptionServices : IEncryptionServices
+        {
+            public EncryptResult Encrypt(EncryptFileInfo fileInfo)
+            {
+                var result = new EncryptResult();
+                if (fileInfo.BundleName.EndsWith(".rawfile"))
+                {
+                    result.Encrypted = false;//原生不加密,或已经加密存储过
+                    //result.EncryptedData = File.ReadAllBytes(fileInfo.FilePath);不需要
+                }
+                else
+                {
+                    result.Encrypted = true;
+                    var bytes = File.ReadAllBytes(fileInfo.FileLoadPath);
+                    var offset = fileInfo.BundleName.ToLower().Sum(c => c);
+                    var newBytes = new byte[bytes.Length + offset];
+                    for (int i = 0; i < offset; ++i) newBytes[i] = (byte)((offset | i) % 0XF);
+                    Array.Copy(bytes, 0, newBytes, offset, bytes.Length);
+                    result.EncryptedData = newBytes;
+                }
+                return result;
+            }
+        }
+#endif
         /// <summary>
         /// 远端资源地址查询服务类
         /// </summary>
@@ -143,7 +170,28 @@ namespace Aot
             }
             else
             {
-                QuitGame();
+                //对于强制更新游戏，无法获取资源版本需要退出游戏
+                //QuitGame();
+
+                //对于单机游戏，可以在这里做差异化，使用本地的版本
+                /* 若首包有资源，那么首次运行需要拷贝内置资源清单到沙盒内
+                if (IsFirstRunApp)
+                {
+                    // 注意：内置清单的版本需要开发者自己记录并填写
+                    // 注意：CopyBuildinManifestOperation类是YOO扩展示例的代码！
+                    var copyBuildinManifestOp = new CopyBuildinManifestOperation("DefaultPackage", "1.0");
+                    YooAssets.StartOperation(copyBuildinManifestOp);
+                    yield return copyBuildinManifestOp;
+                }*/
+                // 获取上次成功记录的版本
+                string version = AotPlayerPrefsUtil.Get(AotPlayerPrefsUtil.GAME_RES_VERSION, string.Empty);
+                if (string.IsNullOrEmpty(version))
+                {
+                    QuitGame();
+                }
+                else {
+                    UpdatePackageManifest(package, yooOp.PackageVersion).Forget();
+                }
             }
         }
         //UpdatePackageManifest
@@ -164,7 +212,7 @@ namespace Aot
         //资源包下载,只下载aot2hot的tag资源，余下的到hot再继续下载，因为aot不提供ui功能
         async UniTaskVoid DownloadAot2HotRes(ResourcePackage package) {
             int downloadingMaxNum = 10;
-            int failedTryAgain = 3;
+            int failedTryAgain = 10;
             var downloader = package.CreateResourceDownloader("Aot2Hot", downloadingMaxNum, failedTryAgain);
 
             //注册回调方法，这里AOT使用这个是避免裁剪，不然HOT找不到该方法了
