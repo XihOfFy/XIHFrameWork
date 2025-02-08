@@ -24,4 +24,6 @@
 	</assembly>
 	<assembly fullname="YooAsset">
 	</assembly>
+	<assembly fullname="YooAsset.RuntimeExtension">
+	</assembly>
 </linker>

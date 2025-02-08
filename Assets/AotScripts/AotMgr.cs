@@ -11,6 +11,11 @@ namespace Aot
         EPlayMode playMode;
         private void Awake()
         {
+#if UNITY_WX
+            WeChatWASM.WX.ReportGameStart();
+            WeChatWASM.WX.PreloadConcurrent(10);//https://wechat-miniprogram.github.io/minigame-unity-webgl-transform/Design/UsingPreload.html 默认值：引擎初始化完成前 10 个；引擎初始化完成后 1 个;在引擎初始化完成后仍会重置为 1 个，需再次修改为你需要的值
+#endif
+
             StartLogo();
 
 #if UNITY_EDITOR

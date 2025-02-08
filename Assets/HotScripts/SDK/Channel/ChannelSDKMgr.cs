@@ -8,6 +8,8 @@ namespace Hot
         static ChannelSDKMgr() {
 #if UNITY_WX
             sdkBase = new WXSDK();
+#elif UNITY_DY
+            sdkBase = new DYStarkSDK();
 #else
             sdkBase = new InternalSDK();
 #endif

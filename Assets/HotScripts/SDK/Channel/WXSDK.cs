@@ -27,6 +27,12 @@ namespace Hot
             WX.OnAudioInterruptionEnd(res => {
                 SoundMgr.Instance.UnPause();
             });
+            WeChatWASM.WX.OnHide(res => {
+                SoundMgr.Instance.PauseBGM();
+            });
+            WeChatWASM.WX.OnShow(res => {
+                SoundMgr.Instance.UnPause();
+            });
         }
     }
 }

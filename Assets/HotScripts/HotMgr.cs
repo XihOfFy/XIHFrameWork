@@ -7,6 +7,8 @@ using Tmpl;
 using Aot;
 using YooAsset;
 using Aot.XiHUtil;
+using WeChatWASM;
+using Ad;
 
 namespace Hot
 {
@@ -25,6 +27,7 @@ namespace Hot
             pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
             pkg.ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles);
 
+            AdSdkMgr.sdkBase.InitSDK();//若使用广告，可以提前初始化
             ChannelSDKMgr.sdkBase.Init(res => {
                 InitHot().Forget();
             });
@@ -38,6 +41,30 @@ namespace Hot
             SoundMgr.Instance.PlayBGM(1);//初始化音频，并播放一个音乐
             ChannelSDKMgr.sdkBase.TouchOverride(this.gameObject);//处理小游戏平台触屏粘连，例如：摄像机射线监测点击物体，触发多次点击事件
             await SceneChangeDialog.LoadHomeScene();
+
+
+#if UNITY_WX
+            if (WxTool.CanUseByVersion("2.26.2"))
+            {
+                WX.ReportScene(new ReportSceneOption() { sceneId = 7 });
+            }
+            else
+            {
+                Debug.LogWarning("暂时不支持该WX API使用：WX.ReportScene");
+            }
+#elif UNITY_DY
+            var param = new TTSDK.UNBridgeLib.LitJson.JsonData();
+            param["sceneId"] = 7001;
+            param["costTime"] = 100;
+            TTSDK.TT.ReportScene(param);
+#endif
+            //UnityEngine.Input.multiTouchEnabled = false;//禁用多点触屏,对于EvenetSystem的触控没法限制
+            //DOTween.SetTweensCapacity(1250, 500);
+#if UNITY_WEBGL &&!UNITY_DY && !UNITY_WX && !UNITY_EDITOR && (UNITY_2021_2_5 || UNITY_2022_1_OR_NEWER)
+            //酌情考虑是否开启输入，对于小游戏，开启这个会有一定性能消耗
+            WebGLInput.mobileKeyboardSupport = true;
+#endif
+
         }
         async UniTaskVoid InitShaderVariants() {
             var handle = YooAssets.LoadAssetAsync<ShaderVariantCollection>("Assets/Res/ShaderVariants/ShaderVariants.shadervariants");
