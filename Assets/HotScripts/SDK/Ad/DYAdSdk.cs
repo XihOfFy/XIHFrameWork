@@ -1,4 +1,4 @@
-﻿#if !UNITY_DY
+﻿#if UNITY_DY
 using System;
 using TTSDK;
 using XiHSound;
@@ -27,7 +27,7 @@ namespace Ad
         void OnRewardAsync(bool isGet)
         {
             rewardedVideoAdAct?.Invoke(isGet);
-#if UNITY_DY && UNITY_ANDROID
+#if UNITY_ANDROID
             SoundMgr.Instance.UnPause();
 #endif
         }
@@ -39,7 +39,6 @@ namespace Ad
                 return;
             }
             rewardedVideoAdAct = onLoad;
-#if UNITY_DY
 #if UNITY_ANDROID
             SoundMgr.Instance.PauseBGM();
 #endif
@@ -54,7 +53,6 @@ namespace Ad
                 OnRewardAsync(false);
                 UnityEngine.Debug.LogException(e);
             }
-#endif
         }
     }
 }
