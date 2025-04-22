@@ -9,15 +9,15 @@ internal class WXFSDownloadFileOperation : DefaultDownloadFileOperation
     private WechatFileSystem _fileSystem;
     private ESteps _steps = ESteps.None;
 
-    internal WXFSDownloadFileOperation(WechatFileSystem fileSystem, PackageBundle bundle, DownloadParam param) : base(bundle, param)
+    internal WXFSDownloadFileOperation(WechatFileSystem fileSystem, PackageBundle bundle, DownloadFileOptions options) : base(bundle, options)
     {
         _fileSystem = fileSystem;
     }
-    internal override void InternalOnStart()
+    internal override void InternalStart()
     {
         _steps = ESteps.CreateRequest;
     }
-    internal override void InternalOnUpdate()
+    internal override void InternalUpdate()
     {
         // 创建下载器
         if (_steps == ESteps.CreateRequest)
@@ -42,7 +42,9 @@ internal class WXFSDownloadFileOperation : DefaultDownloadFileOperation
             Progress = DownloadProgress;
             if (_webRequest.isDone == false)
             {
-                CheckRequestTimeout();
+                //TODO 由于微信小游戏插件的问题，暂时不能判定超时！
+                // Issue : https://github.com/wechat-miniprogram/minigame-unity-webgl-transform/issues/108#
+                //CheckRequestTimeout();
                 return;
             }
 
@@ -51,6 +53,12 @@ internal class WXFSDownloadFileOperation : DefaultDownloadFileOperation
             {
                 _steps = ESteps.Done;
                 Status = EOperationStatus.Succeed;
+
+                //TODO 解决微信小游戏插件问题
+                // Issue : https://github.com/wechat-miniprogram/minigame-unity-webgl-transform/issues/108#
+                DownloadProgress = 1f;
+                DownloadedBytes = Bundle.FileSize;
+                Progress = 1f;
             }
             else
             {
@@ -84,7 +92,7 @@ internal class WXFSDownloadFileOperation : DefaultDownloadFileOperation
 
     private void CreateWebRequest()
     {
-        _webRequest = WXAssetBundle.GetAssetBundle(_requestURL);
+        _webRequest = UnityWebRequest.Get(_requestURL);
         _webRequest.SetRequestHeader("wechatminigame-preload", "1");
         _webRequest.disposeDownloadHandlerOnDispose = true;
         _webRequest.SendWebRequest();

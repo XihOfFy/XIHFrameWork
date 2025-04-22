@@ -1,6 +1,4 @@
 ﻿
-using UnityEngine;
-
 namespace YooAsset
 {
     internal class DWRFSLoadAssetBundleOperation : FSLoadBundleOperation
@@ -8,13 +6,13 @@ namespace YooAsset
         private enum ESteps
         {
             None,
-            DownloadFile,
+            DownloadAssetBundle,
             Done,
         }
 
         private readonly DefaultWebRemoteFileSystem _fileSystem;
         private readonly PackageBundle _bundle;
-        private DownloadHandlerAssetBundleOperation _downloadhanlderAssetBundleOp;
+        private DownloadAssetBundleOperation _downloadAssetBundleOp;
         private ESteps _steps = ESteps.None;
 
 
@@ -23,40 +21,52 @@ namespace YooAsset
             _fileSystem = fileSystem;
             _bundle = bundle;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
-            _steps = ESteps.DownloadFile;
+            _steps = ESteps.DownloadAssetBundle;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
-            if (_steps == ESteps.DownloadFile)
+            if (_steps == ESteps.DownloadAssetBundle)
             {
-                if (_downloadhanlderAssetBundleOp == null)
+                if (_downloadAssetBundleOp == null)
                 {
-                    DownloadParam downloadParam = new DownloadParam(int.MaxValue, 60);
-                    downloadParam.MainURL = _fileSystem.RemoteServices.GetRemoteMainURL(_bundle.FileName);
-                    downloadParam.FallbackURL = _fileSystem.RemoteServices.GetRemoteFallbackURL(_bundle.FileName);
-                    _downloadhanlderAssetBundleOp = new DownloadHandlerAssetBundleOperation(_fileSystem.DisableUnityWebCache, _bundle, downloadParam);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _downloadhanlderAssetBundleOp);
+                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);
+                    options.MainURL = _fileSystem.RemoteServices.GetRemoteMainURL(_bundle.FileName);
+                    options.FallbackURL = _fileSystem.RemoteServices.GetRemoteFallbackURL(_bundle.FileName);
+
+                    if (_bundle.Encrypted)
+                    {
+                        _downloadAssetBundleOp = new DownloadWebEncryptAssetBundleOperation(true, _fileSystem.DecryptionServices, _bundle, options);
+                        _downloadAssetBundleOp.StartOperation();
+                        AddChildOperation(_downloadAssetBundleOp);
+                    }
+                    else
+                    {
+                        _downloadAssetBundleOp = new DownloadWebNormalAssetBundleOperation(_fileSystem.DisableUnityWebCache, _bundle, options);
+                        _downloadAssetBundleOp.StartOperation();
+                        AddChildOperation(_downloadAssetBundleOp);
+                    }
                 }
 
-                DownloadProgress = _downloadhanlderAssetBundleOp.DownloadProgress;
-                DownloadedBytes = _downloadhanlderAssetBundleOp.DownloadedBytes;
-                Progress = _downloadhanlderAssetBundleOp.Progress;
-                if (_downloadhanlderAssetBundleOp.IsDone == false)
+                _downloadAssetBundleOp.UpdateOperation();
+                DownloadProgress = _downloadAssetBundleOp.DownloadProgress;
+                DownloadedBytes = _downloadAssetBundleOp.DownloadedBytes;
+                Progress = _downloadAssetBundleOp.Progress;
+                if (_downloadAssetBundleOp.IsDone == false)
                     return;
 
-                if (_downloadhanlderAssetBundleOp.Status == EOperationStatus.Succeed)
+                if (_downloadAssetBundleOp.Status == EOperationStatus.Succeed)
                 {
-                    var assetBundle = _downloadhanlderAssetBundleOp.Result;
-                    if(assetBundle == null)
+                    var assetBundle = _downloadAssetBundleOp.Result;
+                    if (assetBundle == null)
                     {
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
-                        Error = $"{nameof(DownloadHandlerAssetBundleOperation)} loaded asset bundle is null !";
+                        Error = $"{nameof(DownloadAssetBundleOperation)} loaded asset bundle is null !";
                     }
                     else
                     {
@@ -69,7 +79,7 @@ namespace YooAsset
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = _downloadhanlderAssetBundleOp.Error;
+                    Error = _downloadAssetBundleOp.Error;
                 }
             }
         }
@@ -81,14 +91,6 @@ namespace YooAsset
                 Status = EOperationStatus.Failed;
                 Error = "WebGL platform not support sync load method !";
                 UnityEngine.Debug.LogError(Error);
-            }
-        }
-        public override void AbortDownloadOperation()
-        {
-            if (_steps == ESteps.DownloadFile)
-            {
-                if (_downloadhanlderAssetBundleOp != null)
-                    _downloadhanlderAssetBundleOp.SetAbort();
             }
         }
     }

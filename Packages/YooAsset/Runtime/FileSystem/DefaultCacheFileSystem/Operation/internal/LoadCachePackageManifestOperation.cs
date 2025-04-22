@@ -32,11 +32,11 @@ namespace YooAsset
             _packageVersion = packageVersion;
             _packageHash = packageHash;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _steps = ESteps.LoadFileData;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -59,8 +59,7 @@ namespace YooAsset
 
             if (_steps == ESteps.VerifyFileData)
             {
-                string fileHash = HashUtility.BytesCRC32(_fileData);
-                if (fileHash == _packageHash)
+                if (ManifestTools.VerifyManifestData(_fileData, _packageHash))
                 {
                     _steps = ESteps.LoadManifest;
                 }
@@ -77,9 +76,11 @@ namespace YooAsset
                 if (_deserializer == null)
                 {
                     _deserializer = new DeserializeManifestOperation(_fileData);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _deserializer);
+                    _deserializer.StartOperation();
+                    AddChildOperation(_deserializer);
                 }
 
+                _deserializer.UpdateOperation();
                 Progress = _deserializer.Progress;
                 if (_deserializer.IsDone == false)
                     return;
@@ -97,6 +98,10 @@ namespace YooAsset
                     Error = _deserializer.Error;
                 }
             }
+        }
+        internal override string InternalGetDesc()
+        {
+            return $"PackageVersion : {_packageVersion} PackageHash : {_packageHash}";
         }
     }
 }

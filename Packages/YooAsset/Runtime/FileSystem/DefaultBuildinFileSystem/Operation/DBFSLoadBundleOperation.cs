@@ -29,13 +29,13 @@ namespace YooAsset
             _fileSystem = fileSystem;
             _bundle = bundle;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             DownloadProgress = 1f;
             DownloadedBytes = _bundle.FileSize;
             _steps = ESteps.LoadAssetBundle;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -139,9 +139,6 @@ namespace YooAsset
                 }
             }
         }
-        public override void AbortDownloadOperation()
-        {
-        }
     }
 
     /// <summary>
@@ -166,19 +163,25 @@ namespace YooAsset
             _fileSystem = fileSystem;
             _bundle = bundle;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             DownloadProgress = 1f;
             DownloadedBytes = _bundle.FileSize;
             _steps = ESteps.LoadBuildinRawBundle;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
             if (_steps == ESteps.LoadBuildinRawBundle)
             {
+#if UNITY_ANDROID
+                //TODO : 安卓平台内置文件属于APK压缩包内的文件。
+                _steps = ESteps.Done;
+                Result = new RawBundleResult(_fileSystem, _bundle);
+                Status = EOperationStatus.Succeed;
+#else
                 string filePath = _fileSystem.GetBuildinFileLoadPath(_bundle);
                 if (File.Exists(filePath))
                 {
@@ -193,6 +196,7 @@ namespace YooAsset
                     Error = $"Can not found buildin raw bundle file : {filePath}";
                     YooLogger.Error(Error);
                 }
+#endif
             }
         }
         internal override void InternalWaitForAsyncComplete()
@@ -205,9 +209,6 @@ namespace YooAsset
                     break;
                 }
             }
-        }
-        public override void AbortDownloadOperation()
-        {
         }
     }
 }

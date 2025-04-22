@@ -70,7 +70,13 @@ namespace Aot
                 var remoteServices = new RemoteServices();
                 //var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
 #if UNITY_WX
-                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateWechatFileSystemParameters(remoteServices);
+                string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE";
+                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
+#elif UNITY_DY //BYTEMINIGAME
+                // 小游戏缓存根目录
+                // 注意：如果有子目录，请修改此处！
+                string packageRoot = $"";
+                var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices, decryptionServices);
 #else
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
 #endif

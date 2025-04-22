@@ -138,9 +138,6 @@ namespace YooAsset
             if (string.IsNullOrEmpty(location))
                 return string.Empty;
 
-            if (LocationToLower)
-                location = location.ToLower();
-
             if (AssetPathMapping1.TryGetValue(location, out string assetPath))
                 return assetPath;
             else
@@ -149,48 +146,56 @@ namespace YooAsset
 
         /// <summary>
         /// 获取主资源包
-        /// 注意：传入的资源路径一定合法有效！
+        /// 注意：传入的资源包ID一定合法有效！
         /// </summary>
-        public PackageBundle GetMainPackageBundle(string assetPath)
+        public PackageBundle GetMainPackageBundle(int bundleID)
         {
-            if (AssetDic.TryGetValue(assetPath, out PackageAsset packageAsset))
+            if (bundleID >= 0 && bundleID < BundleList.Count)
             {
-                int bundleID = packageAsset.BundleID;
-                if (bundleID >= 0 && bundleID < BundleList.Count)
-                {
-                    var packageBundle = BundleList[bundleID];
-                    return packageBundle;
-                }
-                else
-                {
-                    throw new Exception($"Invalid bundle id : {bundleID} Asset path : {assetPath}");
-                }
+                var packageBundle = BundleList[bundleID];
+                return packageBundle;
             }
             else
             {
-                throw new Exception("Should never get here !");
+                throw new Exception($"Invalid bundle id : {bundleID}");
             }
         }
 
         /// <summary>
-        /// 获取资源依赖列表
-        /// 注意：传入的资源路径一定合法有效！
+        /// 获取主资源包
+        /// 注意：传入的资源对象一定合法有效！
         /// </summary>
-        public PackageBundle[] GetAllDependencies(string assetPath)
+        public PackageBundle GetMainPackageBundle(PackageAsset packageAsset)
         {
-            var packageBundle = GetMainPackageBundle(assetPath);
-            List<PackageBundle> result = new List<PackageBundle>(packageBundle.DependIDs.Length);
-            foreach (var dependID in packageBundle.DependIDs)
+            return GetMainPackageBundle(packageAsset.BundleID);
+        }
+
+        /// <summary>
+        /// 获取依赖列表
+        /// 注意：传入的资源对象一定合法有效！
+        /// </summary>
+        public PackageBundle[] GetAllDependencies(PackageAsset packageAsset)
+        {
+            List<PackageBundle> result = new List<PackageBundle>(packageAsset.DependBundleIDs.Length);
+            foreach (var dependID in packageAsset.DependBundleIDs)
             {
-                if (dependID >= 0 && dependID < BundleList.Count)
-                {
-                    var dependBundle = BundleList[dependID];
-                    result.Add(dependBundle);
-                }
-                else
-                {
-                    throw new Exception($"Invalid bundle id : {dependID} Asset path : {assetPath}");
-                }
+                var dependBundle = GetMainPackageBundle(dependID);
+                result.Add(dependBundle);
+            }
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// 获取依赖列表
+        /// 注意：传入的资源包对象一定合法有效！
+        /// </summary>
+        public PackageBundle[] GetAllDependencies(PackageBundle packageBundle)
+        {
+            List<PackageBundle> result = new List<PackageBundle>(packageBundle.DependBundleIDs.Length);
+            foreach (var dependID in packageBundle.DependBundleIDs)
+            {
+                var dependBundle = GetMainPackageBundle(dependID);
+                result.Add(dependBundle);
             }
             return result.ToArray();
         }
@@ -298,9 +303,6 @@ namespace YooAsset
                 YooLogger.Error("Failed to mapping location to asset path, The location is null or empty.");
                 return string.Empty;
             }
-
-            if (LocationToLower)
-                location = location.ToLower();
 
             if (AssetPathMapping1.TryGetValue(location, out string assetPath))
             {

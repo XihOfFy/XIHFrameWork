@@ -21,7 +21,7 @@ namespace YooAsset
         }
 
         protected readonly Dictionary<string, FileWrapper> _wrappers = new Dictionary<string, FileWrapper>(10000);
-        protected readonly Dictionary<string, string> _webFilePaths = new Dictionary<string, string>(10000);
+        protected readonly Dictionary<string, string> _webFilePathMapping = new Dictionary<string, string>(10000);
         protected string _webPackageRoot = string.Empty;
 
         /// <summary>
@@ -56,6 +56,11 @@ namespace YooAsset
         /// 禁用Unity的网络缓存
         /// </summary>
         public bool DisableUnityWebCache { private set; get; } = false;
+
+        /// <summary>
+        ///  自定义参数：解密方法类
+        /// </summary>
+        public IWebDecryptionServices DecryptionServices { private set; get; }
         #endregion
 
 
@@ -65,28 +70,24 @@ namespace YooAsset
         public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
         {
             var operation = new DWSFSInitializeOperation(this);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         public virtual FSLoadPackageManifestOperation LoadPackageManifestAsync(string packageVersion, int timeout)
         {
             var operation = new DWSFSLoadPackageManifestOperation(this, packageVersion, timeout);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         public virtual FSRequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
         {
             var operation = new DWSFSRequestPackageVersionOperation(this, timeout);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
-        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
         {
             var operation = new FSClearCacheFilesCompleteOperation();
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
-        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
+        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options)
         {
             throw new System.NotImplementedException();
         }
@@ -95,14 +96,12 @@ namespace YooAsset
             if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
             {
                 var operation = new DWSFSLoadAssetBundleOperation(this, bundle);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
             else
             {
                 string error = $"{nameof(DefaultWebServerFileSystem)} not support load bundle type : {bundle.BundleType}";
                 var operation = new FSLoadBundleCompleteOperation(error);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
         }
@@ -111,7 +110,11 @@ namespace YooAsset
         {
             if (name == FileSystemParametersDefine.DISABLE_UNITY_WEB_CACHE)
             {
-                DisableUnityWebCache = (bool)value;
+                DisableUnityWebCache = Convert.ToBoolean(value);
+            }
+            else if (name == FileSystemParametersDefine.DECRYPTION_SERVICES)
+            {
+                DecryptionServices = (IWebDecryptionServices)value;
             }
             else
             {
@@ -127,7 +130,7 @@ namespace YooAsset
             else
                 _webPackageRoot = packageRoot;
         }
-        public virtual void OnUpdate()
+        public virtual void OnDestroy()
         {
         }
 
@@ -173,10 +176,10 @@ namespace YooAsset
         }
         public string GetWebFileLoadPath(PackageBundle bundle)
         {
-            if (_webFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
+            if (_webFilePathMapping.TryGetValue(bundle.BundleGUID, out string filePath) == false)
             {
                 filePath = PathUtility.Combine(_webPackageRoot, bundle.FileName);
-                _webFilePaths.Add(bundle.BundleGUID, filePath);
+                _webFilePathMapping.Add(bundle.BundleGUID, filePath);
             }
             return filePath;
         }
@@ -195,10 +198,9 @@ namespace YooAsset
             string fileName = YooAssetSettingsData.GetManifestBinaryFileName(PackageName, packageVersion);
             return PathUtility.Combine(FileRoot, fileName);
         }
-        public string GetCatalogFileLoadPath()
+        public string GetCatalogBinaryFileLoadPath()
         {
-            string fileName = Path.GetFileNameWithoutExtension(DefaultBuildinFileSystemDefine.BuildinCatalogFileName);
-            return YooAssetSettingsData.GetYooResourcesLoadPath(PackageName, fileName);
+            return PathUtility.Combine(_webPackageRoot, DefaultBuildinFileSystemDefine.BuildinCatalogBinaryFileName);
         }
 
         /// <summary>

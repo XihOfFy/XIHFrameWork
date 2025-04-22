@@ -11,7 +11,7 @@ namespace YooAsset
         private readonly IFileSystem _fileSystem;
         private readonly PackageBundle _packageBundle;
         private readonly AssetBundle _assetBundle;
-        
+
         public WXAssetBundleResult(IFileSystem fileSystem, PackageBundle packageBundle, AssetBundle assetBundle)
         {
             _fileSystem = fileSystem;
@@ -23,7 +23,10 @@ namespace YooAsset
         {
             if (_assetBundle != null)
             {
-                _assetBundle.WXUnload(true);
+                if (_packageBundle.Encrypted)
+                    _assetBundle.Unload(true);
+                else
+                    _assetBundle.WXUnload(true);
             }
         }
         public override string GetBundleFilePath()
@@ -42,25 +45,21 @@ namespace YooAsset
         public override FSLoadAssetOperation LoadAssetAsync(AssetInfo assetInfo)
         {
             var operation = new AssetBundleLoadAssetOperation(_packageBundle, _assetBundle, assetInfo);
-            OperationSystem.StartOperation(_fileSystem.PackageName, operation);
             return operation;
         }
         public override FSLoadAllAssetsOperation LoadAllAssetsAsync(AssetInfo assetInfo)
         {
             var operation = new AssetBundleLoadAllAssetsOperation(_packageBundle, _assetBundle, assetInfo);
-            OperationSystem.StartOperation(_fileSystem.PackageName, operation);
             return operation;
         }
         public override FSLoadSubAssetsOperation LoadSubAssetsAsync(AssetInfo assetInfo)
         {
             var operation = new AssetBundleLoadSubAssetsOperation(_packageBundle, _assetBundle, assetInfo);
-            OperationSystem.StartOperation(_fileSystem.PackageName, operation);
             return operation;
         }
         public override FSLoadSceneOperation LoadSceneOperation(AssetInfo assetInfo, LoadSceneParameters loadParams, bool suspendLoad)
         {
             var operation = new AssetBundleLoadSceneOperation(assetInfo, loadParams, suspendLoad);
-            OperationSystem.StartOperation(_fileSystem.PackageName, operation);
             return operation;
         }
     }

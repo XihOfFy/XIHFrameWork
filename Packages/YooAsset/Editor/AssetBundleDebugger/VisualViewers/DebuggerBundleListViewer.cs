@@ -13,21 +13,25 @@ namespace YooAsset.Editor
     {
         private class BundleTableData : DefaultTableData
         {
-            public string PackageName;
+            public DebugPackageData PackageData;
             public DebugBundleInfo BundleInfo;
         }
         private class UsingTableData : DefaultTableData
         {
             public DebugProviderInfo ProviderInfo;
         }
+        private class ReferenceTableData : DefaultTableData
+        {
+            public DebugBundleInfo BundleInfo;
+        }
 
         private VisualTreeAsset _visualAsset;
         private TemplateContainer _root;
 
-        private TableView _bundleTableView;
-        private TableView _usingTableView;
+        private TableViewer _bundleTableView;
+        private TableViewer _usingTableView;
+        private TableViewer _referenceTableView;
 
-        private DebugReport _debugReport;
         private List<ITableData> _sourceDatas;
 
         /// <summary>
@@ -44,21 +48,25 @@ namespace YooAsset.Editor
             _root.style.flexGrow = 1f;
 
             // 资源包列表
-            _bundleTableView = _root.Q<TableView>("TopTableView");
+            _bundleTableView = _root.Q<TableViewer>("BundleTableView");
             _bundleTableView.SelectionChangedEvent = OnBundleTableViewSelectionChanged;
             CreateBundleTableViewColumns();
 
             // 使用列表
-            _usingTableView = _root.Q<TableView>("BottomTableView");
+            _usingTableView = _root.Q<TableViewer>("UsingTableView");
             CreateUsingTableViewColumns();
 
-#if UNITY_2020_3_OR_NEWER
+            // 引用列表
+            _referenceTableView = _root.Q<TableViewer>("ReferenceTableView");
+            CreateReferenceTableViewColumns();
+
+            // 面板分屏
             var topGroup = _root.Q<VisualElement>("TopGroup");
             var bottomGroup = _root.Q<VisualElement>("BottomGroup");
             topGroup.style.minHeight = 100;
             bottomGroup.style.minHeight = 100f;
-            PanelSplitView.SplitVerticalPanel(_root, topGroup, bottomGroup);
-#endif
+            UIElementsTools.SplitVerticalPanel(_root, topGroup, bottomGroup);
+            UIElementsTools.SplitVerticalPanel(bottomGroup, _usingTableView, _referenceTableView);
         }
         private void CreateBundleTableViewColumns()
         {
@@ -89,6 +97,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
+                columnStyle.Counter = true;
                 var column = new TableColumn("BundleName", "Bundle Name", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -142,7 +151,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var bundleTableData = data as BundleTableData;
-                    if (bundleTableData.BundleInfo.Status == EOperationStatus.Failed)
+                    if (bundleTableData.BundleInfo.Status == EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -162,6 +171,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
+                columnStyle.Counter = true;
                 var column = new TableColumn("UsingAssets", "Using Assets", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -198,13 +208,13 @@ namespace YooAsset.Editor
                 _usingTableView.AddColumn(column);
             }
 
-            // SpawnTime
+            // BeginTime
             {
                 var columnStyle = new ColumnStyle(100);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
-                var column = new TableColumn("SpawnTime", "Spawn Time", columnStyle);
+                var column = new TableColumn("BeginTime", "Begin Time", columnStyle);
                 column.MakeCell = () =>
                 {
                     var label = new Label();
@@ -269,41 +279,105 @@ namespace YooAsset.Editor
                 _usingTableView.AddColumn(column);
             }
         }
+        private void CreateReferenceTableViewColumns()
+        {
+            // BundleName
+            {
+                var columnStyle = new ColumnStyle(600, 500, 1000);
+                columnStyle.Stretchable = true;
+                columnStyle.Searchable = true;
+                columnStyle.Sortable = true;
+                columnStyle.Counter = true;
+                var column = new TableColumn("ReferenceBundle", "Reference Bundle", columnStyle);
+                column.MakeCell = () =>
+                {
+                    var label = new Label();
+                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    return label;
+                };
+                column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
+                {
+                    var infoLabel = element as Label;
+                    infoLabel.text = (string)cell.GetDisplayObject();
+                };
+                _referenceTableView.AddColumn(column);
+            }
+
+            // RefCount
+            {
+                var columnStyle = new ColumnStyle(100);
+                columnStyle.Stretchable = false;
+                columnStyle.Searchable = false;
+                columnStyle.Sortable = true;
+                var column = new TableColumn("RefCount", "Ref Count", columnStyle);
+                column.MakeCell = () =>
+                {
+                    var label = new Label();
+                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    return label;
+                };
+                column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
+                {
+                    var infoLabel = element as Label;
+                    infoLabel.text = (string)cell.GetDisplayObject();
+                };
+                _referenceTableView.AddColumn(column);
+            }
+
+            // Status
+            {
+                var columnStyle = new ColumnStyle(100);
+                columnStyle.Stretchable = false;
+                columnStyle.Searchable = false;
+                columnStyle.Sortable = true;
+                var column = new TableColumn("Status", "Status", columnStyle);
+                column.MakeCell = () =>
+                {
+                    var label = new Label();
+                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    return label;
+                };
+                column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
+                {
+                    StyleColor textColor;
+                    var feferenceTableData = data as ReferenceTableData;
+                    if (feferenceTableData.BundleInfo.Status == EOperationStatus.Failed.ToString())
+                        textColor = new StyleColor(Color.yellow);
+                    else
+                        textColor = new StyleColor(Color.white);
+
+                    var infoLabel = element as Label;
+                    infoLabel.text = (string)cell.GetDisplayObject();
+                    infoLabel.style.color = textColor;
+                };
+                _referenceTableView.AddColumn(column);
+            }
+        }
 
         /// <summary>
         /// 填充页面数据
         /// </summary>
         public void FillViewData(DebugReport debugReport)
         {
-            _debugReport = debugReport;
-
             // 清空旧数据
             _bundleTableView.ClearAll(false, true);
             _usingTableView.ClearAll(false, true);
+            _referenceTableView.ClearAll(false, true);
 
             // 填充数据源
             _sourceDatas = new List<ITableData>(1000);
             foreach (var packageData in debugReport.PackageDatas)
             {
-                var tempDic = new HashSet<string>();
-                foreach (var providerInfo in packageData.ProviderInfos)
+                foreach (var bundleInfo in packageData.BundleInfos)
                 {
-                    foreach (var bundleInfo in providerInfo.DependBundleInfos)
-                    {
-                        if (tempDic.Contains(bundleInfo.BundleName) == false)
-                        {
-                            tempDic.Add(bundleInfo.BundleName);
-
-                            var rowData = new BundleTableData();
-                            rowData.PackageName = packageData.PackageName;
-                            rowData.BundleInfo = bundleInfo;
-                            rowData.AddAssetPathCell("PackageName", packageData.PackageName);
-                            rowData.AddStringValueCell("BundleName", bundleInfo.BundleName);
-                            rowData.AddLongValueCell("RefCount", bundleInfo.RefCount);
-                            rowData.AddStringValueCell("Status", bundleInfo.Status.ToString());
-                            _sourceDatas.Add(rowData);
-                        }
-                    }
+                    var rowData = new BundleTableData();
+                    rowData.PackageData = packageData;
+                    rowData.BundleInfo = bundleInfo;
+                    rowData.AddAssetPathCell("PackageName", packageData.PackageName);
+                    rowData.AddStringValueCell("BundleName", bundleInfo.BundleName);
+                    rowData.AddLongValueCell("RefCount", bundleInfo.RefCount);
+                    rowData.AddStringValueCell("Status", bundleInfo.Status.ToString());
+                    _sourceDatas.Add(rowData);
                 }
             }
             _bundleTableView.itemsSource = _sourceDatas;
@@ -317,11 +391,14 @@ namespace YooAsset.Editor
         /// </summary>
         public void ClearView()
         {
-            _debugReport = null;
             _bundleTableView.ClearAll(false, true);
             _bundleTableView.RebuildView();
+
             _usingTableView.ClearAll(false, true);
             _usingTableView.RebuildView();
+
+            _referenceTableView.ClearAll(false, true);
+            _referenceTableView.RebuildView();
         }
 
         /// <summary>
@@ -330,10 +407,13 @@ namespace YooAsset.Editor
         public void RebuildView(string searchKeyWord)
         {
             // 搜索匹配
-            DefaultSearchSystem.Search(_sourceDatas, searchKeyWord);
+            if(_sourceDatas != null)
+                DefaultSearchSystem.Search(_sourceDatas, searchKeyWord);
 
             // 重建视图
             _bundleTableView.RebuildView();
+            _usingTableView.RebuildView();
+            _referenceTableView.RebuildView();
         }
 
         /// <summary>
@@ -355,25 +435,23 @@ namespace YooAsset.Editor
         private void OnBundleTableViewSelectionChanged(ITableData data)
         {
             var bundleTableData = data as BundleTableData;
+            var packageData = bundleTableData.PackageData;
+            var selectBundleInfo = bundleTableData.BundleInfo;
 
-            // 填充依赖数据
-            var sourceDatas = new List<ITableData>(1000);
-            foreach (var packageData in _debugReport.PackageDatas)
+            // 填充UsingTableView
             {
-                if (packageData.PackageName != bundleTableData.PackageName)
-                    continue;
-
+                var sourceDatas = new List<ITableData>(1000);
                 foreach (var providerInfo in packageData.ProviderInfos)
                 {
-                    foreach (var bundleInfo in providerInfo.DependBundleInfos)
+                    foreach (var dependBundleName in providerInfo.DependBundles)
                     {
-                        if (bundleInfo.BundleName == bundleTableData.BundleInfo.BundleName)
+                        if (dependBundleName == selectBundleInfo.BundleName)
                         {
                             var rowData = new UsingTableData();
                             rowData.ProviderInfo = providerInfo;
                             rowData.AddStringValueCell("UsingAssets", providerInfo.AssetPath);
                             rowData.AddStringValueCell("SpawnScene", providerInfo.SpawnScene);
-                            rowData.AddStringValueCell("SpawnTime", providerInfo.SpawnTime);
+                            rowData.AddStringValueCell("BeginTime", providerInfo.BeginTime);
                             rowData.AddLongValueCell("RefCount", providerInfo.RefCount);
                             rowData.AddStringValueCell("Status", providerInfo.Status);
                             sourceDatas.Add(rowData);
@@ -381,9 +459,26 @@ namespace YooAsset.Editor
                         }
                     }
                 }
+                _usingTableView.itemsSource = sourceDatas;
+                _usingTableView.RebuildView();
             }
-            _usingTableView.itemsSource = sourceDatas;
-            _usingTableView.RebuildView();
+
+            // 填充ReferenceTableView
+            {
+                var sourceDatas = new List<ITableData>(1000);
+                foreach (string referenceBundleName in selectBundleInfo.ReferenceBundles)
+                {
+                    var bundleInfo = packageData.GetBundleInfo(referenceBundleName);
+                    var rowData = new ReferenceTableData();
+                    rowData.BundleInfo = bundleInfo;
+                    rowData.AddStringValueCell("BundleName", bundleInfo.BundleName);
+                    rowData.AddLongValueCell("RefCount", bundleInfo.RefCount);
+                    rowData.AddStringValueCell("Status", bundleInfo.Status.ToString());
+                    sourceDatas.Add(rowData);
+                }
+                _referenceTableView.itemsSource = sourceDatas;
+                _referenceTableView.RebuildView();
+            }
         }
     }
 }

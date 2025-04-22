@@ -24,8 +24,8 @@ namespace YooAsset.Editor
         private VisualTreeAsset _visualAsset;
         private TemplateContainer _root;
 
-        private TableView _bundleTableView;
-        private TableView _includeTableView;
+        private TableViewer _bundleTableView;
+        private TableViewer _includeTableView;
 
         private BuildReport _buildReport;
         private string _reportFilePath;
@@ -46,13 +46,13 @@ namespace YooAsset.Editor
             _root.style.flexGrow = 1f;
 
             // 资源包列表
-            _bundleTableView = _root.Q<TableView>("TopTableView");
+            _bundleTableView = _root.Q<TableViewer>("TopTableView");
             _bundleTableView.ClickTableDataEvent = OnClickBundleTableView;
             _bundleTableView.SelectionChangedEvent = OnBundleTableViewSelectionChanged;
             CreateBundleTableViewColumns();
 
             // 包含列表
-            _includeTableView = _root.Q<TableView>("BottomTableView");
+            _includeTableView = _root.Q<TableViewer>("BottomTableView");
             _includeTableView.ClickTableDataEvent = OnClickIncludeTableView;
             CreateIncludeTableViewColumns();
 
@@ -61,7 +61,7 @@ namespace YooAsset.Editor
             var bottomGroup = _root.Q<VisualElement>("BottomGroup");
             topGroup.style.minHeight = 100;
             bottomGroup.style.minHeight = 100f;
-            PanelSplitView.SplitVerticalPanel(_root, topGroup, bottomGroup);
+            UIElementsTools.SplitVerticalPanel(_root, topGroup, bottomGroup);
 #endif
         }
         private void CreateBundleTableViewColumns()
@@ -72,6 +72,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
+                columnStyle.Counter = true;
                 var column = new TableColumn("BundleName", "Bundle Name", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -181,6 +182,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
+                columnStyle.Counter = true;
                 var column = new TableColumn("IncludeAssets", "Include Assets", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -320,15 +322,15 @@ namespace YooAsset.Editor
                     sourceDatas.Add(rowData);
                 }
             }
-            foreach (string assetPath in bundleInfo.AllBuiltinAssets)
+            foreach (var assetInfo in bundleInfo.BundleContents)
             {
-                if (mainAssetDic.Contains(assetPath) == false)
+                if (mainAssetDic.Contains(assetInfo.AssetPath) == false)
                 {
                     var rowData = new IncludeTableData();
                     rowData.AssetInfo = null;
-                    rowData.AddAssetPathCell("IncludeAssets", assetPath);
+                    rowData.AddAssetPathCell("IncludeAssets", assetInfo.AssetPath);
                     rowData.AddStringValueCell("AssetSource", "BuiltinAsset");
-                    rowData.AddStringValueCell("AssetGUID", "--");
+                    rowData.AddStringValueCell("AssetGUID", assetInfo.AssetGUID);
                     sourceDatas.Add(rowData);
                 }
             }

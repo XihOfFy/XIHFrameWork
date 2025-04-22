@@ -14,55 +14,44 @@ namespace YooAsset
         }
 
         private readonly ResourceManager _resManager;
+        private readonly int _loopCount;
+        private int _loopCounter = 0;
         private ESteps _steps = ESteps.None;
 
-        internal UnloadUnusedAssetsOperation(ResourceManager resourceManager)
+        internal UnloadUnusedAssetsOperation(ResourceManager resourceManager, int loopCount)
         {
             _resManager = resourceManager;
+            _loopCount = loopCount;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _steps = ESteps.UnloadUnused;
+            _loopCounter = _loopCount;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
             if (_steps == ESteps.UnloadUnused)
             {
-                var loaderDic = _resManager._loaderDic;
-                var removeList = new List<LoadBundleFileOperation>(loaderDic.Count);
-
-                // 注意：优先销毁资源提供者
-                foreach (var loader in loaderDic.Values)
+                while (_loopCounter > 0)
                 {
-                    loader.TryDestroyProviders();
-                }
+                    _loopCounter--;
+                    LoopUnloadUnused();
 
-                // 获取销毁列表
-                foreach (var loader in loaderDic.Values)
-                {
-                    if (loader.CanDestroyLoader())
+                    if (IsWaitForAsyncComplete == false)
                     {
-                        removeList.Add(loader);
+                        if (OperationSystem.IsBusy)
+                            break;
                     }
                 }
 
-                // 销毁文件加载器
-                foreach (var loader in removeList)
+                if (_loopCounter <= 0)
                 {
-                    string bundleName = loader.LoadBundleInfo.Bundle.BundleName;
-                    loader.DestroyLoader();
-                    _resManager._loaderDic.Remove(bundleName);
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Succeed;
                 }
-
-                // 注意：调用底层接口释放所有资源
-                if (removeList.Count > 0)
-                    Resources.UnloadUnusedAssets();
-
-                _steps = ESteps.Done;
-                Status = EOperationStatus.Succeed;
             }
         }
         internal override void InternalWaitForAsyncComplete()
@@ -74,6 +63,41 @@ namespace YooAsset
                     _steps = ESteps.Done;
                     break;
                 }
+            }
+        }
+        internal override string InternalGetDesc()
+        {
+            return $"LoopCount : {_loopCount}";
+        }
+
+        /// <summary>
+        /// 说明：资源包之间会有深层的依赖链表，需要多次迭代才可以在单帧内卸载！
+        /// </summary>
+        private void LoopUnloadUnused()
+        {
+            var removeList = new List<LoadBundleFileOperation>(_resManager.LoaderDic.Count);
+
+            // 注意：优先销毁资源提供者
+            foreach (var loader in _resManager.LoaderDic.Values)
+            {
+                loader.TryDestroyProviders();
+            }
+
+            // 获取销毁列表
+            foreach (var loader in _resManager.LoaderDic.Values)
+            {
+                if (loader.CanDestroyLoader())
+                {
+                    removeList.Add(loader);
+                }
+            }
+
+            // 销毁文件加载器
+            foreach (var loader in removeList)
+            {
+                string bundleName = loader.LoadBundleInfo.Bundle.BundleName;
+                loader.DestroyLoader();
+                _resManager.LoaderDic.Remove(bundleName);
             }
         }
     }

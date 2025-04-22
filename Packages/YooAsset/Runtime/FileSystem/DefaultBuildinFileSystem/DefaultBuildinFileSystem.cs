@@ -21,7 +21,7 @@ namespace YooAsset
         }
 
         protected readonly Dictionary<string, FileWrapper> _wrappers = new Dictionary<string, FileWrapper>(10000);
-        protected readonly Dictionary<string, string> _buildinFilePaths = new Dictionary<string, string>(10000);
+        protected readonly Dictionary<string, string> _buildinFilePathMapping = new Dictionary<string, string>(10000);
         protected IFileSystem _unpackFileSystem;
         protected string _packageRoot;
 
@@ -59,6 +59,11 @@ namespace YooAsset
         public EFileVerifyLevel FileVerifyLevel { private set; get; } = EFileVerifyLevel.Middle;
 
         /// <summary>
+        /// 自定义参数：覆盖安装缓存清理模式
+        /// </summary>
+        public EOverwriteInstallClearMode InstallClearMode { private set; get; } = EOverwriteInstallClearMode.ClearAllManifestFiles;
+
+        /// <summary>
         /// 自定义参数：数据文件追加文件格式
         /// </summary>
         public bool AppendFileExtension { private set; get; } = false;
@@ -92,33 +97,31 @@ namespace YooAsset
         public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
         {
             var operation = new DBFSInitializeOperation(this);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         public virtual FSLoadPackageManifestOperation LoadPackageManifestAsync(string packageVersion, int timeout)
         {
             var operation = new DBFSLoadPackageManifestOperation(this, packageVersion);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         public virtual FSRequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
         {
             var operation = new DBFSRequestPackageVersionOperation(this);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
-        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
         {
-            return _unpackFileSystem.ClearCacheFilesAsync(manifest, clearMode, clearParam);
+            return _unpackFileSystem.ClearCacheFilesAsync(manifest, options);
         }
-        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
+        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options)
         {
-            param.ImportFilePath = GetBuildinFileLoadPath(bundle);
-            return _unpackFileSystem.DownloadFileAsync(bundle, param);
+            // 注意：业务层的解压下载器会依赖内置文件系统的下载方法
+            options.ImportFilePath = GetBuildinFileLoadPath(bundle);
+            return _unpackFileSystem.DownloadFileAsync(bundle, options);
         }
         public virtual FSLoadBundleOperation LoadBundleFile(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
             {
                 return _unpackFileSystem.LoadBundleFile(bundle);
             }
@@ -126,20 +129,17 @@ namespace YooAsset
             if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
             {
                 var operation = new DBFSLoadAssetBundleOperation(this, bundle);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
             else if (bundle.BundleType == (int)EBuildBundleType.RawBundle)
             {
                 var operation = new DBFSLoadRawBundleOperation(this, bundle);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
             else
             {
                 string error = $"{nameof(DefaultBuildinFileSystem)} not support load bundle type : {bundle.BundleType}";
                 var operation = new FSLoadBundleCompleteOperation(error);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
         }
@@ -150,17 +150,21 @@ namespace YooAsset
             {
                 FileVerifyLevel = (EFileVerifyLevel)value;
             }
+            else if (name == FileSystemParametersDefine.INSTALL_CLEAR_MODE)
+            {
+                InstallClearMode = (EOverwriteInstallClearMode)value;
+            }
             else if (name == FileSystemParametersDefine.APPEND_FILE_EXTENSION)
             {
-                AppendFileExtension = (bool)value;
+                AppendFileExtension = Convert.ToBoolean(value);
             }
             else if (name == FileSystemParametersDefine.DISABLE_CATALOG_FILE)
             {
-                DisableCatalogFile = (bool)value;
+                DisableCatalogFile = Convert.ToBoolean(value);
             }
             else if (name == FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST)
             {
-                CopyBuildinPackageManifest = (bool)value;
+                CopyBuildinPackageManifest = Convert.ToBoolean(value);
             }
             else if (name == FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST_DEST_ROOT)
             {
@@ -189,13 +193,13 @@ namespace YooAsset
             _unpackFileSystem = new DefaultUnpackFileSystem();
             _unpackFileSystem.SetParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
             _unpackFileSystem.SetParameter(FileSystemParametersDefine.FILE_VERIFY_LEVEL, FileVerifyLevel);
+            _unpackFileSystem.SetParameter(FileSystemParametersDefine.INSTALL_CLEAR_MODE, InstallClearMode);
             _unpackFileSystem.SetParameter(FileSystemParametersDefine.APPEND_FILE_EXTENSION, AppendFileExtension);
             _unpackFileSystem.SetParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, DecryptionServices);
             _unpackFileSystem.OnCreate(packageName, null);
         }
-        public virtual void OnUpdate()
+        public virtual void OnDestroy()
         {
-            _unpackFileSystem.OnUpdate();
         }
 
         public virtual bool Belong(PackageBundle bundle)
@@ -216,11 +220,7 @@ namespace YooAsset
         }
         public virtual bool NeedUnpack(PackageBundle bundle)
         {
-            if (Belong(bundle) == false)
-                return false;
-
-#if UNITY_ANDROID
-            if (bundle.BundleType == (int)EBuildBundleType.RawBundle || bundle.Encrypted)
+            if (IsUnpackBundleFile(bundle))
             {
                 return _unpackFileSystem.Exists(bundle) == false;
             }
@@ -228,9 +228,6 @@ namespace YooAsset
             {
                 return false;
             }
-#else
-            return false;
-#endif
         }
         public virtual bool NeedImport(PackageBundle bundle)
         {
@@ -239,19 +236,24 @@ namespace YooAsset
 
         public virtual string GetBundleFilePath(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
                 return _unpackFileSystem.GetBundleFilePath(bundle);
 
             return GetBuildinFileLoadPath(bundle);
         }
         public virtual byte[] ReadBundleFileData(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
                 return _unpackFileSystem.ReadBundleFileData(bundle);
 
             if (Exists(bundle) == false)
                 return null;
 
+#if UNITY_ANDROID
+            //TODO : 安卓平台内置文件属于APK压缩包内的文件。
+            YooLogger.Error($"Android platform not support read buildin bundle file data !");
+            return null;
+#else
             if (bundle.Encrypted)
             {
                 if (DecryptionServices == null)
@@ -274,15 +276,21 @@ namespace YooAsset
                 string filePath = GetBuildinFileLoadPath(bundle);
                 return FileUtility.ReadAllBytes(filePath);
             }
+#endif
         }
         public virtual string ReadBundleFileText(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
                 return _unpackFileSystem.ReadBundleFileText(bundle);
 
             if (Exists(bundle) == false)
                 return null;
 
+#if UNITY_ANDROID
+            //TODO : 安卓平台内置文件属于APK压缩包内的文件。
+            YooLogger.Error($"Android platform not support read buildin bundle file text !");
+            return null;
+#else
             if (bundle.Encrypted)
             {
                 if (DecryptionServices == null)
@@ -305,6 +313,7 @@ namespace YooAsset
                 string filePath = GetBuildinFileLoadPath(bundle);
                 return FileUtility.ReadAllText(filePath);
             }
+#endif
         }
 
         #region 内部方法
@@ -315,10 +324,10 @@ namespace YooAsset
         }
         public string GetBuildinFileLoadPath(PackageBundle bundle)
         {
-            if (_buildinFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
+            if (_buildinFilePathMapping.TryGetValue(bundle.BundleGUID, out string filePath) == false)
             {
                 filePath = PathUtility.Combine(_packageRoot, bundle.FileName);
-                _buildinFilePaths.Add(bundle.BundleGUID, filePath);
+                _buildinFilePathMapping.Add(bundle.BundleGUID, filePath);
             }
             return filePath;
         }
@@ -337,10 +346,30 @@ namespace YooAsset
             string fileName = YooAssetSettingsData.GetManifestBinaryFileName(PackageName, packageVersion);
             return PathUtility.Combine(_packageRoot, fileName);
         }
-        public string GetCatalogFileLoadPath()
+        public string GetCatalogBinaryFileLoadPath()
         {
-            string fileName = Path.GetFileNameWithoutExtension(DefaultBuildinFileSystemDefine.BuildinCatalogFileName);
-            return YooAssetSettingsData.GetYooResourcesLoadPath(PackageName, fileName);
+            return PathUtility.Combine(_packageRoot, DefaultBuildinFileSystemDefine.BuildinCatalogBinaryFileName);
+        }
+
+        /// <summary>
+        /// 是否属于解压资源包文件
+        /// </summary>
+        protected bool IsUnpackBundleFile(PackageBundle bundle)
+        {
+            if (Belong(bundle) == false)
+                return false;
+
+#if UNITY_ANDROID
+            if (bundle.Encrypted)
+                return true;
+
+            if (bundle.BundleType == (int)EBuildBundleType.RawBundle)
+                return true;
+
+            return false;
+#else
+            return false;
+#endif
         }
 
         /// <summary>

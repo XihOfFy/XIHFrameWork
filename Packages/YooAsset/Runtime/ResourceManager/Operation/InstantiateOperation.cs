@@ -43,11 +43,11 @@ namespace YooAsset
             _worldPositionStays = worldPositionStays;
             _actived = actived;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _steps = ESteps.LoadObject;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -151,6 +151,11 @@ namespace YooAsset
                 }
             }
         }
+        internal override string InternalGetDesc()
+        {
+            var assetInfo = _handle.GetAssetInfo();
+            return $"AssetPath : {assetInfo.AssetPath}";
+        }
 
         /// <summary>
         /// 取消实例化对象操作
@@ -162,7 +167,7 @@ namespace YooAsset
                 _instantiateAsync.Cancel();
 #endif
 
-            SetAbort();
+            AbortOperation();
         }
 
         /// <summary>

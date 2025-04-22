@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System;
+using System.Linq;
 
 namespace YooAsset
 {
@@ -10,7 +10,8 @@ namespace YooAsset
         protected enum ESteps
         {
             None = 0,
-            LoadBundleFile,
+            StartBundleLoader,
+            WaitBundleLoader,
             ProcessBundleResult,
             Done,
         }
@@ -68,8 +69,8 @@ namespace YooAsset
 
         private ESteps _steps = ESteps.None;
         private readonly LoadBundleFileOperation _mainBundleLoader;
-        private readonly List<LoadBundleFileOperation> _bundleLoaders = new List<LoadBundleFileOperation>();
-        private readonly List<HandleBase> _handles = new List<HandleBase>();
+        private readonly List<LoadBundleFileOperation> _bundleLoaders = new List<LoadBundleFileOperation>(10);
+        private readonly HashSet<HandleBase> _handles = new HashSet<HandleBase>();
 
 
         public ProviderOperation(ResourceManager manager, string providerGUID, AssetInfo assetInfo)
@@ -86,7 +87,7 @@ namespace YooAsset
 
                 // 依赖资源包加载器集合
                 var dependLoaders = manager.CreateDependBundleFileLoaders(assetInfo);
-                if(dependLoaders.Count > 0)
+                if (dependLoaders.Count > 0)
                     _bundleLoaders.AddRange(dependLoaders);
 
                 // 增加引用计数
@@ -96,17 +97,26 @@ namespace YooAsset
                 }
             }
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
-            DebugBeginRecording();
-            _steps = ESteps.LoadBundleFile;
+            _steps = ESteps.StartBundleLoader;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
-            if (_steps == ESteps.LoadBundleFile)
+            if (_steps == ESteps.StartBundleLoader)
+            {
+                foreach (var bundleLoader in _bundleLoaders)
+                {
+                    bundleLoader.StartOperation();
+                    AddChildOperation(bundleLoader);
+                }
+                _steps = ESteps.WaitBundleLoader;
+            }
+
+            if (_steps == ESteps.WaitBundleLoader)
             {
                 if (IsWaitForAsyncComplete)
                 {
@@ -116,6 +126,13 @@ namespace YooAsset
                     }
                 }
 
+                // 更新资源包加载器
+                foreach (var bundleLoader in _bundleLoaders)
+                {
+                    bundleLoader.UpdateOperation();
+                }
+
+                // 检测加载是否完成
                 foreach (var bundleLoader in _bundleLoaders)
                 {
                     if (bundleLoader.IsDone == false)
@@ -128,6 +145,7 @@ namespace YooAsset
                     }
                 }
 
+                // 检测加载结果
                 BundleResultObject = _mainBundleLoader.Result;
                 if (BundleResultObject == null)
                 {
@@ -154,6 +172,10 @@ namespace YooAsset
                     break;
                 }
             }
+        }
+        internal override string InternalGetDesc()
+        {
+            return $"AssetPath : {MainAssetInfo.AssetPath}";
         }
         protected abstract void ProcessBundleResult();
 
@@ -198,20 +220,7 @@ namespace YooAsset
             // 引用计数增加
             RefCount++;
 
-            HandleBase handle;
-            if (typeof(T) == typeof(AssetHandle))
-                handle = new AssetHandle(this);
-            else if (typeof(T) == typeof(SceneHandle))
-                handle = new SceneHandle(this);
-            else if (typeof(T) == typeof(SubAssetsHandle))
-                handle = new SubAssetsHandle(this);
-            else if (typeof(T) == typeof(AllAssetsHandle))
-                handle = new AllAssetsHandle(this);
-            else if (typeof(T) == typeof(RawFileHandle))
-                handle = new RawFileHandle(this);
-            else
-                throw new System.NotImplementedException();
-
+            HandleBase handle = HandleFactory.CreateHandle(this, typeof(T));
             _handles.Add(handle);
             return handle as T;
         }
@@ -236,9 +245,9 @@ namespace YooAsset
         /// </summary>
         public void ReleaseAllHandles()
         {
-            for (int i = _handles.Count - 1; i >= 0; i--)
+            List<HandleBase> tempers = _handles.ToList();
+            foreach (var handle in tempers)
             {
-                var handle = _handles[i];
                 handle.Release();
             }
         }
@@ -248,15 +257,13 @@ namespace YooAsset
         /// </summary>
         protected void InvokeCompletion(string error, EOperationStatus status)
         {
-            DebugEndRecording();
-
             _steps = ESteps.Done;
             Error = error;
             Status = status;
 
             // 注意：创建临时列表是为了防止外部逻辑在回调函数内创建或者释放资源句柄。
             // 注意：回调方法如果发生异常，会阻断列表里的后续回调方法！
-            List<HandleBase> tempers = new List<HandleBase>(_handles);
+            List<HandleBase> tempers = _handles.ToList();
             foreach (var hande in tempers)
             {
                 if (hande.IsValid)
@@ -286,71 +293,30 @@ namespace YooAsset
             return status;
         }
 
-        #region 调试信息相关
+        #region 调试信息
         /// <summary>
         /// 出生的场景
         /// </summary>
         public string SpawnScene = string.Empty;
 
-        /// <summary>
-        /// 出生的时间
-        /// </summary>
-        public string SpawnTime = string.Empty;
-
-        /// <summary>
-        /// 加载耗时（单位：毫秒）
-        /// </summary>
-        public long LoadingTime { protected set; get; }
-
-        // 加载耗时统计
-        private Stopwatch _watch = null;
-
         [Conditional("DEBUG")]
-        public void InitSpawnDebugInfo()
+        public void InitProviderDebugInfo()
         {
-            SpawnScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name; ;
-            SpawnTime = SpawnTimeToString(UnityEngine.Time.realtimeSinceStartup);
-        }
-        private string SpawnTimeToString(float spawnTime)
-        {
-            float h = UnityEngine.Mathf.FloorToInt(spawnTime / 3600f);
-            float m = UnityEngine.Mathf.FloorToInt(spawnTime / 60f - h * 60f);
-            float s = UnityEngine.Mathf.FloorToInt(spawnTime - m * 60f - h * 3600f);
-            return h.ToString("00") + ":" + m.ToString("00") + ":" + s.ToString("00");
-        }
-
-        [Conditional("DEBUG")]
-        protected void DebugBeginRecording()
-        {
-            if (_watch == null)
-            {
-                _watch = Stopwatch.StartNew();
-            }
-        }
-
-        [Conditional("DEBUG")]
-        private void DebugEndRecording()
-        {
-            if (_watch != null)
-            {
-                LoadingTime = _watch.ElapsedMilliseconds;
-                _watch = null;
-            }
+            SpawnScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         }
 
         /// <summary>
         /// 获取资源包的调试信息列表
         /// </summary>
-        internal void GetBundleDebugInfos(List<DebugBundleInfo> output)
+        internal List<string> GetDebugDependBundles()
         {
+            List<string> result = new List<string>(_bundleLoaders.Count);
             foreach (var bundleLoader in _bundleLoaders)
             {
-                var bundleInfo = new DebugBundleInfo();
-                bundleInfo.BundleName = bundleLoader.LoadBundleInfo.Bundle.BundleName;
-                bundleInfo.RefCount = bundleLoader.RefCount;
-                bundleInfo.Status = bundleLoader.Status;
-                output.Add(bundleInfo);
+                var packageBundle = bundleLoader.LoadBundleInfo.Bundle;
+                result.Add(packageBundle.BundleName);
             }
+            return result;
         }
         #endregion
     }

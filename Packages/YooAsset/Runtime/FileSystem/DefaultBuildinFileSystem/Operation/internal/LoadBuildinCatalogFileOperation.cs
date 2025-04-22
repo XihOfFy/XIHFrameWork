@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using System;
 
 namespace YooAsset
 {
@@ -7,56 +7,84 @@ namespace YooAsset
         private enum ESteps
         {
             None,
+            RequestData,
             LoadCatalog,
             Done,
         }
 
         private readonly DefaultBuildinFileSystem _fileSystem;
+        private UnityWebDataRequestOperation _webDataRequestOp;
         private ESteps _steps = ESteps.None;
-
 
         internal LoadBuildinCatalogFileOperation(DefaultBuildinFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
-            _steps = ESteps.LoadCatalog;
+            _steps = ESteps.RequestData;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
+            if (_steps == ESteps.RequestData)
+            {
+                if (_webDataRequestOp == null)
+                {
+                    string filePath = _fileSystem.GetCatalogBinaryFileLoadPath();
+                    string url = DownloadSystemHelper.ConvertToWWWPath(filePath);
+                    _webDataRequestOp = new UnityWebDataRequestOperation(url);
+                    _webDataRequestOp.StartOperation();
+                    AddChildOperation(_webDataRequestOp);
+                }
+
+                _webDataRequestOp.UpdateOperation();
+                if (_webDataRequestOp.IsDone == false)
+                    return;
+
+                if (_webDataRequestOp.Status == EOperationStatus.Succeed)
+                {
+                    _steps = ESteps.LoadCatalog;
+                }
+                else
+                {
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Failed;
+                    Error = _webDataRequestOp.Error;
+                }
+            }
+
             if (_steps == ESteps.LoadCatalog)
             {
-                string catalogFilePath = _fileSystem.GetCatalogFileLoadPath();
-                var catalog = Resources.Load<DefaultBuildinFileCatalog>(catalogFilePath);
-                if (catalog == null)
+                try
+                {
+                    var catalog = CatalogTools.DeserializeFromBinary(_webDataRequestOp.Result);
+                    if (catalog.PackageName != _fileSystem.PackageName)
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Failed;
+                        Error = $"Catalog file package name {catalog.PackageName} cannot match the file system package name {_fileSystem.PackageName}";
+                        return;
+                    }
+
+                    foreach (var wrapper in catalog.Wrappers)
+                    {
+                        var fileWrapper = new DefaultBuildinFileSystem.FileWrapper(wrapper.FileName);
+                        _fileSystem.RecordCatalogFile(wrapper.BundleGUID, fileWrapper);
+                    }
+
+                    YooLogger.Log($"Package '{_fileSystem.PackageName}' buildin catalog files count : {catalog.Wrappers.Count}");
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Succeed;
+                }
+                catch (Exception e)
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = $"Failed to load catalog file : {catalogFilePath}";
-                    return;
+                    Error = $"Failed to load catalog file : {e.Message}";
                 }
-
-                if (catalog.PackageName != _fileSystem.PackageName)
-                {
-                    _steps = ESteps.Done;
-                    Status = EOperationStatus.Failed;
-                    Error = $"Catalog file package name {catalog.PackageName} cannot match the file system package name {_fileSystem.PackageName}";
-                    return;
-                }
-
-                foreach (var wrapper in catalog.Wrappers)
-                {
-                    var fileWrapper = new DefaultBuildinFileSystem.FileWrapper(wrapper.FileName);
-                    _fileSystem.RecordCatalogFile(wrapper.BundleGUID, fileWrapper);
-                }
-
-                YooLogger.Log($"Package '{_fileSystem.PackageName}' buildin catalog files count : {catalog.Wrappers.Count}");
-                _steps = ESteps.Done;
-                Status = EOperationStatus.Succeed;
             }
         }
     }

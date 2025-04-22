@@ -24,8 +24,8 @@ namespace YooAsset.Editor
         private VisualTreeAsset _visualAsset;
         private TemplateContainer _root;
 
-        private TableView _assetTableView;
-        private TableView _dependTableView;
+        private TableViewer _assetTableView;
+        private TableViewer _dependTableView;
 
         private BuildReport _buildReport;
         private string _reportFilePath;
@@ -46,23 +46,22 @@ namespace YooAsset.Editor
             _root.style.flexGrow = 1f;
 
             // 资源列表
-            _assetTableView = _root.Q<TableView>("TopTableView");
+            _assetTableView = _root.Q<TableViewer>("TopTableView");
             _assetTableView.SelectionChangedEvent = OnAssetTableViewSelectionChanged;
             _assetTableView.ClickTableDataEvent = OnClickAssetTableView;
             CreateAssetTableViewColumns();
 
             // 依赖列表
-            _dependTableView = _root.Q<TableView>("BottomTableView");
+            _dependTableView = _root.Q<TableViewer>("BottomTableView");
             _dependTableView.ClickTableDataEvent = OnClickBundleTableView;
             CreateDependTableViewColumns();
 
-#if UNITY_2020_3_OR_NEWER
+            // 面板分屏
             var topGroup = _root.Q<VisualElement>("TopGroup");
             var bottomGroup = _root.Q<VisualElement>("BottomGroup");
             topGroup.style.minHeight = 100;
             bottomGroup.style.minHeight = 100f;
-            PanelSplitView.SplitVerticalPanel(_root, topGroup, bottomGroup);
-#endif
+            UIElementsTools.SplitVerticalPanel(_root, topGroup, bottomGroup);
         }
         private void CreateAssetTableViewColumns()
         {
@@ -72,6 +71,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
+                columnStyle.Counter = true;
                 var column = new TableColumn("AssetPath", "Asset Path", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -116,6 +116,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
+                columnStyle.Counter = true;
                 var column = new TableColumn("DependBundles", "Depend Bundles", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -237,9 +238,8 @@ namespace YooAsset.Editor
             ReportAssetInfo assetInfo = assetTableData.AssetInfo;
 
             // 填充依赖数据
-            var mainBundle = _buildReport.GetBundleInfo(assetInfo.MainBundleName);
-            var sourceDatas = new List<ITableData>(mainBundle.DependBundles.Count);
-            foreach (string dependBundleName in mainBundle.DependBundles)
+            var sourceDatas = new List<ITableData>(assetInfo.DependBundles.Count);
+            foreach (string dependBundleName in assetInfo.DependBundles)
             {
                 var dependBundle = _buildReport.GetBundleInfo(dependBundleName);
                 var rowData = new DependTableData();

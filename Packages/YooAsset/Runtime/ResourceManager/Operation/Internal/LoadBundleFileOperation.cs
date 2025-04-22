@@ -9,7 +9,8 @@ namespace YooAsset
         private enum ESteps
         {
             None,
-            LoadFile,
+            CheckConcurrency,
+            LoadBundleFile,
             Done,
         }
 
@@ -55,23 +56,43 @@ namespace YooAsset
             _resourceManager = resourceManager;
             LoadBundleInfo = bundleInfo;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
-            _steps = ESteps.LoadFile;
+            _steps = ESteps.CheckConcurrency;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
-            if (_steps == ESteps.LoadFile)
+            if (_steps == ESteps.CheckConcurrency)
+            {
+                if (IsWaitForAsyncComplete)
+                {
+                    _steps = ESteps.LoadBundleFile;
+                }
+                else
+                {
+                    if (_resourceManager.BundleLoadingIsBusy())
+                        return;
+                    _steps = ESteps.LoadBundleFile;
+                }
+            }
+
+            if (_steps == ESteps.LoadBundleFile)
             {
                 if (_loadBundleOp == null)
+                {
+                    _resourceManager.BundleLoadingCounter++;
                     _loadBundleOp = LoadBundleInfo.LoadBundleFile();
+                    _loadBundleOp.StartOperation();
+                    AddChildOperation(_loadBundleOp);
+                }
 
                 if (IsWaitForAsyncComplete)
                     _loadBundleOp.WaitForAsyncComplete();
 
+                _loadBundleOp.UpdateOperation();
                 DownloadProgress = _loadBundleOp.DownloadProgress;
                 DownloadedBytes = _loadBundleOp.DownloadedBytes;
                 if (_loadBundleOp.IsDone == false)
@@ -98,6 +119,9 @@ namespace YooAsset
                     Status = EOperationStatus.Failed;
                     Error = _loadBundleOp.Error;
                 }
+
+                // 统计计数减少
+                _resourceManager.BundleLoadingCounter--;
             }
         }
         internal override void InternalWaitForAsyncComplete()
@@ -110,6 +134,10 @@ namespace YooAsset
                     break;
                 }
             }
+        }
+        internal override string InternalGetDesc()
+        {
+            return $"BundleName : {LoadBundleInfo.Bundle.BundleName}";
         }
 
         /// <summary>
@@ -153,7 +181,22 @@ namespace YooAsset
             if (IsDone == false)
                 return false;
 
-            return RefCount <= 0;
+            if (RefCount > 0)
+                return false;
+
+            // YOOASSET_LEGACY_DEPENDENCY
+            // 检查引用链上的资源包是否已经全部销毁
+            // 注意：互相引用的资源包无法卸载！
+            if (LoadBundleInfo.Bundle.ReferenceBundleIDs.Count > 0)
+            {
+                foreach (var bundleID in LoadBundleInfo.Bundle.ReferenceBundleIDs)
+                {
+                    if (_resourceManager.CheckBundleDestroyed(bundleID) == false)
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -193,15 +236,6 @@ namespace YooAsset
                 _resourceManager.RemoveBundleProviders(_removeList);
                 _removeList.Clear();
             }
-        }
-
-        /// <summary>
-        /// 终止下载任务
-        /// </summary>
-        public void AbortDownloadOperation()
-        {
-            if (_loadBundleOp != null)
-                _loadBundleOp.AbortDownloadOperation();
         }
     }
 }

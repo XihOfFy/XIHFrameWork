@@ -1,0 +1,20 @@
+{
+    "name": "YooAsset.RuntimeExtension.Editor",
+    "rootNamespace": "",
+    "references": [
+        "YooAsset",
+        "YooAsset.RuntimeExtension",
+        "YooAsset.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

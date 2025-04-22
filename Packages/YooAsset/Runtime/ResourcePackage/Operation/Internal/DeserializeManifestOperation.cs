@@ -34,11 +34,11 @@ namespace YooAsset
         {
             _buffer = new BufferReader(binaryData);
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _steps = ESteps.DeserializeFileHeader;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -57,7 +57,7 @@ namespace YooAsset
 
                     // 读取文件标记
                     uint fileSign = _buffer.ReadUInt32();
-                    if (fileSign != YooAssetSettings.ManifestFileSign)
+                    if (fileSign != ManifestDefine.FileSign)
                     {
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
@@ -67,11 +67,11 @@ namespace YooAsset
 
                     // 读取文件版本
                     string fileVersion = _buffer.ReadUTF8();
-                    if (fileVersion != YooAssetSettings.ManifestFileVersion)
+                    if (fileVersion != ManifestDefine.FileVersion)
                     {
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
-                        Error = $"The manifest file version are not compatible : {fileVersion} != {YooAssetSettings.ManifestFileVersion}";
+                        Error = $"The manifest file version are not compatible : {fileVersion} != {ManifestDefine.FileVersion}";
                         return;
                     }
 
@@ -112,6 +112,7 @@ namespace YooAsset
                         packageAsset.AssetGUID = _buffer.ReadUTF8();
                         packageAsset.AssetTags = _buffer.ReadUTF8Array();
                         packageAsset.BundleID = _buffer.ReadInt32();
+                        packageAsset.DependBundleIDs = _buffer.ReadInt32Array();
                         ManifestTools.FillAssetCollection(Manifest, packageAsset);
 
                         _packageAssetCount--;
@@ -145,7 +146,7 @@ namespace YooAsset
                         packageBundle.FileSize = _buffer.ReadInt64();
                         packageBundle.Encrypted = _buffer.ReadBool();
                         packageBundle.Tags = _buffer.ReadUTF8Array();
-                        packageBundle.DependIDs = _buffer.ReadInt32Array();
+                        packageBundle.DependBundleIDs = _buffer.ReadInt32Array();
                         ManifestTools.FillBundleCollection(Manifest, packageBundle);
 
                         _packageBundleCount--;

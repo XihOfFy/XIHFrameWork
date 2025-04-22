@@ -2,6 +2,313 @@
 
 All notable changes to this package will be documented in this file.
 
+## [2.3.8] - 2025-04-17
+
+### Improvements
+
+- 扩展工程里增加了“图集丢失变白块的解决方案”的相关代码。
+
+### Fixed
+
+- (#528) 修复了微信小游戏平台WXFSClearUnusedBundleFiles无法清理的问题。
+- (#531) 修复了微信小游戏平台WXFSClearUnusedBundleFiles没有适配BundleName_HashName命名方式。
+- (#533) 修复了Editor程序集下无法访问YooAsset.Editor程序集里的internal字段的问题。
+- (#534) 修复了资源报告窗口AssetView视图里，依赖资源包列表显示不准确的问题。
+
+## [2.3.7] - 2025-04-01
+
+### Improvements
+
+- (#526) 运行时资源清单的哈希值验证兼容了MD5和CRC32两种方式。
+- (#515) 优化了资源路径大小写不敏感的逻辑代码，减少字符串操作产生的GC。
+- (#523) UnloadUnusedAssetsOperation方法支持了分帧处理。
+
+### Fixed
+
+- (#520) 修复了UWP平台获取WWW加载路径未适配的问题。
+
+### Added
+
+- 新增了文件系统初始化参数：INSTALL_CLEAR_MODE
+
+  ```csharp
+  /// <summary>
+  /// 覆盖安装清理模式
+  /// </summary>
+  public enum EOverwriteInstallClearMode
+  {
+      /// <summary>
+      /// 不做任何处理
+      /// </summary>
+      None = 0,
+   
+      /// <summary>
+      /// 清理所有缓存文件（包含资源文件和清单文件）
+      /// </summary>
+      ClearAllCacheFiles = 1,
+   
+      /// <summary>
+      /// 清理所有缓存的资源文件
+      /// </summary>
+      ClearAllBundleFiles = 2,
+   
+      /// <summary>
+      /// 清理所有缓存的清单文件
+      /// </summary>
+      ClearAllManifestFiles = 3,
+  }
+  ```
+
+- 新增了初始化参数：BundleLoadingMaxConcurrency
+
+  ```csharp
+  public abstract class InitializeParameters
+  {
+      /// <summary>
+      /// 同时加载Bundle文件的最大并发数
+      /// </summary>
+      public int BundleLoadingMaxConcurrency = int.MaxValue;
+  }
+  ```
+
+## [2.3.6] - 2025-03-25
+
+### Improvements
+
+- 构建管线新增了TaskCreateCatalog任务节点。
+- 内置文件系统的catalog文件现在存储在streammingAssets目录下。
+
+### Fixed
+
+- (#486) 修复了微信小游戏文件系统调用ClearUnusedBundleFiles时候的异常。
+
+## [2.3.5-preview] - 2025-03-14
+
+### Fixed
+
+- (#502) 修复了原生缓存文件由于文件格式变动导致的加载本地缓存文件失败的问题。
+- (#504) 修复了MacOS平台Offline Play Mode模式请求本地资源清单失败的问题。
+- (#506) 修复了v2.3x版本LoadAllAssets方法计算依赖Bundle不完整的问题。
+- (#506) 修复了微信小游戏文件系统，在启用加密算法后卸载bundle报错的问题。
+
+## [2.3.4-preview] - 2025-03-08
+
+### Improvements
+
+- YooAsset支持了版本宏定义。
+
+  ```csharp
+  YOO_ASSET_2
+  YOO_ASSET_2_3
+  YOO_ASSET_2_3_OR_NEWER
+  ```
+
+### Fixed
+
+- (#389) 修复了禁用域重载(Reload Domain)的情况下，再次启动游戏报错的问题。
+- (#496) 修复了文件系统参数RESUME_DOWNLOAD_MINMUM_SIZE传入int值会导致异常的错误。
+- (#498) 修复了v2.3版本尝试加载安卓包内的原生资源包失败的问题。
+
+### Added
+
+- 新增了YooAssets.GetAllPackages()方法
+
+  ```csharp
+  /// <summary>
+  /// 获取所有资源包裹
+  /// </summary>
+  public static List<ResourcePackage> GetAllPackages()
+  ```
+
+## [2.3.3-preview] - 2025-03-06
+
+### Improvements
+
+- 新增了异步操作任务调试器，AssetBundleDebugger窗口-->OperationView视图模式
+- 编辑器下模拟构建默认启用依赖关系数据库，可以大幅降低编辑器下启动游戏的时间。
+- 单元测试用例增加加密解密测试用例。
+
+### Fixed
+
+- (#492) 修复了发布的MAC平台应用，在启动的时候提示权限无法获取的问题。
+
+## [2.3.2-preview] - 2025-02-27
+
+### Fixed
+
+- (2.3.1) 修复小游戏平台下载器不生效的问题。
+- (#480) 修复了Unity工程打包导出时的报错。
+
+### Added
+
+- 下载器新增参数：recursiveDownload
+
+  ```csharp
+  /// <summary>
+  /// 创建资源下载器，用于下载指定的资源依赖的资源包文件
+  /// </summary>
+  /// <param name="recursiveDownload">下载资源对象所属资源包内所有资源对象依赖的资源包
+  public ResourceDownloaderOperation CreateBundleDownloader()
+  ```
+
+- 新增CustomPlayMode模式
+
+  ```csharp
+  /// <summary>
+  /// 自定义运行模式的初始化参数
+  /// </summary>
+  public class CustomPlayModeParameters : InitializeParameters
+  {
+      /// <summary>
+      /// 文件系统初始化参数列表
+      /// 注意：列表最后一个元素作为主文件系统！
+      /// </summary>
+      public List<FileSystemParameters> FileSystemParameterList;
+  }
+  ```
+
+## [2.3.1-preview] - 2025-02-25
+
+**资源加载依赖计算方式还原为了1.5x版本的模式，只加载资源对象实际依赖的资源包，不再以资源对象所在资源包的依赖关系为加载标准**。
+
+### Improvements
+
+- 优化OperationSystem的更新机制，异步加载的耗时降低了50%。
+- 优化了Debugger窗口的显示页面，BundleView页面增加资源包的引用列表。
+- 优化了Reporter窗口的显示页面。
+
+### Fixed
+
+- 修复了怀旧依赖模式下，TAG传染不正确的问题。
+
+## [2.3.0-preview] - 2025-02-19
+
+### Improvements
+
+资源收集窗口列表元素支持手动上下拖拽排序！
+
+资源扫描窗口列表元素支持手动上下拖拽排序！
+
+### Added
+
+- 新增了UIElements扩展类ReorderableListView
+
+- 新增初始化方法
+
+  ```csharp
+  public class YooAssets
+  {
+      /// <summary>
+      /// 设置异步系统参数，快速启动模式的开关
+      /// 注意：该模式默认开启
+      /// </summary>
+      public static void SetOperationSystemQuickStartMode(bool state)
+  }
+  ```
+
+- 新增打包构建参数
+
+  ```csharp
+  public class BuildParameters
+  {
+      /// <summary>
+      /// 旧版依赖模式
+      /// 说明：兼容YooAssets1.5.x版本
+      /// </summary>
+      public bool LegacyDependency = false;    
+  }
+  ```
+
+### Fixed
+
+- (#472) 修复了Unity6平台，TableView视图无法显示问题。
+- 修复了微信小游戏和抖音小游戏未正确使用插件的卸载方法。
+
+## [2.2.12] - 2025-02-14
+
+### Improvements
+
+- WebGL网页平台支持文件加密。
+- 微信小游戏平台支持文件加密。
+- 抖音小游戏平台支持文件加密。
+
+### Fixed
+
+- (#466) 修复了微信小游戏文件系统查询机制不生效！
+- (#341) 修复了微信小游戏的下载进度异常问题。
+- (#471) 修复了Unity2019,Unity2020平台上，TableView视图无法显示的问题。
+
+### Added
+
+- 新增了ResourcePackage.UnloadAllAssetsAsync(UnloadAllAssetsOptions options)方法
+
+  ```csharp
+  public sealed class UnloadAllAssetsOptions
+  {
+      /// <summary>
+      /// 释放所有资源句柄，防止卸载过程中触发完成回调！
+      /// </summary>
+      public bool ReleaseAllHandles = true;
+       
+      /// <summary>
+      /// 卸载过程中锁定加载操作，防止新的任务请求！
+      /// </summary>
+      public bool LockLoadOperation = true;
+  }
+  ```
+
+## [2.2.11] - 2025-02-10
+
+### Improvements
+
+- AssetArtScanner配置和生成报告的容错性检测。
+
+### Fixed
+
+- (#465) 修复了特殊情况下，没有配置资源包文件后缀名构建失败的问题。
+- (#468) 修复了安卓平台二次启动加载原生文件或加密文件失败的问题。
+
+## [2.2.10] - 2025-02-08
+
+### Improvements
+
+- 新增了可扩展的AssetArtScanner资源扫描工具，详细请见官方说明文档。
+- 优化了AssetBundleReporter页面。
+- 优化了AssetBundleDebugger页面。
+- 优化了微信小游戏文件系统的缓存查询机制。
+- 优化了抖音小游戏文件系统的缓存查询机制。
+
+### Fixed
+
+- (#447) 修复了Unity2019平台代码编译错误问题。
+- (#456) 修复了在Package未激活有效清单之前，无法销毁的问题。
+- (#452) 修复了内置文件系统类NeedPack方法总是返回TRUE的问题。
+- (#424) 适配了Unity6000版本替换了过时方法。
+
+### Added
+
+- 新增了SBP构建管线构建参数：BuiltinShadersBundleName
+
+- 新增了SBP构建管线构建参数：MonoScriptsBundleName
+
+- 新增了全局构建管线构建参数：SingleReferencedPackAlone
+
+  ```csharp
+  /// <summary>
+  /// 对单独引用的共享资源进行独立打包
+  /// 说明：关闭该选项单独引用的共享资源将会构建到引用它的资源包内！
+  /// </summary>
+  public bool SingleReferencedPackAlone = true;
+  ```
+
+- 新增了内置文件系统初始化参数：COPY_BUILDIN_PACKAGE_MANIFEST
+
+  ```csharp
+  // 内置文件系统初始化的时候，自动拷贝内置清单到沙盒目录。
+  var systemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+  systemParameters.AddParameter(FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST, true);
+  ```
+
 ## [2.2.9] - 2025-01-14
 
 ### Fixed

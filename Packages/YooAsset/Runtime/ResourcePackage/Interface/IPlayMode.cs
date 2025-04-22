@@ -9,9 +9,9 @@ namespace YooAsset
         PackageManifest ActiveManifest { set; get; }
 
         /// <summary>
-        /// 更新游戏模式
+        /// 销毁文件系统
         /// </summary>
-        void UpdatePlayMode();
+        void DestroyFileSystem();
 
         /// <summary>
         /// 向网络端请求最新的资源版本
@@ -31,12 +31,12 @@ namespace YooAsset
         /// <summary>
         /// 清理缓存文件
         /// </summary>
-        ClearCacheFilesOperation ClearCacheFilesAsync(string clearMode, object clearParam);
-
+        ClearCacheFilesOperation ClearCacheFilesAsync(ClearCacheFilesOptions options);
+        
         // 下载相关
         ResourceDownloaderOperation CreateResourceDownloaderByAll(int downloadingMaxNumber, int failedTryAgain, int timeout);
         ResourceDownloaderOperation CreateResourceDownloaderByTags(string[] tags, int downloadingMaxNumber, int failedTryAgain, int timeout);
-        ResourceDownloaderOperation CreateResourceDownloaderByPaths(AssetInfo[] assetInfos, int downloadingMaxNumber, int failedTryAgain, int timeout);
+        ResourceDownloaderOperation CreateResourceDownloaderByPaths(AssetInfo[] assetInfos, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout);
 
         // 解压相关
         ResourceUnpackerOperation CreateResourceUnpackerByAll(int upackingMaxNumber, int failedTryAgain, int timeout);

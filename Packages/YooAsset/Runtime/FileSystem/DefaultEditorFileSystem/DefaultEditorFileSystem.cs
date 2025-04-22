@@ -54,28 +54,24 @@ namespace YooAsset
         public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
         {
             var operation = new DEFSInitializeOperation(this);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         public virtual FSLoadPackageManifestOperation LoadPackageManifestAsync(string packageVersion, int timeout)
         {
             var operation = new DEFSLoadPackageManifestOperation(this, packageVersion);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         public virtual FSRequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
         {
             var operation = new DEFSRequestPackageVersionOperation(this);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
-        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
         {
             var operation = new FSClearCacheFilesCompleteOperation();
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
-        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
+        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options)
         {
             throw new System.NotImplementedException();
         }
@@ -84,14 +80,12 @@ namespace YooAsset
             if (bundle.BundleType == (int)EBuildBundleType.VirtualBundle)
             {
                 var operation = new DEFSLoadBundleOperation(this, bundle);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
             else
             {
                 string error = $"{nameof(DefaultEditorFileSystem)} not support load bundle type : {bundle.BundleType}";
                 var operation = new FSLoadBundleCompleteOperation(error);
-                OperationSystem.StartOperation(PackageName, operation);
                 return operation;
             }
         }
@@ -100,11 +94,11 @@ namespace YooAsset
         {
             if (name == FileSystemParametersDefine.ASYNC_SIMULATE_MIN_FRAME)
             {
-                _asyncSimulateMinFrame = (int)value;
+                _asyncSimulateMinFrame = Convert.ToInt32(value);
             }
             else if (name == FileSystemParametersDefine.ASYNC_SIMULATE_MAX_FRAME)
             {
-                _asyncSimulateMaxFrame = (int)value;
+                _asyncSimulateMaxFrame = Convert.ToInt32(value);
             }
             else
             {
@@ -120,7 +114,7 @@ namespace YooAsset
 
             _packageRoot = packageRoot;
         }
-        public virtual void OnUpdate()
+        public virtual void OnDestroy()
         {
         }
 

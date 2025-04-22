@@ -1,14 +1,12 @@
-﻿using System.Collections;
+﻿#if UNITY_2019_4_OR_NEWER
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using YooAsset.Editor;
-
-#if UNITY_2019_4_OR_NEWER
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-#endif
 
 [CreateAssetMenu(fileName = "TextureSchema", menuName = "YooAssetArt/Create TextureSchema")]
 public class TextureSchema : ScannerSchema
@@ -24,6 +22,12 @@ public class TextureSchema : ScannerSchema
     public int MaxHeight = 1024;
 
     /// <summary>
+    /// 测试列表
+    /// </summary>
+    public List<string> TestStringValues = new List<string>();
+    
+
+    /// <summary>
     /// 获取用户指南信息
     /// </summary>
     public override string GetUserGuide()
@@ -37,13 +41,13 @@ public class TextureSchema : ScannerSchema
     public override ScanReport RunScanner(AssetArtScanner scanner)
     {
         // 创建扫描报告
-        string title = "扫描所有纹理资产";
+        string name = "扫描所有纹理资产";
         string desc = GetUserGuide();
-        var report = new ScanReport(title, desc);
-        report.AddHeader("资源路径", 600, 500, 1000).SetStretchable().SetSearchable().SetSortable().SetHeaderType(EHeaderType.AssetPath);
+        var report = new ScanReport(name, desc);
+        report.AddHeader("资源路径", 600, 500, 1000).SetStretchable().SetSearchable().SetSortable().SetCounter().SetHeaderType(EHeaderType.AssetPath);
         report.AddHeader("图片宽度", 100).SetSortable().SetHeaderType(EHeaderType.LongValue);
         report.AddHeader("图片高度", 100).SetSortable().SetHeaderType(EHeaderType.LongValue);
-        report.AddHeader("内存大小", 100).SetSortable().SetHeaderType(EHeaderType.LongValue);
+        report.AddHeader("内存大小", 120).SetSortable().SetUnits("bytes").SetHeaderType(EHeaderType.LongValue);
         report.AddHeader("苹果格式", 100);
         report.AddHeader("安卓格式", 100);
         report.AddHeader("错误信息", 500).SetStretchable();
@@ -105,9 +109,9 @@ public class TextureSchema : ScannerSchema
         // 添加扫描信息
         ReportElement result = new ReportElement(assetGUID);
         result.AddScanInfo("资源路径", assetPath);
-        result.AddScanInfo("图片宽度", texture.width.ToString());
-        result.AddScanInfo("图片高度", texture.height.ToString());
-        result.AddScanInfo("内存大小", memorySize.ToString());
+        result.AddScanInfo("图片宽度", texture.width);
+        result.AddScanInfo("图片高度", texture.height);
+        result.AddScanInfo("内存大小", memorySize);
         result.AddScanInfo("苹果格式", iosFormat.ToString());
         result.AddScanInfo("安卓格式", androidFormat.ToString());
         result.AddScanInfo("错误信息", errorInfo);
@@ -157,7 +161,6 @@ public class TextureSchema : ScannerSchema
     /// </summary>
     public override SchemaInspector CreateInspector()
     {
-#if UNITY_2019_4_OR_NEWER
         var container = new VisualElement();
 
         // 图片最大宽度
@@ -180,11 +183,16 @@ public class TextureSchema : ScannerSchema
         });
         container.Add(maxHeightField);
 
-        SchemaInspector inspector = new SchemaInspector();
-        inspector.Containner = container;
-        return inspector;
-#else
-        return null;
+        // 创建测试列表
+#if UNITY_2021_3_OR_NEWER
+        ReorderableListView reorderableListView = new ReorderableListView();
+        reorderableListView.SourceData = TestStringValues;
+        reorderableListView.HeaderName = "测试列表";
+        container.Add(reorderableListView);
 #endif
+
+        SchemaInspector inspector = new SchemaInspector(container);
+        return inspector;
     }
 }
+#endif

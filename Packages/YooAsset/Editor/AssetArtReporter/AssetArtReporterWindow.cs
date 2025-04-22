@@ -97,7 +97,7 @@ namespace YooAsset.Editor
         private Button _passesVisibleBtn;
         private Label _titleLabel;
         private Label _descLabel;
-        private TableView _elementTableView;
+        private TableViewer _elementTableView;
 
         private ScanReportCombiner _reportCombiner;
         private string _lastestOpenFolder;
@@ -152,7 +152,7 @@ namespace YooAsset.Editor
                 _descLabel = root.Q<Label>("ReportDesc");
 
                 // 列表相关
-                _elementTableView = root.Q<TableView>("TopTableView");
+                _elementTableView = root.Q<TableViewer>("TopTableView");
                 _elementTableView.ClickTableDataEvent = OnClickTableViewItem;
 
                 _lastestOpenFolder = EditorTools.GetProjectPath();
@@ -326,7 +326,7 @@ namespace YooAsset.Editor
                 var column = new TableColumn("眼睛框", string.Empty, columnStyle);
                 column.MakeCell = () =>
                 {
-                    var toggle = new DisplayToggle();
+                    var toggle = new ToggleDisplay();
                     toggle.text = string.Empty;
                     toggle.style.unityTextAlign = TextAnchor.MiddleCenter;
                     toggle.RegisterValueChangedCallback((evt) => { OnDisplayToggleValueChange(toggle, evt); });
@@ -334,11 +334,10 @@ namespace YooAsset.Editor
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
                 {
-                    var toggle = element as DisplayToggle;
+                    var toggle = element as ToggleDisplay;
                     toggle.userData = data;
                     var tableData = data as ElementTableData;
                     toggle.SetValueWithoutNotify(tableData.Element.Hidden);
-                    toggle.RefreshIcon();
                 };
                 _elementTableView.AddColumn(column);
                 var headerElement = _elementTableView.GetHeaderElement("眼睛框");
@@ -442,6 +441,8 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = header.Stretchable;
                 columnStyle.Searchable = header.Searchable;
                 columnStyle.Sortable = header.Sortable;
+                columnStyle.Counter = header.Counter;
+                columnStyle.Units = header.Units;
                 var column = new TableColumn(header.HeaderTitle, header.HeaderTitle, columnStyle);
                 column.MakeCell = () =>
                 {
@@ -577,10 +578,8 @@ namespace YooAsset.Editor
             // 重绘视图
             RebuildView();
         }
-        private void OnDisplayToggleValueChange(DisplayToggle toggle, ChangeEvent<bool> e)
+        private void OnDisplayToggleValueChange(ToggleDisplay toggle, ChangeEvent<bool> e)
         {
-            toggle.RefreshIcon();
-
             // 处理自身
             toggle.SetValueWithoutNotify(e.newValue);
 
@@ -593,7 +592,8 @@ namespace YooAsset.Editor
             foreach (var selectedItem in selectedItems)
             {
                 var selectElement = selectedItem as ElementTableData;
-                selectElement.Element.Hidden = e.newValue;
+                if (selectElement != null)
+                    selectElement.Element.Hidden = e.newValue;
             }
 
             // 重绘视图

@@ -30,12 +30,12 @@ namespace YooAsset
         {
             _fileSystem = fileSystem;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _steps = ESteps.Prepare;
             _verifyStartTime = UnityEngine.Time.realtimeSinceStartup;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -85,15 +85,17 @@ namespace YooAsset
 
                     // 创建验证元素类
                     string fileRootPath = chidDirectory.FullName;
-                    string dataFilePath = $"{fileRootPath}/{ DefaultCacheFileSystemDefine.BundleDataFileName}";
-                    string infoFilePath = $"{fileRootPath}/{ DefaultCacheFileSystemDefine.BundleInfoFileName}";
+                    string dataFilePath = $"{fileRootPath}/{DefaultCacheFileSystemDefine.BundleDataFileName}";
+                    string infoFilePath = $"{fileRootPath}/{DefaultCacheFileSystemDefine.BundleInfoFileName}";
 
                     // 存储的数据文件追加文件格式
                     if (_fileSystem.AppendFileExtension)
                     {
                         string dataFileExtension = FindDataFileExtension(chidDirectory);
                         if (string.IsNullOrEmpty(dataFileExtension) == false)
+                        {
                             dataFilePath += dataFileExtension;
+                        }
                     }
 
                     var element = new VerifyFileElement(_fileSystem.PackageName, bundleGUID, fileRootPath, dataFilePath, infoFilePath);

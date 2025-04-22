@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 
 namespace YooAsset.Editor
 {
@@ -41,6 +42,16 @@ namespace YooAsset.Editor
         /// 可排序选项
         /// </summary>
         public bool Sortable = false;
+
+        /// <summary>
+        /// 统计数量
+        /// </summary>
+        public bool Counter = false;
+
+        /// <summary>
+        /// 展示单位
+        /// </summary>
+        public string Units = string.Empty;
 
         /// <summary>
         /// 数值类型
@@ -88,10 +99,50 @@ namespace YooAsset.Editor
             Sortable = true;
             return this;
         }
+        public ReportHeader SetCounter()
+        {
+            Counter = true;
+            return this;
+        }
+        public ReportHeader SetUnits(string units)
+        {
+            Units = units;
+            return this;
+        }
         public ReportHeader SetHeaderType(EHeaderType value)
         {
             HeaderType = value;
             return this;
+        }
+
+        /// <summary>
+        /// 检测数值有效性
+        /// </summary>
+        public void CheckValueValid(string value)
+        {
+            if (HeaderType == EHeaderType.AssetPath)
+            {
+                string guid = AssetDatabase.AssetPathToGUID(value);
+                if (string.IsNullOrEmpty(guid))
+                    throw new Exception($"{HeaderTitle} value is invalid asset path : {value}");
+            }
+            else if (HeaderType == EHeaderType.DoubleValue)
+            {
+                if (double.TryParse(value, out double doubleValue) == false)
+                    throw new Exception($"{HeaderTitle} value is invalid double value : {value}");
+            }
+            else if (HeaderType == EHeaderType.LongValue)
+            {
+                if (long.TryParse(value, out long longValue) == false)
+                    throw new Exception($"{HeaderTitle} value is invalid long value : {value}");
+            }
+            else if (HeaderType == EHeaderType.StringValue)
+            {
+            }
+            else
+            {
+                throw new System.NotImplementedException(HeaderType.ToString());
+            }
         }
     }
 }

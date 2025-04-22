@@ -1,28 +1,25 @@
 ﻿#if UNITY_WEBGL && WEIXINMINIGAME
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
+using System.Linq;
 using YooAsset;
 using WeChatWASM;
-
 
 internal class WXFSClearUnusedBundleFilesAsync : FSClearCacheFilesOperation
 {
     private enum ESteps
     {
         None,
-        GetAllCacheFiles,
-        WaitResult,
         GetUnusedCacheFiles,
+        WaitingSearch,
         ClearUnusedCacheFiles,
         Done,
     }
 
     private readonly WechatFileSystem _fileSystem;
     private readonly PackageManifest _manifest;
-    private List<string> _unusedCacheFiles;
+    private List<string> _unusedCacheFiles = new List<string>(1000);
     private int _unusedFileTotalCount = 0;
-    private GetSavedFileListSuccessCallbackResult _result;
     private ESteps _steps = ESteps.None;
 
     internal WXFSClearUnusedBundleFilesAsync(WechatFileSystem fileSystem, PackageManifest manifest)
@@ -30,55 +27,69 @@ internal class WXFSClearUnusedBundleFilesAsync : FSClearCacheFilesOperation
         _fileSystem = fileSystem;
         _manifest = manifest;
     }
-    internal override void InternalOnStart()
+    internal override void InternalStart()
     {
-        _steps = ESteps.GetAllCacheFiles;
+        _steps = ESteps.GetUnusedCacheFiles;
     }
-    internal override void InternalOnUpdate()
+    internal override void InternalUpdate()
     {
         if (_steps == ESteps.None || _steps == ESteps.Done)
             return;
 
-        if (_steps == ESteps.GetAllCacheFiles)
-        {
-            _steps = ESteps.WaitResult;
-
-            var fileSystemMgr = WX.GetFileSystemManager();
-            var option = new GetSavedFileListOption();
-            fileSystemMgr.GetSavedFileList(option);
-            option.fail += (FileError error) =>
-            {
-                _steps = ESteps.Done;
-                Error = error.errMsg;
-                Status = EOperationStatus.Failed;
-            };
-            option.success += (GetSavedFileListSuccessCallbackResult result) =>
-            {
-                _result = result;
-                _steps = ESteps.GetUnusedCacheFiles;
-            };
-        }
-
-        if (_steps == ESteps.WaitResult)
-        {
-            return;
-        }
-
         if (_steps == ESteps.GetUnusedCacheFiles)
         {
-            _unusedCacheFiles = GetUnusedCacheFiles();
-            _unusedFileTotalCount = _unusedCacheFiles.Count;
-            _steps = ESteps.ClearUnusedCacheFiles;
-            YooLogger.Log($"Found unused cache files count : {_unusedFileTotalCount}");
+            _steps = ESteps.WaitingSearch;
+
+            // 说明：__GAME_FILE_CACHE/yoo/ 目录下包含所有的资源文件和清单文件
+            var fileSystemMgr = _fileSystem.GetFileSystemMgr();
+            var statOption = new WXStatOption();
+            statOption.path = _fileSystem.FileRoot;
+            statOption.recursive = true;
+            statOption.success = (WXStatResponse response) =>
+            {
+                foreach (var fileStat in response.stats)
+                {
+                    // 如果是目录文件
+                    string fileExtension = Path.GetExtension(fileStat.path);
+                    if (string.IsNullOrEmpty(fileExtension))
+                        continue;
+
+                    // 如果是资源清单
+                    //TODO 默认的清单文件格式
+                    if (fileExtension == ".bytes" || fileExtension == ".hash")
+                        continue;
+
+                    // 注意：适配不同的文件命名方式！
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileStat.path);
+                    string bundleGUID = fileNameWithoutExtension.Split('_').Last();
+                    if (_manifest.TryGetPackageBundleByBundleGUID(bundleGUID, out PackageBundle value) == false)
+                    {
+                        string filePath = _fileSystem.FileRoot + fileStat.path;
+                        if (_unusedCacheFiles.Contains(filePath) == false)
+                            _unusedCacheFiles.Add(filePath);
+                    }
+                }
+
+                _steps = ESteps.ClearUnusedCacheFiles;
+                _unusedFileTotalCount = _unusedCacheFiles.Count;
+                YooLogger.Log($"Found unused cache files count : {_unusedFileTotalCount}");
+            };
+            statOption.fail = (WXStatResponse response) =>
+            {
+                _steps = ESteps.Done;
+                Status = EOperationStatus.Failed;
+                Error = response.errMsg;
+            };
+            fileSystemMgr.Stat(statOption);
         }
 
         if (_steps == ESteps.ClearUnusedCacheFiles)
         {
             for (int i = _unusedCacheFiles.Count - 1; i >= 0; i--)
             {
-                string cacheFilePath = _unusedCacheFiles[i];
-                WX.RemoveFile(cacheFilePath, null);
+                string filePath = _unusedCacheFiles[i];
                 _unusedCacheFiles.RemoveAt(i);
+                WX.RemoveFile(filePath, null);
 
                 if (OperationSystem.IsBusy)
                     break;
@@ -95,30 +106,6 @@ internal class WXFSClearUnusedBundleFilesAsync : FSClearCacheFilesOperation
                 Status = EOperationStatus.Succeed;
             }
         }
-    }
-
-    private List<string> GetUnusedCacheFiles()
-    {
-        List<string> result = new List<string>(_result.fileList.Length);
-        foreach (var fileInfo in _result.fileList)
-        {
-            // 如果存储文件名是按照Bundle文件哈希值存储
-            string bundleGUID = Path.GetFileNameWithoutExtension(fileInfo.filePath);
-            if (_manifest.TryGetPackageBundleByBundleGUID(bundleGUID, out PackageBundle value) == false)
-            {
-                result.Add(fileInfo.filePath);
-            }
-
-            // 如果存储文件名是按照Bundle文件名称存储
-            /*
-            string bundleName = Path.GetFileNameWithoutExtension(fileInfo.filePath);
-            if (_manifest.TryGetPackageBundleByBundleName(bundleName, out PackageBundle value) == false)
-            {
-                result.Add(fileInfo.filePath);
-            }
-            */
-        }
-        return result;
     }
 }
 #endif

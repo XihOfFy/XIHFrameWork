@@ -1,6 +1,19 @@
 ﻿
 namespace YooAsset
 {
+    internal class ClearCacheFilesOptions
+    {
+        /// <summary>
+        /// 清理模式
+        /// </summary>
+        public string ClearMode;
+
+        /// <summary>
+        /// 附加参数
+        /// </summary>
+        public object ClearParam;
+    }
+
     internal abstract class FSClearCacheFilesOperation : AsyncOperationBase
     {
     }
@@ -17,7 +30,7 @@ namespace YooAsset
         {
             _error = error;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             if (string.IsNullOrEmpty(_error))
             {
@@ -29,7 +42,7 @@ namespace YooAsset
                 Error = _error;
             }
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
         }
     }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine.Networking;
+using UnityEngine;
 
 namespace YooAsset
 {
@@ -9,6 +10,14 @@ namespace YooAsset
 
     internal class DownloadSystemHelper
     {
+#if UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void OnRuntimeInitialize()
+        {
+            UnityWebRequestCreater = null;
+        }
+#endif
+
         public static UnityWebRequestDelegate UnityWebRequestCreater = null;
         public static UnityWebRequest NewUnityWebRequestGet(string requestURL)
         {
@@ -28,7 +37,9 @@ namespace YooAsset
             string url;
 
             // 获取对应平台的URL地址
-#if UNITY_EDITOR
+#if UNITY_EDITOR_OSX
+            url = StringUtility.Format("file://{0}", path);
+#elif UNITY_EDITOR
             url = StringUtility.Format("file:///{0}", path);
 #elif UNITY_WEBGL
             url = path;
@@ -56,7 +67,7 @@ namespace YooAsset
             }
 #elif UNITY_STANDALONE_OSX
             url = new System.Uri(path).ToString();
-#elif UNITY_STANDALONE
+#elif UNITY_STANDALONE || UNITY_WSA
             url = StringUtility.Format("file:///{0}", path);
 #else
             throw new System.NotImplementedException();
