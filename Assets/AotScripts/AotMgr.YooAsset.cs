@@ -198,7 +198,7 @@ namespace Aot
                     QuitGame();
                 }
                 else {
-                    UpdatePackageManifest(package, yooOp.PackageVersion).Forget();
+                    UpdatePackageManifest(package, version).Forget();
                 }
             }
         }
