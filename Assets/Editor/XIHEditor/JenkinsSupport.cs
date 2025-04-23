@@ -307,14 +307,14 @@ public class JenkinsSupport
             hash.Add("WebGL");
         }
         else {
-            //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀第一个/分隔的单词是微信缓存的文件夹名字且固定
+            //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀/分隔的是微信缓存的文件夹路径且可多层级，保证名字固定
             //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
 
             var cdn = fontCfg.cdn;
             var suffix = fontCfg.defaultHostServer.Substring(cdn.Length);
             if (suffix.StartsWith('/')) suffix = suffix.Substring(1);
             var suffixs = suffix.Split('/');
-            hash.Add(suffixs[0]);
+            hash.Add(suffixs[0]);//这里只取第一个，后续路径会自动缓存到多层级
         }
         config.ProjectConf.bundlePathIdentifier = string.Join(";", hash);
 
