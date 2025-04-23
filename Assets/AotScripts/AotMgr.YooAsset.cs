@@ -70,7 +70,14 @@ namespace Aot
                 var remoteServices = new RemoteServices();
                 //var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
 #if UNITY_WX
-                string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE";
+                //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀第一个/分隔的单词是微信缓存的文件夹名字且固定
+                //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
+
+                var cdn = AotConfig.frontConfig.cdn;
+                var suffix = AotConfig.frontConfig.defaultHostServer.Substring(cdn.Length);
+                if(suffix.StartsWith('/'))suffix = suffix.Substring(1);
+                var suffixs = suffix.Split('/');
+                string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffixs[0]}";
                 var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
 #elif UNITY_DY //BYTEMINIGAME
                 // 小游戏缓存根目录

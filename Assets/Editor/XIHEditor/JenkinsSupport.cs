@@ -277,11 +277,12 @@ public class JenkinsSupport
         Debug.LogWarning($"设置小游戏输出相对路径 {config.ProjectConf.DST}");
 
         var remoteCfgPath = $"{WEB_ROOT}/Front/WebGL.json";
+        FrontConfig fontCfg = null;
         if (File.Exists(remoteCfgPath))
         {
-            var fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
-            config.ProjectConf.CDN = fontCfg.defaultHostServer;
-            Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{fontCfg.defaultHostServer}\n 这里设置defaultHostServer而不是cdn是为了平台差异化，不然分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/WebGL");
+            fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
+            config.ProjectConf.CDN = fontCfg.cdn;
+            Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{fontCfg.cdn}\n 若资源分包记得分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/WebGL");
         }
         else
         {
@@ -301,7 +302,20 @@ public class JenkinsSupport
         str = config.ProjectConf.bundlePathIdentifier;
         hash = new HashSet<string>(str.Split(";"));
         hash.Remove("");
-        hash.Add("WebGL");
+        if (fontCfg == null)
+        {
+            hash.Add("WebGL");
+        }
+        else {
+            //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀第一个/分隔的单词是微信缓存的文件夹名字且固定
+            //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
+
+            var cdn = fontCfg.cdn;
+            var suffix = fontCfg.defaultHostServer.Substring(cdn.Length);
+            if (suffix.StartsWith('/')) suffix = suffix.Substring(1);
+            var suffixs = suffix.Split('/');
+            hash.Add(suffixs[0]);
+        }
         config.ProjectConf.bundlePathIdentifier = string.Join(";", hash);
 
         EditorUtility.SetDirty(config);
