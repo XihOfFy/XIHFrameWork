@@ -38,44 +38,33 @@ namespace Ad
             });
             try
             {
-                ad.OnClose(p =>
-                {
-                    UnityEngine.Debug.Log($"关闭广告 {UnityEngine.JsonUtility.ToJson(p)} {p.isEnded}");
+                ad.OnClose(p => {
+                    UnityEngine.Debug.Log($"关闭广告 {p.isEnded}");
                     onLoad(p.isEnded);
                 });
-                ad.OnError(rsp =>
-                {
+                //报错都会走这里，所以其他失败只需打印错误日志
+                ad.OnError(rsp => {
                     UnityEngine.Debug.LogError($"加载广告{tryLoadCount}次失败 OnError:{rsp.callbackId}>{rsp.errCode}:{rsp.errMsg} ，将预加载下一个广告");
                     ReLoad();
                 });
-                ad.Show(s =>
-                {
+                ad.Show(s => {
                     UnityEngine.Debug.Log("展示广告");
-                }, f =>
-                {
+                }, f => {
                     UnityEngine.Debug.LogError($"加载广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
-                    ReLoad();
-                });
-                void ReLoad()
-                {
+                }); 
+                void ReLoad() {
                     if (tryLoadCount < maxTryLoadCount)
                     {
                         tryLoadCount += 1;
-                        ad.Load(s2 =>
-                        {
+                        ad.Load(s2 => {
                             UnityEngine.Debug.Log($"加载广告 {tryLoadCount} 次失败后重新 load 广告 成功");
-                            ad.Show(s3 =>
-                            {
-                                UnityEngine.Debug.Log($"重新尝试展示广告 {tryLoadCount} ");
-                            }, f3 =>
-                            {
+                            ad.Show(s3 => {
+                                UnityEngine.Debug.Log($"重新展示广告 Show 成功 ");
+                            }, f3 => {
                                 UnityEngine.Debug.LogError($"重新尝试 {tryLoadCount}展示广告失败!!!");
-                                ReLoad();
                             });
-                        }, f2 =>
-                        {
+                        }, f2 => {
                             UnityEngine.Debug.LogError($"加载广告 {tryLoadCount}次 失败后重新 load 广告 失败");
-                            ReLoad();
                         });
                     }
                     else
