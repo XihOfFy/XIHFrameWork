@@ -186,6 +186,7 @@ public class JenkinsSupport
         buildParameters.FileNameStyle = EFileNameStyle.BundleName_HashName;
         buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
         buildParameters.BuildinFileCopyParams = string.Empty;
+        buildParameters.WriteLinkXML = true;
 
 #if UNITY_WEBGL
         buildParameters.EncryptionServices = null;
@@ -207,6 +208,9 @@ public class JenkinsSupport
             if (Directory.Exists(dstPath)) Directory.Delete(dstPath, true);
             var srcPath = buildResult.OutputPackageDirectory;
             CopyDirs(srcPath, dstPath, new HashSet<string>() { ".json", ".xml", ".report" });
+            //拷贝yoo的link，防裁剪
+            if (!Directory.Exists("Assets/YooAssetGenerate")) Directory.CreateDirectory("Assets/YooAssetGenerate");
+            File.Copy($"{srcPath}/link.xml", "Assets/YooAssetGenerate/link.xml", true);
             Debug.LogWarning($"构建成功,拷贝到目标目录:{srcPath} > {dstPath}");
         }
         else
