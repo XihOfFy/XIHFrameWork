@@ -12,6 +12,18 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.code-philosophy.obfuz": {
+      "version": "file:com.code-philosophy.obfuz",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.code-philosophy.obfuz4hybridclr": {
+      "version": "file:com.code-philosophy.obfuz4hybridclr",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.cysharp.unitask": {
       "version": "file:UniTask",
       "depth": 0,

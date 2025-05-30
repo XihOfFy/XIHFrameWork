@@ -22,7 +22,7 @@ namespace Aot2Hot
         {
             tip.text = "请稍等一会";
             progerssImg.fillAmount = 0;
-            StartCoroutine(nameof(IEAwake));
+            StartCoroutine(IEAwake());
 #if USE_GM
             var report = GameObject.FindObjectOfType<Reporter>(true);
             if (report != null) {
@@ -65,7 +65,7 @@ namespace Aot2Hot
                 tip.text = "当前本版过低，请更新后再启动游戏...";
             }
             else { 
-                StartCoroutine(nameof(DownloadHotRes));
+                StartCoroutine(DownloadHotRes());
             }
         }
         //string[] suffixArr = new string[] { "._. . . . .", ". ._. . . .", ". . ._. . .", ". . . ._. .",  ". . . . ._." };
@@ -79,11 +79,11 @@ namespace Aot2Hot
             }
         }
         void TryReDownload() {
-            StartCoroutine(nameof(DownloadHotRes));
+            StartCoroutine(DownloadHotRes());
         }
         void DownLoadEnd()
         {
-            StartCoroutine(nameof(GotoHotScene));
+            StartCoroutine(GotoHotScene());
         }
         IEnumerator GotoHotScene()
         {

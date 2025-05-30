@@ -40,6 +40,7 @@ namespace Aot
 
         async UniTaskVoid GotoAot2HotScene()
         {
+            await SetUpDynamicSecret();
             var rawOp = YooAssets.LoadAssetAsync<TextAsset>("Assets/Res/Aot2Hot/Raw/Aot2Hot.bytes");
             await rawOp.ToUniTask();
             if (rawOp.Status != EOperationStatus.Succeed)

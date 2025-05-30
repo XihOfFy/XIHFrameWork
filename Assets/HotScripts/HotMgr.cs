@@ -7,7 +7,6 @@ using Tmpl;
 using Aot;
 using YooAsset;
 using Aot.XiHUtil;
-using WeChatWASM;
 using Ad;
 
 namespace Hot
@@ -44,9 +43,9 @@ namespace Hot
 
 
 #if UNITY_WX
-            if (WxTool.CanUseByVersion("2.26.2"))
+            if (WeChatWASM.WxTool.CanUseByVersion("2.26.2"))
             {
-                WX.ReportScene(new ReportSceneOption() { sceneId = 7 });
+                WeChatWASM.WX.ReportScene(new ReportSceneOption() { sceneId = 7 });
             }
             else
             {

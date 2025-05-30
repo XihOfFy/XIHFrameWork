@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using YooAsset;
 using Aot.XiHUtil;
+using Obfuz4HybridCLR;
 
 
 #if UNITY_WX
@@ -54,7 +55,8 @@ public class JenkinsSupport
         {
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
         }
-        PrebuildCommand.GenerateAll();
+        //PrebuildCommand.GenerateAll();
+        XIHObfuscateUtil.GenerateAll();
         FullBuild_WithoutHyCLRGenerateAll();
     }
     [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
@@ -142,7 +144,8 @@ public class JenkinsSupport
         //Debug.LogWarning("输出Tmpl");
         //AssetDatabase.Refresh();
         Debug.LogWarning("开始热更构建");
-        CompileDllCommand.CompileDll(curTarget);
+        //CompileDllCommand.CompileDll(curTarget);使用混淆的CompileAndObfuscateHotUpdateAssemblies
+        ObfuscateUtil.CompileAndObfuscateHotUpdateAssemblies(curTarget);
         Debug.LogWarning("拷贝热更Dll");
         DllCopyEditor.CopyDlls(curTarget);
         AssetDatabase.Refresh();

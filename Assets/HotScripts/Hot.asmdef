@@ -11,7 +11,8 @@
         "Unity.TextMeshPro",
         "Wx",
         "FairyGUI",
-        "Luban.Runtime"
+        "Luban.Runtime",
+        "Obfuz.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

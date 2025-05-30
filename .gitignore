@@ -71,6 +71,8 @@ Assets/Res/Raw/Aot/
 Assets/Res/Raw/Aot~/
 Assets/Res/Raw/Hot/
 Assets/Res/Tmpl/
+Assets/YooAssetGenerate/
+Assets/YooAssetGenerate.meta
 Assets/StreamingAssets/*
 Assets/StreamingAssets.meta
 TextToolDatas/
