@@ -56,7 +56,7 @@ public class JenkinsSupport
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
         }
         //PrebuildCommand.GenerateAll();
-        XIHObfuscateUtil.GenerateAll();
+        PrebuildCommandExt.GenerateAll();
         FullBuild_WithoutHyCLRGenerateAll();
     }
     [MenuItem("XIHUtil/Jenkins/FullBuild_WithoutHyCLRGenerateAll")]
@@ -145,7 +145,7 @@ public class JenkinsSupport
         //AssetDatabase.Refresh();
         Debug.LogWarning("开始热更构建");
         //CompileDllCommand.CompileDll(curTarget);使用混淆的CompileAndObfuscateHotUpdateAssemblies
-        ObfuscateUtil.CompileAndObfuscateHotUpdateAssemblies(curTarget);
+        PrebuildCommandExt.CompileAndObfuscateDll();
         Debug.LogWarning("拷贝热更Dll");
         DllCopyEditor.CopyDlls(curTarget);
         AssetDatabase.Refresh();
