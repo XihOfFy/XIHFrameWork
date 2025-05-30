@@ -1,53 +1,39 @@
-﻿using FairyGUI;
+﻿using dnlib.DotNet;
+using FairyGUI;
 using Obfuz.ObfusPasses.SymbolObfus.Policies;
-using System;
+using Obfuz.Utils;
+using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 public class XIHRenamePolicy : ObfuscationPolicyBase
 {
-    List<Assembly> hotAssemblies;
-    List<Assembly> thirdAssembies;
-    List<Assembly> allAssmies;
-    List<Type> noReNameType;
-    List<Type> noReNameFiled;
+    HashSet<string> noReNameTypeSet;
+    HashSet<string> noReNameFieldSet;
 
     public XIHRenamePolicy(object systemRenameObj) //Obfuz.ObfusPasses.SymbolObfus.SymbolRename
     {
         //Debug.LogWarning($"XIHRenamePolicy:{systemRenameObj}");
-        hotAssemblies = new List<Assembly>
-        {
-            typeof(Aot2Hot.Aot2HotMgr).Assembly,
-            typeof(Hot.HotMgr).Assembly,
+        
+        noReNameTypeSet = new HashSet<string>() {
+           typeof(XiHUI.UIDialog).FullName,
         };
-        thirdAssembies = new List<Assembly>
-        {
-            typeof(FairyGUI.GObject).Assembly
-        };
-        allAssmies = new List<Assembly>();
-        allAssmies.AddRange(hotAssemblies);
-        allAssmies.AddRange(thirdAssembies);
-        noReNameType = new List<Type> { 
-            typeof(XiHUI.UIDialog),
-            typeof(EventDispatcher),//因为自定义ui组件无法获取基类，所以基类也不混淆
-        };
-        noReNameFiled = new List<Type> { 
-            typeof(EventDispatcher),
-            typeof(Transition),
+        noReNameFieldSet = new HashSet<string>() {
+           typeof(EventDispatcher).FullName,
+           typeof(Transition).FullName,
         };
     }
     public override bool NeedRename(dnlib.DotNet.TypeDef typeDef)
     {
-        foreach (var ass in hotAssemblies) {
-            var type = ass.GetType(typeDef.FullName, false);
-            if (type != null) {
-                foreach (var bt in noReNameType) {
-                    if (bt.IsAssignableFrom(type)) {
-                        //Debug.LogWarning($"Skip NeedRename TypeDef  {typeDef.FullName} {typeDef.ReflectionFullName}");
-                        return false;
-                    }
-                }
+        if (noReNameTypeSet.Contains(typeDef.FullName))
+        {
+            return false;
+        }
+        for (TypeDef parentType = MetaUtil.GetBaseTypeDef(typeDef); parentType != null; parentType = MetaUtil.GetBaseTypeDef(parentType))
+        {
+            if (noReNameTypeSet.Contains(parentType.FullName))
+            {
+                return false;
             }
         }
         return true;
@@ -55,26 +41,43 @@ public class XIHRenamePolicy : ObfuscationPolicyBase
 
     public override bool NeedRename(dnlib.DotNet.MethodDef methodDef)
     {
+        //携程名字不混淆
+        if (methodDef.HasReturnType && methodDef.ReturnType.FullName == typeof(IEnumerator).FullName) {
+            //Debug.LogError($"NeedRename MethodDef {methodDef.Name}");
+            return false;
+        }
         return true;
     }
 
     public override bool NeedRename(dnlib.DotNet.FieldDef fieldDef)
     {
-        foreach (var ass in allAssmies)
+        if (noReNameFieldSet.Contains(fieldDef.FieldType.FullName))
         {
-            var type = ass.GetType(fieldDef.FieldType.FullName, false);
-            if (type != null)
+            return false;
+        }
+        //Debug.Log($"{fieldDef.FieldType} {fieldDef.Name}");
+        if (fieldDef.FieldType is ClassSig classSig) {
+            var nextType = classSig.TypeDef;
+            if (nextType == null) {
+                //Debug.LogWarning($"FieldType1 = {fieldDef.FieldType}\n {classSig.TypeRef}\n{classSig.TypeSpec}\n {classSig.Next}");
+                nextType = classSig.TypeRef.Resolve();
+            }
+            if (nextType == null)
             {
-                foreach (var bt in noReNameFiled)
+                //Debug.LogError($"FieldType2 = {fieldDef.FieldType}\n {classSig.TypeRef}\n{classSig.TypeSpec}\n {classSig.Next}");
+                return true;
+            }
+            for (TypeDef parentType = MetaUtil.GetBaseTypeDef(nextType); parentType != null; parentType = MetaUtil.GetBaseTypeDef(parentType))
+            {
+                //Debug.LogWarning($"{fieldDef.FieldType}:{parentType.Name} {fieldDef.Name}");
+                if (noReNameFieldSet.Contains(parentType.FullName))
                 {
-                    if (bt.IsAssignableFrom(type))
-                    {
-                        Debug.LogWarning($"Skip NeedRename FieldDef  {fieldDef.FieldType.FullName}");
-                        return false;
-                    }
+                    //Debug.LogError ($"NeedRename FieldType2 {classSig.FullName}:{parentType.FullName} {fieldDef.Name}");
+                    return false;
                 }
             }
         }
+        
         return true;
     }
 
