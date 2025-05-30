@@ -2,7 +2,6 @@
 using Obfuz.Data;
 using Obfuz.Emit;
 using Obfuz.EncryptionVM;
-using Obfuz.ObfusPasses;
 using Obfuz.ObfusPasses.CleanUp;
 using Obfuz.ObfusPasses.SymbolObfus;
 using Obfuz.Unity;
@@ -11,10 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using IAssemblyResolver = Obfuz.Utils.IAssemblyResolver;
 
 namespace Obfuz
 {
@@ -90,14 +86,17 @@ namespace Obfuz
 
         public void Run()
         {
-            Debug.Log($"Obfuscator Run. begin");
+            Debug.Log($"Obfuscator begin");
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             FileUtil.RecreateDir(_coreSettings.obfuscatedAssemblyOutputPath);
             FileUtil.RecreateDir(_coreSettings.obfuscatedAssemblyTempOutputPath);
             RunPipeline(_pipeline1);
             _assemblyResolver.InsertFirst(new PathAssemblyResolver(_coreSettings.obfuscatedAssemblyTempOutputPath));
             RunPipeline(_pipeline2);
             FileUtil.CopyDir(_coreSettings.obfuscatedAssemblyTempOutputPath, _coreSettings.obfuscatedAssemblyOutputPath, true);
-            Debug.Log($"Obfuscator Run. end");
+            sw.Stop();
+            Debug.Log($"Obfuscator end. cost time: {sw.ElapsedMilliseconds} ms");
         }
 
         private void RunPipeline(Pipeline pipeline)
@@ -138,7 +137,7 @@ namespace Obfuz
                 throw new Exception($"class Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine found in multiple assemblies! Please retain only one!");
             }
 
-            var gvmInstance = (IEncryptor)Activator.CreateInstance(generatedVmTypes[0], new object[] { secretKey } );
+            var gvmInstance = (IEncryptor)Activator.CreateInstance(generatedVmTypes[0], new object[] { secretKey });
 
             VerifyVm(vm, vms, gvmInstance);
 

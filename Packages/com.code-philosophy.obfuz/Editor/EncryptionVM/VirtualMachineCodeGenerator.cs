@@ -1,11 +1,8 @@
 ﻿using Obfuz.Utils;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Obfuz.EncryptionVM
@@ -77,12 +74,12 @@ namespace Obfuz.EncryptionVM
             {");
             foreach (var opCode in _vm.opCodes)
             {
-                lines.Add($@"            case {opCode.code}:
-            {{
-                // {opCode.function.GetType().Name}");
+                lines.Add($@"               case {opCode.code}:
+                {{
+                    // {opCode.function.GetType().Name}");
                 AppendEncryptCode(lines, opCode.function);
-                lines.Add(@"                return value;
-            }");
+                lines.Add(@"                    return value;
+                }");
             }
 
             lines.Add(@"
@@ -101,12 +98,12 @@ namespace Obfuz.EncryptionVM
             {");
             foreach (var opCode in _vm.opCodes)
             {
-                lines.Add($@"            case {opCode.code}:
-            {{
-                // {opCode.function.GetType().Name}");
+                lines.Add($@"               case {opCode.code}:
+                {{
+                    // {opCode.function.GetType().Name}");
                 AppendDecryptCode(lines, opCode.function);
-                lines.Add(@"                return value;
-            }");
+                lines.Add(@"                    return value;
+                }");
             }
 
             lines.Add(@"
@@ -196,12 +193,12 @@ namespace Obfuz.EncryptionVM
 
         private void AppendEncryptCode(List<string> lines, IEncryptionInstruction instruction)
         {
-            instruction.GenerateEncryptCode(lines, "                ");
+            instruction.GenerateEncryptCode(lines, "                    ");
         }
 
         private void AppendDecryptCode(List<string> lines, IEncryptionInstruction instruction)
         {
-            instruction.GenerateDecryptCode(lines, "                ");
+            instruction.GenerateDecryptCode(lines, "                    ");
         }
     }
 }

@@ -64,2188 +64,2188 @@ namespace Obfuz.EncryptionVM
         {
             switch (opCode)
             {
-            case 0:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -1409512319 + _secretKey[255];
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = (int)(part1 | part2);
-                value ^= 908676522 ^ salt;
-                return value;
-            }
-            case 1:
-            {
-                // AddRotateXorInstruction
-                value += -78930327 + _secretKey[166];
-                uint part1 = (uint)value << 3;
-                uint part2 = (uint)value >> (32 - 3);
-                value = (int)(part1 | part2);
-                value ^= 315716906 ^ salt;
-                return value;
-            }
-            case 2:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[116]) + salt) ^ 568537104;
-                return value;
-            }
-            case 3:
-            {
-                // XorAddRotateInstruction
-                value ^= -804936725 ^ salt;
-                value += 874713862 + _secretKey[47];
-                uint part1 = (uint)value << 15;
-                uint part2 = (uint)value >> (32 - 15);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 4:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[3]) + salt) ^ 469891299;
-                return value;
-            }
-            case 5:
-            {
-                // XorAddRotateInstruction
-                value ^= 322802916 ^ salt;
-                value += -1196854978 + _secretKey[215];
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 6:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1745984563 + _secretKey[23];
-                value ^= -1234111715 ^ salt;
-                uint part1 = (uint)value << 26;
-                uint part2 = (uint)value >> (32 - 26);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 7:
-            {
-                // MultipleInstruction
-                value = value *  -2110521503 + _secretKey[165] + salt;
-                return value;
-            }
-            case 8:
-            {
-                // AddXorRotateInstruction
-                value += -620885440 + _secretKey[160];
-                value ^= 527498188 ^ salt;
-                uint part1 = (uint)value << 13;
-                uint part2 = (uint)value >> (32 - 13);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 9:
-            {
-                // MultipleInstruction
-                value = value *  388897683 + _secretKey[56] + salt;
-                return value;
-            }
-            case 10:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -2073969565 ^ salt;
-                value = value * -574342971 + _secretKey[20];
-                uint part1 = (uint)value << 17;
-                uint part2 = (uint)value >> (32 - 17);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 11:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 22;
-                uint part2 = (uint)value >> (32 - 22);
-                value = ((int)(part1 | part2) ^ _secretKey[100]) + salt;
-                return value;
-            }
-            case 12:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[230]) + salt) ^ -1988224811;
-                return value;
-            }
-            case 13:
-            {
-                // AddRotateXorInstruction
-                value += -941349146 + _secretKey[109];
-                uint part1 = (uint)value << 9;
-                uint part2 = (uint)value >> (32 - 9);
-                value = (int)(part1 | part2);
-                value ^= 982550122 ^ salt;
-                return value;
-            }
-            case 14:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -983513587 + _secretKey[23];
-                uint part1 = (uint)value << 14;
-                uint part2 = (uint)value >> (32 - 14);
-                value = (int)(part1 | part2);
-                value ^= -1719139403 ^ salt;
-                return value;
-            }
-            case 15:
-            {
-                // AddRotateXorInstruction
-                value += -800495653 + _secretKey[109];
-                uint part1 = (uint)value << 17;
-                uint part2 = (uint)value >> (32 - 17);
-                value = (int)(part1 | part2);
-                value ^= -600815599 ^ salt;
-                return value;
-            }
-            case 16:
-            {
-                // MultipleInstruction
-                value = value *  -1638727325 + _secretKey[207] + salt;
-                return value;
-            }
-            case 17:
-            {
-                // AddXorRotateInstruction
-                value += -1933652897 + _secretKey[78];
-                value ^= 145339154 ^ salt;
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 18:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1106142215 + _secretKey[254];
-                value ^= 1307737186 ^ salt;
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 19:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -1796986385 + _secretKey[137];
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                value ^= 81995553 ^ salt;
-                return value;
-            }
-            case 20:
-            {
-                // MultipleInstruction
-                value = value *  -703771329 + _secretKey[139] + salt;
-                return value;
-            }
-            case 21:
-            {
-                // AddXorRotateInstruction
-                value += -1427225709 + _secretKey[133];
-                value ^= -1763086552 ^ salt;
-                uint part1 = (uint)value << 17;
-                uint part2 = (uint)value >> (32 - 17);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 22:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 827112939 + _secretKey[214];
-                value ^= 911194544 ^ salt;
-                uint part1 = (uint)value << 6;
-                uint part2 = (uint)value >> (32 - 6);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 23:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[92]) ^ salt) + 725728711;
-                return value;
-            }
-            case 24:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[90]) + salt) ^ 460687778;
-                return value;
-            }
-            case 25:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -1140399263 ^ salt;
-                value = value * 17686469 + _secretKey[4];
-                uint part1 = (uint)value << 24;
-                uint part2 = (uint)value >> (32 - 24);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 26:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 24;
-                uint part2 = (uint)value >> (32 - 24);
-                value = ((int)(part1 | part2) ^ _secretKey[130]) + salt;
-                return value;
-            }
-            case 27:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -1105948113 + _secretKey[233];
-                value ^= 1608705031 ^ salt;
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 28:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -1278339739 + _secretKey[37];
-                value ^= -1366193182 ^ salt;
-                uint part1 = (uint)value << 17;
-                uint part2 = (uint)value >> (32 - 17);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 29:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1663765545 + _secretKey[172];
-                value ^= 13395082 ^ salt;
-                uint part1 = (uint)value << 8;
-                uint part2 = (uint)value >> (32 - 8);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 30:
-            {
-                // AddRotateXorInstruction
-                value += 829988883 + _secretKey[130];
-                uint part1 = (uint)value << 13;
-                uint part2 = (uint)value >> (32 - 13);
-                value = (int)(part1 | part2);
-                value ^= -930611193 ^ salt;
-                return value;
-            }
-            case 31:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -933375861 ^ salt;
-                value = value * 91217363 + _secretKey[129];
-                uint part1 = (uint)value << 4;
-                uint part2 = (uint)value >> (32 - 4);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 32:
-            {
-                // AddRotateXorInstruction
-                value += 288870813 + _secretKey[41];
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = (int)(part1 | part2);
-                value ^= 1348044560 ^ salt;
-                return value;
-            }
-            case 33:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[115]) + salt) ^ -1005539776;
-                return value;
-            }
-            case 34:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 38927859 ^ salt;
-                value = value * 783850663 + _secretKey[239];
-                uint part1 = (uint)value << 0;
-                uint part2 = (uint)value >> (32 - 0);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 35:
-            {
-                // MultipleInstruction
-                value = value *  -199916729 + _secretKey[244] + salt;
-                return value;
-            }
-            case 36:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -203526311 + _secretKey[101];
-                value ^= -1365505945 ^ salt;
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 37:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 179761077 + _secretKey[207];
-                uint part1 = (uint)value << 18;
-                uint part2 = (uint)value >> (32 - 18);
-                value = (int)(part1 | part2);
-                value ^= -1485021030 ^ salt;
-                return value;
-            }
-            case 38:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 25;
-                uint part2 = (uint)value >> (32 - 25);
-                value = ((int)(part1 | part2) ^ _secretKey[127]) + salt;
-                return value;
-            }
-            case 39:
-            {
-                // MultipleInstruction
-                value = value *  1834257177 + _secretKey[188] + salt;
-                return value;
-            }
-            case 40:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[63]) + salt) ^ -1857925045;
-                return value;
-            }
-            case 41:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = ((int)(part1 | part2) ^ _secretKey[191]) + salt;
-                return value;
-            }
-            case 42:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = ((int)(part1 | part2) ^ _secretKey[247]) + salt;
-                return value;
-            }
-            case 43:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -40692013 + _secretKey[233];
-                uint part1 = (uint)value << 25;
-                uint part2 = (uint)value >> (32 - 25);
-                value = (int)(part1 | part2);
-                value ^= -2064739452 ^ salt;
-                return value;
-            }
-            case 44:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[123]) + salt) ^ 1368017926;
-                return value;
-            }
-            case 45:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[128]) + salt) ^ 1800071096;
-                return value;
-            }
-            case 46:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = ((int)(part1 | part2) ^ _secretKey[200]) + salt;
-                return value;
-            }
-            case 47:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -1340084237 + _secretKey[218];
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                value ^= 737906232 ^ salt;
-                return value;
-            }
-            case 48:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[63]) + salt) ^ -1917869048;
-                return value;
-            }
-            case 49:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[201]) ^ salt) + -1282426343;
-                return value;
-            }
-            case 50:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 1;
-                uint part2 = (uint)value >> (32 - 1);
-                value = ((int)(part1 | part2) ^ _secretKey[123]) + salt;
-                return value;
-            }
-            case 51:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 22;
-                uint part2 = (uint)value >> (32 - 22);
-                value = ((int)(part1 | part2) ^ _secretKey[89]) + salt;
-                return value;
-            }
-            case 52:
-            {
-                // XorAddRotateInstruction
-                value ^= 1672784695 ^ salt;
-                value += -399864504 + _secretKey[128];
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 53:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1967137019 + _secretKey[3];
-                value ^= 332845644 ^ salt;
-                uint part1 = (uint)value << 28;
-                uint part2 = (uint)value >> (32 - 28);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 54:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = ((int)(part1 | part2) ^ _secretKey[18]) + salt;
-                return value;
-            }
-            case 55:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -1906888436 ^ salt;
-                value = value * -1908693511 + _secretKey[239];
-                uint part1 = (uint)value << 12;
-                uint part2 = (uint)value >> (32 - 12);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 56:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -2031801803 + _secretKey[166];
-                value ^= 388224710 ^ salt;
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 57:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[187]) + salt) ^ 1468628226;
-                return value;
-            }
-            case 58:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[120]) + salt) ^ -1283249644;
-                return value;
-            }
-            case 59:
-            {
-                // XorAddRotateInstruction
-                value ^= 127214056 ^ salt;
-                value += -225962838 + _secretKey[89];
-                uint part1 = (uint)value << 26;
-                uint part2 = (uint)value >> (32 - 26);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 60:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -44102725 + _secretKey[58];
-                value ^= -1919860977 ^ salt;
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 61:
-            {
-                // XorAddRotateInstruction
-                value ^= -235750316 ^ salt;
-                value += 2033477782 + _secretKey[56];
-                uint part1 = (uint)value << 15;
-                uint part2 = (uint)value >> (32 - 15);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 62:
-            {
-                // MultipleInstruction
-                value = value *  -1677418665 + _secretKey[91] + salt;
-                return value;
-            }
-            case 63:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = ((int)(part1 | part2) ^ _secretKey[75]) + salt;
-                return value;
-            }
-            case 64:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = ((int)(part1 | part2) ^ _secretKey[105]) + salt;
-                return value;
-            }
-            case 65:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 3;
-                uint part2 = (uint)value >> (32 - 3);
-                value = ((int)(part1 | part2) ^ _secretKey[42]) + salt;
-                return value;
-            }
-            case 66:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 538969873 + _secretKey[116];
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                value ^= 2127722731 ^ salt;
-                return value;
-            }
-            case 67:
-            {
-                // XorAddRotateInstruction
-                value ^= -2093762257 ^ salt;
-                value += 1205332559 + _secretKey[245];
-                uint part1 = (uint)value << 3;
-                uint part2 = (uint)value >> (32 - 3);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 68:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 169229441 + _secretKey[228];
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = (int)(part1 | part2);
-                value ^= 92356567 ^ salt;
-                return value;
-            }
-            case 69:
-            {
-                // AddXorRotateInstruction
-                value += -1923884610 + _secretKey[50];
-                value ^= -57416681 ^ salt;
-                uint part1 = (uint)value << 29;
-                uint part2 = (uint)value >> (32 - 29);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 70:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = ((int)(part1 | part2) ^ _secretKey[96]) + salt;
-                return value;
-            }
-            case 71:
-            {
-                // AddXorRotateInstruction
-                value += 432176071 + _secretKey[64];
-                value ^= 1358992288 ^ salt;
-                uint part1 = (uint)value << 12;
-                uint part2 = (uint)value >> (32 - 12);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 72:
-            {
-                // MultipleInstruction
-                value = value *  1245874417 + _secretKey[146] + salt;
-                return value;
-            }
-            case 73:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[99]) ^ salt) + 1130476627;
-                return value;
-            }
-            case 74:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[17]) + salt) ^ 355214100;
-                return value;
-            }
-            case 75:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 2034708471 + _secretKey[100];
-                value ^= 154578981 ^ salt;
-                uint part1 = (uint)value << 21;
-                uint part2 = (uint)value >> (32 - 21);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 76:
-            {
-                // XorAddRotateInstruction
-                value ^= -743962136 ^ salt;
-                value += -192471066 + _secretKey[109];
-                uint part1 = (uint)value << 9;
-                uint part2 = (uint)value >> (32 - 9);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 77:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[12]) ^ salt) + -889577445;
-                return value;
-            }
-            case 78:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[181]) + salt) ^ 969463438;
-                return value;
-            }
-            case 79:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = ((int)(part1 | part2) ^ _secretKey[109]) + salt;
-                return value;
-            }
-            case 80:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 984079633 ^ salt;
-                value = value * 464995753 + _secretKey[99];
-                uint part1 = (uint)value << 15;
-                uint part2 = (uint)value >> (32 - 15);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 81:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 948745055 ^ salt;
-                value = value * -837931953 + _secretKey[18];
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 82:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[254]) ^ salt) + 1662910727;
-                return value;
-            }
-            case 83:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = ((int)(part1 | part2) ^ _secretKey[31]) + salt;
-                return value;
-            }
-            case 84:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -1961207927 + _secretKey[34];
-                uint part1 = (uint)value << 1;
-                uint part2 = (uint)value >> (32 - 1);
-                value = (int)(part1 | part2);
-                value ^= 1551662549 ^ salt;
-                return value;
-            }
-            case 85:
-            {
-                // XorAddRotateInstruction
-                value ^= 1557864843 ^ salt;
-                value += 267393461 + _secretKey[147];
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 86:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[38]) ^ salt) + -1657934671;
-                return value;
-            }
-            case 87:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 789036246 ^ salt;
-                value = value * 162006193 + _secretKey[6];
-                uint part1 = (uint)value << 4;
-                uint part2 = (uint)value >> (32 - 4);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 88:
-            {
-                // MultipleInstruction
-                value = value *  -324587171 + _secretKey[125] + salt;
-                return value;
-            }
-            case 89:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[139]) ^ salt) + -738927270;
-                return value;
-            }
-            case 90:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 1888831685 + _secretKey[4];
-                uint part1 = (uint)value << 24;
-                uint part2 = (uint)value >> (32 - 24);
-                value = (int)(part1 | part2);
-                value ^= -1695052524 ^ salt;
-                return value;
-            }
-            case 91:
-            {
-                // AddRotateXorInstruction
-                value += 2130071938 + _secretKey[72];
-                uint part1 = (uint)value << 15;
-                uint part2 = (uint)value >> (32 - 15);
-                value = (int)(part1 | part2);
-                value ^= -1088602135 ^ salt;
-                return value;
-            }
-            case 92:
-            {
-                // AddXorRotateInstruction
-                value += -17182977 + _secretKey[204];
-                value ^= 311041636 ^ salt;
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 93:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[98]) ^ salt) + 978720753;
-                return value;
-            }
-            case 94:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 634877357 + _secretKey[138];
-                uint part1 = (uint)value << 8;
-                uint part2 = (uint)value >> (32 - 8);
-                value = (int)(part1 | part2);
-                value ^= 828416356 ^ salt;
-                return value;
-            }
-            case 95:
-            {
-                // AddXorRotateInstruction
-                value += -1347171454 + _secretKey[141];
-                value ^= -656927993 ^ salt;
-                uint part1 = (uint)value << 9;
-                uint part2 = (uint)value >> (32 - 9);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 96:
-            {
-                // AddXorRotateInstruction
-                value += 1864276179 + _secretKey[129];
-                value ^= -73467836 ^ salt;
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 97:
-            {
-                // AddXorRotateInstruction
-                value += -37104343 + _secretKey[202];
-                value ^= -350073840 ^ salt;
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 98:
-            {
-                // XorAddRotateInstruction
-                value ^= 56730483 ^ salt;
-                value += 614808165 + _secretKey[243];
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 99:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 1513658112 ^ salt;
-                value = value * -1249538669 + _secretKey[71];
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 100:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[101]) ^ salt) + 1727186009;
-                return value;
-            }
-            case 101:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[45]) + salt) ^ -259909857;
-                return value;
-            }
-            case 102:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[18]) + salt) ^ -765731377;
-                return value;
-            }
-            case 103:
-            {
-                // AddRotateXorInstruction
-                value += 1267364948 + _secretKey[57];
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                value ^= -1047109783 ^ salt;
-                return value;
-            }
-            case 104:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -832248131 + _secretKey[229];
-                value ^= -1576256181 ^ salt;
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 105:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = ((int)(part1 | part2) ^ _secretKey[191]) + salt;
-                return value;
-            }
-            case 106:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 208713797 + _secretKey[247];
-                value ^= -1114664933 ^ salt;
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 107:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -1832686791 ^ salt;
-                value = value * 1369281669 + _secretKey[235];
-                uint part1 = (uint)value << 6;
-                uint part2 = (uint)value >> (32 - 6);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 108:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -2136461495 ^ salt;
-                value = value * -872040775 + _secretKey[128];
-                uint part1 = (uint)value << 14;
-                uint part2 = (uint)value >> (32 - 14);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 109:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -806704184 ^ salt;
-                value = value * -390010101 + _secretKey[243];
-                uint part1 = (uint)value << 26;
-                uint part2 = (uint)value >> (32 - 26);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 110:
-            {
-                // AddXorRotateInstruction
-                value += 1855802168 + _secretKey[201];
-                value ^= 1358196488 ^ salt;
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 111:
-            {
-                // AddRotateXorInstruction
-                value += 238539545 + _secretKey[201];
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = (int)(part1 | part2);
-                value ^= -278959039 ^ salt;
-                return value;
-            }
-            case 112:
-            {
-                // MultipleInstruction
-                value = value *  200087971 + _secretKey[86] + salt;
-                return value;
-            }
-            case 113:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[55]) + salt) ^ -1945833108;
-                return value;
-            }
-            case 114:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[190]) ^ salt) + 794495616;
-                return value;
-            }
-            case 115:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[3]) ^ salt) + -128687110;
-                return value;
-            }
-            case 116:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[232]) ^ salt) + -721342116;
-                return value;
-            }
-            case 117:
-            {
-                // MultipleInstruction
-                value = value *  143323667 + _secretKey[125] + salt;
-                return value;
-            }
-            case 118:
-            {
-                // AddRotateXorInstruction
-                value += -61142791 + _secretKey[239];
-                uint part1 = (uint)value << 12;
-                uint part2 = (uint)value >> (32 - 12);
-                value = (int)(part1 | part2);
-                value ^= -1219651522 ^ salt;
-                return value;
-            }
-            case 119:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 647290023 + _secretKey[198];
-                value ^= -367736633 ^ salt;
-                uint part1 = (uint)value << 21;
-                uint part2 = (uint)value >> (32 - 21);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 120:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = ((int)(part1 | part2) ^ _secretKey[69]) + salt;
-                return value;
-            }
-            case 121:
-            {
-                // AddRotateXorInstruction
-                value += -335421576 + _secretKey[104];
-                uint part1 = (uint)value << 8;
-                uint part2 = (uint)value >> (32 - 8);
-                value = (int)(part1 | part2);
-                value ^= -258425942 ^ salt;
-                return value;
-            }
-            case 122:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[202]) + salt) ^ -385494854;
-                return value;
-            }
-            case 123:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[15]) + salt) ^ 2029726266;
-                return value;
-            }
-            case 124:
-            {
-                // XorAddRotateInstruction
-                value ^= 1595187766 ^ salt;
-                value += -1891130028 + _secretKey[150];
-                uint part1 = (uint)value << 24;
-                uint part2 = (uint)value >> (32 - 24);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 125:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -1032473703 + _secretKey[87];
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = (int)(part1 | part2);
-                value ^= -2024364416 ^ salt;
-                return value;
-            }
-            case 126:
-            {
-                // MultipleInstruction
-                value = value *  -825131445 + _secretKey[170] + salt;
-                return value;
-            }
-            case 127:
-            {
-                // XorAddRotateInstruction
-                value ^= 993487977 ^ salt;
-                value += -586406746 + _secretKey[195];
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 128:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 693463568 ^ salt;
-                value = value * -642486667 + _secretKey[34];
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 129:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 15;
-                uint part2 = (uint)value >> (32 - 15);
-                value = ((int)(part1 | part2) ^ _secretKey[79]) + salt;
-                return value;
-            }
-            case 130:
-            {
-                // MultipleInstruction
-                value = value *  -1335012637 + _secretKey[3] + salt;
-                return value;
-            }
-            case 131:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 4;
-                uint part2 = (uint)value >> (32 - 4);
-                value = ((int)(part1 | part2) ^ _secretKey[62]) + salt;
-                return value;
-            }
-            case 132:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 27378011 + _secretKey[190];
-                uint part1 = (uint)value << 18;
-                uint part2 = (uint)value >> (32 - 18);
-                value = (int)(part1 | part2);
-                value ^= 1670059799 ^ salt;
-                return value;
-            }
-            case 133:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 748866874 ^ salt;
-                value = value * 171145867 + _secretKey[96];
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 134:
-            {
-                // AddXorRotateInstruction
-                value += 102559808 + _secretKey[160];
-                value ^= -639926836 ^ salt;
-                uint part1 = (uint)value << 13;
-                uint part2 = (uint)value >> (32 - 13);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 135:
-            {
-                // AddXorRotateInstruction
-                value += -233826926 + _secretKey[56];
-                value ^= -251392173 ^ salt;
-                uint part1 = (uint)value << 3;
-                uint part2 = (uint)value >> (32 - 3);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 136:
-            {
-                // AddXorRotateInstruction
-                value += -462241772 + _secretKey[17];
-                value ^= 1705165576 ^ salt;
-                uint part1 = (uint)value << 22;
-                uint part2 = (uint)value >> (32 - 22);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 137:
-            {
-                // XorAddRotateInstruction
-                value ^= 1145798437 ^ salt;
-                value += 159282901 + _secretKey[230];
-                uint part1 = (uint)value << 8;
-                uint part2 = (uint)value >> (32 - 8);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 138:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[73]) ^ salt) + -523066771;
-                return value;
-            }
-            case 139:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = ((int)(part1 | part2) ^ _secretKey[12]) + salt;
-                return value;
-            }
-            case 140:
-            {
-                // AddXorRotateInstruction
-                value += -1047448178 + _secretKey[181];
-                value ^= 1675708322 ^ salt;
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 141:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 1338934737 + _secretKey[17];
-                uint part1 = (uint)value << 9;
-                uint part2 = (uint)value >> (32 - 9);
-                value = (int)(part1 | part2);
-                value ^= -1483826333 ^ salt;
-                return value;
-            }
-            case 142:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -647982133 ^ salt;
-                value = value * -90361249 + _secretKey[78];
-                uint part1 = (uint)value << 18;
-                uint part2 = (uint)value >> (32 - 18);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 143:
-            {
-                // XorAddRotateInstruction
-                value ^= 464650382 ^ salt;
-                value += -849731065 + _secretKey[254];
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 144:
-            {
-                // AddRotateXorInstruction
-                value += 1677297183 + _secretKey[239];
-                uint part1 = (uint)value << 9;
-                uint part2 = (uint)value >> (32 - 9);
-                value = (int)(part1 | part2);
-                value ^= 1356448546 ^ salt;
-                return value;
-            }
-            case 145:
-            {
-                // AddXorRotateInstruction
-                value += 1443222741 + _secretKey[62];
-                value ^= 644178059 ^ salt;
-                uint part1 = (uint)value << 21;
-                uint part2 = (uint)value >> (32 - 21);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 146:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[40]) + salt) ^ 1973924485;
-                return value;
-            }
-            case 147:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[235]) + salt) ^ 1807914790;
-                return value;
-            }
-            case 148:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1712232369 + _secretKey[6];
-                value ^= -1102731228 ^ salt;
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 149:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[162]) ^ salt) + -1499050371;
-                return value;
-            }
-            case 150:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -1018753141 + _secretKey[97];
-                value ^= -1456822844 ^ salt;
-                uint part1 = (uint)value << 4;
-                uint part2 = (uint)value >> (32 - 4);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 151:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = ((int)(part1 | part2) ^ _secretKey[120]) + salt;
-                return value;
-            }
-            case 152:
-            {
-                // XorAddRotateInstruction
-                value ^= -744430264 ^ salt;
-                value += 408485935 + _secretKey[233];
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 153:
-            {
-                // AddXorRotateInstruction
-                value += 1049027020 + _secretKey[100];
-                value ^= 1885050661 ^ salt;
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 154:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[41]) + salt) ^ -1294014622;
-                return value;
-            }
-            case 155:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = ((int)(part1 | part2) ^ _secretKey[104]) + salt;
-                return value;
-            }
-            case 156:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = ((int)(part1 | part2) ^ _secretKey[130]) + salt;
-                return value;
-            }
-            case 157:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 1408000519 + _secretKey[73];
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = (int)(part1 | part2);
-                value ^= 619992019 ^ salt;
-                return value;
-            }
-            case 158:
-            {
-                // AddXorRotateInstruction
-                value += -252152508 + _secretKey[66];
-                value ^= 1468120989 ^ salt;
-                uint part1 = (uint)value << 9;
-                uint part2 = (uint)value >> (32 - 9);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 159:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 16;
-                uint part2 = (uint)value >> (32 - 16);
-                value = ((int)(part1 | part2) ^ _secretKey[197]) + salt;
-                return value;
-            }
-            case 160:
-            {
-                // XorAddRotateInstruction
-                value ^= 1251603571 ^ salt;
-                value += -1384975515 + _secretKey[243];
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 161:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[147]) + salt) ^ 2119650304;
-                return value;
-            }
-            case 162:
-            {
-                // MultipleInstruction
-                value = value *  -971354891 + _secretKey[72] + salt;
-                return value;
-            }
-            case 163:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 1289046629 ^ salt;
-                value = value * 785924711 + _secretKey[31];
-                uint part1 = (uint)value << 13;
-                uint part2 = (uint)value >> (32 - 13);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 164:
-            {
-                // AddXorRotateInstruction
-                value += 331559119 + _secretKey[18];
-                value ^= -404059494 ^ salt;
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 165:
-            {
-                // MultipleInstruction
-                value = value *  1146609535 + _secretKey[105] + salt;
-                return value;
-            }
-            case 166:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -1816063043 + _secretKey[229];
-                value ^= -1433164213 ^ salt;
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 167:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[191]) ^ salt) + 1956974091;
-                return value;
-            }
-            case 168:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1665780549 + _secretKey[247];
-                value ^= -68008677 ^ salt;
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 169:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 554975801 + _secretKey[132];
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = (int)(part1 | part2);
-                value ^= -313531898 ^ salt;
-                return value;
-            }
-            case 170:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[184]) + salt) ^ 834925129;
-                return value;
-            }
-            case 171:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 14;
-                uint part2 = (uint)value >> (32 - 14);
-                value = ((int)(part1 | part2) ^ _secretKey[115]) + salt;
-                return value;
-            }
-            case 172:
-            {
-                // AddRotateXorInstruction
-                value += 997906443 + _secretKey[243];
-                uint part1 = (uint)value << 26;
-                uint part2 = (uint)value >> (32 - 26);
-                value = (int)(part1 | part2);
-                value ^= -1401788545 ^ salt;
-                return value;
-            }
-            case 173:
-            {
-                // AddRotateXorInstruction
-                value += 186832329 + _secretKey[8];
-                uint part1 = (uint)value << 31;
-                uint part2 = (uint)value >> (32 - 31);
-                value = (int)(part1 | part2);
-                value ^= -1175485750 ^ salt;
-                return value;
-            }
-            case 174:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -649455671 + _secretKey[74];
-                uint part1 = (uint)value << 1;
-                uint part2 = (uint)value >> (32 - 1);
-                value = (int)(part1 | part2);
-                value ^= -2103037317 ^ salt;
-                return value;
-            }
-            case 175:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 1144953431 + _secretKey[89];
-                value ^= 1350937196 ^ salt;
-                uint part1 = (uint)value << 23;
-                uint part2 = (uint)value >> (32 - 23);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 176:
-            {
-                // XorAddRotateInstruction
-                value ^= 1785825664 ^ salt;
-                value += -1052716098 + _secretKey[162];
-                uint part1 = (uint)value << 26;
-                uint part2 = (uint)value >> (32 - 26);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 177:
-            {
-                // AddXorRotateInstruction
-                value += -945451956 + _secretKey[92];
-                value ^= 75174120 ^ salt;
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 178:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 29;
-                uint part2 = (uint)value >> (32 - 29);
-                value = ((int)(part1 | part2) ^ _secretKey[12]) + salt;
-                return value;
-            }
-            case 179:
-            {
-                // MultipleInstruction
-                value = value *  -2050363409 + _secretKey[172] + salt;
-                return value;
-            }
-            case 180:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = ((int)(part1 | part2) ^ _secretKey[166]) + salt;
-                return value;
-            }
-            case 181:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = ((int)(part1 | part2) ^ _secretKey[117]) + salt;
-                return value;
-            }
-            case 182:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = ((int)(part1 | part2) ^ _secretKey[69]) + salt;
-                return value;
-            }
-            case 183:
-            {
-                // MultipleXorRotateInstruction
-                value = value * -1916361095 + _secretKey[104];
-                value ^= -1972771864 ^ salt;
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 184:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 708516795 + _secretKey[202];
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = (int)(part1 | part2);
-                value ^= 1188643642 ^ salt;
-                return value;
-            }
-            case 185:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 107093855 + _secretKey[54];
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                value ^= 1860230806 ^ salt;
-                return value;
-            }
-            case 186:
-            {
-                // AddRotateXorInstruction
-                value += -937500209 + _secretKey[153];
-                uint part1 = (uint)value << 23;
-                uint part2 = (uint)value >> (32 - 23);
-                value = (int)(part1 | part2);
-                value ^= 355235163 ^ salt;
-                return value;
-            }
-            case 187:
-            {
-                // MultipleXorRotateInstruction
-                value = value * 70066431 + _secretKey[75];
-                value ^= -1865215830 ^ salt;
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 188:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -746789978 ^ salt;
-                value = value * -871154493 + _secretKey[42];
-                uint part1 = (uint)value << 23;
-                uint part2 = (uint)value >> (32 - 23);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 189:
-            {
-                // XorAddRotateInstruction
-                value ^= -234851980 ^ salt;
-                value += 1869386530 + _secretKey[235];
-                uint part1 = (uint)value << 6;
-                uint part2 = (uint)value >> (32 - 6);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 190:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -2109240241 ^ salt;
-                value = value * 769765109 + _secretKey[227];
-                uint part1 = (uint)value << 3;
-                uint part2 = (uint)value >> (32 - 3);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 191:
-            {
-                // AddRotateXorInstruction
-                value += -1837981212 + _secretKey[62];
-                uint part1 = (uint)value << 23;
-                uint part2 = (uint)value >> (32 - 23);
-                value = (int)(part1 | part2);
-                value ^= 706220635 ^ salt;
-                return value;
-            }
-            case 192:
-            {
-                // XorAddRotateInstruction
-                value ^= -1993565390 ^ salt;
-                value += 1703364119 + _secretKey[29];
-                uint part1 = (uint)value << 26;
-                uint part2 = (uint)value >> (32 - 26);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 193:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -1611050400 ^ salt;
-                value = value * -1496603227 + _secretKey[199];
-                uint part1 = (uint)value << 0;
-                uint part2 = (uint)value >> (32 - 0);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 194:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[45]) ^ salt) + 585179340;
-                return value;
-            }
-            case 195:
-            {
-                // AddXorRotateInstruction
-                value += -248179054 + _secretKey[56];
-                value ^= 59172435 ^ salt;
-                uint part1 = (uint)value << 3;
-                uint part2 = (uint)value >> (32 - 3);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 196:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[17]) + salt) ^ -849517292;
-                return value;
-            }
-            case 197:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[100]) ^ salt) + 1450241526;
-                return value;
-            }
-            case 198:
-            {
-                // MultipleInstruction
-                value = value *  1603844565 + _secretKey[230] + salt;
-                return value;
-            }
-            case 199:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 6;
-                uint part2 = (uint)value >> (32 - 6);
-                value = ((int)(part1 | part2) ^ _secretKey[109]) + salt;
-                return value;
-            }
-            case 200:
-            {
-                // AddXorRotateInstruction
-                value += 184266602 + _secretKey[27];
-                value ^= -1382725876 ^ salt;
-                uint part1 = (uint)value << 23;
-                uint part2 = (uint)value >> (32 - 23);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 201:
-            {
-                // AddRotateXorInstruction
-                value += 1467364533 + _secretKey[162];
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = (int)(part1 | part2);
-                value ^= 1679205229 ^ salt;
-                return value;
-            }
-            case 202:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[169]) + salt) ^ 1941059345;
-                return value;
-            }
-            case 203:
-            {
-                // MultipleInstruction
-                value = value *  932866255 + _secretKey[203] + salt;
-                return value;
-            }
-            case 204:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -591934897 + _secretKey[18];
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                value ^= -2113988722 ^ salt;
-                return value;
-            }
-            case 205:
-            {
-                // MultipleInstruction
-                value = value *  -1033327361 + _secretKey[98] + salt;
-                return value;
-            }
-            case 206:
-            {
-                // XorAddRotateInstruction
-                value ^= -1867950817 ^ salt;
-                value += -2049571601 + _secretKey[137];
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 207:
-            {
-                // MultipleInstruction
-                value = value *  698954709 + _secretKey[62] + salt;
-                return value;
-            }
-            case 208:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 326002613 ^ salt;
-                value = value * -2099831661 + _secretKey[133];
-                uint part1 = (uint)value << 8;
-                uint part2 = (uint)value >> (32 - 8);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 209:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -84668378 ^ salt;
-                value = value * -1954935573 + _secretKey[214];
-                uint part1 = (uint)value << 16;
-                uint part2 = (uint)value >> (32 - 16);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 210:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 4;
-                uint part2 = (uint)value >> (32 - 4);
-                value = ((int)(part1 | part2) ^ _secretKey[199]) + salt;
-                return value;
-            }
-            case 211:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 29;
-                uint part2 = (uint)value >> (32 - 29);
-                value = ((int)(part1 | part2) ^ _secretKey[162]) + salt;
-                return value;
-            }
-            case 212:
-            {
-                // AddRotateXorInstruction
-                value += 136517771 + _secretKey[97];
-                uint part1 = (uint)value << 4;
-                uint part2 = (uint)value >> (32 - 4);
-                value = (int)(part1 | part2);
-                value ^= 1147312644 ^ salt;
-                return value;
-            }
-            case 213:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[120]) ^ salt) + -966462700;
-                return value;
-            }
-            case 214:
-            {
-                // XorAddRotateInstruction
-                value ^= 344346696 ^ salt;
-                value += 65616175 + _secretKey[233];
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 215:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -1300836660 ^ salt;
-                value = value * 345957477 + _secretKey[37];
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 216:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[41]) + salt) ^ 1860745826;
-                return value;
-            }
-            case 217:
-            {
-                // XorAddRotateInstruction
-                value ^= -1562861686 ^ salt;
-                value += 1701770344 + _secretKey[100];
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 218:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[7]) ^ salt) + 1666984077;
-                return value;
-            }
-            case 219:
-            {
-                // MultipleRotateXorInstruction
-                value = value * 1669884811 + _secretKey[211];
-                uint part1 = (uint)value << 1;
-                uint part2 = (uint)value >> (32 - 1);
-                value = (int)(part1 | part2);
-                value ^= -1629624764 ^ salt;
-                return value;
-            }
-            case 220:
-            {
-                // AddRotateXorInstruction
-                value += -1215000419 + _secretKey[41];
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = (int)(part1 | part2);
-                value ^= -782372336 ^ salt;
-                return value;
-            }
-            case 221:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -994522304 ^ salt;
-                value = value * 541858163 + _secretKey[101];
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 222:
-            {
-                // MultipleInstruction
-                value = value *  851902191 + _secretKey[0] + salt;
-                return value;
-            }
-            case 223:
-            {
-                // MultipleInstruction
-                value = value *  -2121677241 + _secretKey[244] + salt;
-                return value;
-            }
-            case 224:
-            {
-                // AddRotateXorInstruction
-                value += 553086553 + _secretKey[101];
-                uint part1 = (uint)value << 7;
-                uint part2 = (uint)value >> (32 - 7);
-                value = (int)(part1 | part2);
-                value ^= -1704123105 ^ salt;
-                return value;
-            }
-            case 225:
-            {
-                // MultipleInstruction
-                value = value *  933888693 + _secretKey[207] + salt;
-                return value;
-            }
-            case 226:
-            {
-                // AddRotateXorInstruction
-                value += -428636262 + _secretKey[84];
-                uint part1 = (uint)value << 25;
-                uint part2 = (uint)value >> (32 - 25);
-                value = (int)(part1 | part2);
-                value ^= 734438527 ^ salt;
-                return value;
-            }
-            case 227:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -2096789992 ^ salt;
-                value = value * -1649800003 + _secretKey[229];
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 228:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[11]) + salt) ^ 271019854;
-                return value;
-            }
-            case 229:
-            {
-                // AddXorRotateInstruction
-                value += -709274922 + _secretKey[69];
-                value ^= 11276535 ^ salt;
-                uint part1 = (uint)value << 27;
-                uint part2 = (uint)value >> (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 230:
-            {
-                // XorInstruction
-                value = ((value ^ _secretKey[57]) + salt) ^ 859060201;
-                return value;
-            }
-            case 231:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[6]) ^ salt) + 674799083;
-                return value;
-            }
-            case 232:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -252536503 + _secretKey[184];
-                uint part1 = (uint)value << 0;
-                uint part2 = (uint)value >> (32 - 0);
-                value = (int)(part1 | part2);
-                value ^= 1820270446 ^ salt;
-                return value;
-            }
-            case 233:
-            {
-                // MultipleRotateXorInstruction
-                value = value * -1634178615 + _secretKey[11];
-                uint part1 = (uint)value << 19;
-                uint part2 = (uint)value >> (32 - 19);
-                value = (int)(part1 | part2);
-                value ^= -1819459622 ^ salt;
-                return value;
-            }
-            case 234:
-            {
-                // MultipleInstruction
-                value = value *  901566777 + _secretKey[201] + salt;
-                return value;
-            }
-            case 235:
-            {
-                // AddRotateXorInstruction
-                value += -2017528513 + _secretKey[202];
-                uint part1 = (uint)value << 25;
-                uint part2 = (uint)value >> (32 - 25);
-                value = (int)(part1 | part2);
-                value ^= -654152503 ^ salt;
-                return value;
-            }
-            case 236:
-            {
-                // AddRotateXorInstruction
-                value += 508339777 + _secretKey[123];
-                uint part1 = (uint)value << 2;
-                uint part2 = (uint)value >> (32 - 2);
-                value = (int)(part1 | part2);
-                value ^= 61946710 ^ salt;
-                return value;
-            }
-            case 237:
-            {
-                // AddXorRotateInstruction
-                value += 538665836 + _secretKey[55];
-                value ^= -1821697464 ^ salt;
-                uint part1 = (uint)value << 0;
-                uint part2 = (uint)value >> (32 - 0);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 238:
-            {
-                // XorAddRotateInstruction
-                value ^= 1670031266 ^ salt;
-                value += -1435965958 + _secretKey[3];
-                uint part1 = (uint)value << 12;
-                uint part2 = (uint)value >> (32 - 12);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 239:
-            {
-                // XorAddRotateInstruction
-                value ^= -1069923864 ^ salt;
-                value += -1908817307 + _secretKey[18];
-                uint part1 = (uint)value << 29;
-                uint part2 = (uint)value >> (32 - 29);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 240:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[239]) ^ salt) + 1677484793;
-                return value;
-            }
-            case 241:
-            {
-                // BitRotateInstruction
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = ((int)(part1 | part2) ^ _secretKey[52]) + salt;
-                return value;
-            }
-            case 242:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[199]) ^ salt) + 1086423494;
-                return value;
-            }
-            case 243:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 868448258 ^ salt;
-                value = value * 302877883 + _secretKey[69];
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 244:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[232]) ^ salt) + 721139304;
-                return value;
-            }
-            case 245:
-            {
-                // AddRotateXorInstruction
-                value += -1881430695 + _secretKey[186];
-                uint part1 = (uint)value << 10;
-                uint part2 = (uint)value >> (32 - 10);
-                value = (int)(part1 | part2);
-                value ^= -2131819845 ^ salt;
-                return value;
-            }
-            case 246:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[94]) ^ salt) + -2136945649;
-                return value;
-            }
-            case 247:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[150]) ^ salt) + -1852410028;
-                return value;
-            }
-            case 248:
-            {
-                // AddInstruction
-                value = ((value + _secretKey[153]) ^ salt) + -1705358129;
-                return value;
-            }
-            case 249:
-            {
-                // AddXorRotateInstruction
-                value += 1965560923 + _secretKey[128];
-                value ^= -744150017 ^ salt;
-                uint part1 = (uint)value << 11;
-                uint part2 = (uint)value >> (32 - 11);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 250:
-            {
-                // AddRotateXorInstruction
-                value += -705968418 + _secretKey[105];
-                uint part1 = (uint)value << 6;
-                uint part2 = (uint)value >> (32 - 6);
-                value = (int)(part1 | part2);
-                value ^= -2056536125 ^ salt;
-                return value;
-            }
-            case 251:
-            {
-                // AddRotateXorInstruction
-                value += -91784169 + _secretKey[16];
-                uint part1 = (uint)value << 20;
-                uint part2 = (uint)value >> (32 - 20);
-                value = (int)(part1 | part2);
-                value ^= -535989214 ^ salt;
-                return value;
-            }
-            case 252:
-            {
-                // XorMultipleRotateInstruction
-                value ^= 1595666182 ^ salt;
-                value = value * -1305388497 + _secretKey[79];
-                uint part1 = (uint)value << 21;
-                uint part2 = (uint)value >> (32 - 21);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 253:
-            {
-                // AddXorRotateInstruction
-                value += -911446269 + _secretKey[128];
-                value ^= -923072284 ^ salt;
-                uint part1 = (uint)value << 30;
-                uint part2 = (uint)value >> (32 - 30);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 254:
-            {
-                // XorMultipleRotateInstruction
-                value ^= -1765003429 ^ salt;
-                value = value * -1220156225 + _secretKey[50];
-                uint part1 = (uint)value << 23;
-                uint part2 = (uint)value >> (32 - 23);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 255:
-            {
-                // AddXorRotateInstruction
-                value += 1302724410 + _secretKey[139];
-                value ^= 481719136 ^ salt;
-                uint part1 = (uint)value << 5;
-                uint part2 = (uint)value >> (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
+               case 0:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -1409512319 + _secretKey[255];
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = (int)(part1 | part2);
+                    value ^= 908676522 ^ salt;
+                    return value;
+                }
+               case 1:
+                {
+                    // AddRotateXorInstruction
+                    value += -78930327 + _secretKey[166];
+                    uint part1 = (uint)value << 3;
+                    uint part2 = (uint)value >> (32 - 3);
+                    value = (int)(part1 | part2);
+                    value ^= 315716906 ^ salt;
+                    return value;
+                }
+               case 2:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[116]) + salt) ^ 568537104;
+                    return value;
+                }
+               case 3:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -804936725 ^ salt;
+                    value += 874713862 + _secretKey[47];
+                    uint part1 = (uint)value << 15;
+                    uint part2 = (uint)value >> (32 - 15);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 4:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[3]) + salt) ^ 469891299;
+                    return value;
+                }
+               case 5:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 322802916 ^ salt;
+                    value += -1196854978 + _secretKey[215];
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 6:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1745984563 + _secretKey[23];
+                    value ^= -1234111715 ^ salt;
+                    uint part1 = (uint)value << 26;
+                    uint part2 = (uint)value >> (32 - 26);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 7:
+                {
+                    // MultipleInstruction
+                    value = value *  -2110521503 + _secretKey[165] + salt;
+                    return value;
+                }
+               case 8:
+                {
+                    // AddXorRotateInstruction
+                    value += -620885440 + _secretKey[160];
+                    value ^= 527498188 ^ salt;
+                    uint part1 = (uint)value << 13;
+                    uint part2 = (uint)value >> (32 - 13);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 9:
+                {
+                    // MultipleInstruction
+                    value = value *  388897683 + _secretKey[56] + salt;
+                    return value;
+                }
+               case 10:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -2073969565 ^ salt;
+                    value = value * -574342971 + _secretKey[20];
+                    uint part1 = (uint)value << 17;
+                    uint part2 = (uint)value >> (32 - 17);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 11:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 22;
+                    uint part2 = (uint)value >> (32 - 22);
+                    value = ((int)(part1 | part2) ^ _secretKey[100]) + salt;
+                    return value;
+                }
+               case 12:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[230]) + salt) ^ -1988224811;
+                    return value;
+                }
+               case 13:
+                {
+                    // AddRotateXorInstruction
+                    value += -941349146 + _secretKey[109];
+                    uint part1 = (uint)value << 9;
+                    uint part2 = (uint)value >> (32 - 9);
+                    value = (int)(part1 | part2);
+                    value ^= 982550122 ^ salt;
+                    return value;
+                }
+               case 14:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -983513587 + _secretKey[23];
+                    uint part1 = (uint)value << 14;
+                    uint part2 = (uint)value >> (32 - 14);
+                    value = (int)(part1 | part2);
+                    value ^= -1719139403 ^ salt;
+                    return value;
+                }
+               case 15:
+                {
+                    // AddRotateXorInstruction
+                    value += -800495653 + _secretKey[109];
+                    uint part1 = (uint)value << 17;
+                    uint part2 = (uint)value >> (32 - 17);
+                    value = (int)(part1 | part2);
+                    value ^= -600815599 ^ salt;
+                    return value;
+                }
+               case 16:
+                {
+                    // MultipleInstruction
+                    value = value *  -1638727325 + _secretKey[207] + salt;
+                    return value;
+                }
+               case 17:
+                {
+                    // AddXorRotateInstruction
+                    value += -1933652897 + _secretKey[78];
+                    value ^= 145339154 ^ salt;
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 18:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1106142215 + _secretKey[254];
+                    value ^= 1307737186 ^ salt;
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 19:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -1796986385 + _secretKey[137];
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    value ^= 81995553 ^ salt;
+                    return value;
+                }
+               case 20:
+                {
+                    // MultipleInstruction
+                    value = value *  -703771329 + _secretKey[139] + salt;
+                    return value;
+                }
+               case 21:
+                {
+                    // AddXorRotateInstruction
+                    value += -1427225709 + _secretKey[133];
+                    value ^= -1763086552 ^ salt;
+                    uint part1 = (uint)value << 17;
+                    uint part2 = (uint)value >> (32 - 17);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 22:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 827112939 + _secretKey[214];
+                    value ^= 911194544 ^ salt;
+                    uint part1 = (uint)value << 6;
+                    uint part2 = (uint)value >> (32 - 6);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 23:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[92]) ^ salt) + 725728711;
+                    return value;
+                }
+               case 24:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[90]) + salt) ^ 460687778;
+                    return value;
+                }
+               case 25:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -1140399263 ^ salt;
+                    value = value * 17686469 + _secretKey[4];
+                    uint part1 = (uint)value << 24;
+                    uint part2 = (uint)value >> (32 - 24);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 26:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 24;
+                    uint part2 = (uint)value >> (32 - 24);
+                    value = ((int)(part1 | part2) ^ _secretKey[130]) + salt;
+                    return value;
+                }
+               case 27:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -1105948113 + _secretKey[233];
+                    value ^= 1608705031 ^ salt;
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 28:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -1278339739 + _secretKey[37];
+                    value ^= -1366193182 ^ salt;
+                    uint part1 = (uint)value << 17;
+                    uint part2 = (uint)value >> (32 - 17);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 29:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1663765545 + _secretKey[172];
+                    value ^= 13395082 ^ salt;
+                    uint part1 = (uint)value << 8;
+                    uint part2 = (uint)value >> (32 - 8);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 30:
+                {
+                    // AddRotateXorInstruction
+                    value += 829988883 + _secretKey[130];
+                    uint part1 = (uint)value << 13;
+                    uint part2 = (uint)value >> (32 - 13);
+                    value = (int)(part1 | part2);
+                    value ^= -930611193 ^ salt;
+                    return value;
+                }
+               case 31:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -933375861 ^ salt;
+                    value = value * 91217363 + _secretKey[129];
+                    uint part1 = (uint)value << 4;
+                    uint part2 = (uint)value >> (32 - 4);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 32:
+                {
+                    // AddRotateXorInstruction
+                    value += 288870813 + _secretKey[41];
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = (int)(part1 | part2);
+                    value ^= 1348044560 ^ salt;
+                    return value;
+                }
+               case 33:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[115]) + salt) ^ -1005539776;
+                    return value;
+                }
+               case 34:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 38927859 ^ salt;
+                    value = value * 783850663 + _secretKey[239];
+                    uint part1 = (uint)value << 0;
+                    uint part2 = (uint)value >> (32 - 0);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 35:
+                {
+                    // MultipleInstruction
+                    value = value *  -199916729 + _secretKey[244] + salt;
+                    return value;
+                }
+               case 36:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -203526311 + _secretKey[101];
+                    value ^= -1365505945 ^ salt;
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 37:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 179761077 + _secretKey[207];
+                    uint part1 = (uint)value << 18;
+                    uint part2 = (uint)value >> (32 - 18);
+                    value = (int)(part1 | part2);
+                    value ^= -1485021030 ^ salt;
+                    return value;
+                }
+               case 38:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 25;
+                    uint part2 = (uint)value >> (32 - 25);
+                    value = ((int)(part1 | part2) ^ _secretKey[127]) + salt;
+                    return value;
+                }
+               case 39:
+                {
+                    // MultipleInstruction
+                    value = value *  1834257177 + _secretKey[188] + salt;
+                    return value;
+                }
+               case 40:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[63]) + salt) ^ -1857925045;
+                    return value;
+                }
+               case 41:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = ((int)(part1 | part2) ^ _secretKey[191]) + salt;
+                    return value;
+                }
+               case 42:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = ((int)(part1 | part2) ^ _secretKey[247]) + salt;
+                    return value;
+                }
+               case 43:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -40692013 + _secretKey[233];
+                    uint part1 = (uint)value << 25;
+                    uint part2 = (uint)value >> (32 - 25);
+                    value = (int)(part1 | part2);
+                    value ^= -2064739452 ^ salt;
+                    return value;
+                }
+               case 44:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[123]) + salt) ^ 1368017926;
+                    return value;
+                }
+               case 45:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[128]) + salt) ^ 1800071096;
+                    return value;
+                }
+               case 46:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = ((int)(part1 | part2) ^ _secretKey[200]) + salt;
+                    return value;
+                }
+               case 47:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -1340084237 + _secretKey[218];
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    value ^= 737906232 ^ salt;
+                    return value;
+                }
+               case 48:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[63]) + salt) ^ -1917869048;
+                    return value;
+                }
+               case 49:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[201]) ^ salt) + -1282426343;
+                    return value;
+                }
+               case 50:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 1;
+                    uint part2 = (uint)value >> (32 - 1);
+                    value = ((int)(part1 | part2) ^ _secretKey[123]) + salt;
+                    return value;
+                }
+               case 51:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 22;
+                    uint part2 = (uint)value >> (32 - 22);
+                    value = ((int)(part1 | part2) ^ _secretKey[89]) + salt;
+                    return value;
+                }
+               case 52:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1672784695 ^ salt;
+                    value += -399864504 + _secretKey[128];
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 53:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1967137019 + _secretKey[3];
+                    value ^= 332845644 ^ salt;
+                    uint part1 = (uint)value << 28;
+                    uint part2 = (uint)value >> (32 - 28);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 54:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = ((int)(part1 | part2) ^ _secretKey[18]) + salt;
+                    return value;
+                }
+               case 55:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -1906888436 ^ salt;
+                    value = value * -1908693511 + _secretKey[239];
+                    uint part1 = (uint)value << 12;
+                    uint part2 = (uint)value >> (32 - 12);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 56:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -2031801803 + _secretKey[166];
+                    value ^= 388224710 ^ salt;
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 57:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[187]) + salt) ^ 1468628226;
+                    return value;
+                }
+               case 58:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[120]) + salt) ^ -1283249644;
+                    return value;
+                }
+               case 59:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 127214056 ^ salt;
+                    value += -225962838 + _secretKey[89];
+                    uint part1 = (uint)value << 26;
+                    uint part2 = (uint)value >> (32 - 26);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 60:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -44102725 + _secretKey[58];
+                    value ^= -1919860977 ^ salt;
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 61:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -235750316 ^ salt;
+                    value += 2033477782 + _secretKey[56];
+                    uint part1 = (uint)value << 15;
+                    uint part2 = (uint)value >> (32 - 15);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 62:
+                {
+                    // MultipleInstruction
+                    value = value *  -1677418665 + _secretKey[91] + salt;
+                    return value;
+                }
+               case 63:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = ((int)(part1 | part2) ^ _secretKey[75]) + salt;
+                    return value;
+                }
+               case 64:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = ((int)(part1 | part2) ^ _secretKey[105]) + salt;
+                    return value;
+                }
+               case 65:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 3;
+                    uint part2 = (uint)value >> (32 - 3);
+                    value = ((int)(part1 | part2) ^ _secretKey[42]) + salt;
+                    return value;
+                }
+               case 66:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 538969873 + _secretKey[116];
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    value ^= 2127722731 ^ salt;
+                    return value;
+                }
+               case 67:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -2093762257 ^ salt;
+                    value += 1205332559 + _secretKey[245];
+                    uint part1 = (uint)value << 3;
+                    uint part2 = (uint)value >> (32 - 3);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 68:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 169229441 + _secretKey[228];
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = (int)(part1 | part2);
+                    value ^= 92356567 ^ salt;
+                    return value;
+                }
+               case 69:
+                {
+                    // AddXorRotateInstruction
+                    value += -1923884610 + _secretKey[50];
+                    value ^= -57416681 ^ salt;
+                    uint part1 = (uint)value << 29;
+                    uint part2 = (uint)value >> (32 - 29);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 70:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = ((int)(part1 | part2) ^ _secretKey[96]) + salt;
+                    return value;
+                }
+               case 71:
+                {
+                    // AddXorRotateInstruction
+                    value += 432176071 + _secretKey[64];
+                    value ^= 1358992288 ^ salt;
+                    uint part1 = (uint)value << 12;
+                    uint part2 = (uint)value >> (32 - 12);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 72:
+                {
+                    // MultipleInstruction
+                    value = value *  1245874417 + _secretKey[146] + salt;
+                    return value;
+                }
+               case 73:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[99]) ^ salt) + 1130476627;
+                    return value;
+                }
+               case 74:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[17]) + salt) ^ 355214100;
+                    return value;
+                }
+               case 75:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 2034708471 + _secretKey[100];
+                    value ^= 154578981 ^ salt;
+                    uint part1 = (uint)value << 21;
+                    uint part2 = (uint)value >> (32 - 21);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 76:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -743962136 ^ salt;
+                    value += -192471066 + _secretKey[109];
+                    uint part1 = (uint)value << 9;
+                    uint part2 = (uint)value >> (32 - 9);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 77:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[12]) ^ salt) + -889577445;
+                    return value;
+                }
+               case 78:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[181]) + salt) ^ 969463438;
+                    return value;
+                }
+               case 79:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = ((int)(part1 | part2) ^ _secretKey[109]) + salt;
+                    return value;
+                }
+               case 80:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 984079633 ^ salt;
+                    value = value * 464995753 + _secretKey[99];
+                    uint part1 = (uint)value << 15;
+                    uint part2 = (uint)value >> (32 - 15);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 81:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 948745055 ^ salt;
+                    value = value * -837931953 + _secretKey[18];
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 82:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[254]) ^ salt) + 1662910727;
+                    return value;
+                }
+               case 83:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = ((int)(part1 | part2) ^ _secretKey[31]) + salt;
+                    return value;
+                }
+               case 84:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -1961207927 + _secretKey[34];
+                    uint part1 = (uint)value << 1;
+                    uint part2 = (uint)value >> (32 - 1);
+                    value = (int)(part1 | part2);
+                    value ^= 1551662549 ^ salt;
+                    return value;
+                }
+               case 85:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1557864843 ^ salt;
+                    value += 267393461 + _secretKey[147];
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 86:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[38]) ^ salt) + -1657934671;
+                    return value;
+                }
+               case 87:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 789036246 ^ salt;
+                    value = value * 162006193 + _secretKey[6];
+                    uint part1 = (uint)value << 4;
+                    uint part2 = (uint)value >> (32 - 4);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 88:
+                {
+                    // MultipleInstruction
+                    value = value *  -324587171 + _secretKey[125] + salt;
+                    return value;
+                }
+               case 89:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[139]) ^ salt) + -738927270;
+                    return value;
+                }
+               case 90:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 1888831685 + _secretKey[4];
+                    uint part1 = (uint)value << 24;
+                    uint part2 = (uint)value >> (32 - 24);
+                    value = (int)(part1 | part2);
+                    value ^= -1695052524 ^ salt;
+                    return value;
+                }
+               case 91:
+                {
+                    // AddRotateXorInstruction
+                    value += 2130071938 + _secretKey[72];
+                    uint part1 = (uint)value << 15;
+                    uint part2 = (uint)value >> (32 - 15);
+                    value = (int)(part1 | part2);
+                    value ^= -1088602135 ^ salt;
+                    return value;
+                }
+               case 92:
+                {
+                    // AddXorRotateInstruction
+                    value += -17182977 + _secretKey[204];
+                    value ^= 311041636 ^ salt;
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 93:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[98]) ^ salt) + 978720753;
+                    return value;
+                }
+               case 94:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 634877357 + _secretKey[138];
+                    uint part1 = (uint)value << 8;
+                    uint part2 = (uint)value >> (32 - 8);
+                    value = (int)(part1 | part2);
+                    value ^= 828416356 ^ salt;
+                    return value;
+                }
+               case 95:
+                {
+                    // AddXorRotateInstruction
+                    value += -1347171454 + _secretKey[141];
+                    value ^= -656927993 ^ salt;
+                    uint part1 = (uint)value << 9;
+                    uint part2 = (uint)value >> (32 - 9);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 96:
+                {
+                    // AddXorRotateInstruction
+                    value += 1864276179 + _secretKey[129];
+                    value ^= -73467836 ^ salt;
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 97:
+                {
+                    // AddXorRotateInstruction
+                    value += -37104343 + _secretKey[202];
+                    value ^= -350073840 ^ salt;
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 98:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 56730483 ^ salt;
+                    value += 614808165 + _secretKey[243];
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 99:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 1513658112 ^ salt;
+                    value = value * -1249538669 + _secretKey[71];
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 100:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[101]) ^ salt) + 1727186009;
+                    return value;
+                }
+               case 101:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[45]) + salt) ^ -259909857;
+                    return value;
+                }
+               case 102:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[18]) + salt) ^ -765731377;
+                    return value;
+                }
+               case 103:
+                {
+                    // AddRotateXorInstruction
+                    value += 1267364948 + _secretKey[57];
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    value ^= -1047109783 ^ salt;
+                    return value;
+                }
+               case 104:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -832248131 + _secretKey[229];
+                    value ^= -1576256181 ^ salt;
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 105:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = ((int)(part1 | part2) ^ _secretKey[191]) + salt;
+                    return value;
+                }
+               case 106:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 208713797 + _secretKey[247];
+                    value ^= -1114664933 ^ salt;
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 107:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -1832686791 ^ salt;
+                    value = value * 1369281669 + _secretKey[235];
+                    uint part1 = (uint)value << 6;
+                    uint part2 = (uint)value >> (32 - 6);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 108:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -2136461495 ^ salt;
+                    value = value * -872040775 + _secretKey[128];
+                    uint part1 = (uint)value << 14;
+                    uint part2 = (uint)value >> (32 - 14);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 109:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -806704184 ^ salt;
+                    value = value * -390010101 + _secretKey[243];
+                    uint part1 = (uint)value << 26;
+                    uint part2 = (uint)value >> (32 - 26);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 110:
+                {
+                    // AddXorRotateInstruction
+                    value += 1855802168 + _secretKey[201];
+                    value ^= 1358196488 ^ salt;
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 111:
+                {
+                    // AddRotateXorInstruction
+                    value += 238539545 + _secretKey[201];
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = (int)(part1 | part2);
+                    value ^= -278959039 ^ salt;
+                    return value;
+                }
+               case 112:
+                {
+                    // MultipleInstruction
+                    value = value *  200087971 + _secretKey[86] + salt;
+                    return value;
+                }
+               case 113:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[55]) + salt) ^ -1945833108;
+                    return value;
+                }
+               case 114:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[190]) ^ salt) + 794495616;
+                    return value;
+                }
+               case 115:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[3]) ^ salt) + -128687110;
+                    return value;
+                }
+               case 116:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[232]) ^ salt) + -721342116;
+                    return value;
+                }
+               case 117:
+                {
+                    // MultipleInstruction
+                    value = value *  143323667 + _secretKey[125] + salt;
+                    return value;
+                }
+               case 118:
+                {
+                    // AddRotateXorInstruction
+                    value += -61142791 + _secretKey[239];
+                    uint part1 = (uint)value << 12;
+                    uint part2 = (uint)value >> (32 - 12);
+                    value = (int)(part1 | part2);
+                    value ^= -1219651522 ^ salt;
+                    return value;
+                }
+               case 119:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 647290023 + _secretKey[198];
+                    value ^= -367736633 ^ salt;
+                    uint part1 = (uint)value << 21;
+                    uint part2 = (uint)value >> (32 - 21);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 120:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = ((int)(part1 | part2) ^ _secretKey[69]) + salt;
+                    return value;
+                }
+               case 121:
+                {
+                    // AddRotateXorInstruction
+                    value += -335421576 + _secretKey[104];
+                    uint part1 = (uint)value << 8;
+                    uint part2 = (uint)value >> (32 - 8);
+                    value = (int)(part1 | part2);
+                    value ^= -258425942 ^ salt;
+                    return value;
+                }
+               case 122:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[202]) + salt) ^ -385494854;
+                    return value;
+                }
+               case 123:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[15]) + salt) ^ 2029726266;
+                    return value;
+                }
+               case 124:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1595187766 ^ salt;
+                    value += -1891130028 + _secretKey[150];
+                    uint part1 = (uint)value << 24;
+                    uint part2 = (uint)value >> (32 - 24);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 125:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -1032473703 + _secretKey[87];
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = (int)(part1 | part2);
+                    value ^= -2024364416 ^ salt;
+                    return value;
+                }
+               case 126:
+                {
+                    // MultipleInstruction
+                    value = value *  -825131445 + _secretKey[170] + salt;
+                    return value;
+                }
+               case 127:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 993487977 ^ salt;
+                    value += -586406746 + _secretKey[195];
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 128:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 693463568 ^ salt;
+                    value = value * -642486667 + _secretKey[34];
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 129:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 15;
+                    uint part2 = (uint)value >> (32 - 15);
+                    value = ((int)(part1 | part2) ^ _secretKey[79]) + salt;
+                    return value;
+                }
+               case 130:
+                {
+                    // MultipleInstruction
+                    value = value *  -1335012637 + _secretKey[3] + salt;
+                    return value;
+                }
+               case 131:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 4;
+                    uint part2 = (uint)value >> (32 - 4);
+                    value = ((int)(part1 | part2) ^ _secretKey[62]) + salt;
+                    return value;
+                }
+               case 132:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 27378011 + _secretKey[190];
+                    uint part1 = (uint)value << 18;
+                    uint part2 = (uint)value >> (32 - 18);
+                    value = (int)(part1 | part2);
+                    value ^= 1670059799 ^ salt;
+                    return value;
+                }
+               case 133:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 748866874 ^ salt;
+                    value = value * 171145867 + _secretKey[96];
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 134:
+                {
+                    // AddXorRotateInstruction
+                    value += 102559808 + _secretKey[160];
+                    value ^= -639926836 ^ salt;
+                    uint part1 = (uint)value << 13;
+                    uint part2 = (uint)value >> (32 - 13);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 135:
+                {
+                    // AddXorRotateInstruction
+                    value += -233826926 + _secretKey[56];
+                    value ^= -251392173 ^ salt;
+                    uint part1 = (uint)value << 3;
+                    uint part2 = (uint)value >> (32 - 3);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 136:
+                {
+                    // AddXorRotateInstruction
+                    value += -462241772 + _secretKey[17];
+                    value ^= 1705165576 ^ salt;
+                    uint part1 = (uint)value << 22;
+                    uint part2 = (uint)value >> (32 - 22);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 137:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1145798437 ^ salt;
+                    value += 159282901 + _secretKey[230];
+                    uint part1 = (uint)value << 8;
+                    uint part2 = (uint)value >> (32 - 8);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 138:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[73]) ^ salt) + -523066771;
+                    return value;
+                }
+               case 139:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = ((int)(part1 | part2) ^ _secretKey[12]) + salt;
+                    return value;
+                }
+               case 140:
+                {
+                    // AddXorRotateInstruction
+                    value += -1047448178 + _secretKey[181];
+                    value ^= 1675708322 ^ salt;
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 141:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 1338934737 + _secretKey[17];
+                    uint part1 = (uint)value << 9;
+                    uint part2 = (uint)value >> (32 - 9);
+                    value = (int)(part1 | part2);
+                    value ^= -1483826333 ^ salt;
+                    return value;
+                }
+               case 142:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -647982133 ^ salt;
+                    value = value * -90361249 + _secretKey[78];
+                    uint part1 = (uint)value << 18;
+                    uint part2 = (uint)value >> (32 - 18);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 143:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 464650382 ^ salt;
+                    value += -849731065 + _secretKey[254];
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 144:
+                {
+                    // AddRotateXorInstruction
+                    value += 1677297183 + _secretKey[239];
+                    uint part1 = (uint)value << 9;
+                    uint part2 = (uint)value >> (32 - 9);
+                    value = (int)(part1 | part2);
+                    value ^= 1356448546 ^ salt;
+                    return value;
+                }
+               case 145:
+                {
+                    // AddXorRotateInstruction
+                    value += 1443222741 + _secretKey[62];
+                    value ^= 644178059 ^ salt;
+                    uint part1 = (uint)value << 21;
+                    uint part2 = (uint)value >> (32 - 21);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 146:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[40]) + salt) ^ 1973924485;
+                    return value;
+                }
+               case 147:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[235]) + salt) ^ 1807914790;
+                    return value;
+                }
+               case 148:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1712232369 + _secretKey[6];
+                    value ^= -1102731228 ^ salt;
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 149:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[162]) ^ salt) + -1499050371;
+                    return value;
+                }
+               case 150:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -1018753141 + _secretKey[97];
+                    value ^= -1456822844 ^ salt;
+                    uint part1 = (uint)value << 4;
+                    uint part2 = (uint)value >> (32 - 4);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 151:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = ((int)(part1 | part2) ^ _secretKey[120]) + salt;
+                    return value;
+                }
+               case 152:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -744430264 ^ salt;
+                    value += 408485935 + _secretKey[233];
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 153:
+                {
+                    // AddXorRotateInstruction
+                    value += 1049027020 + _secretKey[100];
+                    value ^= 1885050661 ^ salt;
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 154:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[41]) + salt) ^ -1294014622;
+                    return value;
+                }
+               case 155:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = ((int)(part1 | part2) ^ _secretKey[104]) + salt;
+                    return value;
+                }
+               case 156:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = ((int)(part1 | part2) ^ _secretKey[130]) + salt;
+                    return value;
+                }
+               case 157:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 1408000519 + _secretKey[73];
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = (int)(part1 | part2);
+                    value ^= 619992019 ^ salt;
+                    return value;
+                }
+               case 158:
+                {
+                    // AddXorRotateInstruction
+                    value += -252152508 + _secretKey[66];
+                    value ^= 1468120989 ^ salt;
+                    uint part1 = (uint)value << 9;
+                    uint part2 = (uint)value >> (32 - 9);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 159:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 16;
+                    uint part2 = (uint)value >> (32 - 16);
+                    value = ((int)(part1 | part2) ^ _secretKey[197]) + salt;
+                    return value;
+                }
+               case 160:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1251603571 ^ salt;
+                    value += -1384975515 + _secretKey[243];
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 161:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[147]) + salt) ^ 2119650304;
+                    return value;
+                }
+               case 162:
+                {
+                    // MultipleInstruction
+                    value = value *  -971354891 + _secretKey[72] + salt;
+                    return value;
+                }
+               case 163:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 1289046629 ^ salt;
+                    value = value * 785924711 + _secretKey[31];
+                    uint part1 = (uint)value << 13;
+                    uint part2 = (uint)value >> (32 - 13);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 164:
+                {
+                    // AddXorRotateInstruction
+                    value += 331559119 + _secretKey[18];
+                    value ^= -404059494 ^ salt;
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 165:
+                {
+                    // MultipleInstruction
+                    value = value *  1146609535 + _secretKey[105] + salt;
+                    return value;
+                }
+               case 166:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -1816063043 + _secretKey[229];
+                    value ^= -1433164213 ^ salt;
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 167:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[191]) ^ salt) + 1956974091;
+                    return value;
+                }
+               case 168:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1665780549 + _secretKey[247];
+                    value ^= -68008677 ^ salt;
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 169:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 554975801 + _secretKey[132];
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = (int)(part1 | part2);
+                    value ^= -313531898 ^ salt;
+                    return value;
+                }
+               case 170:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[184]) + salt) ^ 834925129;
+                    return value;
+                }
+               case 171:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 14;
+                    uint part2 = (uint)value >> (32 - 14);
+                    value = ((int)(part1 | part2) ^ _secretKey[115]) + salt;
+                    return value;
+                }
+               case 172:
+                {
+                    // AddRotateXorInstruction
+                    value += 997906443 + _secretKey[243];
+                    uint part1 = (uint)value << 26;
+                    uint part2 = (uint)value >> (32 - 26);
+                    value = (int)(part1 | part2);
+                    value ^= -1401788545 ^ salt;
+                    return value;
+                }
+               case 173:
+                {
+                    // AddRotateXorInstruction
+                    value += 186832329 + _secretKey[8];
+                    uint part1 = (uint)value << 31;
+                    uint part2 = (uint)value >> (32 - 31);
+                    value = (int)(part1 | part2);
+                    value ^= -1175485750 ^ salt;
+                    return value;
+                }
+               case 174:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -649455671 + _secretKey[74];
+                    uint part1 = (uint)value << 1;
+                    uint part2 = (uint)value >> (32 - 1);
+                    value = (int)(part1 | part2);
+                    value ^= -2103037317 ^ salt;
+                    return value;
+                }
+               case 175:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 1144953431 + _secretKey[89];
+                    value ^= 1350937196 ^ salt;
+                    uint part1 = (uint)value << 23;
+                    uint part2 = (uint)value >> (32 - 23);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 176:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1785825664 ^ salt;
+                    value += -1052716098 + _secretKey[162];
+                    uint part1 = (uint)value << 26;
+                    uint part2 = (uint)value >> (32 - 26);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 177:
+                {
+                    // AddXorRotateInstruction
+                    value += -945451956 + _secretKey[92];
+                    value ^= 75174120 ^ salt;
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 178:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 29;
+                    uint part2 = (uint)value >> (32 - 29);
+                    value = ((int)(part1 | part2) ^ _secretKey[12]) + salt;
+                    return value;
+                }
+               case 179:
+                {
+                    // MultipleInstruction
+                    value = value *  -2050363409 + _secretKey[172] + salt;
+                    return value;
+                }
+               case 180:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = ((int)(part1 | part2) ^ _secretKey[166]) + salt;
+                    return value;
+                }
+               case 181:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = ((int)(part1 | part2) ^ _secretKey[117]) + salt;
+                    return value;
+                }
+               case 182:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = ((int)(part1 | part2) ^ _secretKey[69]) + salt;
+                    return value;
+                }
+               case 183:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * -1916361095 + _secretKey[104];
+                    value ^= -1972771864 ^ salt;
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 184:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 708516795 + _secretKey[202];
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = (int)(part1 | part2);
+                    value ^= 1188643642 ^ salt;
+                    return value;
+                }
+               case 185:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 107093855 + _secretKey[54];
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    value ^= 1860230806 ^ salt;
+                    return value;
+                }
+               case 186:
+                {
+                    // AddRotateXorInstruction
+                    value += -937500209 + _secretKey[153];
+                    uint part1 = (uint)value << 23;
+                    uint part2 = (uint)value >> (32 - 23);
+                    value = (int)(part1 | part2);
+                    value ^= 355235163 ^ salt;
+                    return value;
+                }
+               case 187:
+                {
+                    // MultipleXorRotateInstruction
+                    value = value * 70066431 + _secretKey[75];
+                    value ^= -1865215830 ^ salt;
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 188:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -746789978 ^ salt;
+                    value = value * -871154493 + _secretKey[42];
+                    uint part1 = (uint)value << 23;
+                    uint part2 = (uint)value >> (32 - 23);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 189:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -234851980 ^ salt;
+                    value += 1869386530 + _secretKey[235];
+                    uint part1 = (uint)value << 6;
+                    uint part2 = (uint)value >> (32 - 6);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 190:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -2109240241 ^ salt;
+                    value = value * 769765109 + _secretKey[227];
+                    uint part1 = (uint)value << 3;
+                    uint part2 = (uint)value >> (32 - 3);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 191:
+                {
+                    // AddRotateXorInstruction
+                    value += -1837981212 + _secretKey[62];
+                    uint part1 = (uint)value << 23;
+                    uint part2 = (uint)value >> (32 - 23);
+                    value = (int)(part1 | part2);
+                    value ^= 706220635 ^ salt;
+                    return value;
+                }
+               case 192:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -1993565390 ^ salt;
+                    value += 1703364119 + _secretKey[29];
+                    uint part1 = (uint)value << 26;
+                    uint part2 = (uint)value >> (32 - 26);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 193:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -1611050400 ^ salt;
+                    value = value * -1496603227 + _secretKey[199];
+                    uint part1 = (uint)value << 0;
+                    uint part2 = (uint)value >> (32 - 0);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 194:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[45]) ^ salt) + 585179340;
+                    return value;
+                }
+               case 195:
+                {
+                    // AddXorRotateInstruction
+                    value += -248179054 + _secretKey[56];
+                    value ^= 59172435 ^ salt;
+                    uint part1 = (uint)value << 3;
+                    uint part2 = (uint)value >> (32 - 3);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 196:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[17]) + salt) ^ -849517292;
+                    return value;
+                }
+               case 197:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[100]) ^ salt) + 1450241526;
+                    return value;
+                }
+               case 198:
+                {
+                    // MultipleInstruction
+                    value = value *  1603844565 + _secretKey[230] + salt;
+                    return value;
+                }
+               case 199:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 6;
+                    uint part2 = (uint)value >> (32 - 6);
+                    value = ((int)(part1 | part2) ^ _secretKey[109]) + salt;
+                    return value;
+                }
+               case 200:
+                {
+                    // AddXorRotateInstruction
+                    value += 184266602 + _secretKey[27];
+                    value ^= -1382725876 ^ salt;
+                    uint part1 = (uint)value << 23;
+                    uint part2 = (uint)value >> (32 - 23);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 201:
+                {
+                    // AddRotateXorInstruction
+                    value += 1467364533 + _secretKey[162];
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = (int)(part1 | part2);
+                    value ^= 1679205229 ^ salt;
+                    return value;
+                }
+               case 202:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[169]) + salt) ^ 1941059345;
+                    return value;
+                }
+               case 203:
+                {
+                    // MultipleInstruction
+                    value = value *  932866255 + _secretKey[203] + salt;
+                    return value;
+                }
+               case 204:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -591934897 + _secretKey[18];
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    value ^= -2113988722 ^ salt;
+                    return value;
+                }
+               case 205:
+                {
+                    // MultipleInstruction
+                    value = value *  -1033327361 + _secretKey[98] + salt;
+                    return value;
+                }
+               case 206:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -1867950817 ^ salt;
+                    value += -2049571601 + _secretKey[137];
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 207:
+                {
+                    // MultipleInstruction
+                    value = value *  698954709 + _secretKey[62] + salt;
+                    return value;
+                }
+               case 208:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 326002613 ^ salt;
+                    value = value * -2099831661 + _secretKey[133];
+                    uint part1 = (uint)value << 8;
+                    uint part2 = (uint)value >> (32 - 8);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 209:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -84668378 ^ salt;
+                    value = value * -1954935573 + _secretKey[214];
+                    uint part1 = (uint)value << 16;
+                    uint part2 = (uint)value >> (32 - 16);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 210:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 4;
+                    uint part2 = (uint)value >> (32 - 4);
+                    value = ((int)(part1 | part2) ^ _secretKey[199]) + salt;
+                    return value;
+                }
+               case 211:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 29;
+                    uint part2 = (uint)value >> (32 - 29);
+                    value = ((int)(part1 | part2) ^ _secretKey[162]) + salt;
+                    return value;
+                }
+               case 212:
+                {
+                    // AddRotateXorInstruction
+                    value += 136517771 + _secretKey[97];
+                    uint part1 = (uint)value << 4;
+                    uint part2 = (uint)value >> (32 - 4);
+                    value = (int)(part1 | part2);
+                    value ^= 1147312644 ^ salt;
+                    return value;
+                }
+               case 213:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[120]) ^ salt) + -966462700;
+                    return value;
+                }
+               case 214:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 344346696 ^ salt;
+                    value += 65616175 + _secretKey[233];
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 215:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -1300836660 ^ salt;
+                    value = value * 345957477 + _secretKey[37];
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 216:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[41]) + salt) ^ 1860745826;
+                    return value;
+                }
+               case 217:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -1562861686 ^ salt;
+                    value += 1701770344 + _secretKey[100];
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 218:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[7]) ^ salt) + 1666984077;
+                    return value;
+                }
+               case 219:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * 1669884811 + _secretKey[211];
+                    uint part1 = (uint)value << 1;
+                    uint part2 = (uint)value >> (32 - 1);
+                    value = (int)(part1 | part2);
+                    value ^= -1629624764 ^ salt;
+                    return value;
+                }
+               case 220:
+                {
+                    // AddRotateXorInstruction
+                    value += -1215000419 + _secretKey[41];
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = (int)(part1 | part2);
+                    value ^= -782372336 ^ salt;
+                    return value;
+                }
+               case 221:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -994522304 ^ salt;
+                    value = value * 541858163 + _secretKey[101];
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 222:
+                {
+                    // MultipleInstruction
+                    value = value *  851902191 + _secretKey[0] + salt;
+                    return value;
+                }
+               case 223:
+                {
+                    // MultipleInstruction
+                    value = value *  -2121677241 + _secretKey[244] + salt;
+                    return value;
+                }
+               case 224:
+                {
+                    // AddRotateXorInstruction
+                    value += 553086553 + _secretKey[101];
+                    uint part1 = (uint)value << 7;
+                    uint part2 = (uint)value >> (32 - 7);
+                    value = (int)(part1 | part2);
+                    value ^= -1704123105 ^ salt;
+                    return value;
+                }
+               case 225:
+                {
+                    // MultipleInstruction
+                    value = value *  933888693 + _secretKey[207] + salt;
+                    return value;
+                }
+               case 226:
+                {
+                    // AddRotateXorInstruction
+                    value += -428636262 + _secretKey[84];
+                    uint part1 = (uint)value << 25;
+                    uint part2 = (uint)value >> (32 - 25);
+                    value = (int)(part1 | part2);
+                    value ^= 734438527 ^ salt;
+                    return value;
+                }
+               case 227:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -2096789992 ^ salt;
+                    value = value * -1649800003 + _secretKey[229];
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 228:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[11]) + salt) ^ 271019854;
+                    return value;
+                }
+               case 229:
+                {
+                    // AddXorRotateInstruction
+                    value += -709274922 + _secretKey[69];
+                    value ^= 11276535 ^ salt;
+                    uint part1 = (uint)value << 27;
+                    uint part2 = (uint)value >> (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 230:
+                {
+                    // XorInstruction
+                    value = ((value ^ _secretKey[57]) + salt) ^ 859060201;
+                    return value;
+                }
+               case 231:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[6]) ^ salt) + 674799083;
+                    return value;
+                }
+               case 232:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -252536503 + _secretKey[184];
+                    uint part1 = (uint)value << 0;
+                    uint part2 = (uint)value >> (32 - 0);
+                    value = (int)(part1 | part2);
+                    value ^= 1820270446 ^ salt;
+                    return value;
+                }
+               case 233:
+                {
+                    // MultipleRotateXorInstruction
+                    value = value * -1634178615 + _secretKey[11];
+                    uint part1 = (uint)value << 19;
+                    uint part2 = (uint)value >> (32 - 19);
+                    value = (int)(part1 | part2);
+                    value ^= -1819459622 ^ salt;
+                    return value;
+                }
+               case 234:
+                {
+                    // MultipleInstruction
+                    value = value *  901566777 + _secretKey[201] + salt;
+                    return value;
+                }
+               case 235:
+                {
+                    // AddRotateXorInstruction
+                    value += -2017528513 + _secretKey[202];
+                    uint part1 = (uint)value << 25;
+                    uint part2 = (uint)value >> (32 - 25);
+                    value = (int)(part1 | part2);
+                    value ^= -654152503 ^ salt;
+                    return value;
+                }
+               case 236:
+                {
+                    // AddRotateXorInstruction
+                    value += 508339777 + _secretKey[123];
+                    uint part1 = (uint)value << 2;
+                    uint part2 = (uint)value >> (32 - 2);
+                    value = (int)(part1 | part2);
+                    value ^= 61946710 ^ salt;
+                    return value;
+                }
+               case 237:
+                {
+                    // AddXorRotateInstruction
+                    value += 538665836 + _secretKey[55];
+                    value ^= -1821697464 ^ salt;
+                    uint part1 = (uint)value << 0;
+                    uint part2 = (uint)value >> (32 - 0);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 238:
+                {
+                    // XorAddRotateInstruction
+                    value ^= 1670031266 ^ salt;
+                    value += -1435965958 + _secretKey[3];
+                    uint part1 = (uint)value << 12;
+                    uint part2 = (uint)value >> (32 - 12);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 239:
+                {
+                    // XorAddRotateInstruction
+                    value ^= -1069923864 ^ salt;
+                    value += -1908817307 + _secretKey[18];
+                    uint part1 = (uint)value << 29;
+                    uint part2 = (uint)value >> (32 - 29);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 240:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[239]) ^ salt) + 1677484793;
+                    return value;
+                }
+               case 241:
+                {
+                    // BitRotateInstruction
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = ((int)(part1 | part2) ^ _secretKey[52]) + salt;
+                    return value;
+                }
+               case 242:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[199]) ^ salt) + 1086423494;
+                    return value;
+                }
+               case 243:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 868448258 ^ salt;
+                    value = value * 302877883 + _secretKey[69];
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 244:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[232]) ^ salt) + 721139304;
+                    return value;
+                }
+               case 245:
+                {
+                    // AddRotateXorInstruction
+                    value += -1881430695 + _secretKey[186];
+                    uint part1 = (uint)value << 10;
+                    uint part2 = (uint)value >> (32 - 10);
+                    value = (int)(part1 | part2);
+                    value ^= -2131819845 ^ salt;
+                    return value;
+                }
+               case 246:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[94]) ^ salt) + -2136945649;
+                    return value;
+                }
+               case 247:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[150]) ^ salt) + -1852410028;
+                    return value;
+                }
+               case 248:
+                {
+                    // AddInstruction
+                    value = ((value + _secretKey[153]) ^ salt) + -1705358129;
+                    return value;
+                }
+               case 249:
+                {
+                    // AddXorRotateInstruction
+                    value += 1965560923 + _secretKey[128];
+                    value ^= -744150017 ^ salt;
+                    uint part1 = (uint)value << 11;
+                    uint part2 = (uint)value >> (32 - 11);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 250:
+                {
+                    // AddRotateXorInstruction
+                    value += -705968418 + _secretKey[105];
+                    uint part1 = (uint)value << 6;
+                    uint part2 = (uint)value >> (32 - 6);
+                    value = (int)(part1 | part2);
+                    value ^= -2056536125 ^ salt;
+                    return value;
+                }
+               case 251:
+                {
+                    // AddRotateXorInstruction
+                    value += -91784169 + _secretKey[16];
+                    uint part1 = (uint)value << 20;
+                    uint part2 = (uint)value >> (32 - 20);
+                    value = (int)(part1 | part2);
+                    value ^= -535989214 ^ salt;
+                    return value;
+                }
+               case 252:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= 1595666182 ^ salt;
+                    value = value * -1305388497 + _secretKey[79];
+                    uint part1 = (uint)value << 21;
+                    uint part2 = (uint)value >> (32 - 21);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 253:
+                {
+                    // AddXorRotateInstruction
+                    value += -911446269 + _secretKey[128];
+                    value ^= -923072284 ^ salt;
+                    uint part1 = (uint)value << 30;
+                    uint part2 = (uint)value >> (32 - 30);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 254:
+                {
+                    // XorMultipleRotateInstruction
+                    value ^= -1765003429 ^ salt;
+                    value = value * -1220156225 + _secretKey[50];
+                    uint part1 = (uint)value << 23;
+                    uint part2 = (uint)value >> (32 - 23);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 255:
+                {
+                    // AddXorRotateInstruction
+                    value += 1302724410 + _secretKey[139];
+                    value ^= 481719136 ^ salt;
+                    uint part1 = (uint)value << 5;
+                    uint part2 = (uint)value >> (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
 
                 default:
                     throw new System.Exception($"Invalid opCode:{opCode}");
@@ -2256,2221 +2256,2221 @@ namespace Obfuz.EncryptionVM
         {
             switch (opCode)
             {
-            case 0:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 908676522 ^ salt;
-                uint value2 = (uint)value >> 11;
-                uint part1 = (uint)value << (32 - 11);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[255]) * 1275048833;
-                return value;
-            }
-            case 1:
-            {
-                // AddRotateXorInstruction
-                value ^= 315716906 ^ salt;
-                uint value2 = (uint)value >> 3;
-                uint part1 = (uint)value << (32 - 3);
-                value = (int)(value2 | part1);
-                value -= -78930327 + _secretKey[166];
-                return value;
-            }
-            case 2:
-            {
-                // XorInstruction
-                value = ((value ^ 568537104) - salt) ^ _secretKey[116];
-                return value;
-            }
-            case 3:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 15;
-                uint part1 = (uint)value << (32 - 15);
-                value = (int)(value2 | part1);
-                value -= 874713862 + _secretKey[47];
-                value ^= -804936725 ^ salt;
-                return value;
-            }
-            case 4:
-            {
-                // XorInstruction
-                value = ((value ^ 469891299) - salt) ^ _secretKey[3];
-                return value;
-            }
-            case 5:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 27;
-                uint part1 = (uint)value << (32 - 27);
-                value = (int)(value2 | part1);
-                value -= -1196854978 + _secretKey[215];
-                value ^= 322802916 ^ salt;
-                return value;
-            }
-            case 6:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 26;
-                uint part1 = (uint)value << (32 - 26);
-                value = (int)(value2 | part1);
-                value ^= -1234111715 ^ salt;
-                value = (value - _secretKey[23]) * 972734203;
-                return value;
-            }
-            case 7:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[165] - salt) * -1642404703;
-                return value;
-            }
-            case 8:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 13;
-                uint part2 = (uint)value << (32 - 13);
-                value = (int)(part1 | part2);
-                value ^= 527498188 ^ salt;
-                value -= -620885440 + _secretKey[160];
-                return value;
-            }
-            case 9:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[56] - salt) * -376292709;
-                return value;
-            }
-            case 10:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 17;
-                uint part1 = (uint)value << (32 - 17);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[20]) * 1261078029;
-                value ^= -2073969565 ^ salt;
-                return value;
-            }
-            case 11:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[100]);
-                uint part1 = value2 >> 22;
-                uint part2 = value2 << (32 - 22);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 12:
-            {
-                // XorInstruction
-                value = ((value ^ -1988224811) - salt) ^ _secretKey[230];
-                return value;
-            }
-            case 13:
-            {
-                // AddRotateXorInstruction
-                value ^= 982550122 ^ salt;
-                uint value2 = (uint)value >> 9;
-                uint part1 = (uint)value << (32 - 9);
-                value = (int)(value2 | part1);
-                value -= -941349146 + _secretKey[109];
-                return value;
-            }
-            case 14:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -1719139403 ^ salt;
-                uint value2 = (uint)value >> 14;
-                uint part1 = (uint)value << (32 - 14);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[23]) * -141035323;
-                return value;
-            }
-            case 15:
-            {
-                // AddRotateXorInstruction
-                value ^= -600815599 ^ salt;
-                uint value2 = (uint)value >> 17;
-                uint part1 = (uint)value << (32 - 17);
-                value = (int)(value2 | part1);
-                value -= -800495653 + _secretKey[109];
-                return value;
-            }
-            case 16:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[207] - salt) * -2098821045;
-                return value;
-            }
-            case 17:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 20;
-                uint part2 = (uint)value << (32 - 20);
-                value = (int)(part1 | part2);
-                value ^= 145339154 ^ salt;
-                value -= -1933652897 + _secretKey[78];
-                return value;
-            }
-            case 18:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value ^= 1307737186 ^ salt;
-                value = (value - _secretKey[254]) * 2085341623;
-                return value;
-            }
-            case 19:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 81995553 ^ salt;
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[137]) * -1769069297;
-                return value;
-            }
-            case 20:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[139] - salt) * 384770751;
-                return value;
-            }
-            case 21:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 17;
-                uint part2 = (uint)value << (32 - 17);
-                value = (int)(part1 | part2);
-                value ^= -1763086552 ^ salt;
-                value -= -1427225709 + _secretKey[133];
-                return value;
-            }
-            case 22:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 6;
-                uint part1 = (uint)value << (32 - 6);
-                value = (int)(value2 | part1);
-                value ^= 911194544 ^ salt;
-                value = (value - _secretKey[214]) * 902726339;
-                return value;
-            }
-            case 23:
-            {
-                // AddInstruction
-                value = ((value  - 725728711) ^ salt) - _secretKey[92];
-                return value;
-            }
-            case 24:
-            {
-                // XorInstruction
-                value = ((value ^ 460687778) - salt) ^ _secretKey[90];
-                return value;
-            }
-            case 25:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 24;
-                uint part1 = (uint)value << (32 - 24);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[4]) * -334739699;
-                value ^= -1140399263 ^ salt;
-                return value;
-            }
-            case 26:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[130]);
-                uint part1 = value2 >> 24;
-                uint part2 = value2 << (32 - 24);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 27:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value ^= 1608705031 ^ salt;
-                value = (value - _secretKey[233]) * -1991772977;
-                return value;
-            }
-            case 28:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 17;
-                uint part1 = (uint)value << (32 - 17);
-                value = (int)(value2 | part1);
-                value ^= -1366193182 ^ salt;
-                value = (value - _secretKey[37]) * -294579091;
-                return value;
-            }
-            case 29:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 8;
-                uint part1 = (uint)value << (32 - 8);
-                value = (int)(value2 | part1);
-                value ^= 13395082 ^ salt;
-                value = (value - _secretKey[172]) * 1156010009;
-                return value;
-            }
-            case 30:
-            {
-                // AddRotateXorInstruction
-                value ^= -930611193 ^ salt;
-                uint value2 = (uint)value >> 13;
-                uint part1 = (uint)value << (32 - 13);
-                value = (int)(value2 | part1);
-                value -= 829988883 + _secretKey[130];
-                return value;
-            }
-            case 31:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 4;
-                uint part1 = (uint)value << (32 - 4);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[129]) * 1504543323;
-                value ^= -933375861 ^ salt;
-                return value;
-            }
-            case 32:
-            {
-                // AddRotateXorInstruction
-                value ^= 1348044560 ^ salt;
-                uint value2 = (uint)value >> 10;
-                uint part1 = (uint)value << (32 - 10);
-                value = (int)(value2 | part1);
-                value -= 288870813 + _secretKey[41];
-                return value;
-            }
-            case 33:
-            {
-                // XorInstruction
-                value = ((value ^ -1005539776) - salt) ^ _secretKey[115];
-                return value;
-            }
-            case 34:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 0;
-                uint part1 = (uint)value << (32 - 0);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[239]) * 1945324311;
-                value ^= 38927859 ^ salt;
-                return value;
-            }
-            case 35:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[244] - salt) * -826722697;
-                return value;
-            }
-            case 36:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value ^= -1365505945 ^ salt;
-                value = (value - _secretKey[101]) * -1304106775;
-                return value;
-            }
-            case 37:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -1485021030 ^ salt;
-                uint value2 = (uint)value >> 18;
-                uint part1 = (uint)value << (32 - 18);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[207]) * -1503279459;
-                return value;
-            }
-            case 38:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[127]);
-                uint part1 = value2 >> 25;
-                uint part2 = value2 << (32 - 25);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 39:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[188] - salt) * -63725271;
-                return value;
-            }
-            case 40:
-            {
-                // XorInstruction
-                value = ((value ^ -1857925045) - salt) ^ _secretKey[63];
-                return value;
-            }
-            case 41:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[191]);
-                uint part1 = value2 >> 11;
-                uint part2 = value2 << (32 - 11);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 42:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[247]);
-                uint part1 = value2 >> 5;
-                uint part2 = value2 << (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 43:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -2064739452 ^ salt;
-                uint value2 = (uint)value >> 25;
-                uint part1 = (uint)value << (32 - 25);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[233]) * 653635931;
-                return value;
-            }
-            case 44:
-            {
-                // XorInstruction
-                value = ((value ^ 1368017926) - salt) ^ _secretKey[123];
-                return value;
-            }
-            case 45:
-            {
-                // XorInstruction
-                value = ((value ^ 1800071096) - salt) ^ _secretKey[128];
-                return value;
-            }
-            case 46:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[200]);
-                uint part1 = value2 >> 19;
-                uint part2 = value2 << (32 - 19);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 47:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 737906232 ^ salt;
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[218]) * 623722811;
-                return value;
-            }
-            case 48:
-            {
-                // XorInstruction
-                value = ((value ^ -1917869048) - salt) ^ _secretKey[63];
-                return value;
-            }
-            case 49:
-            {
-                // AddInstruction
-                value = ((value  - -1282426343) ^ salt) - _secretKey[201];
-                return value;
-            }
-            case 50:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[123]);
-                uint part1 = value2 >> 1;
-                uint part2 = value2 << (32 - 1);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 51:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[89]);
-                uint part1 = value2 >> 22;
-                uint part2 = value2 << (32 - 22);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 52:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 30;
-                uint part1 = (uint)value << (32 - 30);
-                value = (int)(value2 | part1);
-                value -= -399864504 + _secretKey[128];
-                value ^= 1672784695 ^ salt;
-                return value;
-            }
-            case 53:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 28;
-                uint part1 = (uint)value << (32 - 28);
-                value = (int)(value2 | part1);
-                value ^= 332845644 ^ salt;
-                value = (value - _secretKey[3]) * 2113727027;
-                return value;
-            }
-            case 54:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[18]);
-                uint part1 = value2 >> 5;
-                uint part2 = value2 << (32 - 5);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 55:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 12;
-                uint part1 = (uint)value << (32 - 12);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[239]) * -1536816055;
-                value ^= -1906888436 ^ salt;
-                return value;
-            }
-            case 56:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value ^= 388224710 ^ salt;
-                value = (value - _secretKey[166]) * 476600349;
-                return value;
-            }
-            case 57:
-            {
-                // XorInstruction
-                value = ((value ^ 1468628226) - salt) ^ _secretKey[187];
-                return value;
-            }
-            case 58:
-            {
-                // XorInstruction
-                value = ((value ^ -1283249644) - salt) ^ _secretKey[120];
-                return value;
-            }
-            case 59:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 26;
-                uint part1 = (uint)value << (32 - 26);
-                value = (int)(value2 | part1);
-                value -= -225962838 + _secretKey[89];
-                value ^= 127214056 ^ salt;
-                return value;
-            }
-            case 60:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 30;
-                uint part1 = (uint)value << (32 - 30);
-                value = (int)(value2 | part1);
-                value ^= -1919860977 ^ salt;
-                value = (value - _secretKey[58]) * 1554383219;
-                return value;
-            }
-            case 61:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 15;
-                uint part1 = (uint)value << (32 - 15);
-                value = (int)(value2 | part1);
-                value -= 2033477782 + _secretKey[56];
-                value ^= -235750316 ^ salt;
-                return value;
-            }
-            case 62:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[91] - salt) * 1071692903;
-                return value;
-            }
-            case 63:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[75]);
-                uint part1 = value2 >> 31;
-                uint part2 = value2 << (32 - 31);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 64:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[105]);
-                uint part1 = value2 >> 30;
-                uint part2 = value2 << (32 - 30);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 65:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[42]);
-                uint part1 = value2 >> 3;
-                uint part2 = value2 << (32 - 3);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 66:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 2127722731 ^ salt;
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[116]) * -1719809551;
-                return value;
-            }
-            case 67:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 3;
-                uint part1 = (uint)value << (32 - 3);
-                value = (int)(value2 | part1);
-                value -= 1205332559 + _secretKey[245];
-                value ^= -2093762257 ^ salt;
-                return value;
-            }
-            case 68:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 92356567 ^ salt;
-                uint value2 = (uint)value >> 30;
-                uint part1 = (uint)value << (32 - 30);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[228]) * -183106687;
-                return value;
-            }
-            case 69:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 29;
-                uint part2 = (uint)value << (32 - 29);
-                value = (int)(part1 | part2);
-                value ^= -57416681 ^ salt;
-                value -= -1923884610 + _secretKey[50];
-                return value;
-            }
-            case 70:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[96]);
-                uint part1 = value2 >> 11;
-                uint part2 = value2 << (32 - 11);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 71:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 12;
-                uint part2 = (uint)value << (32 - 12);
-                value = (int)(part1 | part2);
-                value ^= 1358992288 ^ salt;
-                value -= 432176071 + _secretKey[64];
-                return value;
-            }
-            case 72:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[146] - salt) * 1629710353;
-                return value;
-            }
-            case 73:
-            {
-                // AddInstruction
-                value = ((value  - 1130476627) ^ salt) - _secretKey[99];
-                return value;
-            }
-            case 74:
-            {
-                // XorInstruction
-                value = ((value ^ 355214100) - salt) ^ _secretKey[17];
-                return value;
-            }
-            case 75:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 21;
-                uint part1 = (uint)value << (32 - 21);
-                value = (int)(value2 | part1);
-                value ^= 154578981 ^ salt;
-                value = (value - _secretKey[100]) * -429637177;
-                return value;
-            }
-            case 76:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 9;
-                uint part1 = (uint)value << (32 - 9);
-                value = (int)(value2 | part1);
-                value -= -192471066 + _secretKey[109];
-                value ^= -743962136 ^ salt;
-                return value;
-            }
-            case 77:
-            {
-                // AddInstruction
-                value = ((value  - -889577445) ^ salt) - _secretKey[12];
-                return value;
-            }
-            case 78:
-            {
-                // XorInstruction
-                value = ((value ^ 969463438) - salt) ^ _secretKey[181];
-                return value;
-            }
-            case 79:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[109]);
-                uint part1 = value2 >> 27;
-                uint part2 = value2 << (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 80:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 15;
-                uint part1 = (uint)value << (32 - 15);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[99]) * -1153749351;
-                value ^= 984079633 ^ salt;
-                return value;
-            }
-            case 81:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 20;
-                uint part1 = (uint)value << (32 - 20);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[18]) * 433679023;
-                value ^= 948745055 ^ salt;
-                return value;
-            }
-            case 82:
-            {
-                // AddInstruction
-                value = ((value  - 1662910727) ^ salt) - _secretKey[254];
-                return value;
-            }
-            case 83:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[31]);
-                uint part1 = value2 >> 2;
-                uint part2 = value2 << (32 - 2);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 84:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 1551662549 ^ salt;
-                uint value2 = (uint)value >> 1;
-                uint part1 = (uint)value << (32 - 1);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[34]) * 724782777;
-                return value;
-            }
-            case 85:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 5;
-                uint part1 = (uint)value << (32 - 5);
-                value = (int)(value2 | part1);
-                value -= 267393461 + _secretKey[147];
-                value ^= 1557864843 ^ salt;
-                return value;
-            }
-            case 86:
-            {
-                // AddInstruction
-                value = ((value  - -1657934671) ^ salt) - _secretKey[38];
-                return value;
-            }
-            case 87:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 4;
-                uint part1 = (uint)value << (32 - 4);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[6]) * -34618287;
-                value ^= 789036246 ^ salt;
-                return value;
-            }
-            case 88:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[125] - salt) * -1330730251;
-                return value;
-            }
-            case 89:
-            {
-                // AddInstruction
-                value = ((value  - -738927270) ^ salt) - _secretKey[139];
-                return value;
-            }
-            case 90:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -1695052524 ^ salt;
-                uint value2 = (uint)value >> 24;
-                uint part1 = (uint)value << (32 - 24);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[4]) * -563677683;
-                return value;
-            }
-            case 91:
-            {
-                // AddRotateXorInstruction
-                value ^= -1088602135 ^ salt;
-                uint value2 = (uint)value >> 15;
-                uint part1 = (uint)value << (32 - 15);
-                value = (int)(value2 | part1);
-                value -= 2130071938 + _secretKey[72];
-                return value;
-            }
-            case 92:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 5;
-                uint part2 = (uint)value << (32 - 5);
-                value = (int)(part1 | part2);
-                value ^= 311041636 ^ salt;
-                value -= -17182977 + _secretKey[204];
-                return value;
-            }
-            case 93:
-            {
-                // AddInstruction
-                value = ((value  - 978720753) ^ salt) - _secretKey[98];
-                return value;
-            }
-            case 94:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 828416356 ^ salt;
-                uint value2 = (uint)value >> 8;
-                uint part1 = (uint)value << (32 - 8);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[138]) * 1264563749;
-                return value;
-            }
-            case 95:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 9;
-                uint part2 = (uint)value << (32 - 9);
-                value = (int)(part1 | part2);
-                value ^= -656927993 ^ salt;
-                value -= -1347171454 + _secretKey[141];
-                return value;
-            }
-            case 96:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 2;
-                uint part2 = (uint)value << (32 - 2);
-                value = (int)(part1 | part2);
-                value ^= -73467836 ^ salt;
-                value -= 1864276179 + _secretKey[129];
-                return value;
-            }
-            case 97:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 5;
-                uint part2 = (uint)value << (32 - 5);
-                value = (int)(part1 | part2);
-                value ^= -350073840 ^ salt;
-                value -= -37104343 + _secretKey[202];
-                return value;
-            }
-            case 98:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value -= 614808165 + _secretKey[243];
-                value ^= 56730483 ^ salt;
-                return value;
-            }
-            case 99:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 20;
-                uint part1 = (uint)value << (32 - 20);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[71]) * 1880922267;
-                value ^= 1513658112 ^ salt;
-                return value;
-            }
-            case 100:
-            {
-                // AddInstruction
-                value = ((value  - 1727186009) ^ salt) - _secretKey[101];
-                return value;
-            }
-            case 101:
-            {
-                // XorInstruction
-                value = ((value ^ -259909857) - salt) ^ _secretKey[45];
-                return value;
-            }
-            case 102:
-            {
-                // XorInstruction
-                value = ((value ^ -765731377) - salt) ^ _secretKey[18];
-                return value;
-            }
-            case 103:
-            {
-                // AddRotateXorInstruction
-                value ^= -1047109783 ^ salt;
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value -= 1267364948 + _secretKey[57];
-                return value;
-            }
-            case 104:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value ^= -1576256181 ^ salt;
-                value = (value - _secretKey[229]) * -2057190251;
-                return value;
-            }
-            case 105:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[191]);
-                uint part1 = value2 >> 11;
-                uint part2 = value2 << (32 - 11);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 106:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 19;
-                uint part1 = (uint)value << (32 - 19);
-                value = (int)(value2 | part1);
-                value ^= -1114664933 ^ salt;
-                value = (value - _secretKey[247]) * 777886349;
-                return value;
-            }
-            case 107:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 6;
-                uint part1 = (uint)value << (32 - 6);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[235]) * 532366413;
-                value ^= -1832686791 ^ salt;
-                return value;
-            }
-            case 108:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 14;
-                uint part1 = (uint)value << (32 - 14);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[128]) * -1058050167;
-                value ^= -2136461495 ^ salt;
-                return value;
-            }
-            case 109:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 26;
-                uint part1 = (uint)value << (32 - 26);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[243]) * -2068445021;
-                value ^= -806704184 ^ salt;
-                return value;
-            }
-            case 110:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 31;
-                uint part2 = (uint)value << (32 - 31);
-                value = (int)(part1 | part2);
-                value ^= 1358196488 ^ salt;
-                value -= 1855802168 + _secretKey[201];
-                return value;
-            }
-            case 111:
-            {
-                // AddRotateXorInstruction
-                value ^= -278959039 ^ salt;
-                uint value2 = (uint)value >> 10;
-                uint part1 = (uint)value << (32 - 10);
-                value = (int)(value2 | part1);
-                value -= 238539545 + _secretKey[201];
-                return value;
-            }
-            case 112:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[86] - salt) * -2114264565;
-                return value;
-            }
-            case 113:
-            {
-                // XorInstruction
-                value = ((value ^ -1945833108) - salt) ^ _secretKey[55];
-                return value;
-            }
-            case 114:
-            {
-                // AddInstruction
-                value = ((value  - 794495616) ^ salt) - _secretKey[190];
-                return value;
-            }
-            case 115:
-            {
-                // AddInstruction
-                value = ((value  - -128687110) ^ salt) - _secretKey[3];
-                return value;
-            }
-            case 116:
-            {
-                // AddInstruction
-                value = ((value  - -721342116) ^ salt) - _secretKey[232];
-                return value;
-            }
-            case 117:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[125] - salt) * 454338587;
-                return value;
-            }
-            case 118:
-            {
-                // AddRotateXorInstruction
-                value ^= -1219651522 ^ salt;
-                uint value2 = (uint)value >> 12;
-                uint part1 = (uint)value << (32 - 12);
-                value = (int)(value2 | part1);
-                value -= -61142791 + _secretKey[239];
-                return value;
-            }
-            case 119:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 21;
-                uint part1 = (uint)value << (32 - 21);
-                value = (int)(value2 | part1);
-                value ^= -367736633 ^ salt;
-                value = (value - _secretKey[198]) * -1085076713;
-                return value;
-            }
-            case 120:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[69]);
-                uint part1 = value2 >> 27;
-                uint part2 = value2 << (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 121:
-            {
-                // AddRotateXorInstruction
-                value ^= -258425942 ^ salt;
-                uint value2 = (uint)value >> 8;
-                uint part1 = (uint)value << (32 - 8);
-                value = (int)(value2 | part1);
-                value -= -335421576 + _secretKey[104];
-                return value;
-            }
-            case 122:
-            {
-                // XorInstruction
-                value = ((value ^ -385494854) - salt) ^ _secretKey[202];
-                return value;
-            }
-            case 123:
-            {
-                // XorInstruction
-                value = ((value ^ 2029726266) - salt) ^ _secretKey[15];
-                return value;
-            }
-            case 124:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 24;
-                uint part1 = (uint)value << (32 - 24);
-                value = (int)(value2 | part1);
-                value -= -1891130028 + _secretKey[150];
-                value ^= 1595187766 ^ salt;
-                return value;
-            }
-            case 125:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -2024364416 ^ salt;
-                uint value2 = (uint)value >> 27;
-                uint part1 = (uint)value << (32 - 27);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[87]) * -1418334039;
-                return value;
-            }
-            case 126:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[170] - salt) * -1432954013;
-                return value;
-            }
-            case 127:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 10;
-                uint part1 = (uint)value << (32 - 10);
-                value = (int)(value2 | part1);
-                value -= -586406746 + _secretKey[195];
-                value ^= 993487977 ^ salt;
-                return value;
-            }
-            case 128:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 11;
-                uint part1 = (uint)value << (32 - 11);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[34]) * 925856221;
-                value ^= 693463568 ^ salt;
-                return value;
-            }
-            case 129:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[79]);
-                uint part1 = value2 >> 15;
-                uint part2 = value2 << (32 - 15);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 130:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[3] - salt) * -1016560949;
-                return value;
-            }
-            case 131:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[62]);
-                uint part1 = value2 >> 4;
-                uint part2 = value2 << (32 - 4);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 132:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 1670059799 ^ salt;
-                uint value2 = (uint)value >> 18;
-                uint part1 = (uint)value << (32 - 18);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[190]) * -420968749;
-                return value;
-            }
-            case 133:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 5;
-                uint part1 = (uint)value << (32 - 5);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[96]) * 659397923;
-                value ^= 748866874 ^ salt;
-                return value;
-            }
-            case 134:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 13;
-                uint part2 = (uint)value << (32 - 13);
-                value = (int)(part1 | part2);
-                value ^= -639926836 ^ salt;
-                value -= 102559808 + _secretKey[160];
-                return value;
-            }
-            case 135:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 3;
-                uint part2 = (uint)value << (32 - 3);
-                value = (int)(part1 | part2);
-                value ^= -251392173 ^ salt;
-                value -= -233826926 + _secretKey[56];
-                return value;
-            }
-            case 136:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 22;
-                uint part2 = (uint)value << (32 - 22);
-                value = (int)(part1 | part2);
-                value ^= 1705165576 ^ salt;
-                value -= -462241772 + _secretKey[17];
-                return value;
-            }
-            case 137:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 8;
-                uint part1 = (uint)value << (32 - 8);
-                value = (int)(value2 | part1);
-                value -= 159282901 + _secretKey[230];
-                value ^= 1145798437 ^ salt;
-                return value;
-            }
-            case 138:
-            {
-                // AddInstruction
-                value = ((value  - -523066771) ^ salt) - _secretKey[73];
-                return value;
-            }
-            case 139:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[12]);
-                uint part1 = value2 >> 27;
-                uint part2 = value2 << (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 140:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 27;
-                uint part2 = (uint)value << (32 - 27);
-                value = (int)(part1 | part2);
-                value ^= 1675708322 ^ salt;
-                value -= -1047448178 + _secretKey[181];
-                return value;
-            }
-            case 141:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -1483826333 ^ salt;
-                uint value2 = (uint)value >> 9;
-                uint part1 = (uint)value << (32 - 9);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[17]) * -284953807;
-                return value;
-            }
-            case 142:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 18;
-                uint part1 = (uint)value << (32 - 18);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[78]) * -452744801;
-                value ^= -647982133 ^ salt;
-                return value;
-            }
-            case 143:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value -= -849731065 + _secretKey[254];
-                value ^= 464650382 ^ salt;
-                return value;
-            }
-            case 144:
-            {
-                // AddRotateXorInstruction
-                value ^= 1356448546 ^ salt;
-                uint value2 = (uint)value >> 9;
-                uint part1 = (uint)value << (32 - 9);
-                value = (int)(value2 | part1);
-                value -= 1677297183 + _secretKey[239];
-                return value;
-            }
-            case 145:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 21;
-                uint part2 = (uint)value << (32 - 21);
-                value = (int)(part1 | part2);
-                value ^= 644178059 ^ salt;
-                value -= 1443222741 + _secretKey[62];
-                return value;
-            }
-            case 146:
-            {
-                // XorInstruction
-                value = ((value ^ 1973924485) - salt) ^ _secretKey[40];
-                return value;
-            }
-            case 147:
-            {
-                // XorInstruction
-                value = ((value ^ 1807914790) - salt) ^ _secretKey[235];
-                return value;
-            }
-            case 148:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value ^= -1102731228 ^ salt;
-                value = (value - _secretKey[6]) * -1185722031;
-                return value;
-            }
-            case 149:
-            {
-                // AddInstruction
-                value = ((value  - -1499050371) ^ salt) - _secretKey[162];
-                return value;
-            }
-            case 150:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 4;
-                uint part1 = (uint)value << (32 - 4);
-                value = (int)(value2 | part1);
-                value ^= -1456822844 ^ salt;
-                value = (value - _secretKey[97]) * 1559666723;
-                return value;
-            }
-            case 151:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[120]);
-                uint part1 = value2 >> 20;
-                uint part2 = value2 << (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 152:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value -= 408485935 + _secretKey[233];
-                value ^= -744430264 ^ salt;
-                return value;
-            }
-            case 153:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 2;
-                uint part2 = (uint)value << (32 - 2);
-                value = (int)(part1 | part2);
-                value ^= 1885050661 ^ salt;
-                value -= 1049027020 + _secretKey[100];
-                return value;
-            }
-            case 154:
-            {
-                // XorInstruction
-                value = ((value ^ -1294014622) - salt) ^ _secretKey[41];
-                return value;
-            }
-            case 155:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[104]);
-                uint part1 = value2 >> 10;
-                uint part2 = value2 << (32 - 10);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 156:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[130]);
-                uint part1 = value2 >> 19;
-                uint part2 = value2 << (32 - 19);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 157:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 619992019 ^ salt;
-                uint value2 = (uint)value >> 11;
-                uint part1 = (uint)value << (32 - 11);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[73]) * 1531669431;
-                return value;
-            }
-            case 158:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 9;
-                uint part2 = (uint)value << (32 - 9);
-                value = (int)(part1 | part2);
-                value ^= 1468120989 ^ salt;
-                value -= -252152508 + _secretKey[66];
-                return value;
-            }
-            case 159:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[197]);
-                uint part1 = value2 >> 16;
-                uint part2 = value2 << (32 - 16);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 160:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value -= -1384975515 + _secretKey[243];
-                value ^= 1251603571 ^ salt;
-                return value;
-            }
-            case 161:
-            {
-                // XorInstruction
-                value = ((value ^ 2119650304) - salt) ^ _secretKey[147];
-                return value;
-            }
-            case 162:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[72] - salt) * -530383011;
-                return value;
-            }
-            case 163:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 13;
-                uint part1 = (uint)value << (32 - 13);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[31]) * -1640777385;
-                value ^= 1289046629 ^ salt;
-                return value;
-            }
-            case 164:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 20;
-                uint part2 = (uint)value << (32 - 20);
-                value = (int)(part1 | part2);
-                value ^= -404059494 ^ salt;
-                value -= 331559119 + _secretKey[18];
-                return value;
-            }
-            case 165:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[105] - salt) * 396877951;
-                return value;
-            }
-            case 166:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value ^= -1433164213 ^ salt;
-                value = (value - _secretKey[229]) * -636207211;
-                return value;
-            }
-            case 167:
-            {
-                // AddInstruction
-                value = ((value  - 1956974091) ^ salt) - _secretKey[191];
-                return value;
-            }
-            case 168:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 19;
-                uint part1 = (uint)value << (32 - 19);
-                value = (int)(value2 | part1);
-                value ^= -68008677 ^ salt;
-                value = (value - _secretKey[247]) * 1170870157;
-                return value;
-            }
-            case 169:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -313531898 ^ salt;
-                uint value2 = (uint)value >> 11;
-                uint part1 = (uint)value << (32 - 11);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[132]) * 816253961;
-                return value;
-            }
-            case 170:
-            {
-                // XorInstruction
-                value = ((value ^ 834925129) - salt) ^ _secretKey[184];
-                return value;
-            }
-            case 171:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[115]);
-                uint part1 = value2 >> 14;
-                uint part2 = value2 << (32 - 14);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 172:
-            {
-                // AddRotateXorInstruction
-                value ^= -1401788545 ^ salt;
-                uint value2 = (uint)value >> 26;
-                uint part1 = (uint)value << (32 - 26);
-                value = (int)(value2 | part1);
-                value -= 997906443 + _secretKey[243];
-                return value;
-            }
-            case 173:
-            {
-                // AddRotateXorInstruction
-                value ^= -1175485750 ^ salt;
-                uint value2 = (uint)value >> 31;
-                uint part1 = (uint)value << (32 - 31);
-                value = (int)(value2 | part1);
-                value -= 186832329 + _secretKey[8];
-                return value;
-            }
-            case 174:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -2103037317 ^ salt;
-                uint value2 = (uint)value >> 1;
-                uint part1 = (uint)value << (32 - 1);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[74]) * -697716103;
-                return value;
-            }
-            case 175:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 23;
-                uint part1 = (uint)value << (32 - 23);
-                value = (int)(value2 | part1);
-                value ^= 1350937196 ^ salt;
-                value = (value - _secretKey[89]) * -702746265;
-                return value;
-            }
-            case 176:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 26;
-                uint part1 = (uint)value << (32 - 26);
-                value = (int)(value2 | part1);
-                value -= -1052716098 + _secretKey[162];
-                value ^= 1785825664 ^ salt;
-                return value;
-            }
-            case 177:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 5;
-                uint part2 = (uint)value << (32 - 5);
-                value = (int)(part1 | part2);
-                value ^= 75174120 ^ salt;
-                value -= -945451956 + _secretKey[92];
-                return value;
-            }
-            case 178:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[12]);
-                uint part1 = value2 >> 29;
-                uint part2 = value2 << (32 - 29);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 179:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[172] - salt) * 531832591;
-                return value;
-            }
-            case 180:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[166]);
-                uint part1 = value2 >> 20;
-                uint part2 = value2 << (32 - 20);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 181:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[117]);
-                uint part1 = value2 >> 7;
-                uint part2 = value2 << (32 - 7);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 182:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[69]);
-                uint part1 = value2 >> 27;
-                uint part2 = value2 << (32 - 27);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 183:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 10;
-                uint part1 = (uint)value << (32 - 10);
-                value = (int)(value2 | part1);
-                value ^= -1972771864 ^ salt;
-                value = (value - _secretKey[104]) * -499457079;
-                return value;
-            }
-            case 184:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 1188643642 ^ salt;
-                uint value2 = (uint)value >> 27;
-                uint part1 = (uint)value << (32 - 27);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[202]) * 1288663411;
-                return value;
-            }
-            case 185:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 1860230806 ^ salt;
-                uint value2 = (uint)value >> 20;
-                uint part1 = (uint)value << (32 - 20);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[54]) * 905182367;
-                return value;
-            }
-            case 186:
-            {
-                // AddRotateXorInstruction
-                value ^= 355235163 ^ salt;
-                uint value2 = (uint)value >> 23;
-                uint part1 = (uint)value << (32 - 23);
-                value = (int)(value2 | part1);
-                value -= -937500209 + _secretKey[153];
-                return value;
-            }
-            case 187:
-            {
-                // MultipleXorRotateInstruction
-                uint value2 = (uint)value >> 30;
-                uint part1 = (uint)value << (32 - 30);
-                value = (int)(value2 | part1);
-                value ^= -1865215830 ^ salt;
-                value = (value - _secretKey[75]) * -57549057;
-                return value;
-            }
-            case 188:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 23;
-                uint part1 = (uint)value << (32 - 23);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[42]) * -779332629;
-                value ^= -746789978 ^ salt;
-                return value;
-            }
-            case 189:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 6;
-                uint part1 = (uint)value << (32 - 6);
-                value = (int)(value2 | part1);
-                value -= 1869386530 + _secretKey[235];
-                value ^= -234851980 ^ salt;
-                return value;
-            }
-            case 190:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 3;
-                uint part1 = (uint)value << (32 - 3);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[227]) * -1141043875;
-                value ^= -2109240241 ^ salt;
-                return value;
-            }
-            case 191:
-            {
-                // AddRotateXorInstruction
-                value ^= 706220635 ^ salt;
-                uint value2 = (uint)value >> 23;
-                uint part1 = (uint)value << (32 - 23);
-                value = (int)(value2 | part1);
-                value -= -1837981212 + _secretKey[62];
-                return value;
-            }
-            case 192:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 26;
-                uint part1 = (uint)value << (32 - 26);
-                value = (int)(value2 | part1);
-                value -= 1703364119 + _secretKey[29];
-                value ^= -1993565390 ^ salt;
-                return value;
-            }
-            case 193:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 0;
-                uint part1 = (uint)value << (32 - 0);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[199]) * -1252869587;
-                value ^= -1611050400 ^ salt;
-                return value;
-            }
-            case 194:
-            {
-                // AddInstruction
-                value = ((value  - 585179340) ^ salt) - _secretKey[45];
-                return value;
-            }
-            case 195:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 3;
-                uint part2 = (uint)value << (32 - 3);
-                value = (int)(part1 | part2);
-                value ^= 59172435 ^ salt;
-                value -= -248179054 + _secretKey[56];
-                return value;
-            }
-            case 196:
-            {
-                // XorInstruction
-                value = ((value ^ -849517292) - salt) ^ _secretKey[17];
-                return value;
-            }
-            case 197:
-            {
-                // AddInstruction
-                value = ((value  - 1450241526) ^ salt) - _secretKey[100];
-                return value;
-            }
-            case 198:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[230] - salt) * -1807829123;
-                return value;
-            }
-            case 199:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[109]);
-                uint part1 = value2 >> 6;
-                uint part2 = value2 << (32 - 6);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 200:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 23;
-                uint part2 = (uint)value << (32 - 23);
-                value = (int)(part1 | part2);
-                value ^= -1382725876 ^ salt;
-                value -= 184266602 + _secretKey[27];
-                return value;
-            }
-            case 201:
-            {
-                // AddRotateXorInstruction
-                value ^= 1679205229 ^ salt;
-                uint value2 = (uint)value >> 27;
-                uint part1 = (uint)value << (32 - 27);
-                value = (int)(value2 | part1);
-                value -= 1467364533 + _secretKey[162];
-                return value;
-            }
-            case 202:
-            {
-                // XorInstruction
-                value = ((value ^ 1941059345) - salt) ^ _secretKey[169];
-                return value;
-            }
-            case 203:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[203] - salt) * -1839620561;
-                return value;
-            }
-            case 204:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -2113988722 ^ salt;
-                uint value2 = (uint)value >> 20;
-                uint part1 = (uint)value << (32 - 20);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[18]) * -1513157457;
-                return value;
-            }
-            case 205:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[98] - salt) * -1011985665;
-                return value;
-            }
-            case 206:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value -= -2049571601 + _secretKey[137];
-                value ^= -1867950817 ^ salt;
-                return value;
-            }
-            case 207:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[62] - salt) * -535794307;
-                return value;
-            }
-            case 208:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 8;
-                uint part1 = (uint)value << (32 - 8);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[133]) * -2061868645;
-                value ^= 326002613 ^ salt;
-                return value;
-            }
-            case 209:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 16;
-                uint part1 = (uint)value << (32 - 16);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[214]) * -408273981;
-                value ^= -84668378 ^ salt;
-                return value;
-            }
-            case 210:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[199]);
-                uint part1 = value2 >> 4;
-                uint part2 = value2 << (32 - 4);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 211:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[162]);
-                uint part1 = value2 >> 29;
-                uint part2 = value2 << (32 - 29);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 212:
-            {
-                // AddRotateXorInstruction
-                value ^= 1147312644 ^ salt;
-                uint value2 = (uint)value >> 4;
-                uint part1 = (uint)value << (32 - 4);
-                value = (int)(value2 | part1);
-                value -= 136517771 + _secretKey[97];
-                return value;
-            }
-            case 213:
-            {
-                // AddInstruction
-                value = ((value  - -966462700) ^ salt) - _secretKey[120];
-                return value;
-            }
-            case 214:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value -= 65616175 + _secretKey[233];
-                value ^= 344346696 ^ salt;
-                return value;
-            }
-            case 215:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[37]) * -1900597907;
-                value ^= -1300836660 ^ salt;
-                return value;
-            }
-            case 216:
-            {
-                // XorInstruction
-                value = ((value ^ 1860745826) - salt) ^ _secretKey[41];
-                return value;
-            }
-            case 217:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 19;
-                uint part1 = (uint)value << (32 - 19);
-                value = (int)(value2 | part1);
-                value -= 1701770344 + _secretKey[100];
-                value ^= -1562861686 ^ salt;
-                return value;
-            }
-            case 218:
-            {
-                // AddInstruction
-                value = ((value  - 1666984077) ^ salt) - _secretKey[7];
-                return value;
-            }
-            case 219:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -1629624764 ^ salt;
-                uint value2 = (uint)value >> 1;
-                uint part1 = (uint)value << (32 - 1);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[211]) * -1780128733;
-                return value;
-            }
-            case 220:
-            {
-                // AddRotateXorInstruction
-                value ^= -782372336 ^ salt;
-                uint value2 = (uint)value >> 10;
-                uint part1 = (uint)value << (32 - 10);
-                value = (int)(value2 | part1);
-                value -= -1215000419 + _secretKey[41];
-                return value;
-            }
-            case 221:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 19;
-                uint part1 = (uint)value << (32 - 19);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[101]) * 1936372667;
-                value ^= -994522304 ^ salt;
-                return value;
-            }
-            case 222:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[0] - salt) * -1910902769;
-                return value;
-            }
-            case 223:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[244] - salt) * 776864631;
-                return value;
-            }
-            case 224:
-            {
-                // AddRotateXorInstruction
-                value ^= -1704123105 ^ salt;
-                uint value2 = (uint)value >> 7;
-                uint part1 = (uint)value << (32 - 7);
-                value = (int)(value2 | part1);
-                value -= 553086553 + _secretKey[101];
-                return value;
-            }
-            case 225:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[207] - salt) * -1267836003;
-                return value;
-            }
-            case 226:
-            {
-                // AddRotateXorInstruction
-                value ^= 734438527 ^ salt;
-                uint value2 = (uint)value >> 25;
-                uint part1 = (uint)value << (32 - 25);
-                value = (int)(value2 | part1);
-                value -= -428636262 + _secretKey[84];
-                return value;
-            }
-            case 227:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 11;
-                uint part1 = (uint)value << (32 - 11);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[229]) * 931745429;
-                value ^= -2096789992 ^ salt;
-                return value;
-            }
-            case 228:
-            {
-                // XorInstruction
-                value = ((value ^ 271019854) - salt) ^ _secretKey[11];
-                return value;
-            }
-            case 229:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 27;
-                uint part2 = (uint)value << (32 - 27);
-                value = (int)(part1 | part2);
-                value ^= 11276535 ^ salt;
-                value -= -709274922 + _secretKey[69];
-                return value;
-            }
-            case 230:
-            {
-                // XorInstruction
-                value = ((value ^ 859060201) - salt) ^ _secretKey[57];
-                return value;
-            }
-            case 231:
-            {
-                // AddInstruction
-                value = ((value  - 674799083) ^ salt) - _secretKey[6];
-                return value;
-            }
-            case 232:
-            {
-                // MultipleRotateXorInstruction
-                value ^= 1820270446 ^ salt;
-                uint value2 = (uint)value >> 0;
-                uint part1 = (uint)value << (32 - 0);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[184]) * -1930843911;
-                return value;
-            }
-            case 233:
-            {
-                // MultipleRotateXorInstruction
-                value ^= -1819459622 ^ salt;
-                uint value2 = (uint)value >> 19;
-                uint part1 = (uint)value << (32 - 19);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[11]) * -1253703559;
-                return value;
-            }
-            case 234:
-            {
-                // MultipleInstruction
-                value = (value - _secretKey[201] - salt) * 1499647241;
-                return value;
-            }
-            case 235:
-            {
-                // AddRotateXorInstruction
-                value ^= -654152503 ^ salt;
-                uint value2 = (uint)value >> 25;
-                uint part1 = (uint)value << (32 - 25);
-                value = (int)(value2 | part1);
-                value -= -2017528513 + _secretKey[202];
-                return value;
-            }
-            case 236:
-            {
-                // AddRotateXorInstruction
-                value ^= 61946710 ^ salt;
-                uint value2 = (uint)value >> 2;
-                uint part1 = (uint)value << (32 - 2);
-                value = (int)(value2 | part1);
-                value -= 508339777 + _secretKey[123];
-                return value;
-            }
-            case 237:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 0;
-                uint part2 = (uint)value << (32 - 0);
-                value = (int)(part1 | part2);
-                value ^= -1821697464 ^ salt;
-                value -= 538665836 + _secretKey[55];
-                return value;
-            }
-            case 238:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 12;
-                uint part1 = (uint)value << (32 - 12);
-                value = (int)(value2 | part1);
-                value -= -1435965958 + _secretKey[3];
-                value ^= 1670031266 ^ salt;
-                return value;
-            }
-            case 239:
-            {
-                // XorAddRotateInstruction
-                uint value2 = (uint)value >> 29;
-                uint part1 = (uint)value << (32 - 29);
-                value = (int)(value2 | part1);
-                value -= -1908817307 + _secretKey[18];
-                value ^= -1069923864 ^ salt;
-                return value;
-            }
-            case 240:
-            {
-                // AddInstruction
-                value = ((value  - 1677484793) ^ salt) - _secretKey[239];
-                return value;
-            }
-            case 241:
-            {
-                // BitRotateInstruction
-                uint value2 = (uint)((value - salt) ^ _secretKey[52]);
-                uint part1 = value2 >> 30;
-                uint part2 = value2 << (32 - 30);
-                value = (int)(part1 | part2);
-                return value;
-            }
-            case 242:
-            {
-                // AddInstruction
-                value = ((value  - 1086423494) ^ salt) - _secretKey[199];
-                return value;
-            }
-            case 243:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 20;
-                uint part1 = (uint)value << (32 - 20);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[69]) * -1027286925;
-                value ^= 868448258 ^ salt;
-                return value;
-            }
-            case 244:
-            {
-                // AddInstruction
-                value = ((value  - 721139304) ^ salt) - _secretKey[232];
-                return value;
-            }
-            case 245:
-            {
-                // AddRotateXorInstruction
-                value ^= -2131819845 ^ salt;
-                uint value2 = (uint)value >> 10;
-                uint part1 = (uint)value << (32 - 10);
-                value = (int)(value2 | part1);
-                value -= -1881430695 + _secretKey[186];
-                return value;
-            }
-            case 246:
-            {
-                // AddInstruction
-                value = ((value  - -2136945649) ^ salt) - _secretKey[94];
-                return value;
-            }
-            case 247:
-            {
-                // AddInstruction
-                value = ((value  - -1852410028) ^ salt) - _secretKey[150];
-                return value;
-            }
-            case 248:
-            {
-                // AddInstruction
-                value = ((value  - -1705358129) ^ salt) - _secretKey[153];
-                return value;
-            }
-            case 249:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 11;
-                uint part2 = (uint)value << (32 - 11);
-                value = (int)(part1 | part2);
-                value ^= -744150017 ^ salt;
-                value -= 1965560923 + _secretKey[128];
-                return value;
-            }
-            case 250:
-            {
-                // AddRotateXorInstruction
-                value ^= -2056536125 ^ salt;
-                uint value2 = (uint)value >> 6;
-                uint part1 = (uint)value << (32 - 6);
-                value = (int)(value2 | part1);
-                value -= -705968418 + _secretKey[105];
-                return value;
-            }
-            case 251:
-            {
-                // AddRotateXorInstruction
-                value ^= -535989214 ^ salt;
-                uint value2 = (uint)value >> 20;
-                uint part1 = (uint)value << (32 - 20);
-                value = (int)(value2 | part1);
-                value -= -91784169 + _secretKey[16];
-                return value;
-            }
-            case 252:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 21;
-                uint part1 = (uint)value << (32 - 21);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[79]) * -1930941233;
-                value ^= 1595666182 ^ salt;
-                return value;
-            }
-            case 253:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 30;
-                uint part2 = (uint)value << (32 - 30);
-                value = (int)(part1 | part2);
-                value ^= -923072284 ^ salt;
-                value -= -911446269 + _secretKey[128];
-                return value;
-            }
-            case 254:
-            {
-                // XorMultipleRotateInstruction
-                uint value2 = (uint)value >> 23;
-                uint part1 = (uint)value << (32 - 23);
-                value = (int)(value2 | part1);
-                value = (value - _secretKey[50]) * -962098369;
-                value ^= -1765003429 ^ salt;
-                return value;
-            }
-            case 255:
-            {
-                // AddXorRotateInstruction
-                uint part1 = (uint)value >> 5;
-                uint part2 = (uint)value << (32 - 5);
-                value = (int)(part1 | part2);
-                value ^= 481719136 ^ salt;
-                value -= 1302724410 + _secretKey[139];
-                return value;
-            }
+               case 0:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 908676522 ^ salt;
+                    uint value2 = (uint)value >> 11;
+                    uint part1 = (uint)value << (32 - 11);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[255]) * 1275048833;
+                    return value;
+                }
+               case 1:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 315716906 ^ salt;
+                    uint value2 = (uint)value >> 3;
+                    uint part1 = (uint)value << (32 - 3);
+                    value = (int)(value2 | part1);
+                    value -= -78930327 + _secretKey[166];
+                    return value;
+                }
+               case 2:
+                {
+                    // XorInstruction
+                    value = ((value ^ 568537104) - salt) ^ _secretKey[116];
+                    return value;
+                }
+               case 3:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 15;
+                    uint part1 = (uint)value << (32 - 15);
+                    value = (int)(value2 | part1);
+                    value -= 874713862 + _secretKey[47];
+                    value ^= -804936725 ^ salt;
+                    return value;
+                }
+               case 4:
+                {
+                    // XorInstruction
+                    value = ((value ^ 469891299) - salt) ^ _secretKey[3];
+                    return value;
+                }
+               case 5:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 27;
+                    uint part1 = (uint)value << (32 - 27);
+                    value = (int)(value2 | part1);
+                    value -= -1196854978 + _secretKey[215];
+                    value ^= 322802916 ^ salt;
+                    return value;
+                }
+               case 6:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 26;
+                    uint part1 = (uint)value << (32 - 26);
+                    value = (int)(value2 | part1);
+                    value ^= -1234111715 ^ salt;
+                    value = (value - _secretKey[23]) * 972734203;
+                    return value;
+                }
+               case 7:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[165] - salt) * -1642404703;
+                    return value;
+                }
+               case 8:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 13;
+                    uint part2 = (uint)value << (32 - 13);
+                    value = (int)(part1 | part2);
+                    value ^= 527498188 ^ salt;
+                    value -= -620885440 + _secretKey[160];
+                    return value;
+                }
+               case 9:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[56] - salt) * -376292709;
+                    return value;
+                }
+               case 10:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 17;
+                    uint part1 = (uint)value << (32 - 17);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[20]) * 1261078029;
+                    value ^= -2073969565 ^ salt;
+                    return value;
+                }
+               case 11:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[100]);
+                    uint part1 = value2 >> 22;
+                    uint part2 = value2 << (32 - 22);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 12:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1988224811) - salt) ^ _secretKey[230];
+                    return value;
+                }
+               case 13:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 982550122 ^ salt;
+                    uint value2 = (uint)value >> 9;
+                    uint part1 = (uint)value << (32 - 9);
+                    value = (int)(value2 | part1);
+                    value -= -941349146 + _secretKey[109];
+                    return value;
+                }
+               case 14:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -1719139403 ^ salt;
+                    uint value2 = (uint)value >> 14;
+                    uint part1 = (uint)value << (32 - 14);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[23]) * -141035323;
+                    return value;
+                }
+               case 15:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -600815599 ^ salt;
+                    uint value2 = (uint)value >> 17;
+                    uint part1 = (uint)value << (32 - 17);
+                    value = (int)(value2 | part1);
+                    value -= -800495653 + _secretKey[109];
+                    return value;
+                }
+               case 16:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[207] - salt) * -2098821045;
+                    return value;
+                }
+               case 17:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 20;
+                    uint part2 = (uint)value << (32 - 20);
+                    value = (int)(part1 | part2);
+                    value ^= 145339154 ^ salt;
+                    value -= -1933652897 + _secretKey[78];
+                    return value;
+                }
+               case 18:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value ^= 1307737186 ^ salt;
+                    value = (value - _secretKey[254]) * 2085341623;
+                    return value;
+                }
+               case 19:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 81995553 ^ salt;
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[137]) * -1769069297;
+                    return value;
+                }
+               case 20:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[139] - salt) * 384770751;
+                    return value;
+                }
+               case 21:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 17;
+                    uint part2 = (uint)value << (32 - 17);
+                    value = (int)(part1 | part2);
+                    value ^= -1763086552 ^ salt;
+                    value -= -1427225709 + _secretKey[133];
+                    return value;
+                }
+               case 22:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 6;
+                    uint part1 = (uint)value << (32 - 6);
+                    value = (int)(value2 | part1);
+                    value ^= 911194544 ^ salt;
+                    value = (value - _secretKey[214]) * 902726339;
+                    return value;
+                }
+               case 23:
+                {
+                    // AddInstruction
+                    value = ((value  - 725728711) ^ salt) - _secretKey[92];
+                    return value;
+                }
+               case 24:
+                {
+                    // XorInstruction
+                    value = ((value ^ 460687778) - salt) ^ _secretKey[90];
+                    return value;
+                }
+               case 25:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 24;
+                    uint part1 = (uint)value << (32 - 24);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[4]) * -334739699;
+                    value ^= -1140399263 ^ salt;
+                    return value;
+                }
+               case 26:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[130]);
+                    uint part1 = value2 >> 24;
+                    uint part2 = value2 << (32 - 24);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 27:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value ^= 1608705031 ^ salt;
+                    value = (value - _secretKey[233]) * -1991772977;
+                    return value;
+                }
+               case 28:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 17;
+                    uint part1 = (uint)value << (32 - 17);
+                    value = (int)(value2 | part1);
+                    value ^= -1366193182 ^ salt;
+                    value = (value - _secretKey[37]) * -294579091;
+                    return value;
+                }
+               case 29:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 8;
+                    uint part1 = (uint)value << (32 - 8);
+                    value = (int)(value2 | part1);
+                    value ^= 13395082 ^ salt;
+                    value = (value - _secretKey[172]) * 1156010009;
+                    return value;
+                }
+               case 30:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -930611193 ^ salt;
+                    uint value2 = (uint)value >> 13;
+                    uint part1 = (uint)value << (32 - 13);
+                    value = (int)(value2 | part1);
+                    value -= 829988883 + _secretKey[130];
+                    return value;
+                }
+               case 31:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 4;
+                    uint part1 = (uint)value << (32 - 4);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[129]) * 1504543323;
+                    value ^= -933375861 ^ salt;
+                    return value;
+                }
+               case 32:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 1348044560 ^ salt;
+                    uint value2 = (uint)value >> 10;
+                    uint part1 = (uint)value << (32 - 10);
+                    value = (int)(value2 | part1);
+                    value -= 288870813 + _secretKey[41];
+                    return value;
+                }
+               case 33:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1005539776) - salt) ^ _secretKey[115];
+                    return value;
+                }
+               case 34:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 0;
+                    uint part1 = (uint)value << (32 - 0);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[239]) * 1945324311;
+                    value ^= 38927859 ^ salt;
+                    return value;
+                }
+               case 35:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[244] - salt) * -826722697;
+                    return value;
+                }
+               case 36:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value ^= -1365505945 ^ salt;
+                    value = (value - _secretKey[101]) * -1304106775;
+                    return value;
+                }
+               case 37:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -1485021030 ^ salt;
+                    uint value2 = (uint)value >> 18;
+                    uint part1 = (uint)value << (32 - 18);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[207]) * -1503279459;
+                    return value;
+                }
+               case 38:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[127]);
+                    uint part1 = value2 >> 25;
+                    uint part2 = value2 << (32 - 25);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 39:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[188] - salt) * -63725271;
+                    return value;
+                }
+               case 40:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1857925045) - salt) ^ _secretKey[63];
+                    return value;
+                }
+               case 41:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[191]);
+                    uint part1 = value2 >> 11;
+                    uint part2 = value2 << (32 - 11);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 42:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[247]);
+                    uint part1 = value2 >> 5;
+                    uint part2 = value2 << (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 43:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -2064739452 ^ salt;
+                    uint value2 = (uint)value >> 25;
+                    uint part1 = (uint)value << (32 - 25);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[233]) * 653635931;
+                    return value;
+                }
+               case 44:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1368017926) - salt) ^ _secretKey[123];
+                    return value;
+                }
+               case 45:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1800071096) - salt) ^ _secretKey[128];
+                    return value;
+                }
+               case 46:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[200]);
+                    uint part1 = value2 >> 19;
+                    uint part2 = value2 << (32 - 19);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 47:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 737906232 ^ salt;
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[218]) * 623722811;
+                    return value;
+                }
+               case 48:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1917869048) - salt) ^ _secretKey[63];
+                    return value;
+                }
+               case 49:
+                {
+                    // AddInstruction
+                    value = ((value  - -1282426343) ^ salt) - _secretKey[201];
+                    return value;
+                }
+               case 50:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[123]);
+                    uint part1 = value2 >> 1;
+                    uint part2 = value2 << (32 - 1);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 51:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[89]);
+                    uint part1 = value2 >> 22;
+                    uint part2 = value2 << (32 - 22);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 52:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 30;
+                    uint part1 = (uint)value << (32 - 30);
+                    value = (int)(value2 | part1);
+                    value -= -399864504 + _secretKey[128];
+                    value ^= 1672784695 ^ salt;
+                    return value;
+                }
+               case 53:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 28;
+                    uint part1 = (uint)value << (32 - 28);
+                    value = (int)(value2 | part1);
+                    value ^= 332845644 ^ salt;
+                    value = (value - _secretKey[3]) * 2113727027;
+                    return value;
+                }
+               case 54:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[18]);
+                    uint part1 = value2 >> 5;
+                    uint part2 = value2 << (32 - 5);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 55:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 12;
+                    uint part1 = (uint)value << (32 - 12);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[239]) * -1536816055;
+                    value ^= -1906888436 ^ salt;
+                    return value;
+                }
+               case 56:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value ^= 388224710 ^ salt;
+                    value = (value - _secretKey[166]) * 476600349;
+                    return value;
+                }
+               case 57:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1468628226) - salt) ^ _secretKey[187];
+                    return value;
+                }
+               case 58:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1283249644) - salt) ^ _secretKey[120];
+                    return value;
+                }
+               case 59:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 26;
+                    uint part1 = (uint)value << (32 - 26);
+                    value = (int)(value2 | part1);
+                    value -= -225962838 + _secretKey[89];
+                    value ^= 127214056 ^ salt;
+                    return value;
+                }
+               case 60:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 30;
+                    uint part1 = (uint)value << (32 - 30);
+                    value = (int)(value2 | part1);
+                    value ^= -1919860977 ^ salt;
+                    value = (value - _secretKey[58]) * 1554383219;
+                    return value;
+                }
+               case 61:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 15;
+                    uint part1 = (uint)value << (32 - 15);
+                    value = (int)(value2 | part1);
+                    value -= 2033477782 + _secretKey[56];
+                    value ^= -235750316 ^ salt;
+                    return value;
+                }
+               case 62:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[91] - salt) * 1071692903;
+                    return value;
+                }
+               case 63:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[75]);
+                    uint part1 = value2 >> 31;
+                    uint part2 = value2 << (32 - 31);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 64:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[105]);
+                    uint part1 = value2 >> 30;
+                    uint part2 = value2 << (32 - 30);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 65:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[42]);
+                    uint part1 = value2 >> 3;
+                    uint part2 = value2 << (32 - 3);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 66:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 2127722731 ^ salt;
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[116]) * -1719809551;
+                    return value;
+                }
+               case 67:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 3;
+                    uint part1 = (uint)value << (32 - 3);
+                    value = (int)(value2 | part1);
+                    value -= 1205332559 + _secretKey[245];
+                    value ^= -2093762257 ^ salt;
+                    return value;
+                }
+               case 68:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 92356567 ^ salt;
+                    uint value2 = (uint)value >> 30;
+                    uint part1 = (uint)value << (32 - 30);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[228]) * -183106687;
+                    return value;
+                }
+               case 69:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 29;
+                    uint part2 = (uint)value << (32 - 29);
+                    value = (int)(part1 | part2);
+                    value ^= -57416681 ^ salt;
+                    value -= -1923884610 + _secretKey[50];
+                    return value;
+                }
+               case 70:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[96]);
+                    uint part1 = value2 >> 11;
+                    uint part2 = value2 << (32 - 11);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 71:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 12;
+                    uint part2 = (uint)value << (32 - 12);
+                    value = (int)(part1 | part2);
+                    value ^= 1358992288 ^ salt;
+                    value -= 432176071 + _secretKey[64];
+                    return value;
+                }
+               case 72:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[146] - salt) * 1629710353;
+                    return value;
+                }
+               case 73:
+                {
+                    // AddInstruction
+                    value = ((value  - 1130476627) ^ salt) - _secretKey[99];
+                    return value;
+                }
+               case 74:
+                {
+                    // XorInstruction
+                    value = ((value ^ 355214100) - salt) ^ _secretKey[17];
+                    return value;
+                }
+               case 75:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 21;
+                    uint part1 = (uint)value << (32 - 21);
+                    value = (int)(value2 | part1);
+                    value ^= 154578981 ^ salt;
+                    value = (value - _secretKey[100]) * -429637177;
+                    return value;
+                }
+               case 76:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 9;
+                    uint part1 = (uint)value << (32 - 9);
+                    value = (int)(value2 | part1);
+                    value -= -192471066 + _secretKey[109];
+                    value ^= -743962136 ^ salt;
+                    return value;
+                }
+               case 77:
+                {
+                    // AddInstruction
+                    value = ((value  - -889577445) ^ salt) - _secretKey[12];
+                    return value;
+                }
+               case 78:
+                {
+                    // XorInstruction
+                    value = ((value ^ 969463438) - salt) ^ _secretKey[181];
+                    return value;
+                }
+               case 79:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[109]);
+                    uint part1 = value2 >> 27;
+                    uint part2 = value2 << (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 80:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 15;
+                    uint part1 = (uint)value << (32 - 15);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[99]) * -1153749351;
+                    value ^= 984079633 ^ salt;
+                    return value;
+                }
+               case 81:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 20;
+                    uint part1 = (uint)value << (32 - 20);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[18]) * 433679023;
+                    value ^= 948745055 ^ salt;
+                    return value;
+                }
+               case 82:
+                {
+                    // AddInstruction
+                    value = ((value  - 1662910727) ^ salt) - _secretKey[254];
+                    return value;
+                }
+               case 83:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[31]);
+                    uint part1 = value2 >> 2;
+                    uint part2 = value2 << (32 - 2);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 84:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 1551662549 ^ salt;
+                    uint value2 = (uint)value >> 1;
+                    uint part1 = (uint)value << (32 - 1);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[34]) * 724782777;
+                    return value;
+                }
+               case 85:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 5;
+                    uint part1 = (uint)value << (32 - 5);
+                    value = (int)(value2 | part1);
+                    value -= 267393461 + _secretKey[147];
+                    value ^= 1557864843 ^ salt;
+                    return value;
+                }
+               case 86:
+                {
+                    // AddInstruction
+                    value = ((value  - -1657934671) ^ salt) - _secretKey[38];
+                    return value;
+                }
+               case 87:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 4;
+                    uint part1 = (uint)value << (32 - 4);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[6]) * -34618287;
+                    value ^= 789036246 ^ salt;
+                    return value;
+                }
+               case 88:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[125] - salt) * -1330730251;
+                    return value;
+                }
+               case 89:
+                {
+                    // AddInstruction
+                    value = ((value  - -738927270) ^ salt) - _secretKey[139];
+                    return value;
+                }
+               case 90:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -1695052524 ^ salt;
+                    uint value2 = (uint)value >> 24;
+                    uint part1 = (uint)value << (32 - 24);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[4]) * -563677683;
+                    return value;
+                }
+               case 91:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -1088602135 ^ salt;
+                    uint value2 = (uint)value >> 15;
+                    uint part1 = (uint)value << (32 - 15);
+                    value = (int)(value2 | part1);
+                    value -= 2130071938 + _secretKey[72];
+                    return value;
+                }
+               case 92:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 5;
+                    uint part2 = (uint)value << (32 - 5);
+                    value = (int)(part1 | part2);
+                    value ^= 311041636 ^ salt;
+                    value -= -17182977 + _secretKey[204];
+                    return value;
+                }
+               case 93:
+                {
+                    // AddInstruction
+                    value = ((value  - 978720753) ^ salt) - _secretKey[98];
+                    return value;
+                }
+               case 94:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 828416356 ^ salt;
+                    uint value2 = (uint)value >> 8;
+                    uint part1 = (uint)value << (32 - 8);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[138]) * 1264563749;
+                    return value;
+                }
+               case 95:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 9;
+                    uint part2 = (uint)value << (32 - 9);
+                    value = (int)(part1 | part2);
+                    value ^= -656927993 ^ salt;
+                    value -= -1347171454 + _secretKey[141];
+                    return value;
+                }
+               case 96:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 2;
+                    uint part2 = (uint)value << (32 - 2);
+                    value = (int)(part1 | part2);
+                    value ^= -73467836 ^ salt;
+                    value -= 1864276179 + _secretKey[129];
+                    return value;
+                }
+               case 97:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 5;
+                    uint part2 = (uint)value << (32 - 5);
+                    value = (int)(part1 | part2);
+                    value ^= -350073840 ^ salt;
+                    value -= -37104343 + _secretKey[202];
+                    return value;
+                }
+               case 98:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value -= 614808165 + _secretKey[243];
+                    value ^= 56730483 ^ salt;
+                    return value;
+                }
+               case 99:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 20;
+                    uint part1 = (uint)value << (32 - 20);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[71]) * 1880922267;
+                    value ^= 1513658112 ^ salt;
+                    return value;
+                }
+               case 100:
+                {
+                    // AddInstruction
+                    value = ((value  - 1727186009) ^ salt) - _secretKey[101];
+                    return value;
+                }
+               case 101:
+                {
+                    // XorInstruction
+                    value = ((value ^ -259909857) - salt) ^ _secretKey[45];
+                    return value;
+                }
+               case 102:
+                {
+                    // XorInstruction
+                    value = ((value ^ -765731377) - salt) ^ _secretKey[18];
+                    return value;
+                }
+               case 103:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -1047109783 ^ salt;
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value -= 1267364948 + _secretKey[57];
+                    return value;
+                }
+               case 104:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value ^= -1576256181 ^ salt;
+                    value = (value - _secretKey[229]) * -2057190251;
+                    return value;
+                }
+               case 105:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[191]);
+                    uint part1 = value2 >> 11;
+                    uint part2 = value2 << (32 - 11);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 106:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 19;
+                    uint part1 = (uint)value << (32 - 19);
+                    value = (int)(value2 | part1);
+                    value ^= -1114664933 ^ salt;
+                    value = (value - _secretKey[247]) * 777886349;
+                    return value;
+                }
+               case 107:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 6;
+                    uint part1 = (uint)value << (32 - 6);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[235]) * 532366413;
+                    value ^= -1832686791 ^ salt;
+                    return value;
+                }
+               case 108:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 14;
+                    uint part1 = (uint)value << (32 - 14);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[128]) * -1058050167;
+                    value ^= -2136461495 ^ salt;
+                    return value;
+                }
+               case 109:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 26;
+                    uint part1 = (uint)value << (32 - 26);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[243]) * -2068445021;
+                    value ^= -806704184 ^ salt;
+                    return value;
+                }
+               case 110:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 31;
+                    uint part2 = (uint)value << (32 - 31);
+                    value = (int)(part1 | part2);
+                    value ^= 1358196488 ^ salt;
+                    value -= 1855802168 + _secretKey[201];
+                    return value;
+                }
+               case 111:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -278959039 ^ salt;
+                    uint value2 = (uint)value >> 10;
+                    uint part1 = (uint)value << (32 - 10);
+                    value = (int)(value2 | part1);
+                    value -= 238539545 + _secretKey[201];
+                    return value;
+                }
+               case 112:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[86] - salt) * -2114264565;
+                    return value;
+                }
+               case 113:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1945833108) - salt) ^ _secretKey[55];
+                    return value;
+                }
+               case 114:
+                {
+                    // AddInstruction
+                    value = ((value  - 794495616) ^ salt) - _secretKey[190];
+                    return value;
+                }
+               case 115:
+                {
+                    // AddInstruction
+                    value = ((value  - -128687110) ^ salt) - _secretKey[3];
+                    return value;
+                }
+               case 116:
+                {
+                    // AddInstruction
+                    value = ((value  - -721342116) ^ salt) - _secretKey[232];
+                    return value;
+                }
+               case 117:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[125] - salt) * 454338587;
+                    return value;
+                }
+               case 118:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -1219651522 ^ salt;
+                    uint value2 = (uint)value >> 12;
+                    uint part1 = (uint)value << (32 - 12);
+                    value = (int)(value2 | part1);
+                    value -= -61142791 + _secretKey[239];
+                    return value;
+                }
+               case 119:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 21;
+                    uint part1 = (uint)value << (32 - 21);
+                    value = (int)(value2 | part1);
+                    value ^= -367736633 ^ salt;
+                    value = (value - _secretKey[198]) * -1085076713;
+                    return value;
+                }
+               case 120:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[69]);
+                    uint part1 = value2 >> 27;
+                    uint part2 = value2 << (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 121:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -258425942 ^ salt;
+                    uint value2 = (uint)value >> 8;
+                    uint part1 = (uint)value << (32 - 8);
+                    value = (int)(value2 | part1);
+                    value -= -335421576 + _secretKey[104];
+                    return value;
+                }
+               case 122:
+                {
+                    // XorInstruction
+                    value = ((value ^ -385494854) - salt) ^ _secretKey[202];
+                    return value;
+                }
+               case 123:
+                {
+                    // XorInstruction
+                    value = ((value ^ 2029726266) - salt) ^ _secretKey[15];
+                    return value;
+                }
+               case 124:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 24;
+                    uint part1 = (uint)value << (32 - 24);
+                    value = (int)(value2 | part1);
+                    value -= -1891130028 + _secretKey[150];
+                    value ^= 1595187766 ^ salt;
+                    return value;
+                }
+               case 125:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -2024364416 ^ salt;
+                    uint value2 = (uint)value >> 27;
+                    uint part1 = (uint)value << (32 - 27);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[87]) * -1418334039;
+                    return value;
+                }
+               case 126:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[170] - salt) * -1432954013;
+                    return value;
+                }
+               case 127:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 10;
+                    uint part1 = (uint)value << (32 - 10);
+                    value = (int)(value2 | part1);
+                    value -= -586406746 + _secretKey[195];
+                    value ^= 993487977 ^ salt;
+                    return value;
+                }
+               case 128:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 11;
+                    uint part1 = (uint)value << (32 - 11);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[34]) * 925856221;
+                    value ^= 693463568 ^ salt;
+                    return value;
+                }
+               case 129:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[79]);
+                    uint part1 = value2 >> 15;
+                    uint part2 = value2 << (32 - 15);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 130:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[3] - salt) * -1016560949;
+                    return value;
+                }
+               case 131:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[62]);
+                    uint part1 = value2 >> 4;
+                    uint part2 = value2 << (32 - 4);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 132:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 1670059799 ^ salt;
+                    uint value2 = (uint)value >> 18;
+                    uint part1 = (uint)value << (32 - 18);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[190]) * -420968749;
+                    return value;
+                }
+               case 133:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 5;
+                    uint part1 = (uint)value << (32 - 5);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[96]) * 659397923;
+                    value ^= 748866874 ^ salt;
+                    return value;
+                }
+               case 134:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 13;
+                    uint part2 = (uint)value << (32 - 13);
+                    value = (int)(part1 | part2);
+                    value ^= -639926836 ^ salt;
+                    value -= 102559808 + _secretKey[160];
+                    return value;
+                }
+               case 135:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 3;
+                    uint part2 = (uint)value << (32 - 3);
+                    value = (int)(part1 | part2);
+                    value ^= -251392173 ^ salt;
+                    value -= -233826926 + _secretKey[56];
+                    return value;
+                }
+               case 136:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 22;
+                    uint part2 = (uint)value << (32 - 22);
+                    value = (int)(part1 | part2);
+                    value ^= 1705165576 ^ salt;
+                    value -= -462241772 + _secretKey[17];
+                    return value;
+                }
+               case 137:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 8;
+                    uint part1 = (uint)value << (32 - 8);
+                    value = (int)(value2 | part1);
+                    value -= 159282901 + _secretKey[230];
+                    value ^= 1145798437 ^ salt;
+                    return value;
+                }
+               case 138:
+                {
+                    // AddInstruction
+                    value = ((value  - -523066771) ^ salt) - _secretKey[73];
+                    return value;
+                }
+               case 139:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[12]);
+                    uint part1 = value2 >> 27;
+                    uint part2 = value2 << (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 140:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 27;
+                    uint part2 = (uint)value << (32 - 27);
+                    value = (int)(part1 | part2);
+                    value ^= 1675708322 ^ salt;
+                    value -= -1047448178 + _secretKey[181];
+                    return value;
+                }
+               case 141:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -1483826333 ^ salt;
+                    uint value2 = (uint)value >> 9;
+                    uint part1 = (uint)value << (32 - 9);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[17]) * -284953807;
+                    return value;
+                }
+               case 142:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 18;
+                    uint part1 = (uint)value << (32 - 18);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[78]) * -452744801;
+                    value ^= -647982133 ^ salt;
+                    return value;
+                }
+               case 143:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value -= -849731065 + _secretKey[254];
+                    value ^= 464650382 ^ salt;
+                    return value;
+                }
+               case 144:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 1356448546 ^ salt;
+                    uint value2 = (uint)value >> 9;
+                    uint part1 = (uint)value << (32 - 9);
+                    value = (int)(value2 | part1);
+                    value -= 1677297183 + _secretKey[239];
+                    return value;
+                }
+               case 145:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 21;
+                    uint part2 = (uint)value << (32 - 21);
+                    value = (int)(part1 | part2);
+                    value ^= 644178059 ^ salt;
+                    value -= 1443222741 + _secretKey[62];
+                    return value;
+                }
+               case 146:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1973924485) - salt) ^ _secretKey[40];
+                    return value;
+                }
+               case 147:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1807914790) - salt) ^ _secretKey[235];
+                    return value;
+                }
+               case 148:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value ^= -1102731228 ^ salt;
+                    value = (value - _secretKey[6]) * -1185722031;
+                    return value;
+                }
+               case 149:
+                {
+                    // AddInstruction
+                    value = ((value  - -1499050371) ^ salt) - _secretKey[162];
+                    return value;
+                }
+               case 150:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 4;
+                    uint part1 = (uint)value << (32 - 4);
+                    value = (int)(value2 | part1);
+                    value ^= -1456822844 ^ salt;
+                    value = (value - _secretKey[97]) * 1559666723;
+                    return value;
+                }
+               case 151:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[120]);
+                    uint part1 = value2 >> 20;
+                    uint part2 = value2 << (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 152:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value -= 408485935 + _secretKey[233];
+                    value ^= -744430264 ^ salt;
+                    return value;
+                }
+               case 153:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 2;
+                    uint part2 = (uint)value << (32 - 2);
+                    value = (int)(part1 | part2);
+                    value ^= 1885050661 ^ salt;
+                    value -= 1049027020 + _secretKey[100];
+                    return value;
+                }
+               case 154:
+                {
+                    // XorInstruction
+                    value = ((value ^ -1294014622) - salt) ^ _secretKey[41];
+                    return value;
+                }
+               case 155:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[104]);
+                    uint part1 = value2 >> 10;
+                    uint part2 = value2 << (32 - 10);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 156:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[130]);
+                    uint part1 = value2 >> 19;
+                    uint part2 = value2 << (32 - 19);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 157:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 619992019 ^ salt;
+                    uint value2 = (uint)value >> 11;
+                    uint part1 = (uint)value << (32 - 11);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[73]) * 1531669431;
+                    return value;
+                }
+               case 158:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 9;
+                    uint part2 = (uint)value << (32 - 9);
+                    value = (int)(part1 | part2);
+                    value ^= 1468120989 ^ salt;
+                    value -= -252152508 + _secretKey[66];
+                    return value;
+                }
+               case 159:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[197]);
+                    uint part1 = value2 >> 16;
+                    uint part2 = value2 << (32 - 16);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 160:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value -= -1384975515 + _secretKey[243];
+                    value ^= 1251603571 ^ salt;
+                    return value;
+                }
+               case 161:
+                {
+                    // XorInstruction
+                    value = ((value ^ 2119650304) - salt) ^ _secretKey[147];
+                    return value;
+                }
+               case 162:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[72] - salt) * -530383011;
+                    return value;
+                }
+               case 163:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 13;
+                    uint part1 = (uint)value << (32 - 13);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[31]) * -1640777385;
+                    value ^= 1289046629 ^ salt;
+                    return value;
+                }
+               case 164:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 20;
+                    uint part2 = (uint)value << (32 - 20);
+                    value = (int)(part1 | part2);
+                    value ^= -404059494 ^ salt;
+                    value -= 331559119 + _secretKey[18];
+                    return value;
+                }
+               case 165:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[105] - salt) * 396877951;
+                    return value;
+                }
+               case 166:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value ^= -1433164213 ^ salt;
+                    value = (value - _secretKey[229]) * -636207211;
+                    return value;
+                }
+               case 167:
+                {
+                    // AddInstruction
+                    value = ((value  - 1956974091) ^ salt) - _secretKey[191];
+                    return value;
+                }
+               case 168:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 19;
+                    uint part1 = (uint)value << (32 - 19);
+                    value = (int)(value2 | part1);
+                    value ^= -68008677 ^ salt;
+                    value = (value - _secretKey[247]) * 1170870157;
+                    return value;
+                }
+               case 169:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -313531898 ^ salt;
+                    uint value2 = (uint)value >> 11;
+                    uint part1 = (uint)value << (32 - 11);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[132]) * 816253961;
+                    return value;
+                }
+               case 170:
+                {
+                    // XorInstruction
+                    value = ((value ^ 834925129) - salt) ^ _secretKey[184];
+                    return value;
+                }
+               case 171:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[115]);
+                    uint part1 = value2 >> 14;
+                    uint part2 = value2 << (32 - 14);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 172:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -1401788545 ^ salt;
+                    uint value2 = (uint)value >> 26;
+                    uint part1 = (uint)value << (32 - 26);
+                    value = (int)(value2 | part1);
+                    value -= 997906443 + _secretKey[243];
+                    return value;
+                }
+               case 173:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -1175485750 ^ salt;
+                    uint value2 = (uint)value >> 31;
+                    uint part1 = (uint)value << (32 - 31);
+                    value = (int)(value2 | part1);
+                    value -= 186832329 + _secretKey[8];
+                    return value;
+                }
+               case 174:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -2103037317 ^ salt;
+                    uint value2 = (uint)value >> 1;
+                    uint part1 = (uint)value << (32 - 1);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[74]) * -697716103;
+                    return value;
+                }
+               case 175:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 23;
+                    uint part1 = (uint)value << (32 - 23);
+                    value = (int)(value2 | part1);
+                    value ^= 1350937196 ^ salt;
+                    value = (value - _secretKey[89]) * -702746265;
+                    return value;
+                }
+               case 176:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 26;
+                    uint part1 = (uint)value << (32 - 26);
+                    value = (int)(value2 | part1);
+                    value -= -1052716098 + _secretKey[162];
+                    value ^= 1785825664 ^ salt;
+                    return value;
+                }
+               case 177:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 5;
+                    uint part2 = (uint)value << (32 - 5);
+                    value = (int)(part1 | part2);
+                    value ^= 75174120 ^ salt;
+                    value -= -945451956 + _secretKey[92];
+                    return value;
+                }
+               case 178:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[12]);
+                    uint part1 = value2 >> 29;
+                    uint part2 = value2 << (32 - 29);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 179:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[172] - salt) * 531832591;
+                    return value;
+                }
+               case 180:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[166]);
+                    uint part1 = value2 >> 20;
+                    uint part2 = value2 << (32 - 20);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 181:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[117]);
+                    uint part1 = value2 >> 7;
+                    uint part2 = value2 << (32 - 7);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 182:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[69]);
+                    uint part1 = value2 >> 27;
+                    uint part2 = value2 << (32 - 27);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 183:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 10;
+                    uint part1 = (uint)value << (32 - 10);
+                    value = (int)(value2 | part1);
+                    value ^= -1972771864 ^ salt;
+                    value = (value - _secretKey[104]) * -499457079;
+                    return value;
+                }
+               case 184:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 1188643642 ^ salt;
+                    uint value2 = (uint)value >> 27;
+                    uint part1 = (uint)value << (32 - 27);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[202]) * 1288663411;
+                    return value;
+                }
+               case 185:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 1860230806 ^ salt;
+                    uint value2 = (uint)value >> 20;
+                    uint part1 = (uint)value << (32 - 20);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[54]) * 905182367;
+                    return value;
+                }
+               case 186:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 355235163 ^ salt;
+                    uint value2 = (uint)value >> 23;
+                    uint part1 = (uint)value << (32 - 23);
+                    value = (int)(value2 | part1);
+                    value -= -937500209 + _secretKey[153];
+                    return value;
+                }
+               case 187:
+                {
+                    // MultipleXorRotateInstruction
+                    uint value2 = (uint)value >> 30;
+                    uint part1 = (uint)value << (32 - 30);
+                    value = (int)(value2 | part1);
+                    value ^= -1865215830 ^ salt;
+                    value = (value - _secretKey[75]) * -57549057;
+                    return value;
+                }
+               case 188:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 23;
+                    uint part1 = (uint)value << (32 - 23);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[42]) * -779332629;
+                    value ^= -746789978 ^ salt;
+                    return value;
+                }
+               case 189:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 6;
+                    uint part1 = (uint)value << (32 - 6);
+                    value = (int)(value2 | part1);
+                    value -= 1869386530 + _secretKey[235];
+                    value ^= -234851980 ^ salt;
+                    return value;
+                }
+               case 190:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 3;
+                    uint part1 = (uint)value << (32 - 3);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[227]) * -1141043875;
+                    value ^= -2109240241 ^ salt;
+                    return value;
+                }
+               case 191:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 706220635 ^ salt;
+                    uint value2 = (uint)value >> 23;
+                    uint part1 = (uint)value << (32 - 23);
+                    value = (int)(value2 | part1);
+                    value -= -1837981212 + _secretKey[62];
+                    return value;
+                }
+               case 192:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 26;
+                    uint part1 = (uint)value << (32 - 26);
+                    value = (int)(value2 | part1);
+                    value -= 1703364119 + _secretKey[29];
+                    value ^= -1993565390 ^ salt;
+                    return value;
+                }
+               case 193:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 0;
+                    uint part1 = (uint)value << (32 - 0);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[199]) * -1252869587;
+                    value ^= -1611050400 ^ salt;
+                    return value;
+                }
+               case 194:
+                {
+                    // AddInstruction
+                    value = ((value  - 585179340) ^ salt) - _secretKey[45];
+                    return value;
+                }
+               case 195:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 3;
+                    uint part2 = (uint)value << (32 - 3);
+                    value = (int)(part1 | part2);
+                    value ^= 59172435 ^ salt;
+                    value -= -248179054 + _secretKey[56];
+                    return value;
+                }
+               case 196:
+                {
+                    // XorInstruction
+                    value = ((value ^ -849517292) - salt) ^ _secretKey[17];
+                    return value;
+                }
+               case 197:
+                {
+                    // AddInstruction
+                    value = ((value  - 1450241526) ^ salt) - _secretKey[100];
+                    return value;
+                }
+               case 198:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[230] - salt) * -1807829123;
+                    return value;
+                }
+               case 199:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[109]);
+                    uint part1 = value2 >> 6;
+                    uint part2 = value2 << (32 - 6);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 200:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 23;
+                    uint part2 = (uint)value << (32 - 23);
+                    value = (int)(part1 | part2);
+                    value ^= -1382725876 ^ salt;
+                    value -= 184266602 + _secretKey[27];
+                    return value;
+                }
+               case 201:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 1679205229 ^ salt;
+                    uint value2 = (uint)value >> 27;
+                    uint part1 = (uint)value << (32 - 27);
+                    value = (int)(value2 | part1);
+                    value -= 1467364533 + _secretKey[162];
+                    return value;
+                }
+               case 202:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1941059345) - salt) ^ _secretKey[169];
+                    return value;
+                }
+               case 203:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[203] - salt) * -1839620561;
+                    return value;
+                }
+               case 204:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -2113988722 ^ salt;
+                    uint value2 = (uint)value >> 20;
+                    uint part1 = (uint)value << (32 - 20);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[18]) * -1513157457;
+                    return value;
+                }
+               case 205:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[98] - salt) * -1011985665;
+                    return value;
+                }
+               case 206:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value -= -2049571601 + _secretKey[137];
+                    value ^= -1867950817 ^ salt;
+                    return value;
+                }
+               case 207:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[62] - salt) * -535794307;
+                    return value;
+                }
+               case 208:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 8;
+                    uint part1 = (uint)value << (32 - 8);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[133]) * -2061868645;
+                    value ^= 326002613 ^ salt;
+                    return value;
+                }
+               case 209:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 16;
+                    uint part1 = (uint)value << (32 - 16);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[214]) * -408273981;
+                    value ^= -84668378 ^ salt;
+                    return value;
+                }
+               case 210:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[199]);
+                    uint part1 = value2 >> 4;
+                    uint part2 = value2 << (32 - 4);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 211:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[162]);
+                    uint part1 = value2 >> 29;
+                    uint part2 = value2 << (32 - 29);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 212:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 1147312644 ^ salt;
+                    uint value2 = (uint)value >> 4;
+                    uint part1 = (uint)value << (32 - 4);
+                    value = (int)(value2 | part1);
+                    value -= 136517771 + _secretKey[97];
+                    return value;
+                }
+               case 213:
+                {
+                    // AddInstruction
+                    value = ((value  - -966462700) ^ salt) - _secretKey[120];
+                    return value;
+                }
+               case 214:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value -= 65616175 + _secretKey[233];
+                    value ^= 344346696 ^ salt;
+                    return value;
+                }
+               case 215:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[37]) * -1900597907;
+                    value ^= -1300836660 ^ salt;
+                    return value;
+                }
+               case 216:
+                {
+                    // XorInstruction
+                    value = ((value ^ 1860745826) - salt) ^ _secretKey[41];
+                    return value;
+                }
+               case 217:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 19;
+                    uint part1 = (uint)value << (32 - 19);
+                    value = (int)(value2 | part1);
+                    value -= 1701770344 + _secretKey[100];
+                    value ^= -1562861686 ^ salt;
+                    return value;
+                }
+               case 218:
+                {
+                    // AddInstruction
+                    value = ((value  - 1666984077) ^ salt) - _secretKey[7];
+                    return value;
+                }
+               case 219:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -1629624764 ^ salt;
+                    uint value2 = (uint)value >> 1;
+                    uint part1 = (uint)value << (32 - 1);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[211]) * -1780128733;
+                    return value;
+                }
+               case 220:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -782372336 ^ salt;
+                    uint value2 = (uint)value >> 10;
+                    uint part1 = (uint)value << (32 - 10);
+                    value = (int)(value2 | part1);
+                    value -= -1215000419 + _secretKey[41];
+                    return value;
+                }
+               case 221:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 19;
+                    uint part1 = (uint)value << (32 - 19);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[101]) * 1936372667;
+                    value ^= -994522304 ^ salt;
+                    return value;
+                }
+               case 222:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[0] - salt) * -1910902769;
+                    return value;
+                }
+               case 223:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[244] - salt) * 776864631;
+                    return value;
+                }
+               case 224:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -1704123105 ^ salt;
+                    uint value2 = (uint)value >> 7;
+                    uint part1 = (uint)value << (32 - 7);
+                    value = (int)(value2 | part1);
+                    value -= 553086553 + _secretKey[101];
+                    return value;
+                }
+               case 225:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[207] - salt) * -1267836003;
+                    return value;
+                }
+               case 226:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 734438527 ^ salt;
+                    uint value2 = (uint)value >> 25;
+                    uint part1 = (uint)value << (32 - 25);
+                    value = (int)(value2 | part1);
+                    value -= -428636262 + _secretKey[84];
+                    return value;
+                }
+               case 227:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 11;
+                    uint part1 = (uint)value << (32 - 11);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[229]) * 931745429;
+                    value ^= -2096789992 ^ salt;
+                    return value;
+                }
+               case 228:
+                {
+                    // XorInstruction
+                    value = ((value ^ 271019854) - salt) ^ _secretKey[11];
+                    return value;
+                }
+               case 229:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 27;
+                    uint part2 = (uint)value << (32 - 27);
+                    value = (int)(part1 | part2);
+                    value ^= 11276535 ^ salt;
+                    value -= -709274922 + _secretKey[69];
+                    return value;
+                }
+               case 230:
+                {
+                    // XorInstruction
+                    value = ((value ^ 859060201) - salt) ^ _secretKey[57];
+                    return value;
+                }
+               case 231:
+                {
+                    // AddInstruction
+                    value = ((value  - 674799083) ^ salt) - _secretKey[6];
+                    return value;
+                }
+               case 232:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= 1820270446 ^ salt;
+                    uint value2 = (uint)value >> 0;
+                    uint part1 = (uint)value << (32 - 0);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[184]) * -1930843911;
+                    return value;
+                }
+               case 233:
+                {
+                    // MultipleRotateXorInstruction
+                    value ^= -1819459622 ^ salt;
+                    uint value2 = (uint)value >> 19;
+                    uint part1 = (uint)value << (32 - 19);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[11]) * -1253703559;
+                    return value;
+                }
+               case 234:
+                {
+                    // MultipleInstruction
+                    value = (value - _secretKey[201] - salt) * 1499647241;
+                    return value;
+                }
+               case 235:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -654152503 ^ salt;
+                    uint value2 = (uint)value >> 25;
+                    uint part1 = (uint)value << (32 - 25);
+                    value = (int)(value2 | part1);
+                    value -= -2017528513 + _secretKey[202];
+                    return value;
+                }
+               case 236:
+                {
+                    // AddRotateXorInstruction
+                    value ^= 61946710 ^ salt;
+                    uint value2 = (uint)value >> 2;
+                    uint part1 = (uint)value << (32 - 2);
+                    value = (int)(value2 | part1);
+                    value -= 508339777 + _secretKey[123];
+                    return value;
+                }
+               case 237:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 0;
+                    uint part2 = (uint)value << (32 - 0);
+                    value = (int)(part1 | part2);
+                    value ^= -1821697464 ^ salt;
+                    value -= 538665836 + _secretKey[55];
+                    return value;
+                }
+               case 238:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 12;
+                    uint part1 = (uint)value << (32 - 12);
+                    value = (int)(value2 | part1);
+                    value -= -1435965958 + _secretKey[3];
+                    value ^= 1670031266 ^ salt;
+                    return value;
+                }
+               case 239:
+                {
+                    // XorAddRotateInstruction
+                    uint value2 = (uint)value >> 29;
+                    uint part1 = (uint)value << (32 - 29);
+                    value = (int)(value2 | part1);
+                    value -= -1908817307 + _secretKey[18];
+                    value ^= -1069923864 ^ salt;
+                    return value;
+                }
+               case 240:
+                {
+                    // AddInstruction
+                    value = ((value  - 1677484793) ^ salt) - _secretKey[239];
+                    return value;
+                }
+               case 241:
+                {
+                    // BitRotateInstruction
+                    uint value2 = (uint)((value - salt) ^ _secretKey[52]);
+                    uint part1 = value2 >> 30;
+                    uint part2 = value2 << (32 - 30);
+                    value = (int)(part1 | part2);
+                    return value;
+                }
+               case 242:
+                {
+                    // AddInstruction
+                    value = ((value  - 1086423494) ^ salt) - _secretKey[199];
+                    return value;
+                }
+               case 243:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 20;
+                    uint part1 = (uint)value << (32 - 20);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[69]) * -1027286925;
+                    value ^= 868448258 ^ salt;
+                    return value;
+                }
+               case 244:
+                {
+                    // AddInstruction
+                    value = ((value  - 721139304) ^ salt) - _secretKey[232];
+                    return value;
+                }
+               case 245:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -2131819845 ^ salt;
+                    uint value2 = (uint)value >> 10;
+                    uint part1 = (uint)value << (32 - 10);
+                    value = (int)(value2 | part1);
+                    value -= -1881430695 + _secretKey[186];
+                    return value;
+                }
+               case 246:
+                {
+                    // AddInstruction
+                    value = ((value  - -2136945649) ^ salt) - _secretKey[94];
+                    return value;
+                }
+               case 247:
+                {
+                    // AddInstruction
+                    value = ((value  - -1852410028) ^ salt) - _secretKey[150];
+                    return value;
+                }
+               case 248:
+                {
+                    // AddInstruction
+                    value = ((value  - -1705358129) ^ salt) - _secretKey[153];
+                    return value;
+                }
+               case 249:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 11;
+                    uint part2 = (uint)value << (32 - 11);
+                    value = (int)(part1 | part2);
+                    value ^= -744150017 ^ salt;
+                    value -= 1965560923 + _secretKey[128];
+                    return value;
+                }
+               case 250:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -2056536125 ^ salt;
+                    uint value2 = (uint)value >> 6;
+                    uint part1 = (uint)value << (32 - 6);
+                    value = (int)(value2 | part1);
+                    value -= -705968418 + _secretKey[105];
+                    return value;
+                }
+               case 251:
+                {
+                    // AddRotateXorInstruction
+                    value ^= -535989214 ^ salt;
+                    uint value2 = (uint)value >> 20;
+                    uint part1 = (uint)value << (32 - 20);
+                    value = (int)(value2 | part1);
+                    value -= -91784169 + _secretKey[16];
+                    return value;
+                }
+               case 252:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 21;
+                    uint part1 = (uint)value << (32 - 21);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[79]) * -1930941233;
+                    value ^= 1595666182 ^ salt;
+                    return value;
+                }
+               case 253:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 30;
+                    uint part2 = (uint)value << (32 - 30);
+                    value = (int)(part1 | part2);
+                    value ^= -923072284 ^ salt;
+                    value -= -911446269 + _secretKey[128];
+                    return value;
+                }
+               case 254:
+                {
+                    // XorMultipleRotateInstruction
+                    uint value2 = (uint)value >> 23;
+                    uint part1 = (uint)value << (32 - 23);
+                    value = (int)(value2 | part1);
+                    value = (value - _secretKey[50]) * -962098369;
+                    value ^= -1765003429 ^ salt;
+                    return value;
+                }
+               case 255:
+                {
+                    // AddXorRotateInstruction
+                    uint part1 = (uint)value >> 5;
+                    uint part2 = (uint)value << (32 - 5);
+                    value = (int)(part1 | part2);
+                    value ^= 481719136 ^ salt;
+                    value -= 1302724410 + _secretKey[139];
+                    return value;
+                }
 
                 default:
                     throw new System.Exception($"Invalid opCode:{opCode}");

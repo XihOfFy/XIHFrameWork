@@ -34,9 +34,9 @@
       <field signature="int kOpCodeMask" newName="$b" />
       <field signature="int[] _secretKey" newName="$B" />
       <property signature="int OpCodeCount" newName="$E" />
-      <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::get_OpCodeCount([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine)" newName="$g" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:get_OpCodeCount()" newStackTraceSignature="$a.$c:$g()" />
-      <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::Encrypt([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine, int, int, int)" newName="$G" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$a.$c:$G(Int32, Int32, Int32)" />
-      <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::Decrypt([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine, int, int, int)" newName="$h" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$a.$c:$h(Int32, Int32, Int32)" />
+      <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::get_OpCodeCount([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine)" newName="$d" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:get_OpCodeCount()" newStackTraceSignature="$a.$c:$d()" />
+      <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::Encrypt([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine, int, int, int)" newName="$D" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$a.$c:$D(Int32, Int32, Int32)" />
+      <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::Decrypt([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine, int, int, int)" newName="$e" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$a.$c:$e(Int32, Int32, Int32)" />
       <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::ExecuteEncrypt([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine, int, int, int)" newName="$c" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:ExecuteEncrypt(Int32, Int32, Int32)" newStackTraceSignature="$a.$c:$c(Int32, Int32, Int32)" />
       <method signature="int Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine::ExecuteDecrypt([Aot]Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine, int, int, int)" newName="$C" oldStackTraceSignature="Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine:ExecuteDecrypt(Int32, Int32, Int32)" newStackTraceSignature="$a.$c:$C(Int32, Int32, Int32)" />
     </type>
@@ -75,8 +75,8 @@
       <method signature="int Aot.AotMgr/DecryptionServices/&lt;&gt;c::&lt;LoadAssetBundleAsync&gt;b__1_0([Aot]Aot.AotMgr/DecryptionServices/&lt;&gt;c, char)" newName="$c" oldStackTraceSignature="Aot.&lt;&gt;c:&lt;LoadAssetBundleAsync&gt;b__1_0(Char)" newStackTraceSignature="Aot.&lt;&gt;c:$c(Char)" />
     </type>
     <type fullName="Aot.AotMgr/RemoteServices" newFullName="Aot.AotMgr/$e" status="Renamed">
-      <method signature="string Aot.AotMgr/RemoteServices::YooAsset.IRemoteServices.GetRemoteMainURL([Aot]Aot.AotMgr/RemoteServices, string)" newName="$b" oldStackTraceSignature="Aot.RemoteServices:YooAsset.IRemoteServices.GetRemoteMainURL(String)" newStackTraceSignature="Aot.$e:$b(String)" />
-      <method signature="string Aot.AotMgr/RemoteServices::YooAsset.IRemoteServices.GetRemoteFallbackURL([Aot]Aot.AotMgr/RemoteServices, string)" newName="$B" oldStackTraceSignature="Aot.RemoteServices:YooAsset.IRemoteServices.GetRemoteFallbackURL(String)" newStackTraceSignature="Aot.$e:$B(String)" />
+      <method signature="string Aot.AotMgr/RemoteServices::YooAsset.IRemoteServices.GetRemoteMainURL([Aot]Aot.AotMgr/RemoteServices, string)" newName="$a" oldStackTraceSignature="Aot.RemoteServices:YooAsset.IRemoteServices.GetRemoteMainURL(String)" newStackTraceSignature="Aot.$e:$a(String)" />
+      <method signature="string Aot.AotMgr/RemoteServices::YooAsset.IRemoteServices.GetRemoteFallbackURL([Aot]Aot.AotMgr/RemoteServices, string)" newName="$A" oldStackTraceSignature="Aot.RemoteServices:YooAsset.IRemoteServices.GetRemoteFallbackURL(String)" newStackTraceSignature="Aot.$e:$A(String)" />
     </type>
     <type fullName="Aot.AotMgr/&lt;DownloadAot2HotRes&gt;d__18" newFullName="Aot.AotMgr/$E" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
@@ -283,10 +283,10 @@
       <field signature="[YooAsset]YooAsset.ResourceDownloaderOperation &lt;downloader&gt;5__2" newName="$B" />
       <property signature="object System.Collections.Generic.IEnumerator&lt;System.Object&gt;.Current" newName="$e" />
       <property signature="object System.Collections.IEnumerator.Current" newName="$E" />
-      <method signature="void Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.IDisposable.Dispose([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$f" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.IDisposable.Dispose()" newStackTraceSignature="Aot2Hot.$a:$f()" />
-      <method signature="object Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$F" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current()" newStackTraceSignature="Aot2Hot.$a:$F()" />
-      <method signature="void Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.Collections.IEnumerator.Reset([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$g" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.Collections.IEnumerator.Reset()" newStackTraceSignature="Aot2Hot.$a:$g()" />
-      <method signature="object Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.Collections.IEnumerator.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$G" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.Collections.IEnumerator.get_Current()" newStackTraceSignature="Aot2Hot.$a:$G()" />
+      <method signature="void Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.IDisposable.Dispose([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$c" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.IDisposable.Dispose()" newStackTraceSignature="Aot2Hot.$a:$c()" />
+      <method signature="object Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$C" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current()" newStackTraceSignature="Aot2Hot.$a:$C()" />
+      <method signature="void Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.Collections.IEnumerator.Reset([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$d" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.Collections.IEnumerator.Reset()" newStackTraceSignature="Aot2Hot.$a:$d()" />
+      <method signature="object Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8::System.Collections.IEnumerator.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;DownloadHotRes&gt;d__8)" newName="$D" oldStackTraceSignature="Aot2Hot.&lt;DownloadHotRes&gt;d__8:System.Collections.IEnumerator.get_Current()" newStackTraceSignature="Aot2Hot.$a:$D()" />
     </type>
     <type fullName="Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7" newFullName="Aot2Hot.Aot2HotMgr/$A" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
@@ -296,10 +296,10 @@
       <field signature="[YooAsset]YooAsset.AllAssetsHandle &lt;rawHotOp&gt;5__3" newName="$c" />
       <property signature="object System.Collections.Generic.IEnumerator&lt;System.Object&gt;.Current" newName="$E" />
       <property signature="object System.Collections.IEnumerator.Current" newName="$f" />
-      <method signature="void Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.IDisposable.Dispose([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$F" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.IDisposable.Dispose()" newStackTraceSignature="Aot2Hot.$A:$F()" />
-      <method signature="object Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$g" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current()" newStackTraceSignature="Aot2Hot.$A:$g()" />
-      <method signature="void Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.Collections.IEnumerator.Reset([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$G" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.Collections.IEnumerator.Reset()" newStackTraceSignature="Aot2Hot.$A:$G()" />
-      <method signature="object Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.Collections.IEnumerator.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$h" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.Collections.IEnumerator.get_Current()" newStackTraceSignature="Aot2Hot.$A:$h()" />
+      <method signature="void Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.IDisposable.Dispose([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$C" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.IDisposable.Dispose()" newStackTraceSignature="Aot2Hot.$A:$C()" />
+      <method signature="object Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$d" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current()" newStackTraceSignature="Aot2Hot.$A:$d()" />
+      <method signature="void Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.Collections.IEnumerator.Reset([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$D" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.Collections.IEnumerator.Reset()" newStackTraceSignature="Aot2Hot.$A:$D()" />
+      <method signature="object Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7::System.Collections.IEnumerator.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;GotoHotScene&gt;d__7)" newName="$e" oldStackTraceSignature="Aot2Hot.&lt;GotoHotScene&gt;d__7:System.Collections.IEnumerator.get_Current()" newStackTraceSignature="Aot2Hot.$A:$e()" />
     </type>
     <type fullName="Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3" newFullName="Aot2Hot.Aot2HotMgr/$b" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
@@ -308,10 +308,10 @@
       <field signature="[YooAsset]YooAsset.AllAssetsHandle &lt;assets&gt;5__2" newName="$B" />
       <property signature="object System.Collections.Generic.IEnumerator&lt;System.Object&gt;.Current" newName="$e" />
       <property signature="object System.Collections.IEnumerator.Current" newName="$E" />
-      <method signature="void Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.IDisposable.Dispose([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$f" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.IDisposable.Dispose()" newStackTraceSignature="Aot2Hot.$b:$f()" />
-      <method signature="object Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$F" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current()" newStackTraceSignature="Aot2Hot.$b:$F()" />
-      <method signature="void Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.Collections.IEnumerator.Reset([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$g" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.Collections.IEnumerator.Reset()" newStackTraceSignature="Aot2Hot.$b:$g()" />
-      <method signature="object Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.Collections.IEnumerator.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$G" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.Collections.IEnumerator.get_Current()" newStackTraceSignature="Aot2Hot.$b:$G()" />
+      <method signature="void Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.IDisposable.Dispose([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$c" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.IDisposable.Dispose()" newStackTraceSignature="Aot2Hot.$b:$c()" />
+      <method signature="object Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$C" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.Collections.Generic.IEnumerator&lt;System.Object&gt;.get_Current()" newStackTraceSignature="Aot2Hot.$b:$C()" />
+      <method signature="void Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.Collections.IEnumerator.Reset([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$d" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.Collections.IEnumerator.Reset()" newStackTraceSignature="Aot2Hot.$b:$d()" />
+      <method signature="object Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3::System.Collections.IEnumerator.get_Current([Aot2Hot]Aot2Hot.Aot2HotMgr/&lt;IEAwake&gt;d__3)" newName="$D" oldStackTraceSignature="Aot2Hot.&lt;IEAwake&gt;d__3:System.Collections.IEnumerator.get_Current()" newStackTraceSignature="Aot2Hot.$b:$D()" />
     </type>
     <type fullName="&lt;PrivateImplementationDetails&gt;" newFullName="$B" status="Renamed">
       <field signature="[Aot2Hot]&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=97 D24935820D30C87C9FEFDF8C0B3A0A78F1ECA1FB78584131A4D1ED39D8FBB6A1" newName="$a" />
@@ -635,7 +635,7 @@
       <method signature="void XiHUI.UIDialog::set_IsBlurBG([Hot]XiHUI.UIDialog, bool)" newName="$l" oldStackTraceSignature="XiHUI.UIDialog:set_IsBlurBG(Boolean)" newStackTraceSignature="XiHUI.UIDialog:$l(Boolean)" />
       <method signature="System.Collections.Generic.List`1&lt;[Hot]XiHUI.UIDialog&gt; XiHUI.UIDialog::get_BaseDialogs([Hot]XiHUI.UIDialog)" newName="$L" oldStackTraceSignature="XiHUI.UIDialog:get_BaseDialogs()" newStackTraceSignature="XiHUI.UIDialog:$L()" />
       <method signature="void XiHUI.UIDialog::set_BaseDialogs([Hot]XiHUI.UIDialog, System.Collections.Generic.List`1&lt;[Hot]XiHUI.UIDialog&gt;)" newName="$m" oldStackTraceSignature="XiHUI.UIDialog:set_BaseDialogs(List`1)" newStackTraceSignature="XiHUI.UIDialog:$m(List`1)" />
-      <method signature="void XiHUI.UIDialog::InitParam([Hot]XiHUI.UIDialog, string[])" newName="$R" oldStackTraceSignature="XiHUI.UIDialog:InitParam(String[])" newStackTraceSignature="XiHUI.UIDialog:$R(String[])" />
+      <method signature="void XiHUI.UIDialog::InitParam([Hot]XiHUI.UIDialog, string[])" newName="$a" oldStackTraceSignature="XiHUI.UIDialog:InitParam(String[])" newStackTraceSignature="XiHUI.UIDialog:$a(String[])" />
       <method signature="void XiHUI.UIDialog::SetOpenParams([Hot]XiHUI.UIDialog, [Hot]Tmpl.UIParam)" newName="$M" oldStackTraceSignature="XiHUI.UIDialog:SetOpenParams(UIParam)" newStackTraceSignature="XiHUI.UIDialog:$M($xA)" />
       <method signature="void XiHUI.UIDialog::SetBase([Hot]XiHUI.UIDialog, [Hot]XiHUI.UIDialog)" newName="$n" oldStackTraceSignature="XiHUI.UIDialog:SetBase(UIDialog)" newStackTraceSignature="XiHUI.UIDialog:$n(UIDialog)" />
       <method signature="void XiHUI.UIDialog::AddChild([Hot]XiHUI.UIDialog, [Hot]XiHUI.IUIObjectWrap)" newName="$N" oldStackTraceSignature="XiHUI.UIDialog:AddChild(IUIObjectWrap)" newStackTraceSignature="XiHUI.UIDialog:$N($v)" />
@@ -645,11 +645,11 @@
       <method signature="void XiHUI.UIDialog::Dispose([Hot]XiHUI.UIDialog)" newName="$P" oldStackTraceSignature="XiHUI.UIDialog:Dispose()" newStackTraceSignature="XiHUI.UIDialog:$P()" />
       <method signature="void XiHUI.UIDialog::Hide([Hot]XiHUI.UIDialog)" newName="$q" oldStackTraceSignature="XiHUI.UIDialog:Hide()" newStackTraceSignature="XiHUI.UIDialog:$q()" />
       <method signature="void XiHUI.UIDialog::Update([Hot]XiHUI.UIDialog)" newName="$Q" oldStackTraceSignature="XiHUI.UIDialog:Update()" newStackTraceSignature="XiHUI.UIDialog:$Q()" />
-      <method signature="void XiHUI.UIDialog::OnOpen([Hot]XiHUI.UIDialog)" newName="$y" oldStackTraceSignature="XiHUI.UIDialog:OnOpen()" newStackTraceSignature="XiHUI.UIDialog:$y()" />
-      <method signature="void XiHUI.UIDialog::OnClose([Hot]XiHUI.UIDialog)" newName="$Y" oldStackTraceSignature="XiHUI.UIDialog:OnClose()" newStackTraceSignature="XiHUI.UIDialog:$Y()" />
-      <method signature="void XiHUI.UIDialog::OnHide([Hot]XiHUI.UIDialog)" newName="$z" oldStackTraceSignature="XiHUI.UIDialog:OnHide()" newStackTraceSignature="XiHUI.UIDialog:$z()" />
-      <method signature="void XiHUI.UIDialog::OnUpdate([Hot]XiHUI.UIDialog)" newName="$Z" oldStackTraceSignature="XiHUI.UIDialog:OnUpdate()" newStackTraceSignature="XiHUI.UIDialog:$Z()" />
-      <method signature="void XiHUI.UIDialog::InitComponent([Hot]XiHUI.UIDialog)" newName="$aA" oldStackTraceSignature="XiHUI.UIDialog:InitComponent()" newStackTraceSignature="XiHUI.UIDialog:$aA()" />
+      <method signature="void XiHUI.UIDialog::OnOpen([Hot]XiHUI.UIDialog)" newName="$A" oldStackTraceSignature="XiHUI.UIDialog:OnOpen()" newStackTraceSignature="XiHUI.UIDialog:$A()" />
+      <method signature="void XiHUI.UIDialog::OnClose([Hot]XiHUI.UIDialog)" newName="$b" oldStackTraceSignature="XiHUI.UIDialog:OnClose()" newStackTraceSignature="XiHUI.UIDialog:$b()" />
+      <method signature="void XiHUI.UIDialog::OnHide([Hot]XiHUI.UIDialog)" newName="$B" oldStackTraceSignature="XiHUI.UIDialog:OnHide()" newStackTraceSignature="XiHUI.UIDialog:$B()" />
+      <method signature="void XiHUI.UIDialog::OnUpdate([Hot]XiHUI.UIDialog)" newName="$c" oldStackTraceSignature="XiHUI.UIDialog:OnUpdate()" newStackTraceSignature="XiHUI.UIDialog:$c()" />
+      <method signature="void XiHUI.UIDialog::InitComponent([Hot]XiHUI.UIDialog)" newName="$C" oldStackTraceSignature="XiHUI.UIDialog:InitComponent()" newStackTraceSignature="XiHUI.UIDialog:$C()" />
     </type>
     <type fullName="XiHUI.UIDialogManager" newFullName="" status="NotRenamed">
       <field signature="[Hot]XiHUI.UIDialogManager instance" newName="$a" />
@@ -806,11 +806,11 @@
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$B" />
     </type>
     <type fullName="XiHUI.IUIObjectWrap" newFullName="$C.$v" status="Renamed">
-      <method signature="bool XiHUI.IUIObjectWrap::SetPayload([Hot]XiHUI.IUIObjectWrap, [FairyGUI]FairyGUI.GObject)" newName="$H" oldStackTraceSignature="XiHUI.IUIObjectWrap:SetPayload(GObject)" newStackTraceSignature="$C.$v:$H(GObject)" />
-      <method signature="System.Type XiHUI.IUIObjectWrap::ContentType([Hot]XiHUI.IUIObjectWrap)" newName="$i" oldStackTraceSignature="XiHUI.IUIObjectWrap:ContentType()" newStackTraceSignature="$C.$v:$i()" />
-      <method signature="void XiHUI.IUIObjectWrap::Update([Hot]XiHUI.IUIObjectWrap)" newName="$I" oldStackTraceSignature="XiHUI.IUIObjectWrap:Update()" newStackTraceSignature="$C.$v:$I()" />
-      <method signature="void XiHUI.IUIObjectWrap::Dispose([Hot]XiHUI.IUIObjectWrap)" newName="$j" oldStackTraceSignature="XiHUI.IUIObjectWrap:Dispose()" newStackTraceSignature="$C.$v:$j()" />
-      <method signature="void XiHUI.IUIObjectWrap::AddChild([Hot]XiHUI.IUIObjectWrap, [Hot]XiHUI.IUIObjectWrap)" newName="$J" oldStackTraceSignature="XiHUI.IUIObjectWrap:AddChild(IUIObjectWrap)" newStackTraceSignature="$C.$v:$J($v)" />
+      <method signature="bool XiHUI.IUIObjectWrap::SetPayload([Hot]XiHUI.IUIObjectWrap, [FairyGUI]FairyGUI.GObject)" newName="$a" oldStackTraceSignature="XiHUI.IUIObjectWrap:SetPayload(GObject)" newStackTraceSignature="$C.$v:$a(GObject)" />
+      <method signature="System.Type XiHUI.IUIObjectWrap::ContentType([Hot]XiHUI.IUIObjectWrap)" newName="$A" oldStackTraceSignature="XiHUI.IUIObjectWrap:ContentType()" newStackTraceSignature="$C.$v:$A()" />
+      <method signature="void XiHUI.IUIObjectWrap::Update([Hot]XiHUI.IUIObjectWrap)" newName="$D" oldStackTraceSignature="XiHUI.IUIObjectWrap:Update()" newStackTraceSignature="$C.$v:$D()" />
+      <method signature="void XiHUI.IUIObjectWrap::Dispose([Hot]XiHUI.IUIObjectWrap)" newName="$e" oldStackTraceSignature="XiHUI.IUIObjectWrap:Dispose()" newStackTraceSignature="$C.$v:$e()" />
+      <method signature="void XiHUI.IUIObjectWrap::AddChild([Hot]XiHUI.IUIObjectWrap, [Hot]XiHUI.IUIObjectWrap)" newName="$E" oldStackTraceSignature="XiHUI.IUIObjectWrap:AddChild(IUIObjectWrap)" newStackTraceSignature="$C.$v:$E($v)" />
     </type>
     <type fullName="XiHUI.UIObjectWrap`1" newFullName="$C.$V`1" status="Renamed">
       <field signature="!0 &lt;content&gt;k__BackingField" newName="$F" />
@@ -819,13 +819,13 @@
       <property signature="bool visible" newName="$h" />
       <method signature="!0 XiHUI.UIObjectWrap`1::get_content([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$b" oldStackTraceSignature="XiHUI.UIObjectWrap`1:get_content()" newStackTraceSignature="$C.$V`1:$b()" />
       <method signature="void XiHUI.UIObjectWrap`1::set_content([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;, !0)" newName="$B" oldStackTraceSignature="XiHUI.UIObjectWrap`1:set_content(T)" newStackTraceSignature="$C.$V`1:$B(T)" />
-      <method signature="System.Type XiHUI.UIObjectWrap`1::ContentType([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$i" oldStackTraceSignature="XiHUI.UIObjectWrap`1:ContentType()" newStackTraceSignature="$C.$V`1:$i()" />
+      <method signature="System.Type XiHUI.UIObjectWrap`1::ContentType([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$A" oldStackTraceSignature="XiHUI.UIObjectWrap`1:ContentType()" newStackTraceSignature="$C.$V`1:$A()" />
       <method signature="!0 XiHUI.UIObjectWrap`1::op_Implicit([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$c" oldStackTraceSignature="XiHUI.UIObjectWrap`1:op_Implicit(UIObjectWrap`1)" newStackTraceSignature="$C.$V`1:$c($V`1)" />
-      <method signature="bool XiHUI.UIObjectWrap`1::SetPayload([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;, [FairyGUI]FairyGUI.GObject)" newName="$H" oldStackTraceSignature="XiHUI.UIObjectWrap`1:SetPayload(GObject)" newStackTraceSignature="$C.$V`1:$H(GObject)" />
-      <method signature="void XiHUI.UIObjectWrap`1::AddChild([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;, [Hot]XiHUI.IUIObjectWrap)" newName="$J" oldStackTraceSignature="XiHUI.UIObjectWrap`1:AddChild(IUIObjectWrap)" newStackTraceSignature="$C.$V`1:$J($v)" />
-      <method signature="void XiHUI.UIObjectWrap`1::InitComponent([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$k" oldStackTraceSignature="XiHUI.UIObjectWrap`1:InitComponent()" newStackTraceSignature="$C.$V`1:$k()" />
-      <method signature="void XiHUI.UIObjectWrap`1::Update([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$I" oldStackTraceSignature="XiHUI.UIObjectWrap`1:Update()" newStackTraceSignature="$C.$V`1:$I()" />
-      <method signature="void XiHUI.UIObjectWrap`1::Dispose([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$j" oldStackTraceSignature="XiHUI.UIObjectWrap`1:Dispose()" newStackTraceSignature="$C.$V`1:$j()" />
+      <method signature="bool XiHUI.UIObjectWrap`1::SetPayload([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;, [FairyGUI]FairyGUI.GObject)" newName="$a" oldStackTraceSignature="XiHUI.UIObjectWrap`1:SetPayload(GObject)" newStackTraceSignature="$C.$V`1:$a(GObject)" />
+      <method signature="void XiHUI.UIObjectWrap`1::AddChild([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;, [Hot]XiHUI.IUIObjectWrap)" newName="$E" oldStackTraceSignature="XiHUI.UIObjectWrap`1:AddChild(IUIObjectWrap)" newStackTraceSignature="$C.$V`1:$E($v)" />
+      <method signature="void XiHUI.UIObjectWrap`1::InitComponent([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$f" oldStackTraceSignature="XiHUI.UIObjectWrap`1:InitComponent()" newStackTraceSignature="$C.$V`1:$f()" />
+      <method signature="void XiHUI.UIObjectWrap`1::Update([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$D" oldStackTraceSignature="XiHUI.UIObjectWrap`1:Update()" newStackTraceSignature="$C.$V`1:$D()" />
+      <method signature="void XiHUI.UIObjectWrap`1::Dispose([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$e" oldStackTraceSignature="XiHUI.UIObjectWrap`1:Dispose()" newStackTraceSignature="$C.$V`1:$e()" />
       <method signature="bool XiHUI.UIObjectWrap`1::get_visible([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;)" newName="$C" oldStackTraceSignature="XiHUI.UIObjectWrap`1:get_visible()" newStackTraceSignature="$C.$V`1:$C()" />
       <method signature="void XiHUI.UIObjectWrap`1::SetVisible([Hot]XiHUI.UIObjectWrap`1&lt;!0&gt;, bool)" newName="$d" oldStackTraceSignature="XiHUI.UIObjectWrap`1:SetVisible(Boolean)" newStackTraceSignature="$C.$V`1:$d(Boolean)" />
     </type>
@@ -960,27 +960,27 @@
     </type>
     <type fullName="XiHNet.AesCryptor" newFullName="$d.$bA" status="Renamed">
       <field signature="byte[] _key" newName="$b" />
-      <method signature="bool XiHNet.AesCryptor::Decrypt([Hot]XiHNet.AesCryptor, byte[], int, int, byte[]&amp;)" newName="$d" oldStackTraceSignature="XiHNet.AesCryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$bA:$d(Byte[], Int32, Int32, Byte[]&amp;)" />
-      <method signature="bool XiHNet.AesCryptor::Encrypt([Hot]XiHNet.AesCryptor, byte[], int, int, byte[]&amp;)" newName="$D" oldStackTraceSignature="XiHNet.AesCryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$bA:$D(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.AesCryptor::Decrypt([Hot]XiHNet.AesCryptor, byte[], int, int, byte[]&amp;)" newName="$a" oldStackTraceSignature="XiHNet.AesCryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$bA:$a(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.AesCryptor::Encrypt([Hot]XiHNet.AesCryptor, byte[], int, int, byte[]&amp;)" newName="$B" oldStackTraceSignature="XiHNet.AesCryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$bA:$B(Byte[], Int32, Int32, Byte[]&amp;)" />
       <method signature="bool XiHNet.AesCryptor::Process([Hot]XiHNet.AesCryptor, byte[], int, int, byte[]&amp;, bool)" newName="$A" oldStackTraceSignature="XiHNet.AesCryptor:Process(Byte[], Int32, Int32, Byte[]&amp;, Boolean)" newStackTraceSignature="$d.$bA:$A(Byte[], Int32, Int32, Byte[]&amp;, Boolean)" />
     </type>
     <type fullName="XiHNet.ICryptor" newFullName="$d.$BA" status="Renamed">
-      <method signature="bool XiHNet.ICryptor::Encrypt([Hot]XiHNet.ICryptor, byte[], int, int, byte[]&amp;)" newName="$D" oldStackTraceSignature="XiHNet.ICryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$BA:$D(Byte[], Int32, Int32, Byte[]&amp;)" />
-      <method signature="bool XiHNet.ICryptor::Decrypt([Hot]XiHNet.ICryptor, byte[], int, int, byte[]&amp;)" newName="$d" oldStackTraceSignature="XiHNet.ICryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$BA:$d(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.ICryptor::Encrypt([Hot]XiHNet.ICryptor, byte[], int, int, byte[]&amp;)" newName="$B" oldStackTraceSignature="XiHNet.ICryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$BA:$B(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.ICryptor::Decrypt([Hot]XiHNet.ICryptor, byte[], int, int, byte[]&amp;)" newName="$a" oldStackTraceSignature="XiHNet.ICryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$BA:$a(Byte[], Int32, Int32, Byte[]&amp;)" />
     </type>
     <type fullName="XiHNet.NoneCryptor" newFullName="$d.$cA" status="Renamed">
       <field signature="[Hot]XiHNet.NoneCryptor &lt;Default&gt;k__BackingField" newName="$c" />
       <property signature="[Hot]XiHNet.NoneCryptor Default" newName="$C" />
       <method signature="[Hot]XiHNet.NoneCryptor XiHNet.NoneCryptor::get_Default()" newName="$A" oldStackTraceSignature="XiHNet.NoneCryptor:get_Default()" newStackTraceSignature="$d.$cA:$A()" />
-      <method signature="bool XiHNet.NoneCryptor::Encrypt([Hot]XiHNet.NoneCryptor, byte[], int, int, byte[]&amp;)" newName="$D" oldStackTraceSignature="XiHNet.NoneCryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$cA:$D(Byte[], Int32, Int32, Byte[]&amp;)" />
-      <method signature="bool XiHNet.NoneCryptor::Decrypt([Hot]XiHNet.NoneCryptor, byte[], int, int, byte[]&amp;)" newName="$d" oldStackTraceSignature="XiHNet.NoneCryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$cA:$d(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.NoneCryptor::Encrypt([Hot]XiHNet.NoneCryptor, byte[], int, int, byte[]&amp;)" newName="$B" oldStackTraceSignature="XiHNet.NoneCryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$cA:$B(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.NoneCryptor::Decrypt([Hot]XiHNet.NoneCryptor, byte[], int, int, byte[]&amp;)" newName="$a" oldStackTraceSignature="XiHNet.NoneCryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$cA:$a(Byte[], Int32, Int32, Byte[]&amp;)" />
       <method signature="bool XiHNet.NoneCryptor::Process([Hot]XiHNet.NoneCryptor, byte[], int, int, byte[]&amp;)" newName="$b" oldStackTraceSignature="XiHNet.NoneCryptor:Process(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$cA:$b(Byte[], Int32, Int32, Byte[]&amp;)" />
     </type>
     <type fullName="XiHNet.XorCryptor" newFullName="$d.$CA" status="Renamed">
       <field signature="byte[] _key" newName="$A" />
       <field signature="int _keyLen" newName="$c" />
-      <method signature="bool XiHNet.XorCryptor::Encrypt([Hot]XiHNet.XorCryptor, byte[], int, int, byte[]&amp;)" newName="$D" oldStackTraceSignature="XiHNet.XorCryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$CA:$D(Byte[], Int32, Int32, Byte[]&amp;)" />
-      <method signature="bool XiHNet.XorCryptor::Decrypt([Hot]XiHNet.XorCryptor, byte[], int, int, byte[]&amp;)" newName="$d" oldStackTraceSignature="XiHNet.XorCryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$CA:$d(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.XorCryptor::Encrypt([Hot]XiHNet.XorCryptor, byte[], int, int, byte[]&amp;)" newName="$B" oldStackTraceSignature="XiHNet.XorCryptor:Encrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$CA:$B(Byte[], Int32, Int32, Byte[]&amp;)" />
+      <method signature="bool XiHNet.XorCryptor::Decrypt([Hot]XiHNet.XorCryptor, byte[], int, int, byte[]&amp;)" newName="$a" oldStackTraceSignature="XiHNet.XorCryptor:Decrypt(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$CA:$a(Byte[], Int32, Int32, Byte[]&amp;)" />
       <method signature="bool XiHNet.XorCryptor::Process([Hot]XiHNet.XorCryptor, byte[], int, int, byte[]&amp;)" newName="$b" oldStackTraceSignature="XiHNet.XorCryptor:Process(Byte[], Int32, Int32, Byte[]&amp;)" newStackTraceSignature="$d.$CA:$b(Byte[], Int32, Int32, Byte[]&amp;)" />
     </type>
     <type fullName="XiHNet.NetClient" newFullName="$d.$dA" status="Renamed">
@@ -995,15 +995,15 @@
       <property signature="System.Action OnClosedAct" newName="$i" />
       <method signature="[Hot]XiHNet.NetState XiHNet.NetClient::get_NetState([Hot]XiHNet.NetClient)" newName="$C" oldStackTraceSignature="XiHNet.NetClient:get_NetState()" newStackTraceSignature="$d.$dA:$C()" />
       <method signature="void XiHNet.NetClient::set_NetState([Hot]XiHNet.NetClient, [Hot]XiHNet.NetState)" newName="$d" oldStackTraceSignature="XiHNet.NetClient:set_NetState(NetState)" newStackTraceSignature="$d.$dA:$d($pA)" />
-      <method signature="void XiHNet.NetClient::Connect([Hot]XiHNet.NetClient)" newName="$m" oldStackTraceSignature="XiHNet.NetClient:Connect()" newStackTraceSignature="$d.$dA:$m()" />
-      <method signature="void XiHNet.NetClient::Request([Hot]XiHNet.NetClient, byte[])" newName="$M" oldStackTraceSignature="XiHNet.NetClient:Request(Byte[])" newStackTraceSignature="$d.$dA:$M(Byte[])" />
+      <method signature="void XiHNet.NetClient::Connect([Hot]XiHNet.NetClient)" newName="$a" oldStackTraceSignature="XiHNet.NetClient:Connect()" newStackTraceSignature="$d.$dA:$a()" />
+      <method signature="void XiHNet.NetClient::Request([Hot]XiHNet.NetClient, byte[])" newName="$A" oldStackTraceSignature="XiHNet.NetClient:Request(Byte[])" newStackTraceSignature="$d.$dA:$A(Byte[])" />
       <method signature="System.Action`1&lt;byte[]&gt; XiHNet.NetClient::get_OnMessageAct([Hot]XiHNet.NetClient)" newName="$D" oldStackTraceSignature="XiHNet.NetClient:get_OnMessageAct()" newStackTraceSignature="$d.$dA:$D()" />
       <method signature="void XiHNet.NetClient::set_OnMessageAct([Hot]XiHNet.NetClient, System.Action`1&lt;byte[]&gt;)" newName="$e" oldStackTraceSignature="XiHNet.NetClient:set_OnMessageAct(Action`1)" newStackTraceSignature="$d.$dA:$e(Action`1)" />
       <method signature="System.Action XiHNet.NetClient::get_OnConnectedAct([Hot]XiHNet.NetClient)" newName="$E" oldStackTraceSignature="XiHNet.NetClient:get_OnConnectedAct()" newStackTraceSignature="$d.$dA:$E()" />
       <method signature="void XiHNet.NetClient::set_OnConnectedAct([Hot]XiHNet.NetClient, System.Action)" newName="$f" oldStackTraceSignature="XiHNet.NetClient:set_OnConnectedAct(Action)" newStackTraceSignature="$d.$dA:$f(Action)" />
       <method signature="System.Action XiHNet.NetClient::get_OnClosedAct([Hot]XiHNet.NetClient)" newName="$F" oldStackTraceSignature="XiHNet.NetClient:get_OnClosedAct()" newStackTraceSignature="$d.$dA:$F()" />
       <method signature="void XiHNet.NetClient::set_OnClosedAct([Hot]XiHNet.NetClient, System.Action)" newName="$g" oldStackTraceSignature="XiHNet.NetClient:set_OnClosedAct(Action)" newStackTraceSignature="$d.$dA:$g(Action)" />
-      <method signature="void XiHNet.NetClient::Close([Hot]XiHNet.NetClient)" newName="$n" oldStackTraceSignature="XiHNet.NetClient:Close()" newStackTraceSignature="$d.$dA:$n()" />
+      <method signature="void XiHNet.NetClient::Close([Hot]XiHNet.NetClient)" newName="$b" oldStackTraceSignature="XiHNet.NetClient:Close()" newStackTraceSignature="$d.$dA:$b()" />
     </type>
     <type fullName="XiHNet.Kcp" newFullName="$d.$DA" status="Renamed">
       <field signature="int IkcpRtoNdl" newName="$a" />
@@ -1147,16 +1147,16 @@
       <field signature="bool _needUpdate" newName="$K" />
       <field signature="uint _nextUpdateTime" newName="$l" />
       <field signature="System.Threading.CancellationTokenSource source" newName="$L" />
-      <method signature="void XiHNet.KcpClient::Connect([Hot]XiHNet.KcpClient)" newName="$m" oldStackTraceSignature="XiHNet.KcpClient:Connect()" newStackTraceSignature="$d.$fA:$m()" />
+      <method signature="void XiHNet.KcpClient::Connect([Hot]XiHNet.KcpClient)" newName="$a" oldStackTraceSignature="XiHNet.KcpClient:Connect()" newStackTraceSignature="$d.$fA:$a()" />
       <method signature="void XiHNet.KcpClient::OutputKcpAsync([Hot]XiHNet.KcpClient, byte[], int)" newName="$F" oldStackTraceSignature="XiHNet.KcpClient:OutputKcpAsync(Byte[], Int32)" newStackTraceSignature="$d.$fA:$F(Byte[], Int32)" />
       <method signature="void XiHNet.KcpClient::StartRecUpdate([Hot]XiHNet.KcpClient)" newName="$g" oldStackTraceSignature="XiHNet.KcpClient:StartRecUpdate()" newStackTraceSignature="$d.$fA:$g()" />
       <method signature="void XiHNet.KcpClient::PushToRecvQueue([Hot]XiHNet.KcpClient, byte[])" newName="$G" oldStackTraceSignature="XiHNet.KcpClient:PushToRecvQueue(Byte[])" newStackTraceSignature="$d.$fA:$G(Byte[])" />
       <method signature="System.Collections.Generic.Queue`1&lt;byte[]&gt; XiHNet.KcpClient::SwitchRecvQueue([Hot]XiHNet.KcpClient)" newName="$h" oldStackTraceSignature="XiHNet.KcpClient:SwitchRecvQueue()" newStackTraceSignature="$d.$fA:$h()" />
-      <method signature="void XiHNet.KcpClient::Request([Hot]XiHNet.KcpClient, byte[])" newName="$M" oldStackTraceSignature="XiHNet.KcpClient:Request(Byte[])" newStackTraceSignature="$d.$fA:$M(Byte[])" />
+      <method signature="void XiHNet.KcpClient::Request([Hot]XiHNet.KcpClient, byte[])" newName="$A" oldStackTraceSignature="XiHNet.KcpClient:Request(Byte[])" newStackTraceSignature="$d.$fA:$A(Byte[])" />
       <method signature="void XiHNet.KcpClient::ProcessRecv([Hot]XiHNet.KcpClient, uint)" newName="$H" oldStackTraceSignature="XiHNet.KcpClient:ProcessRecv(UInt32)" newStackTraceSignature="$d.$fA:$H(UInt32)" />
       <method signature="bool XiHNet.KcpClient::Update([Hot]XiHNet.KcpClient, uint)" newName="$i" oldStackTraceSignature="XiHNet.KcpClient:Update(UInt32)" newStackTraceSignature="$d.$fA:$i(UInt32)" />
       <method signature="void XiHNet.KcpClient::StartKcpUpdate([Hot]XiHNet.KcpClient)" newName="$I" oldStackTraceSignature="XiHNet.KcpClient:StartKcpUpdate()" newStackTraceSignature="$d.$fA:$I()" />
-      <method signature="void XiHNet.KcpClient::Close([Hot]XiHNet.KcpClient)" newName="$n" oldStackTraceSignature="XiHNet.KcpClient:Close()" newStackTraceSignature="$d.$fA:$n()" />
+      <method signature="void XiHNet.KcpClient::Close([Hot]XiHNet.KcpClient)" newName="$b" oldStackTraceSignature="XiHNet.KcpClient:Close()" newStackTraceSignature="$d.$fA:$b()" />
       <method signature="void XiHNet.KcpClient::&lt;Connect&gt;b__11_0([Hot]XiHNet.KcpClient)" newName="$j" oldStackTraceSignature="XiHNet.KcpClient:&lt;Connect&gt;b__11_0()" newStackTraceSignature="$d.$fA:$j()" />
       <method signature="System.Threading.Tasks.Task XiHNet.KcpClient::&lt;StartRecUpdate&gt;b__14_0([Hot]XiHNet.KcpClient)" newName="$J" oldStackTraceSignature="XiHNet.KcpClient:&lt;StartRecUpdate&gt;b__14_0()" newStackTraceSignature="$d.$fA:$J()" />
       <method signature="System.Threading.Tasks.Task XiHNet.KcpClient::&lt;StartKcpUpdate&gt;b__20_0([Hot]XiHNet.KcpClient)" newName="$k" oldStackTraceSignature="XiHNet.KcpClient:&lt;StartKcpUpdate&gt;b__20_0()" newStackTraceSignature="$d.$fA:$k()" />
@@ -1239,10 +1239,10 @@
       <field signature="[System]System.Net.Sockets.TcpClient _client" newName="$d" />
       <field signature="[System]System.Net.Sockets.NetworkStream networkStream" newName="$D" />
       <field signature="System.Threading.CancellationTokenSource source" newName="$e" />
-      <method signature="void XiHNet.TcpClient::Connect([Hot]XiHNet.TcpClient)" newName="$m" oldStackTraceSignature="XiHNet.TcpClient:Connect()" newStackTraceSignature="$d.$kA:$m()" />
+      <method signature="void XiHNet.TcpClient::Connect([Hot]XiHNet.TcpClient)" newName="$a" oldStackTraceSignature="XiHNet.TcpClient:Connect()" newStackTraceSignature="$d.$kA:$a()" />
       <method signature="void XiHNet.TcpClient::StartRecUpdate([Hot]XiHNet.TcpClient)" newName="$B" oldStackTraceSignature="XiHNet.TcpClient:StartRecUpdate()" newStackTraceSignature="$d.$kA:$B()" />
-      <method signature="void XiHNet.TcpClient::Request([Hot]XiHNet.TcpClient, byte[])" newName="$M" oldStackTraceSignature="XiHNet.TcpClient:Request(Byte[])" newStackTraceSignature="$d.$kA:$M(Byte[])" />
-      <method signature="void XiHNet.TcpClient::Close([Hot]XiHNet.TcpClient)" newName="$n" oldStackTraceSignature="XiHNet.TcpClient:Close()" newStackTraceSignature="$d.$kA:$n()" />
+      <method signature="void XiHNet.TcpClient::Request([Hot]XiHNet.TcpClient, byte[])" newName="$A" oldStackTraceSignature="XiHNet.TcpClient:Request(Byte[])" newStackTraceSignature="$d.$kA:$A(Byte[])" />
+      <method signature="void XiHNet.TcpClient::Close([Hot]XiHNet.TcpClient)" newName="$b" oldStackTraceSignature="XiHNet.TcpClient:Close()" newStackTraceSignature="$d.$kA:$b()" />
       <method signature="void XiHNet.TcpClient::&lt;Connect&gt;b__3_0([Hot]XiHNet.TcpClient)" newName="$c" oldStackTraceSignature="XiHNet.TcpClient:&lt;Connect&gt;b__3_0()" newStackTraceSignature="$d.$kA:$c()" />
       <method signature="System.Threading.Tasks.Task XiHNet.TcpClient::&lt;StartRecUpdate&gt;b__5_0([Hot]XiHNet.TcpClient)" newName="$C" oldStackTraceSignature="XiHNet.TcpClient:&lt;StartRecUpdate&gt;b__5_0()" newStackTraceSignature="$d.$kA:$C()" />
     </type>
@@ -1275,14 +1275,14 @@
       <field signature="System.Runtime.CompilerServices.TaskAwaiter &lt;&gt;u__2" newName="$c" />
     </type>
     <type fullName="XiHNet.WXTcp" newFullName="$d.$MA" status="Renamed">
-      <method signature="void XiHNet.WXTcp::Close([Hot]XiHNet.WXTcp)" newName="$n" oldStackTraceSignature="XiHNet.WXTcp:Close()" newStackTraceSignature="$d.$MA:$n()" />
-      <method signature="void XiHNet.WXTcp::Connect([Hot]XiHNet.WXTcp)" newName="$m" oldStackTraceSignature="XiHNet.WXTcp:Connect()" newStackTraceSignature="$d.$MA:$m()" />
-      <method signature="void XiHNet.WXTcp::Request([Hot]XiHNet.WXTcp, byte[])" newName="$M" oldStackTraceSignature="XiHNet.WXTcp:Request(Byte[])" newStackTraceSignature="$d.$MA:$M(Byte[])" />
+      <method signature="void XiHNet.WXTcp::Close([Hot]XiHNet.WXTcp)" newName="$b" oldStackTraceSignature="XiHNet.WXTcp:Close()" newStackTraceSignature="$d.$MA:$b()" />
+      <method signature="void XiHNet.WXTcp::Connect([Hot]XiHNet.WXTcp)" newName="$a" oldStackTraceSignature="XiHNet.WXTcp:Connect()" newStackTraceSignature="$d.$MA:$a()" />
+      <method signature="void XiHNet.WXTcp::Request([Hot]XiHNet.WXTcp, byte[])" newName="$A" oldStackTraceSignature="XiHNet.WXTcp:Request(Byte[])" newStackTraceSignature="$d.$MA:$A(Byte[])" />
     </type>
     <type fullName="XiHNet.WXUdp" newFullName="$d.$nA" status="Renamed">
-      <method signature="void XiHNet.WXUdp::Close([Hot]XiHNet.WXUdp)" newName="$n" oldStackTraceSignature="XiHNet.WXUdp:Close()" newStackTraceSignature="$d.$nA:$n()" />
-      <method signature="void XiHNet.WXUdp::Connect([Hot]XiHNet.WXUdp)" newName="$m" oldStackTraceSignature="XiHNet.WXUdp:Connect()" newStackTraceSignature="$d.$nA:$m()" />
-      <method signature="void XiHNet.WXUdp::Request([Hot]XiHNet.WXUdp, byte[])" newName="$M" oldStackTraceSignature="XiHNet.WXUdp:Request(Byte[])" newStackTraceSignature="$d.$nA:$M(Byte[])" />
+      <method signature="void XiHNet.WXUdp::Close([Hot]XiHNet.WXUdp)" newName="$b" oldStackTraceSignature="XiHNet.WXUdp:Close()" newStackTraceSignature="$d.$nA:$b()" />
+      <method signature="void XiHNet.WXUdp::Connect([Hot]XiHNet.WXUdp)" newName="$a" oldStackTraceSignature="XiHNet.WXUdp:Connect()" newStackTraceSignature="$d.$nA:$a()" />
+      <method signature="void XiHNet.WXUdp::Request([Hot]XiHNet.WXUdp, byte[])" newName="$A" oldStackTraceSignature="XiHNet.WXUdp:Request(Byte[])" newStackTraceSignature="$d.$nA:$A(Byte[])" />
     </type>
     <type fullName="XiHNet.NetConfig" newFullName="$d.$NA" status="Renamed">
       <field signature="byte PKT_HEAD_BYTE" newName="$a" />
@@ -1316,8 +1316,8 @@
       <property signature="[Hot]XiHAsset.XiHAssetBaseMgr BaseInstance" newName="$E" />
       <method signature="[Hot]XiHAsset.XiHAssetBaseMgr XiHAsset.XiHAssetBaseMgr::get_BaseInstance()" newName="$B" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:get_BaseInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$B()" />
       <method signature="void XiHAsset.XiHAssetBaseMgr::set_BaseInstance([Hot]XiHAsset.XiHAssetBaseMgr)" newName="$c" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:set_BaseInstance(XiHAssetBaseMgr)" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$c(XiHAssetBaseMgr)" />
-      <method signature="void XiHAsset.XiHAssetBaseMgr::SetInstance([Hot]XiHAsset.XiHAssetBaseMgr)" newName="$f" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:SetInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$f()" />
-      <method signature="void XiHAsset.XiHAssetBaseMgr::DestoryInstance([Hot]XiHAsset.XiHAssetBaseMgr)" newName="$F" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:DestoryInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$F()" />
+      <method signature="void XiHAsset.XiHAssetBaseMgr::SetInstance([Hot]XiHAsset.XiHAssetBaseMgr)" newName="$a" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:SetInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$a()" />
+      <method signature="void XiHAsset.XiHAssetBaseMgr::DestoryInstance([Hot]XiHAsset.XiHAssetBaseMgr)" newName="$D" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:DestoryInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$D()" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[YooAsset]YooAsset.AssetHandle&gt; XiHAsset.XiHAssetBaseMgr::GetHandle`1([Hot]XiHAsset.XiHAssetBaseMgr, string)" newName="$C" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:GetHandle(String)" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$C(String)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask XiHAsset.XiHAssetBaseMgr::SetEffect4GLoader3D([Hot]XiHAsset.XiHAssetBaseMgr, [FairyGUI]FairyGUI.GLoader3D, string, bool)" newName="$d" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr:SetEffect4GLoader3D(GLoader3D, String, Boolean)" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr:$d(GLoader3D, String, Boolean)" />
     </type>
@@ -1350,19 +1350,19 @@
       <property signature="!0 Instance" newName="$B" />
       <method signature="!0 XiHAsset.XiHAssetBaseMgr`1::get_Instance()" newName="$A" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:get_Instance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:$A()" />
       <method signature="void XiHAsset.XiHAssetBaseMgr`1::set_Instance(!0)" newName="$b" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:set_Instance(T)" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:$b(T)" />
-      <method signature="void XiHAsset.XiHAssetBaseMgr`1::SetInstance([Hot]XiHAsset.XiHAssetBaseMgr`1&lt;!0&gt;)" newName="$f" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:SetInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:$f()" />
-      <method signature="void XiHAsset.XiHAssetBaseMgr`1::DestoryInstance([Hot]XiHAsset.XiHAssetBaseMgr`1&lt;!0&gt;)" newName="$F" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:DestoryInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:$F()" />
+      <method signature="void XiHAsset.XiHAssetBaseMgr`1::SetInstance([Hot]XiHAsset.XiHAssetBaseMgr`1&lt;!0&gt;)" newName="$a" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:SetInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:$a()" />
+      <method signature="void XiHAsset.XiHAssetBaseMgr`1::DestoryInstance([Hot]XiHAsset.XiHAssetBaseMgr`1&lt;!0&gt;)" newName="$D" oldStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:DestoryInstance()" newStackTraceSignature="XiHAsset.XiHAssetBaseMgr`1:$D()" />
     </type>
     <type fullName="Ad.AdSdkMgr" newFullName="$D.$RA" status="Renamed">
       <field signature="[Hot]Ad.IAdSDK sdkBase" newName="$a" />
     </type>
     <type fullName="Ad.IAdSDK" newFullName="$D.$sA" status="Renamed">
-      <method signature="void Ad.IAdSDK::InitSDK([Hot]Ad.IAdSDK)" newName="$b" oldStackTraceSignature="Ad.IAdSDK:InitSDK()" newStackTraceSignature="$D.$sA:$b()" />
-      <method signature="void Ad.IAdSDK::ShowRewardedAd([Hot]Ad.IAdSDK, System.Action`1&lt;bool&gt;, string)" newName="$B" oldStackTraceSignature="Ad.IAdSDK:ShowRewardedAd(Action`1, String)" newStackTraceSignature="$D.$sA:$B(Action`1, String)" />
+      <method signature="void Ad.IAdSDK::InitSDK([Hot]Ad.IAdSDK)" newName="$a" oldStackTraceSignature="Ad.IAdSDK:InitSDK()" newStackTraceSignature="$D.$sA:$a()" />
+      <method signature="void Ad.IAdSDK::ShowRewardedAd([Hot]Ad.IAdSDK, System.Action`1&lt;bool&gt;, string)" newName="$A" oldStackTraceSignature="Ad.IAdSDK:ShowRewardedAd(Action`1, String)" newStackTraceSignature="$D.$sA:$A(Action`1, String)" />
     </type>
     <type fullName="Ad.LocalAdSdk" newFullName="$D.$SA" status="Renamed">
-      <method signature="void Ad.LocalAdSdk::InitSDK([Hot]Ad.LocalAdSdk)" newName="$b" oldStackTraceSignature="Ad.LocalAdSdk:InitSDK()" newStackTraceSignature="$D.$SA:$b()" />
-      <method signature="void Ad.LocalAdSdk::ShowRewardedAd([Hot]Ad.LocalAdSdk, System.Action`1&lt;bool&gt;, string)" newName="$B" oldStackTraceSignature="Ad.LocalAdSdk:ShowRewardedAd(Action`1, String)" newStackTraceSignature="$D.$SA:$B(Action`1, String)" />
+      <method signature="void Ad.LocalAdSdk::InitSDK([Hot]Ad.LocalAdSdk)" newName="$a" oldStackTraceSignature="Ad.LocalAdSdk:InitSDK()" newStackTraceSignature="$D.$SA:$a()" />
+      <method signature="void Ad.LocalAdSdk::ShowRewardedAd([Hot]Ad.LocalAdSdk, System.Action`1&lt;bool&gt;, string)" newName="$A" oldStackTraceSignature="Ad.LocalAdSdk:ShowRewardedAd(Action`1, String)" newStackTraceSignature="$D.$SA:$A(Action`1, String)" />
     </type>
     <type fullName="Tmpl.ExternalTypeUtil" newFullName="$e.$tA" status="Renamed">
       <method signature="[UnityEngine.CoreModule]UnityEngine.Vector2 Tmpl.ExternalTypeUtil::NewVector2([Hot]Tmpl.vector2)" newName="$a" oldStackTraceSignature="Tmpl.ExternalTypeUtil:NewVector2(vector2)" newStackTraceSignature="$e.$tA:$a($XA)" />
@@ -1485,7 +1485,7 @@
       <method signature="void Hot.SystemTipDialog::&lt;Show&gt;b__1_0([Hot]Hot.SystemTipDialog, [Hot]Hot.TipItem)" newName="$b" oldStackTraceSignature="Hot.SystemTipDialog:&lt;Show&gt;b__1_0(TipItem)" newStackTraceSignature="Hot.SystemTipDialog:$b($i)" />
     </type>
     <type fullName="Hot.HomeDialog" newFullName="" status="NotRenamed">
-      <method signature="void Hot.HomeDialog::InitComponent([Hot]Hot.HomeDialog)" newName="$aA" oldStackTraceSignature="Hot.HomeDialog:InitComponent()" newStackTraceSignature="Hot.HomeDialog:$aA()" />
+      <method signature="void Hot.HomeDialog::InitComponent([Hot]Hot.HomeDialog)" newName="$C" oldStackTraceSignature="Hot.HomeDialog:InitComponent()" newStackTraceSignature="Hot.HomeDialog:$C()" />
       <method signature="void Hot.HomeDialog::OnStarBtn([Hot]Hot.HomeDialog)" newName="$A" oldStackTraceSignature="Hot.HomeDialog:OnStarBtn()" newStackTraceSignature="Hot.HomeDialog:$A()" />
     </type>
     <type fullName="Hot.HomeDialog/&lt;&gt;c" newFullName="" status="NotRenamed">
@@ -1582,12 +1582,12 @@
       <field signature="[Hot]Hot.IChannelSDK sdkBase" newName="$a" />
     </type>
     <type fullName="Hot.IChannelSDK" newFullName="$E.$Fb" status="Renamed">
-      <method signature="void Hot.IChannelSDK::Init([Hot]Hot.IChannelSDK, System.Action`1&lt;bool&gt;)" newName="$b" oldStackTraceSignature="Hot.IChannelSDK:Init(Action`1)" newStackTraceSignature="$E.$Fb:$b(Action`1)" />
-      <method signature="void Hot.IChannelSDK::TouchOverride([Hot]Hot.IChannelSDK, [UnityEngine.CoreModule]UnityEngine.GameObject)" newName="$B" oldStackTraceSignature="Hot.IChannelSDK:TouchOverride(GameObject)" newStackTraceSignature="$E.$Fb:$B(GameObject)" />
+      <method signature="void Hot.IChannelSDK::Init([Hot]Hot.IChannelSDK, System.Action`1&lt;bool&gt;)" newName="$a" oldStackTraceSignature="Hot.IChannelSDK:Init(Action`1)" newStackTraceSignature="$E.$Fb:$a(Action`1)" />
+      <method signature="void Hot.IChannelSDK::TouchOverride([Hot]Hot.IChannelSDK, [UnityEngine.CoreModule]UnityEngine.GameObject)" newName="$A" oldStackTraceSignature="Hot.IChannelSDK:TouchOverride(GameObject)" newStackTraceSignature="$E.$Fb:$A(GameObject)" />
     </type>
     <type fullName="Hot.InternalSDK" newFullName="$E.$gb" status="Renamed">
-      <method signature="void Hot.InternalSDK::TouchOverride([Hot]Hot.InternalSDK, [UnityEngine.CoreModule]UnityEngine.GameObject)" newName="$B" oldStackTraceSignature="Hot.InternalSDK:TouchOverride(GameObject)" newStackTraceSignature="$E.$gb:$B(GameObject)" />
-      <method signature="void Hot.InternalSDK::Hot.IChannelSDK.Init([Hot]Hot.InternalSDK, System.Action`1&lt;bool&gt;)" newName="$b" oldStackTraceSignature="Hot.InternalSDK:Hot.IChannelSDK.Init(Action`1)" newStackTraceSignature="$E.$gb:$b(Action`1)" />
+      <method signature="void Hot.InternalSDK::TouchOverride([Hot]Hot.InternalSDK, [UnityEngine.CoreModule]UnityEngine.GameObject)" newName="$A" oldStackTraceSignature="Hot.InternalSDK:TouchOverride(GameObject)" newStackTraceSignature="$E.$gb:$A(GameObject)" />
+      <method signature="void Hot.InternalSDK::Hot.IChannelSDK.Init([Hot]Hot.InternalSDK, System.Action`1&lt;bool&gt;)" newName="$a" oldStackTraceSignature="Hot.InternalSDK:Hot.IChannelSDK.Init(Action`1)" newStackTraceSignature="$E.$gb:$a(Action`1)" />
     </type>
     <type fullName="Hot.WxTool" newFullName="$E.$Gb" status="Renamed">
       <field signature="string WxCurSDKVersion" newName="$a" />
@@ -2030,60 +2030,60 @@
     </type>
     <type fullName="Obfuz.EncryptorBase" newFullName="$f.$D" status="Renamed">
       <property signature="int OpCodeCount" newName="$F" />
-      <method signature="int Obfuz.EncryptorBase::get_OpCodeCount([Obfuz.Runtime]Obfuz.EncryptorBase)" newName="$g" oldStackTraceSignature="Obfuz.EncryptorBase:get_OpCodeCount()" newStackTraceSignature="$f.$D:$g()" />
+      <method signature="int Obfuz.EncryptorBase::get_OpCodeCount([Obfuz.Runtime]Obfuz.EncryptorBase)" newName="$d" oldStackTraceSignature="Obfuz.EncryptorBase:get_OpCodeCount()" newStackTraceSignature="$f.$D:$d()" />
       <method signature="int[] Obfuz.EncryptorBase::ConvertToIntKey(byte[])" newName="$a" oldStackTraceSignature="Obfuz.EncryptorBase:ConvertToIntKey(Byte[])" newStackTraceSignature="$f.$D:$a(Byte[])" />
-      <method signature="int Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, int, int, int)" newName="$G" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$G(Int32, Int32, Int32)" />
-      <method signature="int Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, int, int, int)" newName="$h" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$h(Int32, Int32, Int32)" />
-      <method signature="long Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, long, int, int)" newName="$G" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$D:$G(Int64, Int32, Int32)" />
-      <method signature="long Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, long, int, int)" newName="$h" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$D:$h(Int64, Int32, Int32)" />
-      <method signature="float Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, float, int, int)" newName="$G" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$D:$G(Single, Int32, Int32)" />
-      <method signature="float Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, float, int, int)" newName="$h" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$D:$h(Single, Int32, Int32)" />
-      <method signature="double Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, double, int, int)" newName="$G" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$D:$G(Double, Int32, Int32)" />
-      <method signature="double Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, double, int, int)" newName="$h" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$D:$h(Double, Int32, Int32)" />
-      <method signature="byte[] Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int, int, int)" newName="$H" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$H(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="byte[] Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int, int, int)" newName="$i" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$i(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="byte[] Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, string, int, int)" newName="$G" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(String, Int32, Int32)" newStackTraceSignature="$f.$D:$G(String, Int32, Int32)" />
-      <method signature="string Obfuz.EncryptorBase::DecryptString([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int, int, int)" newName="$I" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptString(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$I(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="void Obfuz.EncryptorBase::EncryptBlock([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int)" newName="$j" oldStackTraceSignature="Obfuz.EncryptorBase:EncryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$D:$j(Byte[], Int32, Int32)" />
-      <method signature="void Obfuz.EncryptorBase::DecryptBlock([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int)" newName="$J" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$D:$J(Byte[], Int32, Int32)" />
+      <method signature="int Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, int, int, int)" newName="$D" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$D(Int32, Int32, Int32)" />
+      <method signature="int Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, int, int, int)" newName="$e" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$e(Int32, Int32, Int32)" />
+      <method signature="long Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, long, int, int)" newName="$D" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$D:$D(Int64, Int32, Int32)" />
+      <method signature="long Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, long, int, int)" newName="$e" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$D:$e(Int64, Int32, Int32)" />
+      <method signature="float Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, float, int, int)" newName="$D" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$D:$D(Single, Int32, Int32)" />
+      <method signature="float Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, float, int, int)" newName="$e" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$D:$e(Single, Int32, Int32)" />
+      <method signature="double Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, double, int, int)" newName="$D" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$D:$D(Double, Int32, Int32)" />
+      <method signature="double Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, double, int, int)" newName="$e" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$D:$e(Double, Int32, Int32)" />
+      <method signature="byte[] Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int, int, int)" newName="$b" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$b(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="byte[] Obfuz.EncryptorBase::Decrypt([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int, int, int)" newName="$B" oldStackTraceSignature="Obfuz.EncryptorBase:Decrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$B(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="byte[] Obfuz.EncryptorBase::Encrypt([Obfuz.Runtime]Obfuz.EncryptorBase, string, int, int)" newName="$D" oldStackTraceSignature="Obfuz.EncryptorBase:Encrypt(String, Int32, Int32)" newStackTraceSignature="$f.$D:$D(String, Int32, Int32)" />
+      <method signature="string Obfuz.EncryptorBase::DecryptString([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int, int, int)" newName="$c" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptString(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$c(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="void Obfuz.EncryptorBase::EncryptBlock([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int)" newName="$C" oldStackTraceSignature="Obfuz.EncryptorBase:EncryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$D:$C(Byte[], Int32, Int32)" />
+      <method signature="void Obfuz.EncryptorBase::DecryptBlock([Obfuz.Runtime]Obfuz.EncryptorBase, byte[], int, int)" newName="$E" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$D:$E(Byte[], Int32, Int32)" />
       <method signature="void Obfuz.EncryptorBase::DecryptBlock([Obfuz.Runtime]Obfuz.EncryptorBase, byte*, int, int, int)" newName="$A" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptBlock(Byte*, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$A(Byte*, Int32, Int32, Int32)" />
-      <method signature="void Obfuz.EncryptorBase::DecryptInitializeArray([Obfuz.Runtime]Obfuz.EncryptorBase, System.Array, System.RuntimeFieldHandle, int, int, int)" newName="$k" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptInitializeArray(Array, RuntimeFieldHandle, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$k(Array, RuntimeFieldHandle, Int32, Int32, Int32)" />
+      <method signature="void Obfuz.EncryptorBase::DecryptInitializeArray([Obfuz.Runtime]Obfuz.EncryptorBase, System.Array, System.RuntimeFieldHandle, int, int, int)" newName="$f" oldStackTraceSignature="Obfuz.EncryptorBase:DecryptInitializeArray(Array, RuntimeFieldHandle, Int32, Int32, Int32)" newStackTraceSignature="$f.$D:$f(Array, RuntimeFieldHandle, Int32, Int32, Int32)" />
     </type>
     <type fullName="Obfuz.IEncryptor" newFullName="$f.$e" status="Renamed">
       <property signature="int OpCodeCount" newName="$a" />
-      <method signature="int Obfuz.IEncryptor::get_OpCodeCount([Obfuz.Runtime]Obfuz.IEncryptor)" newName="$g" oldStackTraceSignature="Obfuz.IEncryptor:get_OpCodeCount()" newStackTraceSignature="$f.$e:$g()" />
-      <method signature="void Obfuz.IEncryptor::EncryptBlock([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int)" newName="$j" oldStackTraceSignature="Obfuz.IEncryptor:EncryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$e:$j(Byte[], Int32, Int32)" />
-      <method signature="void Obfuz.IEncryptor::DecryptBlock([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int)" newName="$J" oldStackTraceSignature="Obfuz.IEncryptor:DecryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$e:$J(Byte[], Int32, Int32)" />
-      <method signature="int Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, int, int, int)" newName="$G" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$G(Int32, Int32, Int32)" />
-      <method signature="int Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, int, int, int)" newName="$h" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$h(Int32, Int32, Int32)" />
-      <method signature="long Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, long, int, int)" newName="$G" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$e:$G(Int64, Int32, Int32)" />
-      <method signature="long Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, long, int, int)" newName="$h" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$e:$h(Int64, Int32, Int32)" />
-      <method signature="float Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, float, int, int)" newName="$G" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$e:$G(Single, Int32, Int32)" />
-      <method signature="float Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, float, int, int)" newName="$h" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$e:$h(Single, Int32, Int32)" />
-      <method signature="double Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, double, int, int)" newName="$G" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$e:$G(Double, Int32, Int32)" />
-      <method signature="double Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, double, int, int)" newName="$h" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$e:$h(Double, Int32, Int32)" />
-      <method signature="byte[] Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int, int, int)" newName="$H" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$H(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="byte[] Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int, int, int)" newName="$i" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$i(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="byte[] Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, string, int, int)" newName="$G" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(String, Int32, Int32)" newStackTraceSignature="$f.$e:$G(String, Int32, Int32)" />
-      <method signature="string Obfuz.IEncryptor::DecryptString([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int, int, int)" newName="$I" oldStackTraceSignature="Obfuz.IEncryptor:DecryptString(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$I(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="void Obfuz.IEncryptor::DecryptInitializeArray([Obfuz.Runtime]Obfuz.IEncryptor, System.Array, System.RuntimeFieldHandle, int, int, int)" newName="$k" oldStackTraceSignature="Obfuz.IEncryptor:DecryptInitializeArray(Array, RuntimeFieldHandle, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$k(Array, RuntimeFieldHandle, Int32, Int32, Int32)" />
+      <method signature="int Obfuz.IEncryptor::get_OpCodeCount([Obfuz.Runtime]Obfuz.IEncryptor)" newName="$d" oldStackTraceSignature="Obfuz.IEncryptor:get_OpCodeCount()" newStackTraceSignature="$f.$e:$d()" />
+      <method signature="void Obfuz.IEncryptor::EncryptBlock([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int)" newName="$C" oldStackTraceSignature="Obfuz.IEncryptor:EncryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$e:$C(Byte[], Int32, Int32)" />
+      <method signature="void Obfuz.IEncryptor::DecryptBlock([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int)" newName="$E" oldStackTraceSignature="Obfuz.IEncryptor:DecryptBlock(Byte[], Int32, Int32)" newStackTraceSignature="$f.$e:$E(Byte[], Int32, Int32)" />
+      <method signature="int Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, int, int, int)" newName="$D" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$D(Int32, Int32, Int32)" />
+      <method signature="int Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, int, int, int)" newName="$e" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$e(Int32, Int32, Int32)" />
+      <method signature="long Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, long, int, int)" newName="$D" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$e:$D(Int64, Int32, Int32)" />
+      <method signature="long Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, long, int, int)" newName="$e" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$e:$e(Int64, Int32, Int32)" />
+      <method signature="float Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, float, int, int)" newName="$D" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$e:$D(Single, Int32, Int32)" />
+      <method signature="float Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, float, int, int)" newName="$e" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$e:$e(Single, Int32, Int32)" />
+      <method signature="double Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, double, int, int)" newName="$D" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$e:$D(Double, Int32, Int32)" />
+      <method signature="double Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, double, int, int)" newName="$e" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$e:$e(Double, Int32, Int32)" />
+      <method signature="byte[] Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int, int, int)" newName="$b" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$b(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="byte[] Obfuz.IEncryptor::Decrypt([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int, int, int)" newName="$B" oldStackTraceSignature="Obfuz.IEncryptor:Decrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$B(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="byte[] Obfuz.IEncryptor::Encrypt([Obfuz.Runtime]Obfuz.IEncryptor, string, int, int)" newName="$D" oldStackTraceSignature="Obfuz.IEncryptor:Encrypt(String, Int32, Int32)" newStackTraceSignature="$f.$e:$D(String, Int32, Int32)" />
+      <method signature="string Obfuz.IEncryptor::DecryptString([Obfuz.Runtime]Obfuz.IEncryptor, byte[], int, int, int, int)" newName="$c" oldStackTraceSignature="Obfuz.IEncryptor:DecryptString(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$c(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="void Obfuz.IEncryptor::DecryptInitializeArray([Obfuz.Runtime]Obfuz.IEncryptor, System.Array, System.RuntimeFieldHandle, int, int, int)" newName="$f" oldStackTraceSignature="Obfuz.IEncryptor:DecryptInitializeArray(Array, RuntimeFieldHandle, Int32, Int32, Int32)" newStackTraceSignature="$f.$e:$f(Array, RuntimeFieldHandle, Int32, Int32, Int32)" />
     </type>
     <type fullName="Obfuz.NullEncryptor" newFullName="$f.$E" status="Renamed">
       <field signature="byte[] _key" newName="$a" />
       <property signature="int OpCodeCount" newName="$A" />
-      <method signature="int Obfuz.NullEncryptor::get_OpCodeCount([Obfuz.Runtime]Obfuz.NullEncryptor)" newName="$g" oldStackTraceSignature="Obfuz.NullEncryptor:get_OpCodeCount()" newStackTraceSignature="$f.$E:$g()" />
-      <method signature="int Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, int, int, int)" newName="$G" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$G(Int32, Int32, Int32)" />
-      <method signature="int Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, int, int, int)" newName="$h" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$h(Int32, Int32, Int32)" />
-      <method signature="long Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, long, int, int)" newName="$G" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$E:$G(Int64, Int32, Int32)" />
-      <method signature="long Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, long, int, int)" newName="$h" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$E:$h(Int64, Int32, Int32)" />
-      <method signature="float Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, float, int, int)" newName="$G" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$E:$G(Single, Int32, Int32)" />
-      <method signature="float Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, float, int, int)" newName="$h" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$E:$h(Single, Int32, Int32)" />
-      <method signature="double Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, double, int, int)" newName="$G" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$E:$G(Double, Int32, Int32)" />
-      <method signature="double Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, double, int, int)" newName="$h" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$E:$h(Double, Int32, Int32)" />
-      <method signature="byte[] Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, byte[], int, int, int, int)" newName="$H" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$H(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="byte[] Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, byte[], int, int, int, int)" newName="$i" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$i(Byte[], Int32, Int32, Int32, Int32)" />
-      <method signature="byte[] Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, string, int, int)" newName="$G" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(String, Int32, Int32)" newStackTraceSignature="$f.$E:$G(String, Int32, Int32)" />
-      <method signature="string Obfuz.NullEncryptor::DecryptString([Obfuz.Runtime]Obfuz.NullEncryptor, byte[], int, int, int, int)" newName="$I" oldStackTraceSignature="Obfuz.NullEncryptor:DecryptString(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$I(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="int Obfuz.NullEncryptor::get_OpCodeCount([Obfuz.Runtime]Obfuz.NullEncryptor)" newName="$d" oldStackTraceSignature="Obfuz.NullEncryptor:get_OpCodeCount()" newStackTraceSignature="$f.$E:$d()" />
+      <method signature="int Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, int, int, int)" newName="$D" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$D(Int32, Int32, Int32)" />
+      <method signature="int Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, int, int, int)" newName="$e" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$e(Int32, Int32, Int32)" />
+      <method signature="long Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, long, int, int)" newName="$D" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$E:$D(Int64, Int32, Int32)" />
+      <method signature="long Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, long, int, int)" newName="$e" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Int64, Int32, Int32)" newStackTraceSignature="$f.$E:$e(Int64, Int32, Int32)" />
+      <method signature="float Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, float, int, int)" newName="$D" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$E:$D(Single, Int32, Int32)" />
+      <method signature="float Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, float, int, int)" newName="$e" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Single, Int32, Int32)" newStackTraceSignature="$f.$E:$e(Single, Int32, Int32)" />
+      <method signature="double Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, double, int, int)" newName="$D" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$E:$D(Double, Int32, Int32)" />
+      <method signature="double Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, double, int, int)" newName="$e" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Double, Int32, Int32)" newStackTraceSignature="$f.$E:$e(Double, Int32, Int32)" />
+      <method signature="byte[] Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, byte[], int, int, int, int)" newName="$b" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$b(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="byte[] Obfuz.NullEncryptor::Decrypt([Obfuz.Runtime]Obfuz.NullEncryptor, byte[], int, int, int, int)" newName="$B" oldStackTraceSignature="Obfuz.NullEncryptor:Decrypt(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$B(Byte[], Int32, Int32, Int32, Int32)" />
+      <method signature="byte[] Obfuz.NullEncryptor::Encrypt([Obfuz.Runtime]Obfuz.NullEncryptor, string, int, int)" newName="$D" oldStackTraceSignature="Obfuz.NullEncryptor:Encrypt(String, Int32, Int32)" newStackTraceSignature="$f.$E:$D(String, Int32, Int32)" />
+      <method signature="string Obfuz.NullEncryptor::DecryptString([Obfuz.Runtime]Obfuz.NullEncryptor, byte[], int, int, int, int)" newName="$c" oldStackTraceSignature="Obfuz.NullEncryptor:DecryptString(Byte[], Int32, Int32, Int32, Int32)" newStackTraceSignature="$f.$E:$c(Byte[], Int32, Int32, Int32, Int32)" />
     </type>
     <type fullName="&lt;PrivateImplementationDetails&gt;" newFullName="$f" status="Renamed">
       <field signature="[Obfuz.Runtime]&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=342 02E5176FE5961485DA1D9514DA647A17F82D3E8F8F83AB67B6AC55A60312FD65" newName="$a" />

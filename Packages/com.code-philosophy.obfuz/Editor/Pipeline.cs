@@ -1,5 +1,5 @@
-﻿using Obfuz.ObfusPasses;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Obfuz
 {
@@ -34,9 +34,13 @@ namespace Obfuz
 
         public void Run()
         {
+            var sw = new Stopwatch();
             foreach (var pass in _passes)
             {
+                sw.Restart();
                 pass.Process();
+                sw.Stop();
+                UnityEngine.Debug.Log($"Pass: {pass.GetType().Name} process cost time: {sw.ElapsedMilliseconds}ms");
             }
         }
     }
