@@ -1,7 +1,6 @@
 ﻿using dnlib.DotNet;
 using HybridCLR.Editor.ABI;
 using HybridCLR.Editor.Meta;
-using HybridCLR.Editor.ReversePInvokeWrap;
 using HybridCLR.Editor.Template;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ using UnityEngine;
 using TypeInfo = HybridCLR.Editor.ABI.TypeInfo;
 using CallingConvention = System.Runtime.InteropServices.CallingConvention;
 using TypeAttributes = dnlib.DotNet.TypeAttributes;
+using System.Runtime.InteropServices;
 
 namespace HybridCLR.Editor.MethodBridge
 {
@@ -29,9 +29,9 @@ namespace HybridCLR.Editor.MethodBridge
 
             public IReadOnlyCollection<GenericMethod> GenericMethods { get; set; }
 
-            public List<RawReversePInvokeMethodInfo> ReversePInvokeMethods { get; set; }
+            public List<RawMonoPInvokeCallbackMethodInfo> ReversePInvokeMethods { get; set; }
 
-            public IReadOnlyCollection<RawCalliMethodSignatureInfo> CalliMethodSignatures { get; set; }
+            public IReadOnlyCollection<CallNativeMethodSignatureInfo> CalliMethodSignatures { get; set; }
 
             public bool Development { get; set; }
         }
@@ -58,9 +58,9 @@ namespace HybridCLR.Editor.MethodBridge
 
         private readonly List<GenericMethod> _genericMethods;
 
-        private readonly List<RawReversePInvokeMethodInfo> _originalReversePInvokeMethods;
+        private readonly List<RawMonoPInvokeCallbackMethodInfo> _originalReversePInvokeMethods;
 
-        private readonly List<RawCalliMethodSignatureInfo> _originalCalliMethodSignatures;
+        private readonly List<CallNativeMethodSignatureInfo> _originalCalliMethodSignatures;
 
         private readonly string _templateCode;
 
@@ -306,43 +306,105 @@ namespace HybridCLR.Editor.MethodBridge
 
         private class AnalyzeTypeInfo
         {
-            public TypeInfo toSharedType;
+            public TypeInfo isoType;
             public List<AnalyzeFieldInfo> fields;
             public string signature;
-            public ClassLayout classLayout;
-            public TypeAttributes layout;
+            public uint originalPackingSize;
+            public uint packingSize;
+            public uint classSize;
+            public LayoutKind layout;
+            public bool blittable;
         }
 
         private readonly Dictionary<TypeInfo, AnalyzeTypeInfo> _analyzeTypeInfos = new Dictionary<TypeInfo, AnalyzeTypeInfo>();
 
         private readonly Dictionary<string, TypeInfo> _signature2Type = new Dictionary<string, TypeInfo>();
 
+
+
+        private bool IsBlittable(TypeSig typeSig)
+        {
+            typeSig = typeSig.RemovePinnedAndModifiers();
+            if (typeSig.IsByRef)
+            {
+                return true;
+            }
+            switch (typeSig.ElementType)
+            {
+                case ElementType.Void: return false;
+                case ElementType.Boolean:
+                case ElementType.I1:
+                case ElementType.U1:
+                case ElementType.I2:
+                case ElementType.Char:
+                case ElementType.U2:
+                case ElementType.I4:
+                case ElementType.U4:
+                case ElementType.I8:
+                case ElementType.U8:
+                case ElementType.R4:
+                case ElementType.R8:
+                case ElementType.I:
+                case ElementType.U:
+                case ElementType.Ptr:
+                case ElementType.ByRef:
+                case ElementType.FnPtr:
+                case ElementType.TypedByRef: return true;
+                case ElementType.String:
+                case ElementType.Class:
+                case ElementType.Array:
+                case ElementType.SZArray:
+                case ElementType.Object:
+                case ElementType.Module:
+                case ElementType.Var:
+                case ElementType.MVar: return false;
+                case ElementType.ValueType:
+                {
+                    TypeDef typeDef = typeSig.ToTypeDefOrRef().ResolveTypeDef();
+                    if (typeDef == null)
+                    {
+                        throw new Exception($"type:{typeSig} definition could not be found. Please try `HybridCLR/Genergate/LinkXml`, then Build once to generate the AOT dll, and then regenerate the bridge function");
+                    }
+                    if (typeDef.IsEnum)
+                    {
+                        return true;
+                    }
+                    return CalculateAnalyzeTypeInfoBasic(GetSharedTypeInfo(typeSig)).blittable;
+                }
+                case ElementType.GenericInst:
+                {
+                    GenericInstSig gis = (GenericInstSig)typeSig;
+                    if (!gis.GenericType.IsValueType)
+                    {
+                        return false;
+                    }
+                    TypeDef typeDef = gis.GenericType.ToTypeDefOrRef().ResolveTypeDef();
+                    if (typeDef.IsEnum)
+                    {
+                        return true;
+                    }
+                    return CalculateAnalyzeTypeInfoBasic(GetSharedTypeInfo(typeSig)).blittable;
+                }
+                default: throw new NotSupportedException($"{typeSig.ElementType}");
+            }
+        }
+
         private AnalyzeTypeInfo CalculateAnalyzeTypeInfoBasic(TypeInfo typeInfo)
         {
+            Debug.Assert(typeInfo.IsStruct);
+            if (_analyzeTypeInfos.TryGetValue(typeInfo, out var ati))
+            {
+                return ati;
+            }
             TypeSig type = typeInfo.Klass;
             TypeDef typeDef = type.ToTypeDefOrRef().ResolveTypeDefThrow();
 
             List<TypeSig> klassInst = type.ToGenericInstSig()?.GenericArguments?.ToList();
             GenericArgumentContext ctx = klassInst != null ? new GenericArgumentContext(klassInst, null) : null;
 
-            ClassLayout sa = typeDef.ClassLayout;
-            var analyzeTypeInfo = new AnalyzeTypeInfo()
-            {
-                classLayout = sa,
-                layout = typeDef.Layout,
-            };
+            var fields = new List<AnalyzeFieldInfo>();
 
-            // don't share type with explicit layout
-            if (sa != null)
-            {
-                analyzeTypeInfo.toSharedType = typeInfo;
-                analyzeTypeInfo.signature = typeInfo.CreateSigName();
-                _signature2Type.Add(analyzeTypeInfo.signature, typeInfo);
-                return analyzeTypeInfo;
-            }
-
-            var fields = analyzeTypeInfo.fields = new List<AnalyzeFieldInfo>();
-
+            bool blittable = true;
             foreach (FieldDef field in typeDef.Fields)
             {
                 if (field.IsStatic)
@@ -350,8 +412,39 @@ namespace HybridCLR.Editor.MethodBridge
                     continue;
                 }
                 TypeSig fieldType = ctx != null ? MetaUtil.Inflate(field.FieldType, ctx) : field.FieldType;
-                fields.Add(new AnalyzeFieldInfo { field = field, type = GetSharedTypeInfo(fieldType) });
+                blittable &= IsBlittable(fieldType);
+                TypeInfo sharedFieldTypeInfo = GetSharedTypeInfo(fieldType);
+                TypeInfo isoType =  ToIsomorphicType(sharedFieldTypeInfo);
+                fields.Add(new AnalyzeFieldInfo { field = field, type = isoType });
             }
+            //analyzeTypeInfo.blittable = blittable;
+            //analyzeTypeInfo.packingSize = blittable ? analyzeTypeInfo.originalPackingSize : 0;
+
+            ClassLayout sa = typeDef.ClassLayout;
+            uint originalPackingSize = sa?.PackingSize ?? 0;
+            var analyzeTypeInfo = new AnalyzeTypeInfo()
+            {
+                originalPackingSize = originalPackingSize,
+                packingSize = blittable && !typeDef.IsAutoLayout ? originalPackingSize : 0,
+                classSize = sa?.ClassSize ?? 0,
+                layout = typeDef.IsAutoLayout ? LayoutKind.Auto : (typeDef.IsExplicitLayout ? LayoutKind.Explicit : LayoutKind.Sequential),
+                fields = fields,
+                blittable = blittable,
+            };
+            _analyzeTypeInfos.Add(typeInfo, analyzeTypeInfo);
+            analyzeTypeInfo.signature = GetOrCalculateTypeInfoSignature(typeInfo);
+
+            if (_signature2Type.TryGetValue(analyzeTypeInfo.signature, out var sharedType))
+            {
+                // Debug.Log($"[ToIsomorphicType] type:{type.Klass} ==> sharedType:{sharedType.Klass} signature:{signature} ");
+                analyzeTypeInfo.isoType = sharedType;
+            }
+            else
+            {
+                analyzeTypeInfo.isoType = typeInfo;
+                _signature2Type.Add(analyzeTypeInfo.signature, typeInfo);
+            }
+
             return analyzeTypeInfo;
         }
 
@@ -374,17 +467,12 @@ namespace HybridCLR.Editor.MethodBridge
             {
                 return ati.signature;
             }
-            
+
             var sigBuf = new StringBuilder();
-            if (ati.classLayout != null)
+            if (ati.packingSize != 0 || ati.classSize != 0 || ati.layout != LayoutKind.Sequential || !ati.blittable)
             {
-                sigBuf.Append($"[{ati.classLayout.ClassSize}|{ati.classLayout.PackingSize}|{ati.classLayout}]");
+                sigBuf.Append($"[{ati.classSize}|{ati.packingSize}|{ati.layout}|{(ati.blittable ? 0 : 1)}]");
             }
-            if (ati.layout != 0)
-            {
-                sigBuf.Append($"[{(int)ati.layout}]");
-            }
-            
             foreach (var field in ati.fields)
             {
                 string fieldOffset = field.field.FieldOffset != null ? field.field.FieldOffset.ToString() + "|" : "";
@@ -399,27 +487,7 @@ namespace HybridCLR.Editor.MethodBridge
             {
                 return type;
             }
-            if (!_analyzeTypeInfos.TryGetValue(type, out var ati))
-            {
-                ati = CalculateAnalyzeTypeInfoBasic(type);
-                _analyzeTypeInfos.Add(type, ati);
-            }
-            if (ati.toSharedType == null)
-            {
-                string signature = GetOrCalculateTypeInfoSignature(type);
-                Debug.Assert(signature == ati.signature);
-                if (_signature2Type.TryGetValue(signature, out var sharedType))
-                {
-                    // Debug.Log($"[ToIsomorphicType] type:{type.Klass} ==> sharedType:{sharedType.Klass} signature:{signature} ");
-                    ati.toSharedType = sharedType;
-                }
-                else
-                {
-                    ati.toSharedType = type;
-                    _signature2Type.Add(signature, type);
-                }
-            }
-            return ati.toSharedType;
+            return CalculateAnalyzeTypeInfoBasic(type).isoType;
         }
 
         private MethodDesc ToIsomorphicMethod(MethodDesc method)
@@ -519,7 +587,7 @@ namespace HybridCLR.Editor.MethodBridge
             return (CallingConvention)conv;
         }
 
-        private List<ABIReversePInvokeMethodInfo> BuildABIMethods(List<RawReversePInvokeMethodInfo> rawMethods)
+        private List<ABIReversePInvokeMethodInfo> BuildABIMethods(List<RawMonoPInvokeCallbackMethodInfo> rawMethods)
         {
             var methodsBySig = new Dictionary<string, ABIReversePInvokeMethodInfo>();
             foreach (var method in rawMethods)
@@ -527,8 +595,8 @@ namespace HybridCLR.Editor.MethodBridge
                 var sharedMethod = new MethodDesc
                 {
                     MethodDef = method.Method,
-                    ReturnInfo = new ReturnInfo { Type = _typeCreator.CreateTypeInfo(method.Method.ReturnType) },
-                    ParamInfos = method.Method.Parameters.Select(p => new ParamInfo { Type = _typeCreator.CreateTypeInfo(p.Type) }).ToList(),
+                    ReturnInfo = new ReturnInfo { Type = GetSharedTypeInfo(method.Method.ReturnType) },
+                    ParamInfos = method.Method.Parameters.Select(p => new ParamInfo { Type = GetSharedTypeInfo(p.Type) }).ToList(),
                 };
                 sharedMethod.Init();
                 sharedMethod = ToIsomorphicMethod(sharedMethod);
@@ -555,7 +623,7 @@ namespace HybridCLR.Editor.MethodBridge
             return newMethods;
         }
 
-        private List<CalliMethodInfo> BuildCalliMethods(List<RawCalliMethodSignatureInfo> rawMethods)
+        private List<CalliMethodInfo> BuildCalliMethods(List<CallNativeMethodSignatureInfo> rawMethods)
         {
             var methodsBySig = new Dictionary<string, CalliMethodInfo>();
             foreach (var method in rawMethods)
@@ -563,13 +631,13 @@ namespace HybridCLR.Editor.MethodBridge
                 var sharedMethod = new MethodDesc
                 {
                     MethodDef = null,
-                    ReturnInfo = new ReturnInfo { Type = _typeCreator.CreateTypeInfo(method.MethodSig.RetType) },
-                    ParamInfos = method.MethodSig.Params.Select(p => new ParamInfo { Type = _typeCreator.CreateTypeInfo(p) }).ToList(),
+                    ReturnInfo = new ReturnInfo { Type = GetSharedTypeInfo(method.MethodSig.RetType) },
+                    ParamInfos = method.MethodSig.Params.Select(p => new ParamInfo { Type = GetSharedTypeInfo(p) }).ToList(),
                 };
                 sharedMethod.Init();
                 sharedMethod = ToIsomorphicMethod(sharedMethod);
 
-                CallingConvention callingConv = (CallingConvention)((int)method.MethodSig.CallingConvention + 1);
+                CallingConvention callingConv = (CallingConvention)((int)(method.MethodSig.CallingConvention &  dnlib.DotNet.CallingConvention.Mask) + 1);
                 string signature = MakeCalliSignature(sharedMethod, callingConv);
 
                 if (!methodsBySig.TryGetValue(signature, out var arm))
@@ -617,7 +685,7 @@ namespace HybridCLR.Editor.MethodBridge
             };
 
             var classInfos = new List<ClassInfo>();
-            var classTypeSet = new HashSet<TypeInfo>();
+            var classTypeSet = new Dictionary<TypeInfo, ClassInfo>();
             foreach (var type in structTypes)
             {
                 GenerateClassInfo(type, classTypeSet, classInfos);
@@ -770,47 +838,68 @@ const ReversePInvokeMethodData hybridclr::interpreter::g_reversePInvokeMethodStu
         class ClassInfo
         {
             public TypeInfo type;
-
-            public TypeDef typeDef;
-
-            public List<FieldInfo> fields = new List<FieldInfo>();
-
-            public ClassLayout layout;
+            public List<AnalyzeFieldInfo> fields;
+            public uint packingSize;
+            public uint classSize;
+            public LayoutKind layout;
+            public bool blittable;
         }
 
-        private void GenerateClassInfo(TypeInfo type, HashSet<TypeInfo> typeSet, List<ClassInfo> classInfos)
+        private void GenerateClassInfo(TypeInfo type, Dictionary<TypeInfo, ClassInfo> typeSet, List<ClassInfo> classInfos)
         {
-            if (!typeSet.Add(type))
+            if (typeSet.ContainsKey(type))
             {
                 return;
             }
-            TypeSig typeSig = type.Klass;
-            var fields = new List<FieldInfo>();
 
-            TypeDef typeDef = typeSig.ToTypeDefOrRef().ResolveTypeDefThrow();
+            AnalyzeTypeInfo ati = CalculateAnalyzeTypeInfoBasic(type);
+            //TypeSig typeSig = type.Klass;
+            //var fields = new List<FieldInfo>();
 
-            List<TypeSig> klassInst = typeSig.ToGenericInstSig()?.GenericArguments?.ToList();
-            GenericArgumentContext ctx = klassInst != null ? new GenericArgumentContext(klassInst, null) : null;
+            //TypeDef typeDef = typeSig.ToTypeDefOrRef().ResolveTypeDefThrow();
 
-            ClassLayout sa = typeDef.ClassLayout;
-           
-            ICorLibTypes corLibTypes = typeDef.Module.CorLibTypes;
-            foreach (FieldDef field in typeDef.Fields)
+            //List<TypeSig> klassInst = typeSig.ToGenericInstSig()?.GenericArguments?.ToList();
+            //GenericArgumentContext ctx = klassInst != null ? new GenericArgumentContext(klassInst, null) : null;
+
+            //ClassLayout sa = typeDef.ClassLayout;
+
+            //ICorLibTypes corLibTypes = typeDef.Module.CorLibTypes;
+            //bool blittable = true;
+            //foreach (FieldDef field in typeDef.Fields)
+            //{
+            //    if (field.IsStatic)
+            //    {
+            //        continue;
+            //    }
+            //    TypeSig fieldType = ctx != null ? MetaUtil.Inflate(field.FieldType, ctx) : field.FieldType;
+            //    fieldType = MetaUtil.ToShareTypeSig(corLibTypes, fieldType);
+            //    var fieldTypeInfo = ToIsomorphicType(GetSharedTypeInfo(fieldType));
+            //    if (fieldTypeInfo.IsStruct)
+            //    {
+            //        GenerateClassInfo(fieldTypeInfo, typeSet, classInfos);
+            //    }
+            //    blittable &= IsBlittable(fieldType, fieldTypeInfo, typeSet);
+            //    fields.Add(new FieldInfo { field = field, type = fieldTypeInfo });
+            //}
+
+            foreach (var field in ati.fields)
             {
-                if (field.IsStatic)
+                if (field.type.IsStruct)
                 {
-                    continue;
+                    GenerateClassInfo(field.type, typeSet, classInfos);
                 }
-                TypeSig fieldType = ctx != null ? MetaUtil.Inflate(field.FieldType, ctx) : field.FieldType;
-                fieldType = MetaUtil.ToShareTypeSig(corLibTypes, fieldType);
-                var fieldTypeInfo = ToIsomorphicType(_typeCreator.CreateTypeInfo(fieldType));
-                if (fieldTypeInfo.IsStruct)
-                {
-                    GenerateClassInfo(fieldTypeInfo, typeSet, classInfos);
-                }
-                fields.Add(new FieldInfo { field = field, type = fieldTypeInfo });
             }
-            classInfos.Add(new ClassInfo() { type = type, typeDef = typeDef, fields = fields, layout = sa });
+            var classInfo = new ClassInfo()
+            {
+                type = type,
+                fields = ati.fields,
+                packingSize = ati.packingSize,
+                classSize = ati.classSize,
+                layout = ati.layout,
+                blittable = ati.blittable,
+            };
+            typeSet.Add(type, classInfo);
+            classInfos.Add(classInfo);
         }
 
         private void GenerateStructDefines(List<ClassInfo> classInfos, List<string> lines)
@@ -818,16 +907,13 @@ const ReversePInvokeMethodData hybridclr::interpreter::g_reversePInvokeMethodStu
             foreach (var ci in classInfos)
             {
                 lines.Add($"// {ci.type.Klass}");
-                uint packingSize = ci.layout?.PackingSize ?? 0;
-                if (packingSize != 0)
-                {
-                    lines.Add($"#pragma pack(push, {packingSize})");
-                }
-                uint classSize = ci.layout?.ClassSize ?? 0;
+                uint packingSize = ci.packingSize;
+                uint classSize = ci.classSize;
                
-                if (ci.typeDef.IsExplicitLayout)
+                if (ci.layout == LayoutKind.Explicit)
                 {
-                    lines.Add($"union {ci.type.GetTypeName()} {{");
+                    lines.Add($"struct {ci.type.GetTypeName()} {{");
+                    lines.Add("\tunion {");
                     if (classSize > 0)
                     {
                         lines.Add($"\tstruct {{ char __fieldSize_offsetPadding[{classSize}];}};");
@@ -839,14 +925,28 @@ const ReversePInvokeMethodData hybridclr::interpreter::g_reversePInvokeMethodStu
                         string fieldName = $"__{index}";
                         string commentFieldName = $"{field.field.Name}";
                         lines.Add("\t#pragma pack(push, 1)");
-                        lines.Add($"\tstruct {{ {(offset > 0 ? $"char {fieldName}_offsetPadding[{offset}];" : "")}  {field.type.GetTypeName()} {fieldName};}}; // {commentFieldName}");
+                        lines.Add($"\tstruct {{ {(offset > 0 ? $"char {fieldName}_offsetPadding[{offset}]; " : "")}{field.type.GetTypeName()} {fieldName};}}; // {commentFieldName}");
                         lines.Add($"\t#pragma pack(pop)");
-                        lines.Add($"\tstruct {{ {field.type.GetTypeName()} {fieldName}_forAlignmentOnly;}}; // {commentFieldName}");
+                        if (packingSize > 0)
+                        {
+                            lines.Add($"\t#pragma pack(push, {packingSize})");
+                        }
+                        lines.Add($"\tstruct {{ {(offset > 0 ? $"char {fieldName}_offsetPadding_forAlignmentOnly[{offset}]; " : "")}{field.type.GetTypeName()} {fieldName}_forAlignmentOnly;}}; // {commentFieldName}");
+                        if (packingSize > 0)
+                        {
+                            lines.Add($"\t#pragma pack(pop)");
+                        }
                         ++index;
                     }
+                    lines.Add("\t};");
+                    lines.Add("};");
                 }
                 else
                 {
+                    if (packingSize != 0)
+                    {
+                        lines.Add($"#pragma pack(push, {packingSize})");
+                    }
                     lines.Add($"{(classSize > 0 ? "union" : "struct")} {ci.type.GetTypeName()} {{");
                     if (classSize > 0)
                     {
@@ -865,11 +965,11 @@ const ReversePInvokeMethodData hybridclr::interpreter::g_reversePInvokeMethodStu
                     {
                         lines.Add("\t};");
                     }
-                }
-                lines.Add("};");
-                if (packingSize != 0)
-                {
-                    lines.Add($"#pragma pack(pop)");
+                    lines.Add("};");
+                    if (packingSize != 0)
+                    {
+                        lines.Add($"#pragma pack(pop)");
+                    }
                 }
             }
         }
@@ -1127,7 +1227,7 @@ static {method.ReturnInfo.Type.GetTypeName()} __N2M_{(adjustorThunk ? "AdjustorT
             string paramNameListStr = string.Join(", ", method.ParamInfos.Select(p => GetManaged2NativePassParam(p.Type, $"localVarBase+argVarIndexs[{p.Index}]")));
             string il2cppCallConventionName = GetIl2cppCallConventionName(methodInfo.Callvention);
             lines.Add($@"
-static void __M2NF_{methodInfo.Signature}(const void* methodPointer, uint16_t* argVarIndexs, StackObject* localVarBase, void* ret)
+static void __M2NF_{methodInfo.Signature}(Il2CppMethodPointer methodPointer, uint16_t* argVarIndexs, StackObject* localVarBase, void* ret)
 {{
     typedef {method.ReturnInfo.Type.GetTypeName()} ({il2cppCallConventionName} *NativeMethod)({paramListStr});
     {(!method.ReturnInfo.IsVoid ? $"*({method.ReturnInfo.Type.GetTypeName()}*)ret = " : "")}((NativeMethod)(methodPointer))({paramNameListStr});

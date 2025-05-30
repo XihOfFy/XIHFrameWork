@@ -1,5 +1,124 @@
 # ReleaseLog
 
+## 8.1.0
+
+Release Date: 2025-05-29.
+
+### Runtime
+
+- [opt] **important**! use std::unordered_set for s_GenericInst to reduce the time cost of Assembly.Load to 33% of the original.
+
+### Editor
+
+- [fix] fix bug of GenericArgumentContext that inflate ByRef and SZArray to Ptr.
+
+## 8.0.0
+
+Release Date: 2025-05-02.
+
+### Runtime
+
+- [new] support define PInvoke method in interpreter assembly
+- [new] InterpreterImage initialize ImplMap for PInvoke methods.
+- [new] RawImageBase support ModuleRef and ImplMap table.
+- [fix] fixed a compilation error on PS4 platform for the code `TokenGenericContextType key = { token, genericContext };` — the C++ compiler version on PS4 is too old to support this initialization syntax for std::tuple.
+
+### Editor
+
+- [fix] fix error of computing CallingConvention in MethodBridge/Generator::BuildCalliMethods
+- [new] generate Managed2NativeFunction for PInvoke method
+- [change] AssemblyResolver also resolves `*.dll.bytes` files besides `*.dll`.
+- [change] change type of the first argument `methodPointer` of Managed2NativeFunctionPointer from `const void*` to `Il2CppMethodPointer`
+- [change] the shared type of ElementType.FnPtr is changed from IntPtr to UIntPtr
+- [change] validate unsupported parameter type(.e.g string) in MonoPInvokeCallback signature when generate MethodBridge file
+- [opt] optimization unnecessary initialization of typeArgsStack and methodArgsStack of GenericArgumentContext
+- [refactor] refactor code of settings.
+- [refactor] move ReversePInvokeWrap/Analyzer.cs to MethodBridge/MonoPInvokeCallbackAnalyzer.cs
+
+## 7.10.0
+
+Release Date: 2025-04-22.
+
+### Runtime
+
+- [fix] fix the bug that doesn't lock g_MetadataLock in PDBImage::SetupStackFrameInfo.
+- [change] remove Il2CppTypeHash and Il2CppTypeEqualTo, replace with il2cpp::metadata::Il2CppTypeHash and il2cpp::metadata::Il2CppTypeEqualityComparer.
+- [merge] merge il2cpp changes from tuanjie 1.3.4 to 1.5.0, base unity from 2022.3.48 to 2022.3.55 .
+
+### Editor
+
+- [fix] fix bug of `CompileDll(BuildTarget target)` that use EditorUserBuildSettings.activeBuildTarget instead of target to call CompileDll.
+- [opt] AOTAssemblyMetadataStripper strips AOT assembly resources. (#54)
+
+## 7.9.0
+
+Release Date: 2025-03-31.
+
+### Runtime
+
+- [merge] merge il2cpp changes from 6000.0.30f1 to 6000.0.44f1
+
+## 7.8.1
+
+Release Date: 2025-03-24.
+
+### Runtime
+
+- [fix] fix bug of CreateInitLocals when size <= 16
+- [change] remove unnecessary `frame->ip = (byte*)ip;` assignment in LOAD_PREV_FRAME()
+
+## 7.8.0
+
+Release Date: 2025-03-24.
+
+### Runtime
+
+- [opt] fixed a **critical** bug where taking the address of the ip variable severely impacted compiler optimizations, leading to significant performance degradation.
+- [opt] add HiOpCodeEnum::None case to interpreter loop. avoid decrement *ip when compute jump table,  boosts about 5% performance.
+- [opt] opt InitLocals and InitInlineLocals in small size cases
+- [opt] reorder MethodInfo fields to reduce memory size
+
+### Editor
+
+- [fix] fixed the bug where BashUtil.RemoveDir failed to run under certain circumstances on macOS systems.
+
+## 7.7.0
+
+Release Date: 2025-03-12.
+
+### Runtime
+
+- [change] fixed the issue that HYBRIDCLR_ENABLE_PROFILER was disabled in release build
+- [fix] fix a crash in PDBImage::SetMethodDebugInfo when GetMethodDataFromCache returns nullptr
+- [fix] fix assert bug of InterpreterDelegateInvoke when method->parameters_count - curMethod->parameters_count == 1
+- [fix] fix compiler error of initialize constructor code `{a, b}` for `std::tuple<void*,void*>` in PS5
+- [opt] removed unnecessary pdb lock in PDBImage
+- [change] fix some compiler warnings
+- [change] HYBRIDCLR_ENABLE_STRACKTRACE was enabled in both DEBUG and RELEASE build without considering HYBRIDCLR_ENABLE_STRACE_TRACE_IN_WEBGL_RELEASE_BUILD flag.
+
+### Editor
+
+- [fix] fixed hook failed in version below MacOS 11
+- [change] CompileDllActiveBuildTarget and GenerateAll use EditorUserBuildSettings.development to compile hot update dll.
+- [remove] remove option HybridCLRSettings.enableProfilerInReleaseBuild
+- [remove] remove option HybridCLRSettings.enableStraceTraceInWebGLReleaseBuild
+
+## 7.6.0
+
+Release Date: 2025-03-01.
+
+### Runtime
+
+- [fix] fixed the bug in ClassFieldLayoutCalculator where it incorrectly handles [StructLayout] and blittable attribute when calculating the layout for structs.
+- [fix] fix bug of computing explicit struct layout caused by commit "199b1b1a789d760828bd33e7e1438261cd1f8d15"
+- [fix] fix the code `TokenGenericContextType key = { token, genericContext }` has compiler error in PS5
+- [merge] merge il2cpp changes from 2021.3.44f1 to 2021.3.49f1
+
+### Editor
+
+- [fix] fixed the bug in the MethodBridge generator where it incorrectly handles [StructLayout] and blittable attribute when generating code for struct classes.
+- [new] add AssemblySorter to sort assemblies by reference order
+
 ## 7.5.0
 
 Release Date: 2025-02-05.
