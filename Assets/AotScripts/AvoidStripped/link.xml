@@ -12,6 +12,8 @@
 	</assembly>
 	<assembly fullname="LogViewer">
 	</assembly>
+	<assembly fullname="Obfuz.Runtime">
+	</assembly>
 	<assembly fullname="RuntimeInspector.Runtime">
 	</assembly>
 	<assembly fullname="UniTask">
