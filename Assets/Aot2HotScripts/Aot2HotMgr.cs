@@ -32,28 +32,16 @@ namespace Aot2Hot
         }
         IEnumerator IEAwake()
         {
-            var assets = YooAssets.LoadAllAssetsAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+#if USE_TMP_FONT
+            var assets = YooAssets.LoadAssetAsync<Object>("Assets/Res/Aot2Hot/Font/JTFontTMP.asset");
+#else
+            var assets = YooAssets.LoadAssetAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+#endif
             yield return assets;
 #if USE_TMP_FONT
-            TMP_FontAsset font = null;
+            FontManager.RegisterFont(new TMPFont() { fontAsset = assets.AssetObject as TMP_FontAsset, name = "JTFont" });//tmp pro 字体 有点糊
 #else
-            Font font = null;
-#endif
-            foreach (var ass in assets.AllAssetObjects) {
-#if USE_TMP_FONT
-                if (ass is TMP_FontAsset f)
-#else
-                if (ass is Font f)
-#endif
-                {
-                    font = f;
-                    break;
-                }
-            }
-#if USE_TMP_FONT
-            FontManager.RegisterFont(new TMPFont() { fontAsset = font, name = "JTFont" });//tmp pro 字体 有点糊
-#else
-            FontManager.RegisterFont(new DynamicFont("JTFont", font), "JTFont");
+            FontManager.RegisterFont(new DynamicFont("JTFont", assets.AssetObject as Font), "JTFont");
 #endif
             UIConfig.defaultFont = "JTFont"; //另一个方法是FGUI项目里添加jtfont字体，直接引用，发布时字体不会发布，而是找该字体的注册 https://www.fairygui.com/docs/editor/font
             UIPackage.unloadBundleByFGUI = false;
