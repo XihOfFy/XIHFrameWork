@@ -23,6 +23,8 @@ using IAssemblyResolver = HybridCLR.Editor.Meta.IAssemblyResolver;
 using CombinedAssemblyResolver = HybridCLR.Editor.Meta.CombinedAssemblyResolver;
 using MetaUtil = HybridCLR.Editor.Meta.MetaUtil;
 using AssemblyCache = HybridCLR.Editor.Meta.AssemblyCache;
+using HybridCLR.Editor.AOT;
+using Analyzer2 = HybridCLR.Editor.AOT.Analyzer;
 
 namespace Obfuz4HybridCLR
 {
@@ -47,11 +49,11 @@ namespace Obfuz4HybridCLR
             Il2CppDefGeneratorCommand.GenerateIl2CppDef();
             LinkGeneratorCommand.GenerateLinkXml(target);
             StripAOTDllCommand.GenerateStripedAOTDlls(target);
-            AOTReferenceGeneratorCommand.GenerateAOTGenericReference(target);
 
             string obfuscatedHotUpdateDllPath = GetObfuscatedHotUpdateAssemblyOutputPath(target);
             ObfuscateUtil.ObfuscateHotUpdateAssemblies(target, obfuscatedHotUpdateDllPath);
             GenerateMethodBridgeAndReversePInvokeWrapper(target, obfuscatedHotUpdateDllPath);
+            GenerateAOTGenericReference(target, obfuscatedHotUpdateDllPath);
         }
 
         [MenuItem("HybridCLR/ObfuzExtension/CompileAndObfuscateDll")]
@@ -119,6 +121,26 @@ namespace Obfuz4HybridCLR
             generateMethodBridgeMethod.Invoke(null, new object[] { methodBridgeAnalyzer.GenericMethods, reversePInvokeAnalyzer.ReversePInvokeMethods, callNativeMethodSignatures, templateFile, outputFile });
 
             MethodBridgeGeneratorCommand.CleanIl2CppBuildCache();
+        }
+
+        public static void GenerateAOTGenericReference(BuildTarget target, string obfuscatedHotUpdateDllPath)
+        {
+            var gs = SettingsUtil.HybridCLRSettings;
+            List<string> hotUpdateDllNames = SettingsUtil.HotUpdateAssemblyNamesExcludePreserved;
+
+            AssemblyReferenceDeepCollector collector = new AssemblyReferenceDeepCollector(
+                CreateObfuscatedHotUpdateAndAOTAssemblyResolver(target, hotUpdateDllNames, ObfuzSettings.Instance.assemblySettings.GetAssembliesToObfuscate(), obfuscatedHotUpdateDllPath), hotUpdateDllNames);
+            var analyzer = new Analyzer2(new Analyzer2.Options
+            {
+                MaxIterationCount = Math.Min(20, gs.maxGenericReferenceIteration),
+                Collector = collector,
+            });
+
+            analyzer.Run();
+
+            var writer = new GenericReferenceWriter();
+            writer.Write(analyzer.AotGenericTypes.ToList(), analyzer.AotGenericMethods.ToList(), $"{Application.dataPath}/{gs.outputAOTGenericReferenceFile}");
+            AssetDatabase.Refresh();
         }
     }
 }
