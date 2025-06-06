@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using UnityEngine;
 using System;
+using YooAsset;
 #if UNITY_WX
 using WeChatWASM;
 #endif
@@ -45,7 +46,15 @@ namespace Aot
                 }
                 else
                 {
-                    QuitGame();
+                    if (playMode == EPlayMode.HostPlayMode)
+                    {
+                        //主机模式下尝试本地进入游戏，弱网游戏
+                        InitYooAssetStart().Forget();
+                    }
+                    else
+                    {
+                        QuitGame();//强联网，尝试多次失败直接退出游戏，不让玩
+                    }
                 }
             }
             finally {

@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using YooAsset;
 
@@ -56,11 +55,16 @@ namespace Aot
             // 联机运行模式
             else if (playMode == EPlayMode.HostPlayMode)
             {
+                //这里根据游戏来确定，释放启用内置的文件查询，因为优化包体，内置可能不需要含资源
+                //var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                // 注意：设置参数COPY_BUILDIN_PACKAGE_MANIFEST，可以初始化的时候拷贝内置清单到沙盒目录
+                //buildinFileSystemParams.AddParameter(FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST, true);
                 //使用加密
                 var cacheFileSystemParams = FileSystemParameters.CreateDefaultCacheFileSystemParameters(new RemoteServices(), new DecryptionServices());
-                //var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                // 注意：设置参数INSTALL_CLEAR_MODE，可以解决覆盖安装的时候将拷贝的内置清单文件清理的问题。
+                //cacheFileSystemParams.AddParameter(FileSystemParametersDefine.INSTALL_CLEAR_MODE, EOverwriteInstallClearMode.None);
                 var initParameters = new HostPlayModeParameters();
-                //initParameters.BuildinFileSystemParameters = buildinFileSystemParams;//这里根据游戏来确定，释放启用内置的文件查询，因为优化包体，内置可能不需要含资源
+                //initParameters.BuildinFileSystemParameters = buildinFileSystemParams;
                 initParameters.CacheFileSystemParameters = cacheFileSystemParams;
                 createParameters = initParameters;
             }
@@ -179,48 +183,65 @@ namespace Aot
         //获取资源版本
         async UniTaskVoid UpdatePackageVersionAsync(ResourcePackage package)
         {
-            var yooOp = package.RequestPackageVersionAsync();
-            await yooOp.ToUniTask();
-            if (yooOp.Status == EOperationStatus.Succeed)
+            try {
+                var yooOp = package.RequestPackageVersionAsync();
+                await yooOp.ToUniTask();
+                if (yooOp.Status == EOperationStatus.Succeed)
+                {
+                    //更新成功
+                    UpdatePackageManifest(package, yooOp.PackageVersion).Forget();
+                    return;
+                }
+            } catch (Exception e) {
+                Debug.LogError(e);
+            }
+
+            //对于强制更新游戏，无法获取资源版本需要退出游戏
+            //QuitGame();
+
+            //对于单机游戏，可以在这里做差异化，使用本地的版本
+            /* 若首包有资源，那么首次运行需要拷贝内置资源清单到沙盒内
+            if (IsFirstRunApp)
             {
-                //更新成功
-                Debug.Log($"Updated package Version : {yooOp.PackageVersion}");
-                UpdatePackageManifest(package, yooOp.PackageVersion).Forget();
+                // 注意：内置清单的版本需要开发者自己记录并填写
+                // 注意：CopyBuildinManifestOperation类是YOO扩展示例的代码！
+                var copyBuildinManifestOp = new CopyBuildinManifestOperation("DefaultPackage", "1.0");
+                YooAssets.StartOperation(copyBuildinManifestOp);
+                yield return copyBuildinManifestOp;
+            }*/
+            // 获取上次成功记录的版本
+            string version = AotPlayerPrefsUtil.Get(AotPlayerPrefsUtil.GAME_RES_VERSION, string.Empty);
+            //弱网环境尝试
+            if (playMode == EPlayMode.HostPlayMode && !string.IsNullOrEmpty(version))
+            {
+                UpdatePackageManifest(package, version).Forget();
             }
             else
             {
-                //对于强制更新游戏，无法获取资源版本需要退出游戏
-                //QuitGame();
-
-                //对于单机游戏，可以在这里做差异化，使用本地的版本
-                /* 若首包有资源，那么首次运行需要拷贝内置资源清单到沙盒内
-                if (IsFirstRunApp)
-                {
-                    // 注意：内置清单的版本需要开发者自己记录并填写
-                    // 注意：CopyBuildinManifestOperation类是YOO扩展示例的代码！
-                    var copyBuildinManifestOp = new CopyBuildinManifestOperation("DefaultPackage", "1.0");
-                    YooAssets.StartOperation(copyBuildinManifestOp);
-                    yield return copyBuildinManifestOp;
-                }*/
-                // 获取上次成功记录的版本
-                string version = AotPlayerPrefsUtil.Get(AotPlayerPrefsUtil.GAME_RES_VERSION, string.Empty);
-                if (string.IsNullOrEmpty(version))
-                {
-                    QuitGame();
-                }
-                else {
-                    UpdatePackageManifest(package, version).Forget();
-                }
+                QuitGame();
             }
         }
         //UpdatePackageManifest
         async UniTaskVoid UpdatePackageManifest(ResourcePackage package,string packageVersion)
         {
-            var yooOp = package.UpdatePackageManifestAsync(packageVersion,10);
-            await yooOp.ToUniTask();
-            if (yooOp.Status == EOperationStatus.Succeed)
+            try
             {
-                //更新成功
+                var yooOp = package.UpdatePackageManifestAsync(packageVersion, 10);
+                await yooOp.ToUniTask();
+                if (yooOp.Status == EOperationStatus.Succeed)
+                {
+                    //更新成功
+                    DownloadAot2HotRes(package).Forget();
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            //弱网环境尝试
+            if (playMode == EPlayMode.HostPlayMode)
+            {
                 DownloadAot2HotRes(package).Forget();
             }
             else

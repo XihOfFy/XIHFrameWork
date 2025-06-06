@@ -1,6 +1,5 @@
 ﻿using HybridCLR.Editor;
 using HybridCLR.Editor.HotUpdate;
-using Obfuz.Settings;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -76,8 +75,15 @@ public class DllCopyEditor
         // excludeDllNames需要为dhe程序集列表，因为dhe 程序集会进行热更新，热更新代码中
         // 引用的dhe程序集中的类型或函数肯定存在。
         var checker = new MissingMetadataChecker(aotDir, new List<string>());
-        //string hotUpdateDir = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
-        string hotUpdateDir = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
+        string hotUpdateDir;
+        if (Obfuz.Settings.ObfuzSettings.Instance.enable)
+        {
+            hotUpdateDir = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
+        }
+        else
+        {
+            hotUpdateDir = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
+        }
 
         foreach (var dll in SettingsUtil.HotUpdateAssemblyFilesExcludePreserved)
         {
@@ -103,8 +109,15 @@ public class DllCopyEditor
             foreach (var dll in aot2hotdll) otherHotdll.Remove(dll);
             dlls = otherHotdll.ToList();
         }
-        //var sourPath = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
-        string sourPath = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
+        string sourPath;
+        if (Obfuz.Settings.ObfuzSettings.Instance.enable)
+        {
+            sourPath = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
+        }
+        else
+        {
+            sourPath = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
+        }
         if (!Directory.Exists(sourPath))
         {
             Debug.LogWarning($"{sourPath}路径不存在，请先编译dll");
