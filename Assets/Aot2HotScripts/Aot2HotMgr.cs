@@ -100,7 +100,7 @@ namespace Aot2Hot
             ass = rawHotOp.GetAssets<TextAsset>();
             foreach (var asset in ass) {
 #if !UNITY_EDITOR
-                var ass = Assembly.Load(XIHDecryptionServices.Decrypt((asset).bytes));
+                Assembly.Load(XIHDecryptionServices.Decrypt(asset.bytes));
 #endif
             }
             rawHotOp.Release();
