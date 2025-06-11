@@ -38,7 +38,7 @@ namespace Aot2Hot
 #else
             var assets = AssetLoadUtil.LoadAssetAsync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
 #endif
-            yield return assets;
+            yield return assets.assetHandle;
 #if USE_TMP_FONT
             FontManager.RegisterFont(new TMPFont() { fontAsset = assets.GetAsset<TMP_FontAsset>(), name = "JTFont" });//tmp pro 字体 有点糊
 #else
@@ -72,16 +72,18 @@ namespace Aot2Hot
         }
         void DownLoadEnd()
         {
-            GotoHotScene().Forget();
+            StartCoroutine(GotoHotScene());
+            //GotoHotScene().Forget();
         }
-        async UniTaskVoid GotoHotScene()
+        IEnumerator GotoHotScene()
         {
             progerssImg.fillAmount = 1;
 
             //// 注意：location只需要填写资源包里的任意资源地址。
             var rawAotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Aot/mscorlib.bytes");
-            //yield return rawAotOp;
-            await rawAotOp.ToUniTask();
+            yield return rawAotOp.assetObjs;
+            //await rawAotOp.ToUniTask();
+
             // Editor下无需加载，直接查找获得HotUpdate程序集
             var ass = rawAotOp.GetAssets<TextAsset>();
             foreach (var asset in ass) {
@@ -93,8 +95,8 @@ namespace Aot2Hot
             rawAotOp.Release();
 
             var rawHotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Hot/Hot.bytes");
-            //yield return rawHotOp;
-            await rawHotOp.ToUniTask();
+            yield return rawHotOp.assetObjs;
+            //await rawHotOp.ToUniTask();
             ass = rawHotOp.GetAssets<TextAsset>();
             foreach (var asset in ass) {
 #if !UNITY_EDITOR
