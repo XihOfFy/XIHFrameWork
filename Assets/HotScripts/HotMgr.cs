@@ -68,9 +68,9 @@ namespace Hot
 
         }
         async UniTaskVoid InitShaderVariants() {
-            var handle = YooAssets.LoadAssetAsync<ShaderVariantCollection>("Assets/Res/ShaderVariants/ShaderVariants.shadervariants");
-            await handle;
-            var asset = handle.GetAssetObject<ShaderVariantCollection>();
+            var handle = AssetLoadUtil.LoadAssetAsync<ShaderVariantCollection>("Assets/Res/ShaderVariants/ShaderVariants.shadervariants");
+            await handle.ToUniTask();
+            var asset = handle.GetAsset<ShaderVariantCollection>();
             asset.WarmUp();
             handle.Release();
         }
