@@ -1,7 +1,6 @@
 ﻿#define USE_TMP_FONT
 using UnityEngine;
 using TMPro;
-using YooAsset;
 using Aot;
 using System.Collections;
 using UnityEngine.UI;
@@ -10,6 +9,8 @@ using Object = UnityEngine.Object;
 using HybridCLR;
 using System.Reflection;
 using FairyGUI;
+using YooAsset;
+using Cysharp.Threading.Tasks;
 
 namespace Aot2Hot
 {
@@ -33,15 +34,15 @@ namespace Aot2Hot
         IEnumerator IEAwake()
         {
 #if USE_TMP_FONT
-            var assets = YooAssets.LoadAssetAsync<Object>("Assets/Res/Aot2Hot/Font/JTFontTMP.asset");
+            var assets = AssetLoadUtil.LoadAssetAsync<TMP_FontAsset>("Assets/Res/Aot2Hot/Font/JTFontTMP.asset");
 #else
-            var assets = YooAssets.LoadAssetAsync<Object>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
+            var assets = AssetLoadUtil.LoadAssetAsync<Font>("Assets/Res/Aot2Hot/Font/JTFont.ttf");
 #endif
             yield return assets;
 #if USE_TMP_FONT
-            FontManager.RegisterFont(new TMPFont() { fontAsset = assets.AssetObject as TMP_FontAsset, name = "JTFont" });//tmp pro 字体 有点糊
+            FontManager.RegisterFont(new TMPFont() { fontAsset = assets.GetAsset<TMP_FontAsset>(), name = "JTFont" });//tmp pro 字体 有点糊
 #else
-            FontManager.RegisterFont(new DynamicFont("JTFont", assets.AssetObject as Font), "JTFont");
+            FontManager.RegisterFont(new DynamicFont("JTFont", assets.GetAsset<Font>()), "JTFont");
 #endif
             UIConfig.defaultFont = "JTFont"; //另一个方法是FGUI项目里添加jtfont字体，直接引用，发布时字体不会发布，而是找该字体的注册 https://www.fairygui.com/docs/editor/font
             UIPackage.unloadBundleByFGUI = false;
@@ -71,36 +72,39 @@ namespace Aot2Hot
         }
         void DownLoadEnd()
         {
-            StartCoroutine(GotoHotScene());
+            GotoHotScene().Forget();
         }
-        IEnumerator GotoHotScene()
+        async UniTaskVoid GotoHotScene()
         {
             progerssImg.fillAmount = 1;
 
             //// 注意：location只需要填写资源包里的任意资源地址。
-            var rawAotOp = YooAssets.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Aot/mscorlib.bytes");
-            yield return rawAotOp;
-
+            var rawAotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Aot/mscorlib.bytes");
+            //yield return rawAotOp;
+            await rawAotOp.ToUniTask();
             // Editor下无需加载，直接查找获得HotUpdate程序集
-            foreach (var asset in rawAotOp.AllAssetObjects) {
+            var ass = rawAotOp.GetAssets<TextAsset>();
+            foreach (var asset in ass) {
 #if !UNITY_EDITOR
-                var err = RuntimeApi.LoadMetadataForAOTAssembly(((TextAsset)asset).bytes, HomologousImageMode.SuperSet);
+                var err = RuntimeApi.LoadMetadataForAOTAssembly((asset).bytes, HomologousImageMode.SuperSet);
                 Debug.Log($"LoadMetadataForAOTAssembly:{asset.name}. ret:{err}");
 #endif
             }
             rawAotOp.Release();
 
-            var rawHotOp = YooAssets.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Hot/Hot.bytes");
-            yield return rawHotOp;
-            foreach (var asset in rawHotOp.AllAssetObjects) {
+            var rawHotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Hot/Hot.bytes");
+            //yield return rawHotOp;
+            await rawHotOp.ToUniTask();
+            ass = rawHotOp.GetAssets<TextAsset>();
+            foreach (var asset in ass) {
 #if !UNITY_EDITOR
-                var ass = Assembly.Load(XIHDecryptionServices.Decrypt(((TextAsset)asset).bytes));
+                var ass = Assembly.Load(XIHDecryptionServices.Decrypt((asset).bytes));
 #endif
             }
             rawHotOp.Release();
 
             //Debug.Log($"成功加载热更程序集和元数据");
-            var handle= YooAssets.LoadSceneAsync("Assets/Res/HotScene/HotInit.unity");
+            AssetLoadUtil.LoadScene("Assets/Res/HotScene/HotInit.unity").Forget();
         }
     }
 }

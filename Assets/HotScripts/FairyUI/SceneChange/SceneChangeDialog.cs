@@ -5,6 +5,7 @@ using XiHUI;
 using XiHUtil;
 using YooAsset;
 using FairyGUI;
+using Aot;
 
 namespace Hot
 {
@@ -69,7 +70,7 @@ namespace Hot
             else keepDialogs.Add(nameof(SceneChangeDialog));
             UIUtil.CloseAll(keepDialogs);//可以自己考虑加入哪些UI，跳转场景不会关闭的
             await UniTask.Yield();
-            await YooAssets.LoadSceneAsync(path).ToUniTask();
+            await AssetLoadUtil.LoadScene(path);
         }
         void OnLoadScene()
         {

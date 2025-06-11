@@ -1,8 +1,6 @@
-﻿
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
-using YooAsset;
 
 namespace Aot
 {
@@ -26,7 +24,7 @@ namespace Aot
             {
                 await UniTask.WaitUntil(() => isLogoEnd);
             }
-            await YooAssets.LoadSceneAsync("Assets/Res/Aot2Hot/Scene/Aot2Hot.unity").ToUniTask();
+            AssetLoadUtil.LoadScene("Assets/Res/Aot2Hot/Scene/Aot2Hot.unity").Forget();
         }
     }
 }

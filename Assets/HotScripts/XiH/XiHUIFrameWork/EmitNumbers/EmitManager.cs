@@ -2,10 +2,7 @@
 using UnityEngine;
 using FairyGUI;
 using Cysharp.Threading.Tasks;
-using Hot;
-using YooAsset;
-
-
+using Aot;
 namespace XiHUI
 {
     public class EmitManager
@@ -36,27 +33,32 @@ namespace XiHUI
             view.SetPivot(0.5f, 0.5f);
             GRoot.inst.AddChild(view);
         }
-        public async UniTaskVoid EmitText(Camera camera, Vector3 worldPos, string txt, string fontUrl, int fontSize, int delay, int targetY = -128, float duration = 2f)
+        public async UniTaskVoid EmitText(Vector3 worldPos, string txt, string fontUrl, int fontSize, int delay, int targetY = -128, float duration = 2f)
         {
-            var screenPos = ChangeWorld2ScreenPos(worldPos, camera);    //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
+            var screenPos = ChangeWorld2ScreenPos(worldPos);    //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
             var localPos = ChangeScreen2LocalPos(screenPos);
             await UniTask.Delay(delay);
             var ec = GetEmitComponent();
             ec.EmitText(localPos, txt, fontUrl, fontSize, targetY, duration);
         }
         //世界坐标飞屏幕坐标
-        public void EmitUrl(Camera camera, Vector3 worldPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1)
+        public void EmitUrl(Vector3 worldPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1, float scale = 1)
         {
-            EmitUrl(ChangeWorld2ScreenPos(worldPos, camera), fObj, icon, delay, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, emitCount);
+            EmitUrl(ChangeWorld2ScreenPos(worldPos), fObj, icon, delay, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, emitCount, scale);
         }
         // UI飞UI，使用屏幕坐标
-        public void EmitUrl(Vector2 screenPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1)
+        public void EmitUrl(Vector2 screenPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1, float scale = 1)
         {
             var localPos = ChangeScreen2LocalPos(screenPos);
-            EmitUrlInner(localPos, fObj, icon, delay, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, emitCount).Forget();
+            EmitUrlInner(localPos, fObj, icon, delay, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, emitCount, scale).Forget();
         }
-
-        async UniTaskVoid EmitUrlInner(Vector2 localPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1)
+        // UI飞UI，使用逻辑屏幕坐标
+        public void EmitUI(Vector2 logicScreenPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1, float scale = 1)
+        {
+            var localPos = ChangeLogicScreen2LocalPos(logicScreenPos);
+            EmitUrlInner(localPos, fObj, icon, delay, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, emitCount, scale).Forget();
+        }
+        async UniTaskVoid EmitUrlInner(Vector2 localPos, GObject fObj, string icon, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1, float scale = 1)
         {
             if (fObj == null || fObj.isDisposed)
             {
@@ -66,28 +68,32 @@ namespace XiHUI
             var targetPos = fObj.TransformPoint(new Vector2(fObj.width, fObj.height) / 2, view);
             if (delay > 0) await UniTask.Delay(delay);
             var ec = GetEmitComponent();
-            ec.EmitUrl(localPos, targetPos, icon, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback);
+            ec.EmitUrl(localPos, targetPos, icon, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, scale);
+            emitCount = Mathf.Min(emitCount, 10);
             foreach (var offset in genDir)
             {
                 if (--emitCount <= 0) break;
                 await UniTask.Delay(50);
                 ec = GetEmitComponent();
-                ec.EmitUrl(localPos + offset, targetPos, icon, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback);
+                ec.EmitUrl(localPos + offset, targetPos, icon, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, scale);
             }
         }
-        // UI飞UI，使用逻辑屏幕坐标
-        public void EmitUI(Vector2 logicScreenPos, GObject fObj, string icon, bool rotate = false, System.Action OnPlaySoundCallback = null, int emitCount = 1)
+
+        public void EmitObj(string assetPath, Vector3 worldPos, GObject fObj, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f)
+        {
+            var screenPos = ChangeWorld2ScreenPos(worldPos);    //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
+            var localPos = ChangeScreen2LocalPos(screenPos);
+            EmitObjInner(assetPath, localPos, fObj, delay, toTargetDuration, disappearDuration).Forget();
+        }
+        public void EmitObjByLogicScreenPos(string assetPath, Vector2 logicScreenPos, GObject fObj, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f)
         {
             var localPos = ChangeLogicScreen2LocalPos(logicScreenPos);
-            EmitUrlInner(localPos, fObj, icon, 0, 2, 0.5f, rotate, OnPlaySoundCallback, emitCount).Forget();
+            EmitObjInner(assetPath, localPos, fObj, delay, toTargetDuration, disappearDuration).Forget();
         }
-
-        public async void EmitObj(Camera camera, string assetPath, Vector3 worldPos, GObject fObj, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f)
+        async UniTaskVoid EmitObjInner(string assetPath, Vector2 localPos, GObject fObj, int delay = 0, float toTargetDuration = 2f, float disappearDuration = 0.5f)
         {
-            var screenPos = ChangeWorld2ScreenPos(worldPos, camera);    //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
-            var localPos = ChangeScreen2LocalPos(screenPos);
             var targetPos = fObj.TransformPoint(new Vector2(fObj.width, fObj.height) / 2, view);
-            var prefab = YooAssets.LoadAssetAsync<GameObject>(assetPath);
+            var prefab = AssetLoadUtil.LoadAssetAsync<GameObject>(assetPath);
             await prefab.ToUniTask();
             if (delay > 0) await UniTask.Delay(delay);
             var ec = GetEmitComponent();
@@ -99,11 +105,13 @@ namespace XiHUI
             _componentPool.Push(com);
         }
         //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
-        Vector2 ChangeWorld2ScreenPos(Vector3 worldPos, Camera camera)
+        Vector2 ChangeWorld2ScreenPos(Vector3 worldPos)
         {
-            var screenPos = camera.WorldToScreenPoint(worldPos);
+             Debug.LogError("待实现 ChangeWorld2ScreenPos");
+             return Vector2.zero;
+            /*var screenPos = GameBase.Instance.gameCamera.WorldToScreenPoint(worldPos);
             screenPos.y = Screen.height - screenPos.y; //convert to Stage coordinates system
-            return screenPos;
+            return screenPos;*/
         }
 
         //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空

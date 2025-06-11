@@ -1,30 +1,27 @@
 ﻿//#define JSON_LOAD
 using Cysharp.Threading.Tasks;
-using Hot;
 using Luban;
-using SimpleJSON;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using XiHUtil;
-using YooAsset;
+using Aot;
 
 namespace Tmpl
 {
     public partial class Tables
     {
         public static Tables Instance { get; private set; }
-        public static async UniTask LoadAllTmpl() {
+        public static async UniTask InitTmpl() {
 #if JSON_LOAD
-            var asHandle = YooAssets.LoadAllAssetsAsync<TextAsset>("Assets/Res/Tmpl/tbuiparam.json");
+            var asHandle = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Tmpl/tbaudio.json");
 #else
-            var asHandle = YooAssets.LoadAllAssetsAsync<TextAsset>("Assets/Res/Tmpl/tbuiparam.bytes");
+            var asHandle = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Tmpl/tbaudio.bytes");
 #endif
             await asHandle.ToUniTask();
             var dic = new Dictionary<string, TextAsset>();
-            foreach (var ast in asHandle.AllAssetObjects)
+            var asts = asHandle.GetAssets<TextAsset>();
+            foreach (var ast in asts)
             {
-                dic.Add(ast.name, ast as TextAsset);
+                dic.Add(ast.name, ast);
             }
             Instance = new Tables((fn) => {
 #if JSON_LOAD
@@ -33,9 +30,27 @@ namespace Tmpl
                 return ByteBuf.Wrap(dic[fn].bytes);
 #endif
             });
+            
             asHandle.Release();
-            await UniTask.Yield();//避免内存占用峰值高，GC一下
-            PlatformUtil.TriggerGC();
+            AfterLoadTmpl();
         }
+
+        static void AfterLoadTmpl() {
+
+        }
+#if UNITY_EDITOR
+        public static void InitFromEditor() {
+            Instance = new Tables((fn) => {
+#if JSON_LOAD
+                var asst = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>($"Assets/Res/Tmpl/{fn}.json");
+                return JSON.Parse(asst.text);
+#else
+                var asst = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>($"Assets/Res/Tmpl/{fn}.bytes");
+                return ByteBuf.Wrap(asst.bytes);
+#endif
+            });
+            AfterLoadTmpl();
+        }
+#endif
     }
 }

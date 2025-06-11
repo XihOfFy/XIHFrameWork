@@ -8,6 +8,7 @@ using Aot;
 using YooAsset;
 using Aot.XiHUtil;
 using Ad;
+using XiHUtil;
 
 namespace Hot
 {
@@ -34,7 +35,7 @@ namespace Hot
         async UniTaskVoid InitHot() {
             InitShaderVariants().Forget();//看情况是否预加载编译变体
             var tks = new List<UniTask>();
-            tks.Add(Tables.LoadAllTmpl());//初始化配置,放在第一
+            tks.Add(Tables.InitTmpl());//初始化配置,放在第一
             tks.Add(UIDialogManager.Instance.InitCommonPackageAsync(new List<string>() { "Common" }));//持久化的UI包
             await UniTask.WhenAll(tks);
             SoundMgr.Instance.PlayBGM(1);//初始化音频，并播放一个音乐
@@ -59,10 +60,11 @@ namespace Hot
 #endif
             //UnityEngine.Input.multiTouchEnabled = false;//禁用多点触屏,对于EvenetSystem的触控没法限制
             //DOTween.SetTweensCapacity(1250, 500);
-#if UNITY_WEBGL &&!UNITY_DY && !UNITY_WX && !UNITY_EDITOR && (UNITY_2021_2_5 || UNITY_2022_1_OR_NEWER)
+#if UNITY_WEBGL && !UNITY_DY && !UNITY_WX && !UNITY_EDITOR && (UNITY_2021_2_5 || UNITY_2022_1_OR_NEWER)
             //酌情考虑是否开启输入，对于小游戏，开启这个会有一定性能消耗
             WebGLInput.mobileKeyboardSupport = true;
 #endif
+            PlatformUtil.RegisterLowMemoryEvent(PlatformUtil.TriggerGC);
 
         }
         async UniTaskVoid InitShaderVariants() {

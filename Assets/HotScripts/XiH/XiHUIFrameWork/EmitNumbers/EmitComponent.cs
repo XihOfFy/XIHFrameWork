@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using FairyGUI;
-using YooAsset;
-
+using Aot;
 namespace XiHUI
 {
     public partial class EmitComponent : GComponent
@@ -35,7 +34,7 @@ namespace XiHUI
 
         public void EmitText(Vector2 localPos, string txt, string fontUrl, int fontSize, int targetY = -128, float duration = 2f)
         {
-            BeginLayout(localPos);
+            BeginLayout(localPos, 1);
             SetText(txt, fontUrl, fontSize);
             EndLayout();
             var halfTime = duration * 0.5f;
@@ -43,12 +42,12 @@ namespace XiHUI
             this.TweenFade(0, halfTime).SetDelay(halfTime);
         }
 
-        public void EmitUrl(Vector2 localPos, Vector2 targetPos, string url, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = true, System.Action OnPlaySoundCallback = null)
+        public void EmitUrl(Vector2 localPos, Vector2 targetPos, string url, float toTargetDuration = 2f, float disappearDuration = 0.5f, bool rotate = true, System.Action OnPlaySoundCallback = null, float scale = 1)
         {
-            BeginLayout(localPos);
+            BeginLayout(localPos, scale);
             SetUrl(url);
             EndLayout();
-            DoRotete(rotate);
+            DoRotate(rotate);
             this.TweenMove(targetPos, toTargetDuration).SetEase(EaseType.BackIn).OnComplete(() =>
             {
                 if (OnPlaySoundCallback != null)
@@ -60,12 +59,12 @@ namespace XiHUI
             this.TweenScale(Vector2.zero, disappearDuration).SetDelay(toTargetDuration).OnComplete(this.OnCompleted);
         }
 
-        public void EmitObj(AssetHandle prefab, Vector2 localPos, Vector2 targetPos, float toTargetDuration = 2f, float disappearDuration = 0.5f)
+        public void EmitObj(AssetRef prefab, Vector2 localPos, Vector2 targetPos, float toTargetDuration = 2f, float disappearDuration = 0.5f, float scale = 1)
         {
-            BeginLayout(localPos);
+            BeginLayout(localPos, scale);
             SetObj(prefab);
             EndLayout();
-            this.TweenMove(targetPos, toTargetDuration).SetEase(EaseType.BackIn);
+            this.TweenMove(targetPos, toTargetDuration).SetEase(EaseType.Linear);
             this.TweenFade(0, disappearDuration).SetDelay(toTargetDuration);
             this.TweenScale(Vector2.zero, disappearDuration).SetDelay(toTargetDuration).OnComplete(() =>
             {
@@ -73,7 +72,7 @@ namespace XiHUI
                 this.OnCompleted();
             });
         }
-        void DoRotete(bool rotate)
+        void DoRotate(bool rotate)
         {
             if (!rotate) return;
             GTween.To(0, 180, 0.35f).SetTarget(this, TweenPropType.RotationY).SetEase(EaseType.Linear).SetRepeat(-1);

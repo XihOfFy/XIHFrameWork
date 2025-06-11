@@ -162,7 +162,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.Xih.XIHFrameWork
-    Standalone: com.DefaultCompany.2DProject
+    Standalone: com.Xih.XIHFrameWork
     iPhone: com.Xih.XIHFrameWork
   buildNumber:
     Standalone: 0
@@ -800,8 +800,10 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: FAIRYGUI_TMPRO
-    WebGL: FAIRYGUI_TMPRO;UNITY_WX;WEIXINMINIGAME;STARK_UNITY_INPUT_OVERRIDE
+    Android: FAIRYGUI_TMPRO;USE_YOO
+    Standalone: USE_YOO;FAIRYGUI_TMPRO
+    WebGL: FAIRYGUI_TMPRO;UNITY_WX;WEIXINMINIGAME;STARK_UNITY_INPUT_OVERRIDE;USE_YOO
+    iPhone: FAIRYGUI_TMPRO;USE_YOO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

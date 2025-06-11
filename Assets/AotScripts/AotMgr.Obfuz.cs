@@ -2,7 +2,6 @@
 using Obfuz;
 using Obfuz.EncryptionVM;
 using UnityEngine;
-using YooAsset;
 
 namespace Aot
 {
@@ -17,13 +16,10 @@ namespace Aot
         }
         private async UniTask SetUpDynamicSecret()
         {
-            var rawOp = YooAssets.LoadAssetAsync<TextAsset>("Assets/Res/Aot2Hot/Obfuz/defaultDynamicSecretKey.bytes");
+            var rawOp = AssetLoadUtil.LoadAssetAsync<TextAsset>("Assets/Res/Aot2Hot/Obfuz/defaultDynamicSecretKey.bytes");
             await rawOp.ToUniTask();
-            if (rawOp.Status != EOperationStatus.Succeed)
-            {
-                QuitGame();
-            }
-            EncryptionService<DefaultDynamicEncryptionScope>.Encryptor = new GeneratedEncryptionVirtualMachine(((TextAsset)rawOp.AssetObject).bytes);
+            EncryptionService<DefaultDynamicEncryptionScope>.Encryptor = new GeneratedEncryptionVirtualMachine(rawOp.GetAsset<TextAsset>().bytes);
+            rawOp.Release();
         }
     }
 }

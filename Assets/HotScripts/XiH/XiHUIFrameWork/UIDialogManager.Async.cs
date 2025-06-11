@@ -1,11 +1,11 @@
 ﻿using Cysharp.Threading.Tasks;
 using FairyGUI;
-using Hot;
 using System;
 using System.Collections.Generic;
-using Tmpl;
 using UnityEngine;
-using YooAsset;
+using Aot;
+using Tmpl;
+using Object = UnityEngine.Object;
 
 namespace XiHUI
 {
@@ -113,21 +113,21 @@ namespace XiHUI
         /// <returns></returns>
         private async UniTask<UIPackageReference> LoadUIPackageAsync(string packageName, UIDialog reference)
         {
-            var _handles = new List<AssetHandle>(100);
+            var _handles = new List<AssetRef>(64);
             string locationPreffix = "Assets/Res/FairyRes/" + packageName + "/" + packageName;
-            var handle = YooAssets.LoadAssetAsync<TextAsset>(locationPreffix + "_fui.bytes");
+            var handle = AssetLoadUtil.LoadAssetAsync<TextAsset>(locationPreffix + "_fui.bytes");
             await handle.ToUniTask();
             _handles.Add(handle);
             //var uniHandles = new List<UniTask>(2);
-            var pkg = UIPackage.AddPackage((handle.AssetObject as TextAsset).bytes, string.Empty,async (name, extension, type, item) =>
+            var pkg = UIPackage.AddPackage((handle.GetAsset<TextAsset>()).bytes, string.Empty,async (name, extension, type, item) =>
             {
                 string path = locationPreffix + "_" + name + extension;
-                var subHandle = YooAssets.LoadAssetAsync(path,type);
+                var subHandle = AssetLoadUtil.LoadAssetAsync(path,type);
                 var uniTask = subHandle.ToUniTask();
                 //uniHandles.Add(uniTask);
                 _handles.Add(subHandle);
                 await uniTask;
-                item.owner.SetItemAsset(item, subHandle.AssetObject, DestroyMethod.None);//注意：这里一定要设置为None
+                item.owner.SetItemAsset(item, subHandle.GetAsset<Object>(), DestroyMethod.None);//注意：这里一定要设置为None
             });
             //await UniTask.WhenAll(uniHandles);
             pkg.LoadAllAssets();

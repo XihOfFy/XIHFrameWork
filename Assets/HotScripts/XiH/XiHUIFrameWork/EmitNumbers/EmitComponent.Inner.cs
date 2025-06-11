@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 using FairyGUI;
-using YooAsset;
-
+using Aot;
 namespace XiHUI
 {
     public partial class EmitComponent
     {
-        void BeginLayout(Vector2 localPos)
+        void BeginLayout(Vector2 localPos, float scale)
         {
             this.localPos = localPos;
-            this.scale = Vector2.one;
+            this.scale = Vector2.one * scale;
             this.alpha = 1;
             this.rotationY = 0;
             _numberText.SetText("");
@@ -36,7 +35,7 @@ namespace XiHUI
         {
             _symbolLoader.url = url;
         }
-        void SetObj(AssetHandle prefab)
+        void SetObj(AssetRef prefab)
         {
             if (loader3D.wrapTarget != null) GameObject.Destroy(loader3D.wrapTarget);
             loader3D.SetWrapTarget(prefab.InstantiateSync(), false, 1, 1);

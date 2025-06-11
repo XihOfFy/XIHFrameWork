@@ -1,13 +1,10 @@
-﻿using Aot;
-using Cysharp.Threading.Tasks;
-using FairyGUI;
-using Hot;
+﻿using FairyGUI;
+using Aot;
 using System;
 using System.Collections.Generic;
-using Tmpl;
 using UnityEngine;
 using XiHUtil;
-using YooAsset;
+using Tmpl;
 
 namespace XiHUI
 {
@@ -42,7 +39,7 @@ namespace XiHUI
         }
         class UIPackageReference
         {
-            public UIPackageReference(UIPackage pkg, List<AssetHandle> _handles)
+            public UIPackageReference(UIPackage pkg, List<AssetRef> _handles)
             {
                 _package = pkg;
                 _persistent = _persistentPkg.Contains(pkg.name);
@@ -52,7 +49,7 @@ namespace XiHUI
 
             private int _useCount;
             private UIPackage _package;
-            List<AssetHandle> handles;
+            List<AssetRef> handles;
             private List<UIDialog> _references = new List<UIDialog>();
             private float _cacheRemain;
             private bool _persistent;
@@ -112,8 +109,8 @@ namespace XiHUI
 
         private static List<string> _persistentPkg = new List<string>();
         private static List<string> _noAtlasPkg = new List<string>();
-        private static float _pkgLifeTime = 30;
-        private static float _pkgUseAddTime = 2;
+        private static float _pkgLifeTime = 5;//30 因为外部也做了延迟，所以这里缩减一些
+        private static float _pkgUseAddTime = 0;//2 因为外部也做了延迟，所以这里缩减一些
 
 
         private readonly Dictionary<Mode, UIStack> _layers = new Dictionary<Mode, UIStack>();
@@ -185,7 +182,7 @@ namespace XiHUI
         void TickReference(bool considerTime)
         {
             _removeList.Clear();
-            bool gc = false;
+            //bool gc = false;
             foreach (var key in _packages.Keys)
             {
                 var pkg = _packages[key];
@@ -200,15 +197,16 @@ namespace XiHUI
                 UIPackage.RemovePackage(key);
                 var pkg = _packages[key];
                 pkg.ReleaseHandles();
-
+#if UNITY_EDITOR
                 Debug.Log($"[UIDialogManager] remove {key}");
+#endif
                 _packages.Remove(key);
-                gc = true;
+                //gc = true;
             }
 
-            if (gc) {
+            /*if (gc) {
                 PlatformUtil.TriggerGC();
-            }
+            }*/
         }
 
 
@@ -299,14 +297,14 @@ namespace XiHUI
         /// <returns></returns>
         private UIPackageReference LoadUIPackage(string packageName,  UIDialog reference)
         {
-            var _handles = new List<AssetHandle>(100);
+            var _handles = new List<AssetRef>(64);
             object LoadFunc(string name, string extension, System.Type type, out DestroyMethod method)
             {
                 method = DestroyMethod.None; //注意：这里一定要设置为None
                 string location = "Assets/Res/FairyRes/" + packageName + "/" + name + extension;
-                var handle = YooAssets.LoadAssetSync(location, type);
+                var handle = AssetLoadUtil.LoadAssetSync(location, type);
                 _handles.Add(handle);
-                return handle.AssetObject;
+                return handle.GetAsset<UnityEngine.Object>();
             }
 
             // 执行FairyGUI的添加包函数

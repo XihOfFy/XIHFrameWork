@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using YooAsset;
 using TMPro;
+using YooAsset;
+
 namespace Aot
 {
     public partial class AotMgr : MonoBehaviour
@@ -41,14 +42,11 @@ namespace Aot
         async UniTaskVoid GotoAot2HotScene()
         {
             await SetUpDynamicSecret();
-            var rawOp = YooAssets.LoadAssetAsync<TextAsset>("Assets/Res/Aot2Hot/Raw/Aot2Hot.bytes");
+            var rawOp = AssetLoadUtil.LoadAssetAsync<TextAsset>("Assets/Res/Aot2Hot/Raw/Aot2Hot.bytes");
             await rawOp.ToUniTask();
-            if (rawOp.Status != EOperationStatus.Succeed)
-            {
-                QuitGame();
-            }
+
 #if !UNITY_EDITOR
-            var hotUpdateAss =Assembly.Load(XIHDecryptionServices.Decrypt(((TextAsset)rawOp.AssetObject).bytes));
+            var hotUpdateAss =Assembly.Load(XIHDecryptionServices.Decrypt((rawOp.GetAsset<TextAsset>()).bytes));
 #else
             // Editor下无需加载，直接查找获得HotUpdate程序集
             var hotUpdateAss = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Aot2Hot");

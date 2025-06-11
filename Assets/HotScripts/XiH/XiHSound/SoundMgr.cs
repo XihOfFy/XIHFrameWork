@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XiHUtil;
-using YooAsset;
 using Tmpl;
+using Aot;
 
 namespace XiHSound
 {
@@ -32,7 +32,7 @@ namespace XiHSound
         const string SOUND_VOLUME = "SoundVolume";
 
         AudioListener listener;
-        AudioSource soundSource;
+        Queue<AudioSource> soundSources;
         AudioSource musicSource;
         //AudioMixer audioMixer;
         bool bgmEnable;
@@ -88,11 +88,11 @@ namespace XiHSound
                 PlayerPrefsUtil.Set(SOUND_VOLUME, value);
                 soundVolume = value;
                 //audioMixer.SetFloat(SOUND_VOLUME, value - 80);
-                soundSource.volume = value;
+                //foreach(var soundSource in soundSources) soundSource.volume = value;
             }
         }
 
-        Dictionary<int, AssetHandle> abHandles;
+        Dictionary<int, AssetRef> abHandles;
         LRU recentBgmUseQue;
         LRU recentSoundUseQue;
         int curBgId;
@@ -100,11 +100,14 @@ namespace XiHSound
         {
             listener = gameObject.AddComponent<AudioListener>();
             musicSource = gameObject.AddComponent<AudioSource>();
-            soundSource = gameObject.AddComponent<AudioSource>();
+            soundSources = new Queue<AudioSource>();
+            for (int i = 0; i < 10; i++) {
+                soundSources.Enqueue(gameObject.AddComponent<AudioSource>());
+            }
             bgmEnable = PlayerPrefsUtil.Get(BGM_ENABLE, true);
             soundEnable = PlayerPrefsUtil.Get(SOUND_ENABLE, true);
             vibrate = PlayerPrefsUtil.Get(VIBRATE_ENABLE, true);
-            abHandles = new Dictionary<int, AssetHandle>();
+            abHandles = new Dictionary<int, AssetRef>();
             recentBgmUseQue = new LRU(1);
             recentSoundUseQue = new LRU(16);
             InitAudioMixer();
@@ -120,7 +123,7 @@ namespace XiHSound
             bgmVolume = PlayerPrefsUtil.Get(BGM_VOLUME, 1.0f);
             musicSource.volume = bgmVolume;
             soundVolume = PlayerPrefsUtil.Get(SOUND_VOLUME, 1.0f);
-            soundSource.volume = soundVolume;
+            //foreach(var soundSource in soundSources) soundSource.volume = soundVolume;
         }
         public void PlayBGM(int bgId)
         {
@@ -138,7 +141,7 @@ namespace XiHSound
                 Debug.LogError("无此音乐ID：" + bgId);
                 return;
             }
-            AssetHandle handle;
+            AssetRef handle;
             if (abHandles.ContainsKey(bgId))
             {
                 handle = abHandles[bgId];
@@ -153,12 +156,12 @@ namespace XiHSound
             }
             else
             {
-                handle = YooAssets.LoadAssetAsync<AudioClip>(cfg.Path);
+                handle = AssetLoadUtil.LoadAssetAsync<AudioClip>(cfg.Path);
                 abHandles.Add(bgId, handle);
                 await handle.ToUniTask();
             }
             recentBgmUseQue.InAndOut(bgId, abHandles);
-            if (curBgId == bgId) PlayBGM(handle.AssetObject as AudioClip);
+            if (curBgId == bgId) PlayBGM(handle.GetAsset<AudioClip>());
         }
         public void StopBGM()
         {
@@ -166,13 +169,20 @@ namespace XiHSound
             musicSource.Stop();
             curBgId = int.MinValue;
         }
-        public void PauseBGM()
-        {
+        public void PauseBGM() {
             musicSource.Pause();
+            foreach(var soundSource in soundSources) soundSource.Stop();
         }
         public void UnPause()
         {
-            musicSource.UnPause();
+            musicSource.UnPause();//这个在小程序抖音可能没有效果？
+            //使用下面的代替看看
+            //musicSource.Stop();
+            musicSource.Play();
+            foreach (var soundSource in soundSources) {
+                soundSource.UnPause();
+                soundSource.Stop();
+            }
         }
         void PlayBGM(AudioClip bgm)
         {
@@ -191,13 +201,14 @@ namespace XiHSound
         async UniTaskVoid PlaySoundById(int soundId)
         {
             if (!soundEnable) return;
+            if (soundId < 0) return;
             var cfg = Tables.Instance.TbAudio.Get(soundId);
             if (cfg == null)
             {
                 Debug.LogError("无此音效ID：" + soundId);
                 return;
             }
-            AssetHandle handle;
+            AssetRef handle;
 
             if (abHandles.ContainsKey(soundId))
             {
@@ -213,17 +224,30 @@ namespace XiHSound
             }
             else
             {
-                handle = YooAssets.LoadAssetAsync<AudioClip>(cfg.Path);
+                handle = AssetLoadUtil.LoadAssetAsync<AudioClip>(cfg.Path);
                 abHandles.Add(soundId, handle);
                 await handle.ToUniTask();
             }
             recentSoundUseQue.InAndOut(soundId, abHandles);
-            PlaySound(handle.AssetObject as AudioClip);
+            PlaySound(handle.GetAsset<AudioClip>());
         }
         void PlaySound(AudioClip sound)
         {
             if (!soundEnable || sound == null) return;
-            soundSource.PlayOneShot(sound, soundVolume);
+            AudioSource source = null;
+            foreach (var soundSource in soundSources) {
+                if (soundSource.isPlaying) continue;
+                source=soundSource;
+                break;
+            }
+            if (source == null)
+            {
+                source = soundSources.Dequeue();
+                soundSources.Enqueue(source);
+            }
+            //Debug.Log($"PlayBreakSound {source.isPlaying}>{sound.name}");
+            source.Stop();
+            source.PlayOneShot(sound, soundVolume);
             //AudioSource.PlayClipAtPoint(sound,Vector3.zero,1);
         }
         public void PlayVibrate(int times = 1)
@@ -244,14 +268,14 @@ namespace XiHSound
                 dic = new Dictionary<int, uint>();
                 mCount = maxCount < 1 ? 1 : maxCount;
             }
-            public void InAndOut(int item, Dictionary<int, AssetHandle> abHandles)
+            public void InAndOut(int item, Dictionary<int, AssetRef> abHandles)
             {
                 dic[item] = ++order;
                 if (dic.Count > mCount)
                 {
                     var kvs = dic.OrderBy(kv => kv.Value).ToList();
                     var maxIdx = (mCount + 1) >> 1;
-                    bool gc = false;
+                    //bool gc = false;
                     foreach (var kv in kvs)
                     {
                         if (--maxIdx >= 0)
@@ -263,7 +287,7 @@ namespace XiHSound
                                 tmp.Release();
                                 abHandles.Remove(key);
                                 dic.Remove(key);
-                                gc = true;
+                                //gc = true;
                             }
                         }
                         else
@@ -271,9 +295,20 @@ namespace XiHSound
                             break;
                         }
                     }
-                    if (gc) PlatformUtil.TriggerGC();
+                    //if (gc) PlatformUtil.TriggerGC();
                 }
             }
         }
+
+/*
+        /// <summary>
+        /// 在切后台时和切回时需要处理BGM的播放
+        /// </summary>
+        /// <param name="pause"></param>
+        private void OnApplicationPause(bool pause)
+        {
+            if (pause) PauseBGM();
+            else UnPause();
+        }*/
     }
 }

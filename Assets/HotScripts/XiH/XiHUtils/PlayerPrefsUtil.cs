@@ -2,7 +2,7 @@
 
 namespace XiHUtil
 {
-    public class PlayerPrefsUtil:AotPlayerPrefsUtil
+    public class PlayerPrefsUtil : AotPlayerPrefsUtil
     {
     }
 }

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 namespace XiHUtil
 {
 	/// <summary>
@@ -211,9 +212,13 @@ namespace XiHUtil
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IEnumerable<Type> GetAllTypes(bool userAssemblyOnly = true)
 		{
-			return AppDomain.CurrentDomain.GetAssemblies()
+#if UNITY_EDITOR
+			Debug.Log("优先使用 typeof(Hot.HotMgr)所在 程序集，若是其他项目可以自行改动！");
+#endif
+			return typeof(Hot.HotMgr).Assembly.GetTypes();
+            /*return AppDomain.CurrentDomain.GetAssemblies()
 					.Where(asm => !userAssemblyOnly || IsUserAssembly(asm))
-					.SelectMany(asm => asm.GetLoadableTypes());
+					.SelectMany(asm => asm.GetLoadableTypes());*/
 		}
 	}
 }
