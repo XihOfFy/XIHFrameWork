@@ -134,7 +134,7 @@ namespace XiHSound
         async UniTaskVoid PlayBGMById(int bgId)
         {
             //if (!bgmEnable) return;
-            var cfg = Tables.Instance.TbAudio.Get(bgId);
+            var cfg = Tables.Instance.TbAudio.GetOrDefault(bgId);
             if (cfg == null)
             {
                 StopBGM();
@@ -202,7 +202,7 @@ namespace XiHSound
         {
             if (!soundEnable) return;
             if (soundId < 0) return;
-            var cfg = Tables.Instance.TbAudio.Get(soundId);
+            var cfg = Tables.Instance.TbAudio.GetOrDefault(soundId);
             if (cfg == null)
             {
                 Debug.LogError("无此音效ID：" + soundId);
