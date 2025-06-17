@@ -10,7 +10,7 @@ using System.Threading;
 #if USE_YOO
 using YooAsset;
 #endif
-namespace Aot
+namespace Aot.XiHUtil
 {
     public class AssetRef {
         public int refCount;
@@ -40,6 +40,47 @@ namespace Aot
         {
             return assetHandle.ToUniTask(cancellationToken: cancellationToken);
         }
+
+        /*若要断线重连，可以使用这个方式
+         * 若之前已经package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);那么可能内部DCFSLoadAssetBundleOperation会无限重连处理（边玩边下下载器引用计数没有Release），所以这里永远不会报错404，也就是没必要try，等网络恢复它将自动完成
+         * public async UniTask ToUniTask(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                //这里可能因为yoo网络错误导致失败，所以try下做后续处理，若使用了后台下载，这里可能会无限等待，因为后台下载会无限次请求直到完成
+                await assetHandle.ToUniTask(cancellationToken: cancellationToken);
+            }
+            catch
+            {
+                if (assetHandle.LastError.StartsWith("HTTP"))//yoo 网络错误是  Error = HTTP/1.1 404 Not Found
+                {
+                    await ToUniTask(int.MaxValue);
+                }
+                else
+                {
+                    await ToUniTask(1);
+                }
+            }
+        }
+        async UniTask ToUniTask(int leftTimes)
+        {
+            if (leftTimes < 0) return;
+            await UniTask.Yield();
+            var info = assetHandle.GetAssetInfo();
+            Debug.LogError($"加载{info.AssetPath}错误，剩余尝试{leftTimes}次  {assetHandle.LastError}");//yoo 网络错误是  Error = HTTP/1.1 404 Not Found
+            try
+            {
+                assetHandle.Release();
+                YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).TryUnloadUnusedAsset(info);//这个是关键，移除_providers，不然无法重新下载请求,provider.Status为上次的,所以一直失败不重新拉取
+                assetHandle = YooAssets.LoadAssetAsync(info.AssetPath, info.AssetType);
+                await assetHandle.ToUniTask();
+            }
+            catch
+            {
+                await ToUniTask(--leftTimes);
+            }
+        }*/
+
         public GameObject InstantiateSync(Transform transform = null)
         {
             return assetHandle.InstantiateSync(transform);

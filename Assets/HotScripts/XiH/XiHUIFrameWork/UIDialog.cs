@@ -6,28 +6,6 @@ using UnityEngine;
 
 namespace XiHUI
 {
-    public enum Mode
-    {
-        None = 0,
-        /// <summary>
-        /// 全屏栈窗口
-        /// </summary>
-        Stack = 1,
-        /// <summary>
-        /// 弹出式子窗口
-        /// </summary>
-        Popup = 2,
-        /// <summary>
-        /// 模态弹出框
-        /// </summary>
-        Modal = 3,
-        /// <summary>
-        /// 顶层窗口(如Loading)
-        /// </summary>
-        TopMost = 4,
-        Max = 5,
-    }
-
     public enum State
     {
         None = 0,
@@ -91,7 +69,7 @@ namespace XiHUI
                 _children.Add(wrap);
         }
 
-        internal void Open(GComponent obj, bool isFull, bool isBlur)
+        internal void Open(GComponent obj, bool isFull, bool isBlur,bool useBatch)
         {
             Content = obj;
             IsFullScreen = isFull;
@@ -99,9 +77,9 @@ namespace XiHUI
             if (Content != null)
             {
                 Content.name = dialogName;
-                Content.fairyBatching = false;
+                Content.fairyBatching = useBatch;
 #if UNITY_EDITOR
-                Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
+                if(useBatch) Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
 #endif
             }
 

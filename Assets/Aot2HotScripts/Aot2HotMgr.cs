@@ -11,6 +11,7 @@ using System.Reflection;
 using FairyGUI;
 using YooAsset;
 using Cysharp.Threading.Tasks;
+using Aot.XiHUtil;
 
 namespace Aot2Hot
 {

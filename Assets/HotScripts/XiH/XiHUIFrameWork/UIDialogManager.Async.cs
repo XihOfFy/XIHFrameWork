@@ -3,7 +3,7 @@ using FairyGUI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Aot;
+using Aot.XiHUtil;
 using Tmpl;
 using Object = UnityEngine.Object;
 
@@ -69,7 +69,7 @@ namespace XiHUI
             }
 
             UIControlBinding.BindFields(dialog, compent);
-            dialog.Open(compent, param.IsFull, param.IsBlur);
+            dialog.Open(compent, param.IsFull, param.IsBlur,param.UseBatch);
             stack.Push(dialog);
             dialog.Open();
 

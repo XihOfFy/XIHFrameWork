@@ -5,7 +5,7 @@ using XiHUI;
 using XiHUtil;
 using YooAsset;
 using FairyGUI;
-using Aot;
+using Aot.XiHUtil;
 
 namespace Hot
 {

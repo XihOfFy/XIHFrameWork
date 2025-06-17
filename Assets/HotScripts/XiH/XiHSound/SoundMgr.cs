@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using XiHUtil;
 using Tmpl;
-using Aot;
+using Aot.XiHUtil;
 
 namespace XiHSound
 {

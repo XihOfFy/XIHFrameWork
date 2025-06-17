@@ -213,7 +213,7 @@ namespace XiHUtil
 		public static IEnumerable<Type> GetAllTypes(bool userAssemblyOnly = true)
 		{
 #if UNITY_EDITOR
-			Debug.Log("优先使用 typeof(Hot.HotMgr)所在 程序集，若是其他项目可以自行改动！");
+			Debug.LogWarning("优先使用 typeof(Hot.HotMgr)所在程序集，若是其他项目可以自行改动！");
 #endif
 			return typeof(Hot.HotMgr).Assembly.GetTypes();
             /*return AppDomain.CurrentDomain.GetAssemblies()

@@ -1,15 +1,4 @@
 <module name="">
-    <enum name="mode">
-        <var name="None" value="0"/>
-        <var name="Stack" value="1"/>
-        <var name="Popup" value="2"/>
-        <var name="Modal" value="3"/>
-        <var name="TopMost" value="4"/>
-        <var name="Max" value="5"/>
-        <mapper target="client" codeTarget="cs-bin,cs-simple-json">
-            <option name="type" value="XiHUI.Mode"/>
-        </mapper>
-    </enum>
     <bean name="vector2" valueType="1" sep=",">
         <var name="x" type="float"/>
         <var name="y" type="float"/>

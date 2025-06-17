@@ -1,5 +1,5 @@
 ﻿using FairyGUI;
-using Aot;
+using Aot.XiHUtil;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -257,7 +257,7 @@ namespace XiHUI
             if (dialog != null && dialog.State == State.Loading)
             {
                 UIControlBinding.BindFields(dialog, compent);
-                dialog.Open(compent, param.IsFull, param.IsBlur);
+                dialog.Open(compent, param.IsFull, param.IsBlur,param.UseBatch);
                 stack.Push(dialog);
                 dialog.Open();
             }

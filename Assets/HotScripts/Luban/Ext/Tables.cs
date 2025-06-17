@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using Luban;
 using System.Collections.Generic;
 using UnityEngine;
-using Aot;
+using Aot.XiHUtil;
 
 namespace Tmpl
 {

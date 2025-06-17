@@ -2,7 +2,8 @@
 using UnityEngine;
 using FairyGUI;
 using Cysharp.Threading.Tasks;
-using Aot;
+using Aot.XiHUtil;
+
 namespace XiHUI
 {
     public class EmitManager

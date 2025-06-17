@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aot
+namespace Aot.XiHUtil
 {
     //无需实现IDecryptionServices，因为我们只加密原生文件rawfile，不是ab
     public class XIHDecryptionServices

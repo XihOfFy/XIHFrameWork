@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Aot.XiHUtil;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 
@@ -11,12 +12,16 @@ namespace Aot
         bool isLogoEnd;
         private void StartLogo()
         {
-            isLogoEnd = false;
             tip.text = "XIH\nGamer";
+#if UNITY_EDITOR
+            isLogoEnd = true;
+#else
+            isLogoEnd = false;
             tip.transform.DOScale(1, 2).From(0).OnComplete(() =>
             {
                 isLogoEnd = true;
             });
+#endif
         }
         private async UniTaskVoid EndLogo()
         {

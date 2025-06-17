@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using TMPro;
 using YooAsset;
+using Aot.XiHUtil;
 
 namespace Aot
 {
