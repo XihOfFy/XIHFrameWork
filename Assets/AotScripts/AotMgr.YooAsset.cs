@@ -85,16 +85,12 @@ namespace Aot
                 // 小游戏缓存根目录
                 // 注意：如果有子目录，请修改此处！
                 string packageRoot = $"";
-                var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices, decryptionServices);
+                var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
 #else
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
 #endif
 
-
                 var initParameters = new WebPlayModeParameters();
-#if !UNITY_WX
-                //initParameters.WebServerFileSystemParameters = webServerFileSystemParams;
-#endif
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
                 createParameters = initParameters;
             }
@@ -218,7 +214,7 @@ namespace Aot
             }
             else
             {
-                QuitGame();
+                UpdatePackageVersionAsync(package).Forget();//无限尝试
             }
         }
         //UpdatePackageManifest
@@ -246,7 +242,7 @@ namespace Aot
             }
             else
             {
-                QuitGame();
+                UpdatePackageManifest(package, packageVersion).Forget();//无限尝试
             }
         }
         //资源包下载,只下载aot2hot的tag资源，余下的到hot再继续下载，因为aot不提供ui功能
