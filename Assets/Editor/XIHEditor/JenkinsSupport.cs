@@ -55,7 +55,7 @@ public class JenkinsSupport
         {
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
         }
-        if (Obfuz.Settings.ObfuzSettings.Instance.enable)
+        if (Obfuz.Settings.ObfuzSettings.Instance.buildPipelineSettings.enable)
         {
             PrebuildCommandExt.GenerateAll();
         }
@@ -150,7 +150,7 @@ public class JenkinsSupport
         //Debug.LogWarning("输出Tmpl");
         //AssetDatabase.Refresh();
         Debug.LogWarning("开始热更构建");
-        if (Obfuz.Settings.ObfuzSettings.Instance.enable)
+        if (Obfuz.Settings.ObfuzSettings.Instance.buildPipelineSettings.enable)
         {
             PrebuildCommandExt.CompileAndObfuscateDll();
         }

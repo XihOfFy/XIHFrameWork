@@ -76,7 +76,7 @@ public class DllCopyEditor
         // 引用的dhe程序集中的类型或函数肯定存在。
         var checker = new MissingMetadataChecker(aotDir, new List<string>());
         string hotUpdateDir;
-        if (Obfuz.Settings.ObfuzSettings.Instance.enable)
+        if (Obfuz.Settings.ObfuzSettings.Instance.buildPipelineSettings.enable)
         {
             hotUpdateDir = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
         }
@@ -110,7 +110,7 @@ public class DllCopyEditor
             dlls = otherHotdll.ToList();
         }
         string sourPath;
-        if (Obfuz.Settings.ObfuzSettings.Instance.enable)
+        if (Obfuz.Settings.ObfuzSettings.Instance.buildPipelineSettings.enable)
         {
             sourPath = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
         }

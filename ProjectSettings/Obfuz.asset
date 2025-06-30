@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c414eef017e565c4db1442ec64ec52fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enable: 1
+  buildPipelineSettings:
+    enable: 1
+    linkXmlProcessCallbackOrder: 10000
+    obfuscationProcessCallbackOrder: 10000
   assemblySettings:
     assembliesToObfuscate:
     - Aot
@@ -41,6 +44,8 @@ MonoBehaviour:
     debug: 0
     obfuscatedNamePrefix: $
     useConsistentNamespaceObfuscation: 1
+    detectReflectionCompatibility: 1
+    keepUnknownSymbolInSymbolMappingFile: 1
     symbolMappingFile: Assets/Obfuz/SymbolObfus/symbol-mapping.xml
     debugSymbolMappingFile: Assets/Obfuz/SymbolObfus/symbol-mapping-debug.xml
     ruleFiles: []
@@ -49,10 +54,30 @@ MonoBehaviour:
   constEncryptSettings:
     encryptionLevel: 1
     ruleFiles: []
+  evalStackObfusSettings:
+    ruleFiles: []
   fieldEncryptSettings:
     encryptionLevel: 1
     ruleFiles: []
   callObfusSettings:
     obfuscationLevel: 1
     maxProxyMethodCountPerDispatchMethod: 100
+    obfuscateCallToMethodInMscorlib: 0
     ruleFiles: []
+  exprObfusSettings:
+    ruleFiles: []
+  controlFlowObfusSettings:
+    minInstructionCountOfBasicBlockToObfuscate: 3
+    ruleFiles: []
+  garbageCodeGenerationSettings:
+    codeGenerationSecret: XIH Garbage Code
+    defaultTask:
+      codeGenerationRandomSeed: 22
+      classNamespace: Hot
+      classNamePrefix: XIHGarbage
+      classCount: 69
+      methodCountPerClass: 9
+      fieldCountPerClass: 6
+      garbageCodeType: 1
+      outputPath: Assets/HotScripts/Obfuz/GarbageCode
+    additionalTasks: []
