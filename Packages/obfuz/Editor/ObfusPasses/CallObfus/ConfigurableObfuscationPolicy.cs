@@ -78,7 +78,7 @@ namespace Obfuz.ObfusPasses.CallObfus
             disableObfuscation = false,
             obfuscateCallInLoop = true,
             cacheCallIndexInLoop = true,
-            cacheCallIndexNotLoop = false,
+            cacheCallIndexNotLoop = true,
         };
 
         private readonly XmlAssemblyTypeMethodRuleParser<AssemblySpec, TypeSpec, MethodSpec, ObfuscationRule> _configParser;
@@ -86,11 +86,12 @@ namespace Obfuz.ObfusPasses.CallObfus
         private ObfuscationRule _global;
         private readonly List<WhiteListAssembly> _whiteListAssemblies = new List<WhiteListAssembly>();
 
-        private readonly Dictionary<IMethod, bool> _whiteListMethodCache = new Dictionary<IMethod, bool>(MethodEqualityComparer.CompareDeclaringTypes);
+        private readonly CachedDictionary<IMethod, bool> _whiteListMethodCache;
         private readonly Dictionary<MethodDef, ObfuscationRule> _methodRuleCache = new Dictionary<MethodDef, ObfuscationRule>();
 
         public ConfigurableObfuscationPolicy(List<string> toObfuscatedAssemblyNames, List<string> xmlConfigFiles)
         {
+            _whiteListMethodCache = new CachedDictionary<IMethod, bool>(MethodEqualityComparer.CompareDeclaringTypes, this.ComputeIsInWhiteList);
             _configParser = new XmlAssemblyTypeMethodRuleParser<AssemblySpec, TypeSpec, MethodSpec, ObfuscationRule>(toObfuscatedAssemblyNames,
                 ParseObfuscationRule, ParseGlobalElement);
             LoadConfigs(xmlConfigFiles);
@@ -252,7 +253,7 @@ namespace Obfuz.ObfusPasses.CallObfus
         {
             if (!_methodRuleCache.TryGetValue(method, out var rule))
             {
-                rule = _configParser.GetMethodRule(method, s_default);
+                rule = _configParser.GetMethodRule(method, _global);
                 _methodRuleCache[method] = rule;
             }
             return rule;
@@ -272,33 +273,6 @@ namespace Obfuz.ObfusPasses.CallObfus
                 cacheInLoop = rule.cacheCallIndexInLoop.Value,
                 cacheNotInLoop = rule.cacheCallIndexNotLoop.Value,
             };
-        }
-
-
-        private bool IsSpecialNotObfuscatedMethod(TypeDef typeDef, IMethod method)
-        {
-            if (typeDef.IsDelegate || typeDef.IsEnum)
-                return true;
-
-            string methodName = method.Name;
-
-            // doesn't proxy call if the method is a constructor
-            if (methodName == ".ctor")
-            {
-                return true;
-            }
-
-            if (typeDef.Name == "EncryptionService`1")
-            {
-                return true;
-            }
-            // special handle
-            // don't proxy call for List<T>.Enumerator GetEnumerator()
-            if (methodName == "GetEnumerator")
-            {
-                return true;
-            }
-            return false;
         }
 
         private bool ComputeIsInWhiteList(IMethod calledMethod)
@@ -325,11 +299,6 @@ namespace Obfuz.ObfusPasses.CallObfus
             }
 
             TypeDef typeDef = declaringType.ResolveTypeDef();
-
-            if (IsSpecialNotObfuscatedMethod(typeDef, calledMethod))
-            {
-                return true;
-            }
 
             string assName = typeDef.Module.Assembly.Name;
             string typeFullName = typeDef.FullName;
@@ -360,42 +329,13 @@ namespace Obfuz.ObfusPasses.CallObfus
             return false;
         }
 
-        private bool IsInWhiteList(IMethod method)
-        {
-            if (!_whiteListMethodCache.TryGetValue(method, out var isWhiteList))
-            {
-                isWhiteList = ComputeIsInWhiteList(method);
-                _whiteListMethodCache.Add(method, isWhiteList);
-            }
-            return isWhiteList;
-        }
-
-        private bool IsTypeSelfAndParentPublic(TypeDef type)
-        {
-            if (type.DeclaringType != null && !IsTypeSelfAndParentPublic(type.DeclaringType))
-            {
-                return false;
-            }
-
-            return type.IsPublic;
-        }
-
         public override bool NeedObfuscateCalledMethod(MethodDef callerMethod, IMethod calledMethod, bool callVir, bool currentInLoop)
         {
-            if (IsInWhiteList(calledMethod))
+            if (_whiteListMethodCache.GetValue(calledMethod))
             {
                 return false;
             }
 
-            // mono has more strict access control, calls non-public method will raise exception.
-            if (PlatformUtil.IsMonoBackend())
-            {
-                MethodDef calledMethodDef = calledMethod.ResolveMethodDef();
-                if (calledMethodDef != null && (!calledMethodDef.IsPublic || !IsTypeSelfAndParentPublic(calledMethodDef.DeclaringType)))
-                {
-                    return false;
-                }
-            }
             ObfuscationRule rule = GetMethodObfuscationRule(callerMethod);
             if (currentInLoop && rule.obfuscateCallInLoop == false)
             {

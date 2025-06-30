@@ -16,7 +16,7 @@ namespace Obfuz.Unity
 #if UNITY_2019_1_OR_NEWER
     public class ObfuscationProcess : IPostBuildPlayerScriptDLLs
     {
-        public int callbackOrder => 10000;
+        public int callbackOrder => ObfuzSettings.Instance.buildPipelineSettings.obfuscationProcessCallbackOrder;
 
         public static event Action<ObfuscationBeginEventArgs> OnObfuscationBegin;
 
@@ -70,7 +70,7 @@ namespace Obfuz.Unity
         private static void RunObfuscate(BuildFile[] files)
         {
             ObfuzSettings settings = ObfuzSettings.Instance;
-            if (!settings.enable)
+            if (!settings.buildPipelineSettings.enable)
             {
                 Debug.Log("Obfuscation is disabled.");
                 return;

@@ -16,7 +16,7 @@ namespace Obfuz.Unity
 {
     public class LinkXmlProcess : IUnityLinkerProcessor
     {
-        public int callbackOrder => 10000;
+        public int callbackOrder => ObfuzSettings.Instance.buildPipelineSettings.linkXmlProcessCallbackOrder;
 
         public string GenerateAdditionalLinkXmlFile(BuildReport report, UnityLinkerBuildPipelineData data)
         {
@@ -27,12 +27,12 @@ namespace Obfuz.Unity
 
         public void OnBeforeRun(BuildReport report, UnityLinkerBuildPipelineData data)
         {
-            throw new NotImplementedException();
+
         }
 
         public void OnAfterRun(BuildReport report, UnityLinkerBuildPipelineData data)
         {
-            throw new NotImplementedException();
+
         }
 #endif
 

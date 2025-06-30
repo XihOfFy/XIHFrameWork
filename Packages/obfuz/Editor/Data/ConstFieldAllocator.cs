@@ -96,15 +96,16 @@ namespace Obfuz.Data
         {
             if (_holderTypeDef == null || _holderTypeDef.Fields.Count >= maxFieldCount)
             {
-                _module.EnableTypeDefFindCache = false;
-                ITypeDefOrRef objectTypeRef = _module.Import(typeof(object));
-                _holderTypeDef = new TypeDefUser($"{ConstValues.ObfuzInternalSymbolNamePrefix}ConstFieldHolder${_holderTypeDefs.Count}", objectTypeRef);
-                _module.Types.Add(_holderTypeDef);
-                _holderTypeDefs.Add(_holderTypeDef);
-                _module.EnableTypeDefFindCache = true;
+                using (var scope = new DisableTypeDefFindCacheScope(_module))
+                {
+                    ITypeDefOrRef objectTypeRef = _module.Import(typeof(object));
+                    _holderTypeDef = new TypeDefUser($"{ConstValues.ObfuzInternalSymbolNamePrefix}ConstFieldHolder${_holderTypeDefs.Count}", objectTypeRef);
+                    _module.Types.Add(_holderTypeDef);
+                    _holderTypeDefs.Add(_holderTypeDef);
+                }
             }
 
-            var field = new FieldDefUser($"{ConstValues.ObfuzInternalSymbolNamePrefix}RVA_Value{_holderTypeDef.Fields.Count}", new FieldSig(GetTypeSigOfValue(value)), FieldAttributes.Static | FieldAttributes.Public | FieldAttributes.InitOnly);
+            var field = new FieldDefUser($"{ConstValues.ObfuzInternalSymbolNamePrefix}RVA_Value{_holderTypeDef.Fields.Count}", new FieldSig(GetTypeSigOfValue(value)), FieldAttributes.Static | FieldAttributes.Public);
             field.DeclaringType = _holderTypeDef;
             return new ConstFieldInfo
             {
@@ -293,7 +294,7 @@ namespace Obfuz.Data
             _moduleEntityManager = moduleEntityManager;
         }
 
-        private ModuleConstFieldAllocator GetModuleAllocator(ModuleDef mod)
+        public ModuleConstFieldAllocator GetModuleAllocator(ModuleDef mod)
         {
             return _moduleEntityManager.GetEntity<ModuleConstFieldAllocator>(mod, () => new ModuleConstFieldAllocator(_encryptionScopeProvider, _rvaDataAllocator, _moduleEntityManager));
         }

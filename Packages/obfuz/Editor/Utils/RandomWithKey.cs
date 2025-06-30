@@ -18,6 +18,8 @@
             _seed = seed;
         }
 
+        public int[] Key => _key;
+
         public int NextInt(int min, int max)
         {
             return min + NextInt(max - min);
@@ -46,6 +48,16 @@
         public long NextLong()
         {
             return ((long)NextInt() << 32) | (uint)NextInt();
+        }
+
+        public float NextFloat()
+        {
+            return (float)((double)(uint)NextInt() / uint.MaxValue);
+        }
+
+        public bool NextInPercentage(float percentage)
+        {
+            return NextFloat() < percentage;
         }
     }
 }

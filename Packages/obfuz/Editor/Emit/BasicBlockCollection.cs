@@ -38,13 +38,20 @@ namespace Obfuz.Emit
 
         public IList<BasicBlock> Blocks => _blocks;
 
-        public BasicBlockCollection(MethodDef method)
+        public BasicBlockCollection(MethodDef method, bool computeInLoop)
         {
             _method = method;
             HashSet<Instruction> splitPoints = BuildSplitPoint(method);
             BuildBasicBlocks(method, splitPoints);
             BuildInOutGraph(method);
+            if (computeInLoop)
+            {
+                ComputeBlocksInLoop();
+            }
+        }
 
+        public void ComputeBlocksInLoop()
+        {
             var loopBlocks = FindLoopBlocks(_blocks);
             foreach (var block in loopBlocks)
             {
@@ -97,6 +104,7 @@ namespace Obfuz.Emit
                         {
                             splitPoints.Add(nextInst);
                         }
+                        splitPoints.Add((Instruction)curInst.Operand);
                         break;
                     }
                     case FlowControl.Cond_Branch:
@@ -204,11 +212,21 @@ namespace Obfuz.Emit
                         }
                         break;
                     }
+                    case FlowControl.Call:
+                    case FlowControl.Next:
+                    {
+                        if (nextBlock != null)
+                        {
+                            curBlock.AddTargetBasicBlock(nextBlock);
+                        }
+                        break;
+                    }
                     case FlowControl.Return:
                     case FlowControl.Throw:
                     {
                         break;
                     }
+                    default: throw new NotSupportedException($"Unsupported flow control: {lastInst.OpCode.FlowControl} in method {method.FullName}");
                 }
             }
         }

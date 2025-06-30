@@ -2,53 +2,19 @@
 using dnlib.DotNet.Emit;
 using Obfuz.Emit;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Obfuz.ObfusPasses
 {
-    public abstract class BasicBlockObfuscationPassBase : ObfuscationPassBase
+    public abstract class BasicBlockObfuscationPassBase : ObfuscationMethodPassBase
     {
-        protected abstract bool NeedObfuscateMethod(MethodDef method);
-
-        public override void Process()
-        {
-            var ctx = ObfuscationPassContext.Current;
-            ObfuscationMethodWhitelist whiteList = ctx.whiteList;
-            ConfigurablePassPolicy passPolicy = ctx.passPolicy;
-            foreach (ModuleDef mod in ctx.modulesToObfuscate)
-            {
-                if (whiteList.IsInWhiteList(mod))
-                {
-                    continue;
-                }
-                // ToArray to avoid modify list exception
-                foreach (TypeDef type in mod.GetTypes().ToArray())
-                {
-                    if (whiteList.IsInWhiteList(type))
-                    {
-                        continue;
-                    }
-                    // ToArray to avoid modify list exception
-                    foreach (MethodDef method in type.Methods.ToArray())
-                    {
-                        if (!method.HasBody || ctx.whiteList.IsInWhiteList(method) || !Support(passPolicy.GetMethodObfuscationPasses(method)) || !NeedObfuscateMethod(method))
-                        {
-                            continue;
-                        }
-                        // TODO if isGeneratedBy Obfuscator, continue
-                        ObfuscateData(method);
-                    }
-                }
-            }
-        }
-
+        protected virtual bool ComputeBlockInLoop => true;
 
         protected abstract bool TryObfuscateInstruction(MethodDef callingMethod, Instruction inst, BasicBlock block, int instructionIndex,
             IList<Instruction> globalInstructions, List<Instruction> outputInstructions, List<Instruction> totalFinalInstructions);
 
-        private void ObfuscateData(MethodDef method)
+        protected override void ObfuscateData(MethodDef method)
         {
-            BasicBlockCollection bbc = new BasicBlockCollection(method);
+            BasicBlockCollection bbc = new BasicBlockCollection(method, ComputeBlockInLoop);
 
             IList<Instruction> instructions = method.Body.Instructions;
 

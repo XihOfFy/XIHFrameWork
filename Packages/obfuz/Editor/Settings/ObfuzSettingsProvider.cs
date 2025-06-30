@@ -24,7 +24,8 @@ namespace Obfuz.Settings
 
 
         private SerializedObject _serializedObject;
-        private SerializedProperty _enable;
+        private SerializedProperty _buildPipelineSettings;
+
         private SerializedProperty _assemblySettings;
         private SerializedProperty _obfuscationPassSettings;
         private SerializedProperty _secretSettings;
@@ -32,8 +33,13 @@ namespace Obfuz.Settings
 
         private SerializedProperty _symbolObfusSettings;
         private SerializedProperty _constEncryptSettings;
+        private SerializedProperty _evalStackObfusSettings;
         private SerializedProperty _fieldEncryptSettings;
         private SerializedProperty _callObfusSettings;
+        private SerializedProperty _exprObfusSettings;
+        private SerializedProperty _controlFlowObfusSettings;
+
+        private SerializedProperty _garbageCodeGenerationSettings;
 
         public ObfuzSettingsProvider() : base("Project/Obfuz", SettingsScope.Project)
         {
@@ -55,7 +61,8 @@ namespace Obfuz.Settings
             var setting = ObfuzSettings.Instance;
             _serializedObject?.Dispose();
             _serializedObject = new SerializedObject(setting);
-            _enable = _serializedObject.FindProperty("enable");
+            _buildPipelineSettings = _serializedObject.FindProperty("buildPipelineSettings");
+
             _assemblySettings = _serializedObject.FindProperty("assemblySettings");
             _obfuscationPassSettings = _serializedObject.FindProperty("obfuscationPassSettings");
             _secretSettings = _serializedObject.FindProperty("secretSettings");
@@ -64,8 +71,13 @@ namespace Obfuz.Settings
 
             _symbolObfusSettings = _serializedObject.FindProperty("symbolObfusSettings");
             _constEncryptSettings = _serializedObject.FindProperty("constEncryptSettings");
+            _evalStackObfusSettings = _serializedObject.FindProperty("evalStackObfusSettings");
+            _exprObfusSettings = _serializedObject.FindProperty("exprObfusSettings");
             _fieldEncryptSettings = _serializedObject.FindProperty("fieldEncryptSettings");
             _callObfusSettings = _serializedObject.FindProperty("callObfusSettings");
+            _controlFlowObfusSettings = _serializedObject.FindProperty("controlFlowObfusSettings");
+
+            _garbageCodeGenerationSettings = _serializedObject.FindProperty("garbageCodeGenerationSettings");
         }
 
         public override void OnGUI(string searchContext)
@@ -77,7 +89,8 @@ namespace Obfuz.Settings
             _serializedObject.Update();
             EditorGUI.BeginChangeCheck();
 
-            EditorGUILayout.PropertyField(_enable);
+            EditorGUILayout.PropertyField(_buildPipelineSettings);
+
             EditorGUILayout.PropertyField(_assemblySettings);
             EditorGUILayout.PropertyField(_obfuscationPassSettings);
             EditorGUILayout.PropertyField(_secretSettings);
@@ -86,9 +99,13 @@ namespace Obfuz.Settings
 
             EditorGUILayout.PropertyField(_symbolObfusSettings);
             EditorGUILayout.PropertyField(_constEncryptSettings);
+            EditorGUILayout.PropertyField(_evalStackObfusSettings);
+            EditorGUILayout.PropertyField(_exprObfusSettings);
             EditorGUILayout.PropertyField(_fieldEncryptSettings);
             EditorGUILayout.PropertyField(_callObfusSettings);
+            EditorGUILayout.PropertyField(_controlFlowObfusSettings);
 
+            EditorGUILayout.PropertyField(_garbageCodeGenerationSettings);
 
             if (EditorGUI.EndChangeCheck())
             {

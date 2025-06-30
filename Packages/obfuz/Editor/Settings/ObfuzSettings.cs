@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace Obfuz.Settings
 {
+
     public class ObfuzSettings : ScriptableObject
     {
-        [Tooltip("enable Obfuz")]
-        public bool enable = true;
+        [Tooltip("build pipeline settings")]
+        public BuildPipelineSettings buildPipelineSettings;
 
         [Tooltip("assembly settings")]
         public AssemblySettings assemblySettings;
@@ -28,11 +29,23 @@ namespace Obfuz.Settings
         [Tooltip("const encryption settings")]
         public ConstEncryptionSettings constEncryptSettings;
 
+        [Tooltip("eval stack obfuscation settings")]
+        public EvalStackObfuscationSettings evalStackObfusSettings;
+
         [Tooltip("field encryption settings")]
         public FieldEncryptionSettings fieldEncryptSettings;
 
         [Tooltip("call obfuscation settings")]
         public CallObfuscationSettings callObfusSettings;
+
+        [Tooltip("expression obfuscation settings")]
+        public ExprObfuscationSettings exprObfusSettings;
+
+        [Tooltip("control flow obfuscation settings")]
+        public ControlFlowObfuscationSettings controlFlowObfusSettings;
+
+        [Tooltip("garbage code generator settings")]
+        public GarbageCodeGenerationSettings garbageCodeGenerationSettings;
 
         public string ObfuzRootDir => $"Library/Obfuz";
 

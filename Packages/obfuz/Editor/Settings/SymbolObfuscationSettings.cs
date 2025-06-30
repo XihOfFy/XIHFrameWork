@@ -11,6 +11,8 @@ namespace Obfuz.Settings
         public bool debug;
         public string obfuscatedNamePrefix;
         public bool useConsistentNamespaceObfuscation;
+        public bool detectReflectionCompatibility;
+        public bool keepUnknownSymbolInSymbolMappingFile;
         public string symbolMappingFile;
         public List<string> ruleFiles;
         public List<Type> customRenamePolicyTypes;
@@ -26,6 +28,12 @@ namespace Obfuz.Settings
 
         [Tooltip("obfuscate same namespace to one name")]
         public bool useConsistentNamespaceObfuscation = true;
+
+        [Tooltip("detect reflection compatibility, if true, will detect if the obfuscated name is compatibility with reflection, such as Type.GetType(), Enum.Parse(), etc.")]
+        public bool detectReflectionCompatibility = true;
+
+        [Tooltip("keep unknown symbol in symbol mapping file, if false, unknown symbol will be removed from mapping file")]
+        public bool keepUnknownSymbolInSymbolMappingFile = true;
 
         [Tooltip("symbol mapping file path")]
         public string symbolMappingFile = "Assets/Obfuz/SymbolObfus/symbol-mapping.xml";
@@ -51,6 +59,8 @@ namespace Obfuz.Settings
                 debug = debug,
                 obfuscatedNamePrefix = obfuscatedNamePrefix,
                 useConsistentNamespaceObfuscation = useConsistentNamespaceObfuscation,
+                detectReflectionCompatibility = detectReflectionCompatibility,
+                keepUnknownSymbolInSymbolMappingFile = keepUnknownSymbolInSymbolMappingFile,
                 symbolMappingFile = GetSymbolMappingFile(),
                 ruleFiles = ruleFiles?.ToList() ?? new List<string>(),
                 customRenamePolicyTypes = customRenamePolicyTypes?.Select(typeName => ReflectionUtil.FindUniqueTypeInCurrentAppDomain(typeName)).ToList() ?? new List<Type>(),

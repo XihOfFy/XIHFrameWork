@@ -25,9 +25,13 @@
 - **Symbol Obfuscation**: Supports comprehensive configuration rules and incremental obfuscation for flexible and efficient code protection.
 - **Constant Obfuscation**: Obfuscates constants such as `int`, `long`, `float`, `double`, `string` and `array` to prevent reverse engineering.
 - **Variable Memory Encryption**: Encrypts variables in memory to enhance runtime security.
+- **Eval stack Obfuscation**: Obfuscates eval stack variable to prevent reverse engineering.
+- **Expression Obfuscation**: Obfuscate complex expressions for enhanced protection.
 - **Function Call Obfuscation**: Scrambles function call structures to increase cracking difficulty.
+- **Control Flow Obfuscation**: Disrupt code flow to deter reverse engineering.
 - **Randomized Encryption VM**: Generates randomized virtual machines to thwart decompilation and cracking tools.
 - **Static and Dynamic Decryption**: Combines static and dynamic decryption to resist offline static analysis.
+- **Garbage Code Generation**​​: Supports various types of low-quality code generation to improve App Store and Google Play review pass rates
 - **Seamless Unity Integration**: Deeply integrated with Unity workflows, requiring minimal configuration to get started.
 - **Hot Update Compatibility**: Fully supports hot update frameworks like HybridCLR, xLua, and Puerts, ensuring compatibility with dynamic code updates.
 - **DOTS Compatibility**: Works seamlessly across all DOTS versions with zero configuration required.
@@ -43,8 +47,6 @@
 
 Obfuz is actively evolving. Upcoming features include:
 
-- **Expression Obfuscation**: Obfuscate complex expressions for enhanced protection.
-- **Control Flow Obfuscation**: Disrupt code flow to deter reverse engineering.
 - **Code Watermarking**: Embed traceable watermarks in your code.
 - **Anti-Memory Dumping and Anti-Debugging**: Prevent memory dumps and debugging attempts.
 - **DLL Structure Encryption**: Secure DLL file structures against tampering.
@@ -65,5 +67,6 @@ Obfuz is released under the MIT License. Feel free to use, modify, and distribut
 For questions, suggestions, or bug reports, please reach us through:
 
 - Submit an Issue on GitHub
-- Email the maintainer: [obfuz@code-philosophy.com]
-- Join the ​​Luban & Obfuz Discussion Group​​ on QQ: 692890842
+- Email the maintainer: `obfuz#code-philosophy.com`
+- Obfuz QQ Group: 1048396510
+- Discord channel: `https://discord.gg/bFXhmrUw8c`
