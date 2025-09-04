@@ -29,6 +29,9 @@ namespace Obfuz.Settings
         [Tooltip("const encryption settings")]
         public ConstEncryptionSettings constEncryptSettings;
 
+        [Tooltip("remove const field settings")]
+        public RemoveConstFieldSettings removeConstFieldSettings;
+
         [Tooltip("eval stack obfuscation settings")]
         public EvalStackObfuscationSettings evalStackObfusSettings;
 
@@ -46,6 +49,12 @@ namespace Obfuz.Settings
 
         [Tooltip("garbage code generator settings")]
         public GarbageCodeGenerationSettings garbageCodeGenerationSettings;
+
+        [Tooltip("watermark settings")]
+        public WatermarkSettings watermarkSettings;
+
+        [Tooltip("polymorphic dll settings")]
+        public PolymorphicDllSettings polymorphicDllSettings;
 
         public string ObfuzRootDir => $"Library/Obfuz";
 

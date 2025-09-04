@@ -7,19 +7,32 @@ using System.Collections.Generic;
 
 namespace Obfuz.ObfusPasses.CallObfus
 {
-    public class CallObfusPass : BasicBlockObfuscationPassBase
+    class ObfusMethodContext
     {
+        public MethodDef method;
+        public LocalVariableAllocator localVariableAllocator;
+        public IRandom localRandom;
+        public EncryptionScopeInfo encryptionScope;
+    }
+
+    public class CallObfusPass : ObfuscationMethodPassBase
+    {
+        public static CallObfuscationSettingsFacade CurrentSettings { get; private set; }
+
         private readonly CallObfuscationSettingsFacade _settings;
+        private readonly SpecialWhiteListMethodCalculator _specialWhiteListMethodCache;
+
         private IObfuscator _dynamicProxyObfuscator;
         private IObfuscationPolicy _dynamicProxyPolicy;
-        private readonly CachedDictionary<IMethod, bool> _specialwhiteListMethodCache;
 
         public override ObfuscationPassType Type => ObfuscationPassType.CallObfus;
 
         public CallObfusPass(CallObfuscationSettingsFacade settings)
         {
             _settings = settings;
-            _specialwhiteListMethodCache = new CachedDictionary<IMethod, bool>(MethodEqualityComparer.CompareDeclaringTypes, this.ComputeIsInWhiteList);
+            CurrentSettings = settings;
+
+            _specialWhiteListMethodCache = new SpecialWhiteListMethodCalculator(settings.obfuscateCallToMethodInMscorlib);
         }
 
         public override void Stop()
@@ -30,8 +43,72 @@ namespace Obfuz.ObfusPasses.CallObfus
         public override void Start()
         {
             var ctx = ObfuscationPassContext.Current;
-            _dynamicProxyObfuscator = new DefaultCallProxyObfuscator(ctx.encryptionScopeProvider, ctx.constFieldAllocator, ctx.moduleEntityManager, _settings);
+            _dynamicProxyObfuscator = CreateObfuscator(ctx, _settings.proxyMode);
             _dynamicProxyPolicy = new ConfigurableObfuscationPolicy(ctx.coreSettings.assembliesToObfuscate, _settings.ruleFiles);
+        }
+
+        private IObfuscator CreateObfuscator(ObfuscationPassContext ctx, ProxyMode mode)
+        {
+            switch (mode)
+            {
+                case ProxyMode.Dispatch:
+                return new DispatchProxyObfuscator(ctx.moduleEntityManager);
+                case ProxyMode.Delegate:
+                return new DelegateProxyObfuscator(ctx.moduleEntityManager);
+                default:
+                throw new System.NotSupportedException($"Unsupported proxy mode: {mode}");
+            }
+        }
+
+        protected override void ObfuscateData(MethodDef method)
+        {
+            BasicBlockCollection bbc = new BasicBlockCollection(method, false);
+
+            IList<Instruction> instructions = method.Body.Instructions;
+
+            var outputInstructions = new List<Instruction>();
+            var totalFinalInstructions = new List<Instruction>();
+
+            ObfuscationPassContext ctx = ObfuscationPassContext.Current;
+            var encryptionScope = ctx.moduleEntityManager.EncryptionScopeProvider.GetScope(method.Module);
+            var localRandom = encryptionScope.localRandomCreator(MethodEqualityComparer.CompareDeclaringTypes.GetHashCode(method));
+            var omc = new ObfusMethodContext
+            {
+                method = method,
+                localVariableAllocator = new LocalVariableAllocator(method),
+                localRandom = localRandom,
+                encryptionScope = encryptionScope,
+            };
+            Instruction lastInst = null;
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                Instruction inst = instructions[i];
+                BasicBlock block = bbc.GetBasicBlockByInstruction(inst);
+                outputInstructions.Clear();
+                if (TryObfuscateInstruction(method, lastInst, inst, outputInstructions, omc))
+                {
+                    // current instruction may be the target of control flow instruction, so we can't remove it directly.
+                    // we replace it with nop now, then remove it in CleanUpInstructionPass
+                    inst.OpCode = outputInstructions[0].OpCode;
+                    inst.Operand = outputInstructions[0].Operand;
+                    totalFinalInstructions.Add(inst);
+                    for (int k = 1; k < outputInstructions.Count; k++)
+                    {
+                        totalFinalInstructions.Add(outputInstructions[k]);
+                    }
+                }
+                else
+                {
+                    totalFinalInstructions.Add(inst);
+                }
+                lastInst = inst;
+            }
+
+            instructions.Clear();
+            foreach (var obInst in totalFinalInstructions)
+            {
+                instructions.Add(obInst);
+            }
         }
 
         protected override bool NeedObfuscateMethod(MethodDef method)
@@ -39,108 +116,7 @@ namespace Obfuz.ObfusPasses.CallObfus
             return _dynamicProxyPolicy.NeedObfuscateCallInMethod(method);
         }
 
-
-        private static readonly HashSet<string> _specialTypeFullNames = new HashSet<string>
-        {
-            "System.Enum",
-            "System.Delegate",
-            "System.MulticastDelegate",
-            "Obfuz.EncryptionService`1",
-        };
-
-        private static readonly HashSet<string> _specialMethodNames = new HashSet<string>
-        {
-            "GetEnumerator", // List<T>.Enumerator.GetEnumerator()
-            ".ctor", // constructor
-        };
-
-        private static readonly HashSet<string> _specialMethodFullNames = new HashSet<string>
-        {
-            "System.Reflection.MethodBase.GetCurrentMethod",
-            "System.Reflection.Assembly.GetCallingAssembly",
-            "System.Reflection.Assembly.GetExecutingAssembly",
-            "System.Reflection.Assembly.GetEntryAssembly",
-        };
-
-        private bool ComputeIsInWhiteList(IMethod calledMethod)
-        {
-            MethodDef calledMethodDef = calledMethod.ResolveMethodDef();
-            // mono has more strict access control, calls non-public method will raise exception.
-            if (PlatformUtil.IsMonoBackend())
-            {
-                if (calledMethodDef != null && (!calledMethodDef.IsPublic || !IsTypeSelfAndParentPublic(calledMethodDef.DeclaringType)))
-                {
-                    return true;
-                }
-            }
-
-            ITypeDefOrRef declaringType = calledMethod.DeclaringType;
-            TypeSig declaringTypeSig = calledMethod.DeclaringType.ToTypeSig();
-            declaringTypeSig = declaringTypeSig.RemovePinnedAndModifiers();
-            switch (declaringTypeSig.ElementType)
-            {
-                case ElementType.ValueType:
-                case ElementType.Class:
-                {
-                    break;
-                }
-                case ElementType.GenericInst:
-                {
-                    if (MetaUtil.ContainsContainsGenericParameter(calledMethod))
-                    {
-                        return true;
-                    }
-                    break;
-                }
-                default: return true;
-            }
-
-            TypeDef typeDef = declaringType.ResolveTypeDef();
-
-            if (!_settings.obfuscateCallToMethodInMscorlib && typeDef.Module.IsCoreLibraryModule == true)
-            {
-                return true;
-            }
-
-            if (typeDef.IsDelegate || typeDef.IsEnum)
-                return true;
-
-            string fullName = typeDef.FullName;
-            if (_specialTypeFullNames.Contains(fullName))
-            {
-                return true;
-            }
-            //if (fullName.StartsWith("System.Runtime.CompilerServices."))
-            //{
-            //    return true;
-            //}
-
-            string methodName = calledMethod.Name;
-            if (_specialMethodNames.Contains(methodName))
-            {
-                return true;
-            }
-
-            string methodFullName = $"{fullName}.{methodName}";
-            if (_specialMethodFullNames.Contains(methodFullName))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private bool IsTypeSelfAndParentPublic(TypeDef type)
-        {
-            if (type.DeclaringType != null && !IsTypeSelfAndParentPublic(type.DeclaringType))
-            {
-                return false;
-            }
-
-            return type.IsPublic;
-        }
-
-        protected override bool TryObfuscateInstruction(MethodDef callerMethod, Instruction inst, BasicBlock block,
-            int instructionIndex, IList<Instruction> globalInstructions, List<Instruction> outputInstructions, List<Instruction> totalFinalInstructions)
+        private bool TryObfuscateInstruction(MethodDef callerMethod, Instruction lastInst, Instruction inst, List<Instruction> outputInstructions, ObfusMethodContext ctx)
         {
             IMethod calledMethod = inst.Operand as IMethod;
             if (calledMethod == null || !calledMethod.IsMethod)
@@ -162,7 +138,7 @@ namespace Obfuz.ObfusPasses.CallObfus
                 }
                 case Code.Callvirt:
                 {
-                    if (instructionIndex > 0 && globalInstructions[instructionIndex - 1].OpCode.Code == Code.Constrained)
+                    if (lastInst != null && lastInst.OpCode.Code == Code.Constrained)
                     {
                         return false;
                     }
@@ -173,21 +149,18 @@ namespace Obfuz.ObfusPasses.CallObfus
             }
 
 
-            if (_specialwhiteListMethodCache.GetValue(calledMethod))
+            if (_specialWhiteListMethodCache.IsInWhiteList(calledMethod))
             {
                 return false;
             }
 
 
-            if (!_dynamicProxyPolicy.NeedObfuscateCalledMethod(callerMethod, calledMethod, callVir, block.inLoop))
+            if (!_dynamicProxyPolicy.NeedObfuscateCalledMethod(callerMethod, calledMethod, callVir))
             {
                 return false;
             }
 
-            ObfuscationCachePolicy cachePolicy = _dynamicProxyPolicy.GetMethodObfuscationCachePolicy(callerMethod);
-            bool cachedCallIndex = block.inLoop ? cachePolicy.cacheInLoop : cachePolicy.cacheNotInLoop;
-            _dynamicProxyObfuscator.Obfuscate(callerMethod, calledMethod, callVir, cachedCallIndex, outputInstructions);
-            return true;
+            return _dynamicProxyObfuscator.Obfuscate(callerMethod, calledMethod, callVir, outputInstructions);
         }
     }
 }

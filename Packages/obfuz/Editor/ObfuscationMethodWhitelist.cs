@@ -9,10 +9,12 @@ namespace Obfuz
     public class ObfuscationMethodWhitelist
     {
         private readonly ObfuzIgnoreScopeComputeCache _obfuzComputeCache;
+        private readonly BurstCompileComputeCache _burstCompileComputeCache;
 
-        public ObfuscationMethodWhitelist(ObfuzIgnoreScopeComputeCache obfuzComputeCache)
+        public ObfuscationMethodWhitelist(ObfuzIgnoreScopeComputeCache obfuzComputeCache, BurstCompileComputeCache burstCompileComputeCache)
         {
             _obfuzComputeCache = obfuzComputeCache;
+            _burstCompileComputeCache = burstCompileComputeCache;
         }
 
         public bool IsInWhiteList(ModuleDef module)
@@ -31,7 +33,7 @@ namespace Obfuz
 
         private bool DoesMethodContainsRuntimeInitializeOnLoadMethodAttributeAndLoadTypeGreaterEqualAfterAssembliesLoaded(MethodDef method)
         {
-            CustomAttribute ca = method.CustomAttributes.Find("UnityEngine.RuntimeInitializeOnLoadMethodAttribute");
+            CustomAttribute ca = method.CustomAttributes.Find(ConstValues.RuntimeInitializedOnLoadMethodAttributeFullName);
             if (ca != null && ca.ConstructorArguments.Count > 0)
             {
                 RuntimeInitializeLoadType loadType = (RuntimeInitializeLoadType)ca.ConstructorArguments[0].Value;
@@ -46,10 +48,10 @@ namespace Obfuz
         public bool IsInWhiteList(MethodDef method)
         {
             TypeDef typeDef = method.DeclaringType;
-            if (IsInWhiteList(typeDef))
-            {
-                return true;
-            }
+            //if (IsInWhiteList(typeDef))
+            //{
+            //    return true;
+            //}
             if (method.Name.StartsWith(ConstValues.ObfuzInternalSymbolNamePrefix))
             {
                 return true;
@@ -58,8 +60,12 @@ namespace Obfuz
             {
                 return true;
             }
-            CustomAttribute ca = method.CustomAttributes.Find("UnityEngine.RuntimeInitializeOnLoadMethodAttribute");
+            CustomAttribute ca = method.CustomAttributes.Find(ConstValues.RuntimeInitializedOnLoadMethodAttributeFullName);
             if (DoesMethodContainsRuntimeInitializeOnLoadMethodAttributeAndLoadTypeGreaterEqualAfterAssembliesLoaded(method))
+            {
+                return true;
+            }
+            if (MetaUtil.HasBurstCompileAttribute(method) || _burstCompileComputeCache.IsBurstCompileMethodOrReferencedByBurstCompileMethod(method))
             {
                 return true;
             }
@@ -82,7 +88,11 @@ namespace Obfuz
             {
                 return true;
             }
-            if (_obfuzComputeCache.HasSelfOrDeclaringOrEnclosingOrInheritObfuzIgnoreScope(type, type.DeclaringType, ObfuzScope.TypeName))
+            if (MetaUtil.HasBurstCompileAttribute(type))
+            {
+                return true;
+            }
+            if (_obfuzComputeCache.HasSelfOrDeclaringOrEnclosingOrInheritObfuzIgnoreScope(type, type.DeclaringType, ObfuzScope.MethodBody))
             {
                 return true;
             }
@@ -90,7 +100,7 @@ namespace Obfuz
             //{
             //    return true;
             //}
-            if (type.FullName == "Obfuz.EncryptionVM.GeneratedEncryptionVirtualMachine")
+            if (type.FullName == ConstValues.GeneratedEncryptionVirtualMachineFullName)
             {
                 return true;
             }

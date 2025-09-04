@@ -1,5 +1,7 @@
 ﻿using HybridCLR.Editor;
 using HybridCLR.Editor.HotUpdate;
+using Obfuz.Settings;
+using Obfuz4HybridCLR;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,36 +10,32 @@ using UnityEngine;
 
 public class DllCopyEditor
 {
-    [MenuItem("XIHUtil/Hclr/CopyAndroidDlls")]
-    static void CopyAndroidDlls()
+    [MenuItem("HybridCLR/ObfuzExtension/XIHUtilXIHWebServerResCompileAndObfuscateDllAndPolymorphicDll")]
+    static void CompileAndObfuscateDllAndPolymorphicDll()
     {
-        CopyDlls(BuildTarget.Android);
-    }
-    [MenuItem("XIHUtil/Hclr/CopyiOSDlls")]
-    static void CopyiOSDlls()
-    {
-        CopyDlls(BuildTarget.iOS);
-    }
-    [MenuItem("XIHUtil/Hclr/CopyWebglDlls")]
-    static void CopyWebglDlls()
-    {
-        CopyDlls(BuildTarget.WebGL);
+        var target = EditorUserBuildSettings.activeBuildTarget;
+        PrebuildCommandExt.CompileAndObfuscateDll();
+        var settings = ObfuzSettings.Instance.polymorphicDllSettings;
+        CopyHotDll(true, "XIHWebServerRes/Aot2HotPloy", target, settings.enable);
+        CopyHotDll(false, "XIHWebServerRes/HotPloy", target, settings.enable);
     }
     public static void CopyDlls(BuildTarget target)
     {
-        CopyAotDll("Assets/Res/Raw/Aot", target);
-        CopyHotDll(true, "Assets/Res/Aot2Hot/Raw", target);
-        CopyHotDll(false, "Assets/Res/Raw/Hot", target);
+        var settings = ObfuzSettings.Instance.polymorphicDllSettings;
+        CopyAotDll("Assets/Res/Raw/Aot", target, settings.enable);
+        CopyHotDll(true, "Assets/Res/Aot2Hot/Raw", target, settings.enable);
+        CopyHotDll(false, "Assets/Res/Raw/Hot", target, settings.enable);
         AssetDatabase.Refresh();
     }
-    static void CopyAotDll(string dstPath, BuildTarget target)
+    static void CopyAotDll(string dstPath, BuildTarget target, bool usePolymorphic)
     {
         var bakupPath = dstPath + "~";
         try
         {
             CheckAccessMissingMetadata(bakupPath, target);
         }
-        catch { 
+        catch
+        {
         }
         if (Directory.Exists(bakupPath)) Directory.Delete(bakupPath, true);
         Directory.CreateDirectory(bakupPath);
@@ -49,8 +47,16 @@ public class DllCopyEditor
             Debug.LogWarning($"{sourPath}路径不存在，请先编译dll");
             return;
         }
-        if (Directory.Exists(dstPath)) Directory.Delete(dstPath, true);
-        Directory.CreateDirectory(dstPath);
+        var rms = new HashSet<string>();
+        if (Directory.Exists(dstPath))
+        {
+            var files = Directory.GetFiles(dstPath);
+            foreach (var file in files) rms.Add(Path.GetFileName(file));
+        }
+        else
+        {
+            Directory.CreateDirectory(dstPath);
+        }
         foreach (var dll in dlls)
         {
             var ph = $"{sourPath}/{dll}.dll";
@@ -59,8 +65,26 @@ public class DllCopyEditor
                 Debug.LogError($"CopyDll {ph}不存在");
                 continue;
             }
-            File.Copy(ph, $"{bakupPath}/{dll}.dll",true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
-            HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, $"{dstPath}/{dll}.bytes");
+            File.Copy(ph, $"{bakupPath}/{dll}.dll", true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
+            var dstDll = $"{dstPath}/{dll}.bytes";
+            if (usePolymorphic)
+            {
+                var stripDll = $"{bakupPath}/{dll}_strip.dll";
+                HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, stripDll);
+                ObfuscateUtil.GeneratePolymorphicDll(stripDll, dstDll);
+            }
+            else
+            {
+                HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, dstDll);
+            }
+            rms.Remove($"{dll}.bytes");
+            rms.Remove($"{dll}.bytes.meta");
+        }
+        foreach (var rm in rms)
+        {
+            var dst = $"{dstPath}/{rm}";
+            File.Delete(dst);
+            Debug.LogWarning("删除多余文件dll：" + dst);
         }
         Debug.LogWarning($"拷贝无需加密的Aotdlls到 {dstPath}");
     }
@@ -95,7 +119,7 @@ public class DllCopyEditor
             }
         }
     }
-    static void CopyHotDll(bool isAot2Hot, string dstPath, BuildTarget target)
+    static void CopyHotDll(bool isAot2Hot, string dstPath, BuildTarget target, bool usePolymorphic)
     {
         var aot2hotdll = new HashSet<string>() { "Aot2Hot" };
         List<string> dlls = null;
@@ -127,7 +151,18 @@ public class DllCopyEditor
         Directory.CreateDirectory(dstPath);
         foreach (var dll in dlls)
         {
-            XIHEncryptionServices.Encrypt($"{sourPath}/{dll}.dll", $"{dstPath}/{dll}.bytes");
+            var srcDll = $"{sourPath}/{dll}.dll";
+            var dstDll = $"{dstPath}/{dll}.bytes";
+            if (usePolymorphic)
+            {
+                var polyDll = $"{sourPath}/{dll}_poly.dll";
+                ObfuscateUtil.GeneratePolymorphicDll(srcDll, polyDll);
+                XIHEncryptionServices.Encrypt(polyDll, dstDll);
+            }
+            else
+            {
+                XIHEncryptionServices.Encrypt(srcDll, dstDll);
+            }
         }
         Debug.LogWarning($"拷贝加密的dlls到 {dstPath}");
     }

@@ -47,12 +47,6 @@
         "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
       }
     },
-    "com.tuyoogame.yooasset.extension": {
-      "version": "file:YooAsset.Extension",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.tuyoogame.yooasset.unitask": {
       "version": "file:UniTask.YooAsset",
       "depth": 0,
@@ -116,7 +110,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {

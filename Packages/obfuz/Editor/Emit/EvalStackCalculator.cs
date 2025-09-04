@@ -3,7 +3,6 @@ using dnlib.DotNet.Emit;
 using Obfuz.Utils;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine.Assertions;
 
@@ -125,7 +124,7 @@ namespace Obfuz.Emit
                 case ElementType.Ptr:
                 case ElementType.FnPtr:
                 case ElementType.ByRef:
-                datas.Add(new EvalDataTypeWithSig(EvalDataType.I, null));
+                datas.Add(new EvalDataTypeWithSig(EvalDataType.I, type));
                 break;
                 case ElementType.String:
                 case ElementType.Class:
@@ -206,10 +205,20 @@ namespace Obfuz.Emit
             datas.Add(type);
         }
 
-        private void PushStackObject(List<EvalDataTypeWithSig> datas)
+        private void PushStackObject(List<EvalDataTypeWithSig> datas, TypeSig type)
         {
-            datas.Add(new EvalDataTypeWithSig(EvalDataType.Ref, _method.Module.CorLibTypes.Object));
+            PushStack(datas, new EvalDataTypeWithSig(EvalDataType.Ref, type));
         }
+
+        private void PushStackPointer(List<EvalDataTypeWithSig> datas, TypeSig type)
+        {
+            PushStack(datas, new EvalDataTypeWithSig(EvalDataType.I, type));
+        }
+
+        //private void PushStackObject(List<EvalDataTypeWithSig> datas)
+        //{
+        //    datas.Add(new EvalDataTypeWithSig(EvalDataType.Ref, _method.Module.CorLibTypes.Object));
+        //}
 
         private EvalDataType CalcBasicBinOpRetType(EvalDataType op1, EvalDataType op2)
         {
@@ -270,7 +279,7 @@ namespace Obfuz.Emit
 
         private void SimulateRunAllBlocks()
         {
-            bool methodHasReturnValue = _method.ReturnType.RemovePinnedAndModifiers().ElementType != ElementType.Void;
+            bool methodHasReturnValue = !MetaUtil.IsVoidType(_method.ReturnType);
 
             CilBody body = _method.Body;
             if (body.HasExceptionHandlers)
@@ -283,7 +292,7 @@ namespace Obfuz.Emit
                         var inputStackDatas = _blockEvalStackStates[bb].inputStackDatas;
                         if (inputStackDatas.Count == 0)
                         {
-                            inputStackDatas.Add(new EvalDataTypeWithSig(EvalDataType.Ref, handler.CatchType.ToTypeSig()));
+                            PushStackObject(inputStackDatas, handler.CatchType.ToTypeSig());
                         }
                     }
                     if (handler.IsCatch || handler.IsFilter)
@@ -292,7 +301,7 @@ namespace Obfuz.Emit
                         var inputStackDatas = _blockEvalStackStates[bb].inputStackDatas;
                         if (inputStackDatas.Count == 0)
                         {
-                            inputStackDatas.Add(new EvalDataTypeWithSig(EvalDataType.Ref, handler.CatchType.ToTypeSig()));
+                            PushStackObject(inputStackDatas, handler.CatchType.ToTypeSig());
                         }
                     }
                 }
@@ -339,7 +348,7 @@ namespace Obfuz.Emit
                         case Code.Ldarga:
                         case Code.Ldarga_S:
                         {
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, new ByRefSig(inst.GetParameter(_method.Parameters).Type));
                             break;
                         }
                         case Code.Ldloc_0:
@@ -355,7 +364,7 @@ namespace Obfuz.Emit
                         case Code.Ldloca:
                         case Code.Ldloca_S:
                         {
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, new ByRefSig(inst.GetLocal(body.Variables).Type));
                             break;
                         }
                         case Code.Stloc_0:
@@ -376,7 +385,7 @@ namespace Obfuz.Emit
                         }
                         case Code.Ldnull:
                         {
-                            PushStackObject(newPushedDatas);
+                            PushStackObject(newPushedDatas, corLibTypes.Object);
                             break;
                         }
                         case Code.Ldc_I4_M1:
@@ -513,13 +522,13 @@ namespace Obfuz.Emit
                         case Code.Ldind_I:
                         {
                             Assert.IsTrue(stackSize > 0);
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Ldind_Ref:
                         {
                             Assert.IsTrue(stackSize > 0);
-                            PushStackObject(newPushedDatas);
+                            PushStackObject(newPushedDatas, stackDatas[stackSize - 1].typeSig?.RemovePinnedAndModifiers().Next ?? corLibTypes.Object);
                             break;
                         }
                         case Code.Ldind_R4:
@@ -639,7 +648,7 @@ namespace Obfuz.Emit
                         case Code.Conv_I:
                         case Code.Conv_U:
                         {
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Conv_R4:
@@ -681,7 +690,7 @@ namespace Obfuz.Emit
                         case Code.Conv_Ovf_U:
                         case Code.Conv_Ovf_U_Un:
                         {
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Conv_R_Un:
@@ -702,7 +711,7 @@ namespace Obfuz.Emit
                         }
                         case Code.Ldstr:
                         {
-                            PushStack(newPushedDatas, new EvalDataTypeWithSig(EvalDataType.Ref, corLibTypes.String));
+                            PushStackObject(newPushedDatas, corLibTypes.String);
                             break;
                         }
                         case Code.Newobj:
@@ -713,21 +722,24 @@ namespace Obfuz.Emit
                         }
                         case Code.Castclass:
                         {
-                            PushStack(newPushedDatas, (ITypeDefOrRef)inst.Operand);
+                            Assert.IsTrue(stackSize > 0);
+                            var obj = stackDatas[stackSize - 1];
+                            //Assert.IsTrue(obj.type == EvalDataType.Ref);
+                            PushStackObject(newPushedDatas, ((ITypeDefOrRef)inst.Operand).ToTypeSig());
                             break;
                         }
                         case Code.Isinst:
                         {
                             Assert.IsTrue(stackSize > 0);
                             var obj = stackDatas[stackSize - 1];
-                            Assert.IsTrue(obj.type == EvalDataType.Ref);
-                            PushStack(newPushedDatas, obj);
+                            //Assert.IsTrue(obj.type == EvalDataType.Ref);
+                            PushStackObject(newPushedDatas, ((ITypeDefOrRef)inst.Operand).ToTypeSig());
                             break;
                         }
                         case Code.Unbox:
                         {
                             Assert.IsTrue(stackSize > 0);
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Unbox_Any:
@@ -739,7 +751,8 @@ namespace Obfuz.Emit
                         case Code.Box:
                         {
                             Assert.IsTrue(stackSize > 0);
-                            PushStackObject(newPushedDatas);
+                            //PushStack(newPushedDatas, (ITypeDefOrRef)inst.Operand);
+                            PushStackObject(newPushedDatas, ((ITypeDefOrRef)inst.Operand).ToTypeSig());
                             break;
                         }
                         case Code.Throw:
@@ -763,7 +776,9 @@ namespace Obfuz.Emit
                         case Code.Ldflda:
                         case Code.Ldsflda:
                         {
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            IField field = (IField)inst.Operand;
+                            TypeSig fieldType = MetaUtil.InflateFieldSig(field, gac);
+                            PushStackPointer(newPushedDatas, new ByRefSig(fieldType));
                             break;
                         }
                         case Code.Stfld:
@@ -809,7 +824,7 @@ namespace Obfuz.Emit
                         case Code.Ldelem_I:
                         {
                             Assert.IsTrue(stackSize >= 2);
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Ldelem_R4:
@@ -827,7 +842,7 @@ namespace Obfuz.Emit
                         case Code.Ldelem_Ref:
                         {
                             Assert.IsTrue(stackSize >= 2);
-                            PushStackObject(newPushedDatas);
+                            PushStackObject(newPushedDatas, stackDatas[stackSize - 2].typeSig.RemovePinnedAndModifiers().Next ?? corLibTypes.Object);
                             break;
                         }
                         case Code.Ldelem:
@@ -862,7 +877,7 @@ namespace Obfuz.Emit
                         case Code.Refanyval:
                         {
                             Assert.IsTrue(stackSize > 0);
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Ldtoken:
@@ -892,7 +907,7 @@ namespace Obfuz.Emit
                         }
                         case Code.Localloc:
                         {
-                            PushStack(newPushedDatas, EvalDataType.I);
+                            PushStackPointer(newPushedDatas, corLibTypes.IntPtr);
                             break;
                         }
                         case Code.Unaligned:

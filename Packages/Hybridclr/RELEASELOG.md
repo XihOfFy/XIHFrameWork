@@ -1,5 +1,74 @@
 # ReleaseLog
 
+## 8.5.1
+
+Release Date: 2025-08-25.
+
+### Runtime
+
+- [fix] **CRITICAL!!!** fixed stack calculation bug in instinct transform for `System.Activator.CreateInstance<T>()` when T is value type.
+
+### Editor
+
+- [fix] fixed PInvokeAnalyzer bug in computing PInvoke function calling conventions.
+
+## 8.5.0
+
+Release Date: 2025-08-20.
+
+### Runtime
+
+- [new] AOTHomologousImage supports custom image format
+- [fix] Throw an exception when the number of function parameters exceeds 255, as the parameter count type in il2cpp is uint8_t.
+- [fix] fix  incorrect type conversions for MethodInfo.parameter_count and Il2CppMethodDefinition.parameterCount.
+
+### Editor
+
+- [change] BashUtil::CopyDir replaces CopyWithCheckLongFile with CopyUnityEditor.FileUtil.CopyFileOrDirectory
+
+## 8.4.0
+
+Release Date: 2025-07-26.
+
+### Runtime
+
+- **[new] IMPORTANT! support custom image format**
+- [change] the type of field `offset` of ldsfld, stfld, ldthreadlocalfld、stthreadlocalfld changed from uint16_t to uint32_t so that supports class with huge static fields.
+- [opt] optimize to use NewValueTypeVar_Ctor_0 for new zero-argument value type and System.Activator.CreateInstance&lt;T&gt;()
+- [opt] optimize new ValueType with zero arguments.
+
+### Editor
+
+- [fix] fix the issue that `Texture Compression` option in Build Settings was changed after running `HybridCLR/Generate/All` on Android platform
+
+## 8.3.0
+
+Release Date: 2025-07-04.
+
+### Runtime
+
+- [fix] fix the bug where RuntimeInitClassCCtor was executed during InterpreterModule::GetInterpMethodInfo. This caused the type static constructor to be incorrectly executed prematurely during PrejitMethod.
+- [fix] fix bug that JitMethod jit method of generic class incorrectly.
+- [merge] merge il2cpp of tuanjie changes from 1.5.0-1.6.0
+
+### Editor
+
+- [fix] fix the bug that not collect struct in calli and extern method signature in generating MethodBridge.
+
+## 8.2.0
+
+Release Date: 2025-06-12.
+
+### Runtime
+
+- [fix] fix line number mistake in stacktrace
+- [fix] Fixed bug that PDBImage::SetupStackFrameInfo didn't set ilOffset and sourceCodeLineNumber of stackFrame when SequencePoint not found
+- [merge] merge il2cpp changes from 2022.3.54-2022.3.63
+
+### Editor
+
+- [change] changed from throw exception to logError when not supported pinvoke or reverse pinvoke method parameter type was found
+
 ## 8.1.0
 
 Release Date: 2025-05-29.

@@ -6,7 +6,9 @@ using Obfuz.ObfusPasses.ControlFlowObfus;
 using Obfuz.ObfusPasses.EvalStackObfus;
 using Obfuz.ObfusPasses.ExprObfus;
 using Obfuz.ObfusPasses.FieldEncrypt;
+using Obfuz.ObfusPasses.RemoveConstField;
 using Obfuz.ObfusPasses.SymbolObfus;
+using Obfuz.ObfusPasses.Watermark;
 using Obfuz.Settings;
 using Obfuz.Utils;
 using System.Collections.Generic;
@@ -120,7 +122,7 @@ namespace Obfuz
                 searchPaths.Add("Managed/UnityEngine");
             }
 
-                var resultPaths = new List<string>();
+            var resultPaths = new List<string>();
             foreach (var path in searchPaths)
             {
                 string candidatePath1 = Path.Combine(applicationContentsPath, path);
@@ -173,18 +175,27 @@ namespace Obfuz
                 },
             };
             ObfuscationPassType obfuscationPasses = settings.obfuscationPassSettings.enabledPasses;
+
+            if (obfuscationPasses.HasFlag(ObfuscationPassType.SymbolObfus) && settings.symbolObfusSettings.detectReflectionCompatibility)
+            {
+                builder.AddPass(new ReflectionCompatibilityDetectionPass(settings.symbolObfusSettings.ToFacade()));
+            }
             if (obfuscationPasses.HasFlag(ObfuscationPassType.ConstEncrypt))
             {
                 builder.AddPass(new ConstEncryptPass(settings.constEncryptSettings.ToFacade()));
+            }
+            if (obfuscationPasses.HasFlag(ObfuscationPassType.RemoveConstField))
+            {
+                builder.AddPass(new RemoveConstFieldPass(settings.removeConstFieldSettings.ToFacade()));
             }
             if (obfuscationPasses.HasFlag(ObfuscationPassType.ExprObfus))
             {
                 builder.AddPass(new ExprObfusPass(settings.exprObfusSettings.ToFacade()));
             }
-            if (obfuscationPasses.HasFlag(ObfuscationPassType.EvalStackObfus))
-            {
-                builder.AddPass(new EvalStackObfusPass(settings.evalStackObfusSettings.ToFacade()));
-            }
+            //if (obfuscationPasses.HasFlag(ObfuscationPassType.EvalStackObfus))
+            //{
+            //    builder.AddPass(new EvalStackObfusPass(settings.evalStackObfusSettings.ToFacade()));
+            //}
             if (obfuscationPasses.HasFlag(ObfuscationPassType.FieldEncrypt))
             {
                 builder.AddPass(new FieldEncryptPass(settings.fieldEncryptSettings.ToFacade()));
@@ -196,6 +207,10 @@ namespace Obfuz
             if (obfuscationPasses.HasFlag(ObfuscationPassType.ControlFlowObfus))
             {
                 builder.AddPass(new ControlFlowObfusPass(settings.controlFlowObfusSettings.ToFacade()));
+            }
+            if (obfuscationPasses.HasFlag(ObfuscationPassType.WaterMark))
+            {
+                builder.AddPass(new WatermarkPass(settings.watermarkSettings.ToFacade()));
             }
             if (obfuscationPasses.HasFlag(ObfuscationPassType.SymbolObfus))
             {

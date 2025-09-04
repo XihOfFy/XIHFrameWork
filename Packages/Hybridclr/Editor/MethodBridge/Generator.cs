@@ -287,6 +287,7 @@ namespace HybridCLR.Editor.MethodBridge
             CollectStructDefs(_managed2NativeMethodList0, structTypeSet);
             CollectStructDefs(_native2ManagedMethodList0, structTypeSet);
             CollectStructDefs(_adjustThunkMethodList0, structTypeSet);
+            CollectStructDefs(_originalCalliMethodSignatures.Select(m => m.MethodSig).ToList(), structTypeSet);
             _structTypes0 = structTypeSet.ToList();
             _structTypes0.Sort((a, b) => a.TypeId - b.TypeId);
 
@@ -637,7 +638,7 @@ namespace HybridCLR.Editor.MethodBridge
                 sharedMethod.Init();
                 sharedMethod = ToIsomorphicMethod(sharedMethod);
 
-                CallingConvention callingConv = (CallingConvention)((int)(method.MethodSig.CallingConvention &  dnlib.DotNet.CallingConvention.Mask) + 1);
+                CallingConvention callingConv = (CallingConvention)((int)((method.Callvention ?? method.MethodSig.CallingConvention) &  dnlib.DotNet.CallingConvention.Mask) + 1);
                 string signature = MakeCalliSignature(sharedMethod, callingConv);
 
                 if (!methodsBySig.TryGetValue(signature, out var arm))
@@ -827,6 +828,38 @@ const ReversePInvokeMethodData hybridclr::interpreter::g_reversePInvokeMethodStu
                 }
             }
             
+        }
+
+        private void CollectStructDefs(List<MethodSig> methods, HashSet<TypeInfo> structTypes)
+        {
+            ICorLibTypes corLibTypes = _genericMethods[0].Method.Module.CorLibTypes;
+
+            foreach (var method in methods)
+            {
+                foreach (var paramInfo in method.Params)
+                {
+                    var paramType = GetSharedTypeInfo(MetaUtil.ToShareTypeSig(corLibTypes, paramInfo));
+                    if (paramType.IsStruct)
+                    {
+                        structTypes.Add(paramType);
+                        if (paramType.Klass.ContainsGenericParameter)
+                        {
+                            throw new Exception($"[CollectStructDefs] method:{method} type:{paramType.Klass} contains generic parameter");
+                        }
+                    }
+
+                }
+                var returnType = GetSharedTypeInfo(MetaUtil.ToShareTypeSig(corLibTypes, method.RetType));
+                if (returnType.IsStruct)
+                {
+                    structTypes.Add(returnType);
+                    if (returnType.Klass.ContainsGenericParameter)
+                    {
+                        throw new Exception($"[CollectStructDefs] method:{method} type:{returnType.Klass} contains generic parameter");
+                    }
+                }
+            }
+
         }
 
         class FieldInfo

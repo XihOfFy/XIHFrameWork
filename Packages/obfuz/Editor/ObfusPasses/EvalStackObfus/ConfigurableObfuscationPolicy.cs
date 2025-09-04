@@ -1,6 +1,7 @@
 ﻿using dnlib.DotNet;
 using Obfuz.Conf;
 using Obfuz.Settings;
+using Obfuz.Utils;
 using System;
 using System.Collections.Generic;
 using System.Xml;
@@ -63,7 +64,7 @@ namespace Obfuz.ObfusPasses.EvalStackObfus
         private static readonly ObfuscationRule s_default = new ObfuscationRule()
         {
             obfuscationLevel = ObfuscationLevel.Basic,
-            obfuscationPercentage = 0.5f,
+            obfuscationPercentage = 0.05f,
         };
 
         private ObfuscationRule _global;
@@ -91,6 +92,10 @@ namespace Obfuz.ObfusPasses.EvalStackObfus
             {
                 _global.InheritParent(s_default);
             }
+            if (_global.obfuscationPercentage.Value > 0.1f)
+            {
+                UnityEngine.Debug.LogWarning($"EvalStackObfus significantly increases the size of the obfuscated hot-update DLL. It is recommended to keep the obfuscationPercentage ≤ 0.1 (currently set to {_global.obfuscationPercentage.Value}).");
+            }
             _xmlParser.InheritParentRules(_global);
         }
 
@@ -103,17 +108,12 @@ namespace Obfuz.ObfusPasses.EvalStackObfus
             }
         }
 
-        private ObfuscationLevel ParseObfuscationLevel(string str)
-        {
-            return (ObfuscationLevel)Enum.Parse(typeof(ObfuscationLevel), str);
-        }
-
         private ObfuscationRule ParseObfuscationRule(string configFile, XmlElement ele)
         {
             var rule = new ObfuscationRule();
             if (ele.HasAttribute("obfuscationLevel"))
             {
-                rule.obfuscationLevel = ParseObfuscationLevel(ele.GetAttribute("obfuscationLevel"));
+                rule.obfuscationLevel = ConfigUtil.ParseObfuscationLevel(ele.GetAttribute("obfuscationLevel"));
             }
             if (ele.HasAttribute("obfuscationPercentage"))
             {

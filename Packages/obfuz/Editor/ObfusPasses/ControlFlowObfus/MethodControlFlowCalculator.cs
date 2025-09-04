@@ -6,7 +6,6 @@ using Obfuz.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -35,15 +34,16 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
 
             private TypeSig GetLocalTypeSig(ICorLibTypes corLibTypes, EvalDataTypeWithSig type)
             {
+                TypeSig typeSig = type.typeSig;
                 switch (type.type)
                 {
                     case EvalDataType.Int32: return corLibTypes.Int32;
                     case EvalDataType.Int64: return corLibTypes.Int64;
                     case EvalDataType.Float: return corLibTypes.Single;
                     case EvalDataType.Double: return corLibTypes.Double;
-                    case EvalDataType.I: return corLibTypes.IntPtr;
-                    case EvalDataType.Ref: Assert.IsNotNull(type.typeSig); return type.typeSig;
-                    case EvalDataType.ValueType: Assert.IsNotNull(type.typeSig); return type.typeSig;
+                    case EvalDataType.I: return typeSig ?? corLibTypes.IntPtr;
+                    case EvalDataType.Ref: return typeSig == null || MetaUtil.IsValueType(typeSig) ? corLibTypes.Object : typeSig;
+                    case EvalDataType.ValueType: Assert.IsNotNull(typeSig); return typeSig;
                     case EvalDataType.Token: throw new System.NotSupportedException("Token type is not supported in BasicBlockInputOutputArguments");
                     default: throw new System.NotSupportedException("not supported EvalDataType");
                 }
@@ -155,11 +155,11 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
 
         private readonly MethodDef _method;
         private readonly IRandom _random;
-        private readonly ModuleConstFieldAllocator _constFieldAllocator;
+        private readonly ConstFieldAllocator _constFieldAllocator;
         private readonly int _minInstructionCountOfBasicBlockToObfuscate;
         private readonly BasicBlockInfo _bbHead;
 
-        public MethodControlFlowCalculator(MethodDef method, IRandom random, ModuleConstFieldAllocator constFieldAllocator, int minInstructionCountOfBasicBlockToObfuscate)
+        public MethodControlFlowCalculator(MethodDef method, IRandom random, ConstFieldAllocator constFieldAllocator, int minInstructionCountOfBasicBlockToObfuscate)
         {
             _method = method;
             _random = random;
@@ -329,9 +329,10 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
 
             BlockGroup group = to.group;
             group.basicBlocks.Insert(group.basicBlocks.IndexOf(to), saveLocalBasicBlock);
-            group.switchMachineCases.Add(new SwitchMachineCase { index = -1, prepareBlock = saveLocalBasicBlock, targetBlock = to});
+            group.switchMachineCases.Add(new SwitchMachineCase { index = -1, prepareBlock = saveLocalBasicBlock, targetBlock = to });
             saveLocalBasicBlock.instructions.Add(Instruction.Create(OpCodes.Ldsfld, (FieldDef)null));
-            saveLocalBasicBlock.instructions.Add(Instruction.Create(OpCodes.Br, group.switchMachineInst));
+            saveLocalBasicBlock.instructions.Add(Instruction.Create(OpCodes.Stloc, GlobalSwitchIndexLocal));
+            saveLocalBasicBlock.instructions.Add(Instruction.Create(OpCodes.Br, group.switchMachineEntryInst));
 
 
             return saveLocalBasicBlock;
@@ -359,72 +360,114 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
         {
             Dictionary<Instruction, BasicBlockInfo> inst2bb = BuildInstructionToBasicBlockInfoDic();
 
-             InsertSwitchMachineBasicBlockForGroup(rootGroup, inst2bb);
+            InsertSwitchMachineBasicBlockForGroup(rootGroup, inst2bb);
         }
 
-        //private void ShuffleBasicBlocks0(List<BasicBlockInfo> bbs)
-        //{
-        //    int n = bbs.Count;
-        //    if (n <= 1)
-        //    {
-        //        return;
-        //    }
+        private void ShuffleBasicBlocks0(List<BasicBlockInfo> bbs)
+        {
+            if (bbs.Count <= 2)
+            {
+                return;
+            }
 
-        //    var firstSection = new List<BasicBlockInfo>() { bbs[0] };
-        //    var sectionsExcludeFirstLast = new List<List<BasicBlockInfo>>();
-        //    List<BasicBlockInfo> currentSection = firstSection;
-        //    for (int i = 1; i < n; i++)
-        //    {
-        //        BasicBlockInfo cur = bbs[i];
-        //        if (cur.inputArgs.locals.Count == 0)
-        //        {
-        //            currentSection = new List<BasicBlockInfo>() { cur };
-        //            sectionsExcludeFirstLast.Add(currentSection);
-        //        }
-        //        else
-        //        {
-        //            currentSection.Add(cur);
-        //        }
-        //    }
-        //    if (sectionsExcludeFirstLast.Count <= 1)
-        //    {
-        //        return;
-        //    }
-        //    var lastSection = sectionsExcludeFirstLast.Last();
-        //    sectionsExcludeFirstLast.RemoveAt(sectionsExcludeFirstLast.Count - 1);
+            var subBlocksExcludeFirstLast = bbs.GetRange(1, bbs.Count - 2);
+
+            var blocksInputArgsCountZero = new List<BasicBlockInfo>();
+            var blocksInputArgsCountNonZero = new List<BasicBlockInfo>();
+            foreach (var bb in subBlocksExcludeFirstLast)
+            {
+                if (bb.inputArgs.locals.Count == 0)
+                {
+                    blocksInputArgsCountZero.Add(bb);
+                }
+                else
+                {
+                    blocksInputArgsCountNonZero.Add(bb);
+                }
+            }
+            RandomUtil.ShuffleList(blocksInputArgsCountZero, _random);
+
+            int index = 1;
+            foreach (var bb in blocksInputArgsCountZero)
+            {
+                bbs[index++] = bb;
+            }
+            foreach (var bb in blocksInputArgsCountNonZero)
+            {
+                bbs[index++] = bb;
+            }
+            Assert.AreEqual(bbs.Count - 1, index, "Shuffled basic blocks count should be the same as original count minus first and last blocks");
+
+            //var firstSection = new List<BasicBlockInfo>() { bbs[0] };
+            //var sectionsExcludeFirstLast = new List<List<BasicBlockInfo>>();
+            //List<BasicBlockInfo> currentSection = firstSection;
+            //for (int i = 1; i < n; i++)
+            //{
+            //    BasicBlockInfo cur = bbs[i];
+            //    if (cur.inputArgs.locals.Count == 0)
+            //    {
+            //        currentSection = new List<BasicBlockInfo>() { cur };
+            //        sectionsExcludeFirstLast.Add(currentSection);
+            //    }
+            //    else
+            //    {
+            //        currentSection.Add(cur);
+            //    }
+            //}
+            //if (sectionsExcludeFirstLast.Count <= 1)
+            //{
+            //    return;
+            //}
+            //var lastSection = sectionsExcludeFirstLast.Last();
+            //sectionsExcludeFirstLast.RemoveAt(sectionsExcludeFirstLast.Count - 1);
 
 
-        //    RandomUtil.ShuffleList(sectionsExcludeFirstLast, _random);
+            //RandomUtil.ShuffleList(sectionsExcludeFirstLast, _random);
 
-        //    bbs.Clear();
-        //    bbs.AddRange(firstSection);
-        //    bbs.AddRange(sectionsExcludeFirstLast.SelectMany(section => section));
-        //    bbs.AddRange(lastSection);
-        //    Assert.AreEqual(n, bbs.Count, "Shuffled basic blocks count should be the same as original count");
-        //}
+            //bbs.Clear();
+            //bbs.AddRange(firstSection);
+            //bbs.AddRange(sectionsExcludeFirstLast.SelectMany(section => section));
+            //bbs.AddRange(lastSection);
+            //Assert.AreEqual(n, bbs.Count, "Shuffled basic blocks count should be the same as original count");
+        }
 
         private void ShuffleBasicBlocks(List<BasicBlockInfo> bbs)
         {
             // TODO
 
-            //int n = bbs.Count;
-            //BasicBlockInfo groupPrev = bbs[0].prev;
-            //BasicBlockInfo groupNext = bbs[n - 1].next;
-            ////RandomUtil.ShuffleList(bbs, _random);
-            //ShuffleBasicBlocks0(bbs);
-            //BasicBlockInfo prev = groupPrev;
-            //for (int i = 0; i < n; i++)
-            //{
-            //    BasicBlockInfo cur = bbs[i];
-            //    cur.prev = prev;
-            //    prev.next = cur;
-            //    prev = cur;
-            //}
-            //prev.next = groupNext;
-            //if (groupNext != null)
-            //{
-            //    groupNext.prev = prev;
-            //}
+            int n = bbs.Count;
+            BasicBlockInfo groupPrev = bbs[0].prev;
+            BasicBlockInfo groupNext = bbs[n - 1].next;
+            //RandomUtil.ShuffleList(bbs, _random);
+            ShuffleBasicBlocks0(bbs);
+            BasicBlockInfo prev = groupPrev;
+            for (int i = 0; i < n; i++)
+            {
+                BasicBlockInfo cur = bbs[i];
+                cur.prev = prev;
+                prev.next = cur;
+                prev = cur;
+            }
+            prev.next = groupNext;
+            if (groupNext != null)
+            {
+                groupNext.prev = prev;
+            }
+        }
+
+        private Local _globalSwitchIndexLocal;
+
+        Local GlobalSwitchIndexLocal
+        {
+            get
+            {
+                if (_globalSwitchIndexLocal == null)
+                {
+                    _globalSwitchIndexLocal = new Local(_method.Module.CorLibTypes.Int32);
+                    _method.Body.Variables.Add(_globalSwitchIndexLocal);
+                }
+                return _globalSwitchIndexLocal;
+            }
         }
 
         private void InsertSwitchMachineBasicBlockForGroup(BlockGroup group, Dictionary<Instruction, BasicBlockInfo> inst2bb)
@@ -450,6 +493,8 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
                 var instructions = new List<Instruction>()
                     {
                         Instruction.Create(OpCodes.Ldsfld, (FieldDef)null),
+                        Instruction.Create(OpCodes.Stloc, GlobalSwitchIndexLocal),
+                        group.switchMachineEntryInst,
                         group.switchMachineInst,
                         Instruction.Create(OpCodes.Br, firstCase.targetBlock.FirstInstruction),
                     };
@@ -457,7 +502,7 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
                 {
                     instructions.Insert(0, Instruction.Create(OpCodes.Br, firstBlock.FirstInstruction));
                 }
-                
+
                 var switchMachineBb = new BasicBlockInfo()
                 {
                     group = group,
@@ -481,7 +526,7 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
                     switchMachineCase.index = i;
                     List<Instruction> prepareBlockInstructions = switchMachineCase.prepareBlock.instructions;
 
-                    Instruction setBranchIndexInst = prepareBlockInstructions[prepareBlockInstructions.Count - 2];
+                    Instruction setBranchIndexInst = prepareBlockInstructions[prepareBlockInstructions.Count - 3];
                     Assert.AreEqual(setBranchIndexInst.OpCode, OpCodes.Ldsfld, "first instruction of prepareBlock should be Ldsfld");
                     //setBranchIndexInst.Operand = i;
                     var indexField = _constFieldAllocator.Allocate(i);
@@ -490,9 +535,10 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
                 }
 
                 // after shuffle
-                Assert.IsTrue(instructions.Count == 3 || instructions.Count == 4, "Switch machine basic block should contain 3 or 4 instructions");
-                Assert.AreEqual(Code.Ldsfld, instructions[instructions.Count - 3].OpCode.Code, "First instruction should be Ldsfld");
-                instructions[instructions.Count - 3].Operand = _constFieldAllocator.Allocate(firstCase.index);
+                //Assert.IsTrue(instructions.Count == 4 || instructions.Count == 5, "Switch machine basic block should contain 4 or 5 instructions");
+                Instruction loadFirstIndex = instructions[instructions.Count - 5];
+                Assert.AreEqual(Code.Ldsfld, loadFirstIndex.OpCode.Code, "First instruction should be Ldsfld");
+                loadFirstIndex.Operand = _constFieldAllocator.Allocate(firstCase.index);
             }
         }
 
@@ -554,6 +600,7 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
 
             public List<BasicBlockInfo> basicBlocks;
 
+            public Instruction switchMachineEntryInst;
             public Instruction switchMachineInst;
             public List<SwitchMachineCase> switchMachineCases;
 
@@ -664,7 +711,7 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
                 this.subGroups = finalGroupList;
             }
 
-            public void ComputeBasicBlocks(Dictionary<Instruction, BasicBlockInfo> inst2bb)
+            public void ComputeBasicBlocks(Dictionary<Instruction, BasicBlockInfo> inst2bb, Func<Local> switchIndexLocalGetter)
             {
                 if (subGroups == null || subGroups.Count == 0)
                 {
@@ -685,13 +732,14 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
                             basicBlocks.Add(block);
                         }
                     }
+                    switchMachineEntryInst = Instruction.Create(OpCodes.Ldloc, switchIndexLocalGetter());
                     switchMachineInst = Instruction.Create(OpCodes.Switch, new List<Instruction>());
                     switchMachineCases = new List<SwitchMachineCase>();
                     return;
                 }
                 foreach (var subGroup in subGroups)
                 {
-                    subGroup.ComputeBasicBlocks(inst2bb);
+                    subGroup.ComputeBasicBlocks(inst2bb, switchIndexLocalGetter);
                 }
             }
         }
@@ -765,7 +813,7 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
             var tryBlocks = new List<TryBlockInfo>();
             foreach (var ex in _method.Body.ExceptionHandlers)
             {
-                TryBlockInfo tryBlock = tryBlocks.Find(tryBlocks => tryBlocks.tryStart == ex.TryStart && tryBlocks.tryEnd == ex.TryEnd);
+                TryBlockInfo tryBlock = tryBlocks.Find(block => block.tryStart == ex.TryStart && block.tryEnd == ex.TryEnd);
                 if (tryBlock == null)
                 {
                     int startIndex = inst2Index[ex.TryStart];
@@ -800,7 +848,7 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
             var rootGroup = new BlockGroup(new List<Instruction>(instructions), inst2blockGroup);
             rootGroup.SplitInstructionsNotInAnySubGroupsToIndividualGroups(inst2blockGroup);
 
-            rootGroup.ComputeBasicBlocks(BuildInstructionToBasicBlockInfoDic());
+            rootGroup.ComputeBasicBlocks(BuildInstructionToBasicBlockInfoDic(), () => GlobalSwitchIndexLocal);
             return rootGroup;
         }
 
@@ -870,6 +918,10 @@ namespace Obfuz.ObfusPasses.ControlFlowObfus
             //{
             //    return false;
             //}
+            if (_method.HasGenericParameters || _method.DeclaringType.HasGenericParameters)
+            {
+                return false;
+            }
             var evc = new EvalStackCalculator(_method);
             BuildBasicBlockLink(evc);
             if (!CheckNotContainsNotSupportedEvalStackData())

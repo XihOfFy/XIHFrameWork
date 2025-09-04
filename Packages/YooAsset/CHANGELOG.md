@@ -2,6 +2,155 @@
 
 All notable changes to this package will be documented in this file.
 
+## [2.3.14] - 2025-07-23
+
+**重要**：**所有下载相关的超时参数（timeout）已更新判定逻辑**
+
+超时不再以‘指定时间内未接收到任何数据’为判定条件，而是以‘指定时间内未完成整个下载任务’为判定条件。
+
+### Improvements
+
+- 重构了核心代码的下载逻辑，解决了同步加载触发的下载任务没有完成的问题。
+- 扩展工程里新增了PreprocessBuildCatalog类，用于处理在构建应用程序前自动生成内置资源目录文件。
+- (#592) 优化了资源清单逻辑里不必要产生的GC逻辑。
+
+### Fixed
+
+- (#590) 修复了TryUnloadUnusedAsset方法，在依赖嵌套层数过深导致没有卸载的问题。
+
+### Added
+
+- 新增了支持Google Play的文件系统扩展示例。
+
+- 新增了支持DefaultCacheFileSystem的单元测试用例。
+
+- 新增了文件系统配置参数：DISABLE_ONDEMAND_DOWNLOAD
+
+  ```csharp
+  public class FileSystemParametersDefine
+  {
+      // 禁用边玩边下机制
+      public const string DISABLE_ONDEMAND_DOWNLOAD = "DISABLE_ONDEMAND_DOWNLO";
+  }
+  ```
+
+### Changed
+
+- IManifestServices接口拆分为了IManifestProcessServices和IManifestRestoreServices
+
+  ```csharp
+  public interface IManifestProcessServices
+  {
+      /// <summary>
+      /// 处理资源清单（压缩或加密）
+      /// </summary>
+      byte[] ProcessManifest(byte[] fileData);
+  }
+  
+  public interface IManifestRestoreServices
+  {
+      /// <summary>
+      /// 还原资源清单（解压或解密）
+      /// </summary>
+      byte[] RestoreManifest(byte[] fileData);
+  }
+  ```
+
+## [2.3.12] - 2025-07-01
+
+### Improvements
+
+- 优化了同步接口导致的资源拷贝和资源验证性能开销高的现象。
+- 微信小游戏和抖音小游戏支持资源清单加密。
+
+### Fixed
+
+- (#579) 修复了2.3.10版本资源包构建页面里CopyBuildinFileParam无法编辑问题。
+- (#572) 修复了资源收集页面指定收集的预制体名称变动的问题。
+- (#582) 修复了非递归收集依赖时，依赖列表中才包含主资源的问题。
+
+### Added
+
+- 新增初始化参数：WebGLForceSyncLoadAsset
+
+  ```csharp
+  public abstract class InitializeParameters
+  {
+      /// <summary>
+      /// WebGL平台强制同步加载资源对象
+      /// </summary>Add commentMore actions
+      public bool WebGLForceSyncLoadAsset = false;
+  }
+  ```
+
+- (#576) 新增了资源清单服务类：IManifestServices
+
+  ```csharp
+  /// <summary>
+  /// 资源清单文件处理服务接口
+  /// </summary>
+  public interface IManifestServices
+  {
+      /// <summary>
+      /// 处理资源清单（压缩和加密）
+      /// </summary>
+      byte[] ProcessManifest(byte[] fileData);
+          
+      /// <summary>
+      /// 还原资源清单（解压和解密）
+      /// </summary>
+      byte[] RestoreManifest(byte[] fileData);
+  } 
+  ```
+
+- (#585) 新增了本地文件拷贝服务类：ICopyLocalFileServices
+
+  ```csharp
+  /// <summary>
+  /// 本地文件拷贝服务类
+  /// </summary>
+  public interface ICopyLocalFileServices
+  {
+      void CopyFile(LocalFileInfo sourceFileInfo, string destFilePath);
+  }
+  ```
+
+## [2.3.10] - 2025-06-17
+
+### Improvements
+
+- 小游戏扩展库已经独立，可以单独导入到项目工程。
+- 编辑器里的TableView视图新增了AssetObjectCell类。
+- (#552) 微信小游戏文件系统类，增加了URL合法性的初始化检测机制。
+- (#566) 重构了资源构建页面，方便扩展自定义界面。
+- (#573) 完善了AssetDependencyDB的输出日志，可以正确输出丢失的引用资产信息。
+
+### Fixed
+
+- 修复太空战机DEMO在退出运行模式时的报错。
+- (#551) 修复了Unity2019, Unity2020的代码兼容性报错。
+- (#569) 修复了TVOS平台的兼容问题。  
+- (#564) 修复了TiktokFileSystem文件系统里appendTimeTicks无效的问题。
+
+### Added
+
+- (#562) 新增了解密方法。
+
+  ```csharp
+  public interface IDecryptionServices
+  {
+      /// <summary>
+      /// 后备方式获取解密的资源包对象
+      /// 注意：当正常解密方法失败后，会触发后备加载！
+      /// 说明：建议通过LoadFromMemory()方法加载资源对象作为保底机制。
+      /// issues : https://github.com/tuyoogame/YooAsset/issues/562
+      /// </summary>
+      DecryptResult LoadAssetBundleFallback(DecryptFileInfo fileInfo);    
+  }
+  ```
+
+
+
 ## [2.3.9] - 2025-05-13
 
 ### Improvements

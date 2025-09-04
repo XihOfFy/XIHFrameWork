@@ -283,24 +283,25 @@ namespace Obfuz
             LoadAssemblies(assemblyCache, modulesToObfuscate, allObfuscationRelativeModules);
 
             EncryptionScopeProvider encryptionScopeProvider = CreateEncryptionScopeProvider();
-            var moduleEntityManager = new GroupByModuleEntityManager();
+            var moduleEntityManager = new GroupByModuleEntityManager()
+            {
+                EncryptionScopeProvider = encryptionScopeProvider,
+            };
             var obfuzIgnoreScopeComputeCache = new ObfuzIgnoreScopeComputeCache();
-            var rvaDataAllocator = new RvaDataAllocator(encryptionScopeProvider, moduleEntityManager);
-            var constFieldAllocator = new ConstFieldAllocator(encryptionScopeProvider, rvaDataAllocator, moduleEntityManager);
+            var burstCompileCache = new BurstCompileComputeCache(modulesToObfuscate, allObfuscationRelativeModules);
             _ctx = new ObfuscationPassContext
             {
                 coreSettings = _coreSettings,
                 assemblyCache = assemblyCache,
                 modulesToObfuscate = modulesToObfuscate,
                 allObfuscationRelativeModules = allObfuscationRelativeModules,
+
                 moduleEntityManager = moduleEntityManager,
 
-                encryptionScopeProvider = encryptionScopeProvider,
                 obfuzIgnoreScopeComputeCache = obfuzIgnoreScopeComputeCache,
+                burstCompileComputeCache = burstCompileCache,
 
-                rvaDataAllocator = rvaDataAllocator,
-                constFieldAllocator = constFieldAllocator,
-                whiteList = new ObfuscationMethodWhitelist(obfuzIgnoreScopeComputeCache),
+                whiteList = new ObfuscationMethodWhitelist(obfuzIgnoreScopeComputeCache, burstCompileCache),
                 passPolicy = _passPolicy,
             };
             ObfuscationPassContext.Current = _ctx;
@@ -345,8 +346,8 @@ namespace Obfuz
         {
             pipeline.Stop();
 
-            _ctx.constFieldAllocator.Done();
-            _ctx.rvaDataAllocator.Done();
+            _ctx.moduleEntityManager.Done<ConstFieldAllocator>();
+            _ctx.moduleEntityManager.Done<RvaDataAllocator>();
             WriteAssemblies();
         }
     }

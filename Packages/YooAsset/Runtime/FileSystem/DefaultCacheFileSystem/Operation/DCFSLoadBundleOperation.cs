@@ -49,16 +49,25 @@ namespace YooAsset
                 }
                 else
                 {
-                    _steps = ESteps.DownloadFile;
+                    if (_fileSystem.DisableOnDemandDownload)
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Failed;
+                        Error = $"The bundle not cached : {_bundle.BundleName}";
+                        YooLogger.Warning(Error);
+                    }
+                    else
+                    {
+                        _steps = ESteps.DownloadFile;
+                    }
                 }
             }
 
             if (_steps == ESteps.DownloadFile)
             {
-                // 注意：边玩边下下载器引用计数没有Release
                 if (_downloadFileOp == null)
                 {
-                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);
+                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue);
                     _downloadFileOp = _fileSystem.DownloadFileAsync(_bundle, options);
                     _downloadFileOp.StartOperation();
                     AddChildOperation(_downloadFileOp);
@@ -164,11 +173,23 @@ namespace YooAsset
                 {
                     if (_bundle.Encrypted)
                     {
-                        _steps = ESteps.Done;
-                        Status = EOperationStatus.Failed;
-                        Error = $"Failed to load encrypted asset bundle file : {_bundle.BundleName}";
-                        YooLogger.Error(Error);
-                        return;
+                        var decryptResult = _fileSystem.LoadEncryptedAssetBundleFallback(_bundle);
+                        _assetBundle = decryptResult.Result;
+                        if (_assetBundle != null)
+                        {
+                            _steps = ESteps.Done;
+                            Result = new AssetBundleResult(_fileSystem, _bundle, _assetBundle, _managedStream);
+                            Status = EOperationStatus.Succeed;
+                            return;
+                        }
+                        else
+                        {
+                            _steps = ESteps.Done;
+                            Status = EOperationStatus.Failed;
+                            Error = $"Failed to load encrypted asset bundle file : {_bundle.BundleName}";
+                            YooLogger.Error(Error);
+                            return;
+                        }
                     }
 
                     // 注意：在安卓移动平台，华为和三星真机上有极小概率加载资源包失败。
@@ -216,9 +237,6 @@ namespace YooAsset
             {
                 if (ExecuteWhileDone())
                 {
-                    if (_downloadFileOp != null && _downloadFileOp.Status == EOperationStatus.Failed)
-                        YooLogger.Error($"Try load bundle {_bundle.BundleName} from remote !");
-
                     _steps = ESteps.Done;
                     break;
                 }
@@ -294,10 +312,9 @@ namespace YooAsset
 
             if (_steps == ESteps.DownloadFile)
             {
-                // 注意：边玩边下下载器引用计数没有Release
                 if (_downloadFileOp == null)
                 {
-                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);
+                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue);
                     _downloadFileOp = _fileSystem.DownloadFileAsync(_bundle, options);
                     _downloadFileOp.StartOperation();
                     AddChildOperation(_downloadFileOp);
@@ -348,10 +365,6 @@ namespace YooAsset
             {
                 if (ExecuteWhileDone())
                 {
-                    //TODO 拷贝本地文件失败也会触发该错误！
-                    if (_downloadFileOp != null && _downloadFileOp.Status == EOperationStatus.Failed)
-                        YooLogger.Error($"Try load bundle {_bundle.BundleName} from remote !");
-
                     _steps = ESteps.Done;
                     break;
                 }

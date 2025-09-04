@@ -33,6 +33,7 @@ namespace Obfuz.Settings
 
         private SerializedProperty _symbolObfusSettings;
         private SerializedProperty _constEncryptSettings;
+        private SerializedProperty _removeConstFieldSettings;
         private SerializedProperty _evalStackObfusSettings;
         private SerializedProperty _fieldEncryptSettings;
         private SerializedProperty _callObfusSettings;
@@ -40,6 +41,9 @@ namespace Obfuz.Settings
         private SerializedProperty _controlFlowObfusSettings;
 
         private SerializedProperty _garbageCodeGenerationSettings;
+        private SerializedProperty _watermarkSettings;
+
+        private SerializedProperty _polymorphicDllSettings;
 
         public ObfuzSettingsProvider() : base("Project/Obfuz", SettingsScope.Project)
         {
@@ -71,6 +75,7 @@ namespace Obfuz.Settings
 
             _symbolObfusSettings = _serializedObject.FindProperty("symbolObfusSettings");
             _constEncryptSettings = _serializedObject.FindProperty("constEncryptSettings");
+            _removeConstFieldSettings = _serializedObject.FindProperty("removeConstFieldSettings");
             _evalStackObfusSettings = _serializedObject.FindProperty("evalStackObfusSettings");
             _exprObfusSettings = _serializedObject.FindProperty("exprObfusSettings");
             _fieldEncryptSettings = _serializedObject.FindProperty("fieldEncryptSettings");
@@ -78,6 +83,9 @@ namespace Obfuz.Settings
             _controlFlowObfusSettings = _serializedObject.FindProperty("controlFlowObfusSettings");
 
             _garbageCodeGenerationSettings = _serializedObject.FindProperty("garbageCodeGenerationSettings");
+            _watermarkSettings = _serializedObject.FindProperty("watermarkSettings");
+
+            _polymorphicDllSettings = _serializedObject.FindProperty("polymorphicDllSettings");
         }
 
         public override void OnGUI(string searchContext)
@@ -99,6 +107,7 @@ namespace Obfuz.Settings
 
             EditorGUILayout.PropertyField(_symbolObfusSettings);
             EditorGUILayout.PropertyField(_constEncryptSettings);
+            EditorGUILayout.PropertyField(_removeConstFieldSettings);
             EditorGUILayout.PropertyField(_evalStackObfusSettings);
             EditorGUILayout.PropertyField(_exprObfusSettings);
             EditorGUILayout.PropertyField(_fieldEncryptSettings);
@@ -106,6 +115,9 @@ namespace Obfuz.Settings
             EditorGUILayout.PropertyField(_controlFlowObfusSettings);
 
             EditorGUILayout.PropertyField(_garbageCodeGenerationSettings);
+            EditorGUILayout.PropertyField(_watermarkSettings);
+
+            EditorGUILayout.PropertyField(_polymorphicDllSettings);
 
             if (EditorGUI.EndChangeCheck())
             {

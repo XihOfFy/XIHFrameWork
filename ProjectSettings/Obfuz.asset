@@ -28,11 +28,11 @@ MonoBehaviour:
     enabledPasses: -1
     ruleFiles: []
   secretSettings:
-    defaultStaticSecretKey: Code Philosophy-Static
-    defaultDynamicSecretKey: Code Philosophy-Dynamic
+    defaultStaticSecretKey: XihOfFy Statik Key
+    defaultDynamicSecretKey: XihOfFy Dynamik Key
     staticSecretKeyOutputPath: Assets/Resources/Obfuz/defaultStaticSecretKey.bytes
     dynamicSecretKeyOutputPath: Assets/Res/Aot2Hot/Obfuz/defaultDynamicSecretKey.bytes
-    randomSeed: 310122
+    randomSeed: 222242222
     assembliesUsingDynamicSecretKeys:
     - Aot2Hot
     - Hot
@@ -54,12 +54,15 @@ MonoBehaviour:
   constEncryptSettings:
     encryptionLevel: 1
     ruleFiles: []
+  removeConstFieldSettings:
+    ruleFiles: []
   evalStackObfusSettings:
     ruleFiles: []
   fieldEncryptSettings:
     encryptionLevel: 1
     ruleFiles: []
   callObfusSettings:
+    proxyMode: 0
     obfuscationLevel: 1
     maxProxyMethodCountPerDispatchMethod: 100
     obfuscateCallToMethodInMscorlib: 0
@@ -70,14 +73,21 @@ MonoBehaviour:
     minInstructionCountOfBasicBlockToObfuscate: 3
     ruleFiles: []
   garbageCodeGenerationSettings:
-    codeGenerationSecret: XIH Garbage Code
+    codeGenerationSecret: XIH
     defaultTask:
-      codeGenerationRandomSeed: 22
+      codeGenerationRandomSeed: 5
       classNamespace: Hot
-      classNamePrefix: XIHGarbage
-      classCount: 69
-      methodCountPerClass: 9
-      fieldCountPerClass: 6
+      classNamePrefix: FY
+      classCount: 8
+      methodCountPerClass: 4
+      fieldCountPerClass: 2
       garbageCodeType: 1
       outputPath: Assets/HotScripts/Obfuz/GarbageCode
     additionalTasks: []
+  watermarkSettings:
+    text: XiH Of Fy FYSG
+    signatureLength: 256
+  polymorphicDllSettings:
+    enable: 1
+    codeGenerationSecretKey: XihOfFy Polymorphk Key
+    disableLoadStandardDll: 1

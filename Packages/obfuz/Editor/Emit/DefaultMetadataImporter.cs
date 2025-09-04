@@ -111,23 +111,20 @@ namespace Obfuz.Emit
 
     public class DefaultMetadataImporter : GroupByModuleEntityBase
     {
-        private readonly EncryptionScopeProvider _encryptionScopeProvider;
-        private EncryptionScopeInfo _encryptionScope;
         private EncryptionServiceMetadataImporter _defaultEncryptionServiceMetadataImporter;
 
 
         private EncryptionServiceMetadataImporter _staticDefaultEncryptionServiceMetadataImporter;
         private EncryptionServiceMetadataImporter _dynamicDefaultEncryptionServiceMetadataImporter;
 
-        public DefaultMetadataImporter(EncryptionScopeProvider encryptionScopeProvider)
+        public DefaultMetadataImporter()
         {
-            _encryptionScopeProvider = encryptionScopeProvider;
         }
 
-        public override void Init(ModuleDef mod)
+        public override void Init()
         {
-            _module = mod;
-            _encryptionScope = _encryptionScopeProvider.GetScope(mod);
+            ModuleDef mod = Module;
+
             var constUtilityType = typeof(ConstUtility);
 
             _castIntAsFloat = mod.Import(constUtilityType.GetMethod("CastIntAsFloat"));
@@ -141,7 +138,7 @@ namespace Obfuz.Emit
 
             _initializeArray = mod.Import(typeof(System.Runtime.CompilerServices.RuntimeHelpers).GetMethod("InitializeArray", new[] { typeof(Array), typeof(RuntimeFieldHandle) }));
             Assert.IsNotNull(_initializeArray);
-            _verifySecretKey = mod.Import(typeof(AssetUtility).GetMethod("VerifySecretKey", new[] { typeof(int), typeof(int) }));
+            _verifySecretKey = mod.Import(typeof(AssertUtility).GetMethod("VerifySecretKey", new[] { typeof(int), typeof(int) }));
             Assert.IsNotNull(_verifySecretKey, "VerifySecretKey not found");
 
             _obfuscationTypeMapperRegisterType = mod.Import(typeof(ObfuscationTypeMapper).GetMethod("RegisterType", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null));
@@ -156,6 +153,11 @@ namespace Obfuz.Emit
             Assert.IsNotNull(_addFloat, "ExprUtility.Add(float, float) not found");
             _addDouble = mod.Import(exprUtilityType.GetMethod("Add", new[] { typeof(double), typeof(double) }));
             Assert.IsNotNull(_addDouble, "ExprUtility.Add(double, double) not found");
+            _addIntPtr = mod.Import(exprUtilityType.GetMethod("Add", new[] { typeof(IntPtr), typeof(IntPtr) }));
+            Assert.IsNotNull(_addIntPtr, "ExprUtility.Add(IntPtr, IntPtr) not found");
+            _addIntPtrInt = mod.Import(exprUtilityType.GetMethod("Add", new[] { typeof(IntPtr), typeof(int) }));
+            Assert.IsNotNull(_addIntPtrInt, "ExprUtility.Add(IntPtr, int) not found");
+
             _subtractInt = mod.Import(exprUtilityType.GetMethod("Subtract", new[] { typeof(int), typeof(int) }));
             Assert.IsNotNull(_subtractInt, "ExprUtility.Subtract(int, int) not found");
             _subtractLong = mod.Import(exprUtilityType.GetMethod("Subtract", new[] { typeof(long), typeof(long) }));
@@ -164,6 +166,11 @@ namespace Obfuz.Emit
             Assert.IsNotNull(_subtractFloat, "ExprUtility.Subtract(float, float) not found");
             _subtractDouble = mod.Import(exprUtilityType.GetMethod("Subtract", new[] { typeof(double), typeof(double) }));
             Assert.IsNotNull(_subtractDouble, "ExprUtility.Subtract(double, double) not found");
+            _subtractIntPtr = mod.Import(exprUtilityType.GetMethod("Subtract", new[] { typeof(IntPtr), typeof(IntPtr) }));
+            Assert.IsNotNull(_subtractIntPtr, "ExprUtility.Subtract(IntPtr, IntPtr) not found");
+            _subtractIntPtrInt = mod.Import(exprUtilityType.GetMethod("Subtract", new[] { typeof(IntPtr), typeof(int) }));
+            Assert.IsNotNull(_subtractIntPtrInt, "ExprUtility.Subtract(IntPtr, int) not found");
+
             _multiplyInt = mod.Import(exprUtilityType.GetMethod("Multiply", new[] { typeof(int), typeof(int) }));
             Assert.IsNotNull(_multiplyInt, "ExprUtility.Multiply(int, int) not found");
             _multiplyLong = mod.Import(exprUtilityType.GetMethod("Multiply", new[] { typeof(long), typeof(long) }));
@@ -172,6 +179,11 @@ namespace Obfuz.Emit
             Assert.IsNotNull(_multiplyFloat, "ExprUtility.Multiply(float, float) not found");
             _multiplyDouble = mod.Import(exprUtilityType.GetMethod("Multiply", new[] { typeof(double), typeof(double) }));
             Assert.IsNotNull(_multiplyDouble, "ExprUtility.Multiply(double, double) not found");
+            _multiplyIntPtr = mod.Import(exprUtilityType.GetMethod("Multiply", new[] { typeof(IntPtr), typeof(IntPtr) }));
+            Assert.IsNotNull(_multiplyIntPtr, "ExprUtility.Multiply(IntPtr, IntPtr) not found");
+            _multiplyIntPtrInt = mod.Import(exprUtilityType.GetMethod("Multiply", new[] { typeof(IntPtr), typeof(int) }));
+            Assert.IsNotNull(_multiplyIntPtrInt, "ExprUtility.Multiply(IntPtr, int) not found");
+
             _divideInt = mod.Import(exprUtilityType.GetMethod("Divide", new[] { typeof(int), typeof(int) }));
             Assert.IsNotNull(_divideInt, "ExprUtility.Divide(int, int) not found");
             _divideLong = mod.Import(exprUtilityType.GetMethod("Divide", new[] { typeof(long), typeof(long) }));
@@ -238,7 +250,7 @@ namespace Obfuz.Emit
 
             _staticDefaultEncryptionServiceMetadataImporter = new EncryptionServiceMetadataImporter(mod, typeof(EncryptionService<DefaultStaticEncryptionScope>));
             _dynamicDefaultEncryptionServiceMetadataImporter = new EncryptionServiceMetadataImporter(mod, typeof(EncryptionService<DefaultDynamicEncryptionScope>));
-            if (_encryptionScopeProvider.IsDynamicSecretAssembly(mod))
+            if (EncryptionScopeProvider.IsDynamicSecretAssembly(mod))
             {
                 _defaultEncryptionServiceMetadataImporter = _dynamicDefaultEncryptionServiceMetadataImporter;
             }
@@ -248,9 +260,14 @@ namespace Obfuz.Emit
             }
         }
 
+        public override void Done()
+        {
+
+        }
+
         public EncryptionServiceMetadataImporter GetEncryptionServiceMetadataImporterOfModule(ModuleDef mod)
         {
-            return _encryptionScopeProvider.IsDynamicSecretAssembly(mod) ? _dynamicDefaultEncryptionServiceMetadataImporter : _staticDefaultEncryptionServiceMetadataImporter;
+            return EncryptionScopeProvider.IsDynamicSecretAssembly(mod) ? _dynamicDefaultEncryptionServiceMetadataImporter : _staticDefaultEncryptionServiceMetadataImporter;
         }
 
         private ModuleDef _module;
@@ -267,14 +284,20 @@ namespace Obfuz.Emit
         private IMethod _addLong;
         private IMethod _addFloat;
         private IMethod _addDouble;
+        private IMethod _addIntPtr;
+        private IMethod _addIntPtrInt;
         private IMethod _subtractInt;
         private IMethod _subtractLong;
         private IMethod _subtractFloat;
         private IMethod _subtractDouble;
+        private IMethod _subtractIntPtr;
+        private IMethod _subtractIntPtrInt;
         private IMethod _multiplyInt;
         private IMethod _multiplyLong;
         private IMethod _multiplyFloat;
         private IMethod _multiplyDouble;
+        private IMethod _multiplyIntPtr;
+        private IMethod _multiplyIntPtrInt;
         private IMethod _divideInt;
         private IMethod _divideLong;
         private IMethod _divideFloat;
@@ -348,14 +371,22 @@ namespace Obfuz.Emit
         public IMethod AddLong => _addLong;
         public IMethod AddFloat => _addFloat;
         public IMethod AddDouble => _addDouble;
+        public IMethod AddIntPtr => _addIntPtr;
+        public IMethod AddIntPtrInt => _addIntPtrInt;
         public IMethod SubtractInt => _subtractInt;
         public IMethod SubtractLong => _subtractLong;
         public IMethod SubtractFloat => _subtractFloat;
         public IMethod SubtractDouble => _subtractDouble;
+        public IMethod SubtractIntPtr => _subtractIntPtr;
+        public IMethod SubtractIntPtrInt => _subtractIntPtrInt;
+
         public IMethod MultiplyInt => _multiplyInt;
         public IMethod MultiplyLong => _multiplyLong;
         public IMethod MultiplyFloat => _multiplyFloat;
         public IMethod MultiplyDouble => _multiplyDouble;
+        public IMethod MultiplyIntPtr => _multiplyIntPtr;
+        public IMethod MultiplyIntPtrInt => _multiplyIntPtrInt;
+
         public IMethod DivideInt => _divideInt;
         public IMethod DivideLong => _divideLong;
         public IMethod DivideFloat => _divideFloat;

@@ -84,7 +84,7 @@ namespace Aot
 #elif UNITY_DY //BYTEMINIGAME
                 // 小游戏缓存根目录
                 // 注意：如果有子目录，请修改此处！
-                string packageRoot = $"";
+                string packageRoot = $"yoo";
                 var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
 #else
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
@@ -123,6 +123,12 @@ namespace Aot
                 var res = new DecryptResult();
                 var offset = fileInfo.BundleName.ToLower().Sum(c => c);
                 res.CreateRequest = AssetBundle.LoadFromFileAsync(fileInfo.FileLoadPath, fileInfo.FileLoadCRC, (ulong)offset);
+                return res;
+            }
+            public DecryptResult LoadAssetBundleFallback(DecryptFileInfo fileInfo)
+            {
+                var res = new DecryptResult();
+                res.CreateRequest = AssetBundle.LoadFromMemoryAsync(ReadFileData(fileInfo));
                 return res;
             }
             //原生文件不进行加密,或已经加密存储过

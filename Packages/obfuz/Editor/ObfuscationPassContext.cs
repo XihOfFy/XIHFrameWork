@@ -1,5 +1,4 @@
 ﻿using dnlib.DotNet;
-using Obfuz.Data;
 using Obfuz.Emit;
 using Obfuz.Utils;
 using System.Collections.Generic;
@@ -10,6 +9,8 @@ namespace Obfuz
 
     public class EncryptionScopeInfo
     {
+        public const int MaxEncryptionLevel = 4;
+
         public readonly IEncryptor encryptor;
         public readonly RandomCreator localRandomCreator;
 
@@ -63,10 +64,8 @@ namespace Obfuz
         public List<ModuleDef> modulesToObfuscate;
         public List<ModuleDef> allObfuscationRelativeModules;
         public ObfuzIgnoreScopeComputeCache obfuzIgnoreScopeComputeCache;
+        public BurstCompileComputeCache burstCompileComputeCache;
 
-        public EncryptionScopeProvider encryptionScopeProvider;
-        public ConstFieldAllocator constFieldAllocator;
-        public RvaDataAllocator rvaDataAllocator;
         public ObfuscationMethodWhitelist whiteList;
         public ConfigurablePassPolicy passPolicy;
     }

@@ -39,6 +39,11 @@ namespace Obfuz.Unity
         public static string GenerateAdditionalLinkXmlFile(BuildTarget target)
         {
             ObfuzSettings settings = ObfuzSettings.Instance;
+            if (!settings.buildPipelineSettings.enable)
+            {
+                Debug.Log("Obfuscation is disabled. Skipping link.xml generation.");
+                return null;
+            }
             string symbolMappingFile = settings.symbolObfusSettings.GetSymbolMappingFile();
             if (!File.Exists(symbolMappingFile))
             {
@@ -62,6 +67,13 @@ namespace Obfuz.Unity
 
                 writer.WriteStartDocument();
                 writer.WriteStartElement("linker");
+
+                // Preserve Obfuz.Runtime assembly
+                writer.WriteStartElement("assembly");
+                writer.WriteAttributeString("fullname", "Obfuz.Runtime");
+                writer.WriteAttributeString("preserve", "all");
+                writer.WriteEndElement();
+
                 foreach (string linkPath in linkXmlPaths)
                 {
                     TransformLinkXml(linkPath, symbolMapping, assembliesToObfuscated, writer);
@@ -73,8 +85,8 @@ namespace Obfuz.Unity
             {
                 writer.Close();
             }
-            Debug.Log($"LinkXmlProcess write {linkXmlPath}");
-            return linkXmlPath;
+            Debug.Log($"LinkXmlProcess write {Path.GetFullPath(linkXmlPath)}");
+            return Path.GetFullPath(linkXmlPath);
         }
 
         private static void TransformLinkXml(string xmlFile, LiteSymbolMappingReader symbolMapping, HashSet<string> assembliesToObfuscated, XmlWriter writer)

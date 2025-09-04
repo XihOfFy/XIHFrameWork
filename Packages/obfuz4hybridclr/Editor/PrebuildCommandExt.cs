@@ -47,6 +47,7 @@ namespace Obfuz4HybridCLR
             BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
             CompileDllCommand.CompileDll(target);
             Il2CppDefGeneratorCommand.GenerateIl2CppDef();
+            GeneratePolymorphicCodesWhenEnable();
             LinkGeneratorCommand.GenerateLinkXml(target);
             StripAOTDllCommand.GenerateStripedAOTDlls(target);
 
@@ -64,6 +65,23 @@ namespace Obfuz4HybridCLR
 
             string obfuscatedHotUpdateDllPath = GetObfuscatedHotUpdateAssemblyOutputPath(target);
             ObfuscateUtil.ObfuscateHotUpdateAssemblies(target, obfuscatedHotUpdateDllPath);
+        }
+
+        [MenuItem("HybridCLR/ObfuzExtension/GeneratePolymorphicCodes")]
+        public static void GeneratePolymorphicCodes()
+        {
+            ObfuscateUtil.GeneratePolymorphicCodes($"{SettingsUtil.LocalIl2CppDir}/libil2cpp");
+        }
+
+        private static void GeneratePolymorphicCodesWhenEnable()
+        {
+            PolymorphicDllSettings settings = ObfuzSettings.Instance.polymorphicDllSettings;
+            if (!settings.enable)
+            {
+                UnityEngine.Debug.LogWarning("Polymorphic code generation is disabled.");
+                return;
+            }
+            GeneratePolymorphicCodes();
         }
 
         public static IAssemblyResolver CreateObfuscatedHotUpdateAssemblyResolver(BuildTarget target, List<string> obfuscatedHotUpdateAssemblies, string obfuscatedHotUpdateDllPath)
