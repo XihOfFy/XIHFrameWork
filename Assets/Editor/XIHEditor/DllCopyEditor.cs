@@ -16,8 +16,33 @@ public class DllCopyEditor
         var target = EditorUserBuildSettings.activeBuildTarget;
         PrebuildCommandExt.CompileAndObfuscateDll();
         var settings = ObfuzSettings.Instance.polymorphicDllSettings;
-        CopyHotDll(true, "XIHWebServerRes/Aot2HotPloy", target, settings.enable);
-        CopyHotDll(false, "XIHWebServerRes/HotPloy", target, settings.enable);
+        /*if (settings.enable) {第一次执行过即可，但是这个无法回退
+            PrebuildCommandExt.GeneratePolymorphicCodes();
+        }*/
+
+        string sourPath;
+        if (Obfuz.Settings.ObfuzSettings.Instance.buildPipelineSettings.enable)
+        {
+            sourPath = Obfuz4HybridCLR.PrebuildCommandExt.GetObfuscatedHotUpdateAssemblyOutputPath(target);
+        }
+        else
+        {
+            sourPath = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
+        }
+        if (!Directory.Exists(sourPath))
+        {
+            Debug.LogWarning($"{sourPath}路径不存在，请先编译dll");
+            return;
+        }
+        if (settings.enable)
+        {
+            var dstPath = "XIHWebServerRes";
+            var files = Directory.GetFiles(sourPath);
+            foreach (var file in files)
+            {
+                ObfuscateUtil.GeneratePolymorphicDll(file, dstPath+"/"+Path.GetFileName(file));
+            }
+        }
     }
     public static void CopyDlls(BuildTarget target)
     {
@@ -34,8 +59,7 @@ public class DllCopyEditor
         {
             CheckAccessMissingMetadata(bakupPath, target);
         }
-        catch
-        {
+        catch { 
         }
         if (Directory.Exists(bakupPath)) Directory.Delete(bakupPath, true);
         Directory.CreateDirectory(bakupPath);
@@ -48,10 +72,9 @@ public class DllCopyEditor
             return;
         }
         var rms = new HashSet<string>();
-        if (Directory.Exists(dstPath))
-        {
+        if (Directory.Exists(dstPath)) {
             var files = Directory.GetFiles(dstPath);
-            foreach (var file in files) rms.Add(Path.GetFileName(file));
+            foreach(var file in files) rms.Add(Path.GetFileName(file));
         }
         else
         {
@@ -65,7 +88,7 @@ public class DllCopyEditor
                 Debug.LogError($"CopyDll {ph}不存在");
                 continue;
             }
-            File.Copy(ph, $"{bakupPath}/{dll}.dll", true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
+            File.Copy(ph, $"{bakupPath}/{dll}.dll",true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
             var dstDll = $"{dstPath}/{dll}.bytes";
             if (usePolymorphic)
             {
@@ -73,18 +96,16 @@ public class DllCopyEditor
                 HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, stripDll);
                 ObfuscateUtil.GeneratePolymorphicDll(stripDll, dstDll);
             }
-            else
-            {
+            else {
                 HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, dstDll);
             }
             rms.Remove($"{dll}.bytes");
             rms.Remove($"{dll}.bytes.meta");
         }
-        foreach (var rm in rms)
-        {
+        foreach (var rm in rms) {
             var dst = $"{dstPath}/{rm}";
             File.Delete(dst);
-            Debug.LogWarning("删除多余文件dll：" + dst);
+            Debug.LogWarning("删除多余文件dll："+ dst);
         }
         Debug.LogWarning($"拷贝无需加密的Aotdlls到 {dstPath}");
     }
