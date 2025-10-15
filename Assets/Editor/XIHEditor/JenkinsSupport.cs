@@ -201,7 +201,9 @@ public class JenkinsSupport
         buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
         buildParameters.BuildinFileCopyParams = string.Empty;
         buildParameters.WriteLinkXML = true;
-
+        buildParameters.ManifestProcessServices = new AotMgr.ManifestProcessServices();
+        buildParameters.ManifestRestoreServices = new AotMgr.ManifestRestoreServices();
+        buildParameters.StripUnityVersion = true;
 #if UNITY_WEBGL
         buildParameters.EncryptionServices = null;
         //buildParameters.EncryptionServices = new EncryptionNone();

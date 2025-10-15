@@ -47,7 +47,7 @@ namespace Aot
             {
                 //使用加密
                 var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(new DecryptionServices());
-                //var buildinFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                buildinFileSystemParams.AddParameter(FileSystemParametersDefine.MANIFEST_SERVICES, new ManifestRestoreServices());
                 var initParameters = new OfflinePlayModeParameters();
                 initParameters.BuildinFileSystemParameters = buildinFileSystemParams;
                 createParameters = initParameters;
@@ -61,6 +61,7 @@ namespace Aot
                 //buildinFileSystemParams.AddParameter(FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST, true);
                 //使用加密
                 var cacheFileSystemParams = FileSystemParameters.CreateDefaultCacheFileSystemParameters(new RemoteServices(), new DecryptionServices());
+                cacheFileSystemParams.AddParameter(FileSystemParametersDefine.MANIFEST_SERVICES, new ManifestRestoreServices());
                 // 注意：设置参数INSTALL_CLEAR_MODE，可以解决覆盖安装的时候将拷贝的内置清单文件清理的问题。
                 //cacheFileSystemParams.AddParameter(FileSystemParametersDefine.INSTALL_CLEAR_MODE, EOverwriteInstallClearMode.None);
                 var initParameters = new HostPlayModeParameters();
@@ -89,6 +90,7 @@ namespace Aot
 #else
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
 #endif
+                webRemoteFileSystemParams.AddParameter(FileSystemParametersDefine.MANIFEST_SERVICES, new ManifestRestoreServices());
 
                 var initParameters = new WebPlayModeParameters();
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
@@ -166,7 +168,34 @@ namespace Aot
                 return result;
             }
         }
+        public class ManifestProcessServices : IManifestProcessServices
+        {
+            public byte[] ProcessManifest(byte[] fileData)
+            {
+                var len = fileData.Length;
+                var data = new byte[len];
+                for (int i = 0; i < len; ++i)
+                {
+                    data[i] = (byte)(fileData[i] ^ (byte)i);
+                }
+                return data;
+            }
+        }
+
 #endif
+        public class ManifestRestoreServices : IManifestRestoreServices
+        {
+            public byte[] RestoreManifest(byte[] fileData)
+            {
+                var len = fileData.Length;
+                var data = new byte[len];
+                for (int i = 0; i < len; ++i)
+                {
+                    data[i] = (byte)(fileData[i] ^ (byte)i);
+                }
+                return data;
+            }
+        }
         /// <summary>
         /// 远端资源地址查询服务类
         /// </summary>
