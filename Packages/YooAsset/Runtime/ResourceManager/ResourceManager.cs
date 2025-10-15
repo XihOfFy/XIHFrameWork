@@ -15,7 +15,11 @@ namespace YooAsset
         private long _sceneCreateIndex = 0;
         private IBundleQuery _bundleQuery;
         private int _bundleLoadingMaxConcurrency;
-        private bool _webGLForceSyncLoadAsset;
+
+        // 开发者配置选项
+        public bool AutoUnloadBundleWhenUnused { private set; get; }
+        public bool WebGLForceSyncLoadAsset { private set; get; }
+        public bool UseWeakReferenceHandle { private set; get; }
 
         /// <summary>
         /// 所属包裹
@@ -44,7 +48,9 @@ namespace YooAsset
         public void Initialize(InitializeParameters parameters, IBundleQuery bundleServices)
         {
             _bundleLoadingMaxConcurrency = parameters.BundleLoadingMaxConcurrency;
-            _webGLForceSyncLoadAsset = parameters.WebGLForceSyncLoadAsset;
+            AutoUnloadBundleWhenUnused = parameters.AutoUnloadBundleWhenUnused;
+            WebGLForceSyncLoadAsset = parameters.WebGLForceSyncLoadAsset;
+            UseWeakReferenceHandle = parameters.UseWeakReferenceHandle;
             _bundleQuery = bundleServices;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
@@ -323,6 +329,14 @@ namespace YooAsset
                 return true;
             return bundleFileLoader.IsDestroyed;
         }
+        internal bool CheckBundleReleasable(int bundleID)
+        {
+            string bundleName = _bundleQuery.GetMainBundleName(bundleID);
+            var bundleFileLoader = TryGetBundleFileLoader(bundleName);
+            if (bundleFileLoader == null)
+                return true;
+            return bundleFileLoader.CanReleasableLoader();
+        }
         internal bool HasAnyLoader()
         {
             return LoaderDic.Count > 0;
@@ -330,10 +344,6 @@ namespace YooAsset
         internal bool BundleLoadingIsBusy()
         {
             return BundleLoadingCounter >= _bundleLoadingMaxConcurrency;
-        }
-        internal bool WebGLForceSyncLoadAsset()
-        {
-            return _webGLForceSyncLoadAsset;
         }
 
         private LoadBundleFileOperation CreateBundleFileLoaderInternal(BundleInfo bundleInfo)

@@ -19,7 +19,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 创建补丁清单文件到输出目录
         /// </summary>
-        protected void CreateManifestFile(bool processBundleDepends, bool processBundleTags, BuildContext context)
+        protected void CreateManifestFile(bool processBundleDepends, bool processBundleTags, bool replaceAssetPathWithAddress, BuildContext context)
         {
             var buildMapContext = context.GetContextObject<BuildMapContext>();
             var buildParametersContext = context.GetContextObject<BuildParametersContext>();
@@ -36,6 +36,7 @@ namespace YooAsset.Editor
             manifest.SupportExtensionless = buildMapContext.Command.SupportExtensionless;
             manifest.LocationToLower = buildMapContext.Command.LocationToLower;
             manifest.IncludeAssetGUID = buildMapContext.Command.IncludeAssetGUID;
+            manifest.ReplaceAssetPathWithAddress = replaceAssetPathWithAddress;
             manifest.OutputNameStyle = (int)buildParameters.FileNameStyle;
             manifest.BuildBundleType = buildParameters.BuildBundleType;
             manifest.BuildPipeline = buildParameters.BuildPipeline;
@@ -58,7 +59,13 @@ namespace YooAsset.Editor
 
             // 4. 处理内置资源包
             if (processBundleDepends)
+            {
+                // 注意：初始化资源清单建立引用关系
+                manifest.Initialize();
+
                 ProcessBuiltinBundleDependency(context, manifest);
+            }
+
 
             // 创建资源清单文本文件
             {
@@ -302,31 +309,37 @@ namespace YooAsset.Editor
         #region YOOASSET_LEGACY_DEPENDENCY
         private void ProcessBuiltinBundleDependency(BuildContext context, PackageManifest manifest)
         {
-            // 注意：初始化资源清单建立引用关系
-            ManifestTools.InitManifest(manifest);
-
             // 注意：如果是可编程构建管线，需要补充内置资源包
             // 注意：该步骤依赖前面的操作！
             var buildResultContext = context.TryGetContextObject<TaskBuilding_SBP.BuildResultContext>();
+
             if (buildResultContext != null)
             {
-                ProcessBuiltinBundleReference(context, manifest, buildResultContext.BuiltinShadersBundleName);
-                ProcessBuiltinBundleReference(context, manifest, buildResultContext.MonoScriptsBundleName);
+                ProcessBuiltinBundleReference(manifest, buildResultContext.BuiltinShadersBundleName);
+                ProcessBuiltinBundleReference(manifest, buildResultContext.MonoScriptsBundleName);
 
-                // 注意：检测是否开启图集模式
-                // 说明：需要记录主资源对象对图集的依赖关系！
-                if (EditorSettings.spritePackerMode != SpritePackerMode.Disabled)
+                var buildParametersContext = context.TryGetContextObject<BuildParametersContext>();
+                var buildParameters = buildParametersContext.Parameters;
+                if (buildParameters is ScriptableBuildParameters scriptableBuildParameters)
                 {
-                    var buildMapContext = context.GetContextObject<BuildMapContext>();
-                    foreach (var spriteAtlasAsset in buildMapContext.SpriteAtlasAssetList)
+                    if (scriptableBuildParameters.TrackSpriteAtlasDependencies)
                     {
-                        string spriteAtlasBundleName = spriteAtlasAsset.BundleName;
-                        ProcessBuiltinBundleReference(context, manifest, spriteAtlasBundleName);
+                        // 注意：检测是否开启图集模式
+                        // 说明：需要记录主资源对象对图集的依赖关系！
+                        if (EditorSettings.spritePackerMode != SpritePackerMode.Disabled)
+                        {
+                            var buildMapContext = context.GetContextObject<BuildMapContext>();
+                            foreach (var spriteAtlasAsset in buildMapContext.SpriteAtlasAssetList)
+                            {
+                                string spriteAtlasBundleName = spriteAtlasAsset.BundleName;
+                                ProcessBuiltinBundleReference(manifest, spriteAtlasBundleName);
+                            }
+                        }
                     }
                 }
             }
         }
-        private void ProcessBuiltinBundleReference(BuildContext context, PackageManifest manifest, string builtinBundleName)
+        private void ProcessBuiltinBundleReference(PackageManifest manifest, string builtinBundleName)
         {
             if (string.IsNullOrEmpty(builtinBundleName))
                 return;
