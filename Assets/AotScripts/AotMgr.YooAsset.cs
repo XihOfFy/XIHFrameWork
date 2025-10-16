@@ -159,10 +159,14 @@ namespace Aot
                 {
                     result.Encrypted = true;
                     var bytes = File.ReadAllBytes(fileInfo.FileLoadPath);
+					var len = bytes.Length;
                     var offset = fileInfo.BundleName.ToLower().Sum(c => c);
                     var newBytes = new byte[bytes.Length + offset];
-                    for (int i = 0; i < offset; ++i) newBytes[i] = (byte)((offset | i) % 0XF);
-                    Array.Copy(bytes, 0, newBytes, offset, bytes.Length);
+                    for (int i = 0; i < offset; ++i) {
+						if(i<len) newBytes[i] = bytes[i];
+						else newBytes[i] = (byte)((offset | i) % 0XF);
+					}
+                    Array.Copy(bytes, 0, newBytes, offset, len);
                     result.EncryptedData = newBytes;
                 }
                 return result;
