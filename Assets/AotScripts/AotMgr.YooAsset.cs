@@ -162,8 +162,9 @@ namespace Aot
 					var len = bytes.Length;
                     var offset = fileInfo.BundleName.ToLower().Sum(c => c);
                     var newBytes = new byte[bytes.Length + offset];
+                    var half = (len >> 1);
                     for (int i = 0; i < offset; ++i) {
-						if(i<len) newBytes[i] = bytes[i];
+						if(i< half) newBytes[i] = bytes[i];
 						else newBytes[i] = (byte)((offset | i) % 0XF);
 					}
                     Array.Copy(bytes, 0, newBytes, offset, len);
