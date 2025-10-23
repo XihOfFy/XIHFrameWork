@@ -227,6 +227,9 @@ public class JenkinsSupport
             //拷贝yoo的link，防裁剪
             if (!Directory.Exists("Assets/YooAssetGenerate")) Directory.CreateDirectory("Assets/YooAssetGenerate");
             File.Copy($"{srcPath}/link.xml", "Assets/YooAssetGenerate/link.xml", true);
+            //删除多余catJson
+            var catJson = $"Assets/StreamingAssets/yoo/{AotConfig.PACKAGE_NAME}/{DefaultBuildinFileSystemDefine.BuildinCatalogJsonFileName}";
+            if (File.Exists(catJson)) File.Delete(catJson);
             Debug.LogWarning($"构建成功,拷贝到目标目录:{srcPath} > {dstPath}");
         }
         else
