@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using UnityEngine;
 
@@ -6,13 +7,13 @@ namespace XiHNet
 {
     public class NetAdapter
     {
-        public Action<byte[]> OnMessageAct { get; }
-        public Action OnConnectedAct { get;}
-        public Action OnClosedAct { get;}
+        public Action<byte[]> OnMessageAct { get; set; }
+        public Action OnConnectedAct { get; set; }
+        public Action OnClosedAct { get; set; }
         private readonly NetClient netClient;
-        private readonly ICryptor cryptor;
+        private ICryptor cryptor;
         private bool closed;
-        public NetAdapter(NetworkProtocol protocol, IPEndPoint iPEnd, CryptType cryptType,byte[] key=null)
+        public NetAdapter(NetworkProtocol protocol, IPEndPoint iPEnd)
         {
             switch (protocol)
             {
@@ -32,16 +33,39 @@ namespace XiHNet
                     Debug.LogError($"当前平台不支持该类型 {protocol}");
                     break;
             }
-            cryptor = cryptType switch
-            {
-                CryptType.CryptAes => new AesCryptor(key),
-                CryptType.CryptXor => new XorCryptor(key),
-                _ => NoneCryptor.Default,
+            
+            netClient.OnConnectedAct = ()=> {
+                closed = false;
+                OnConnectedAct?.Invoke();
             };
-            netClient.OnConnectedAct = OnConnectedAct;
-            netClient.OnMessageAct = OnMessage;
+            netClient.OnMessageAct = SetCryptParam;
             netClient.OnClosedAct = Close;
             closed = true;
+        }
+        private void SetCryptParam(byte[] data)
+        {
+            netClient.OnMessageAct = OnMessage;
+            using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
+            {
+                var cryptType = (CryptType)reader.ReadByte();
+                var keyLen = reader.ReadByte();
+                var key = reader.ReadBytes(keyLen);
+                cryptor = cryptType switch
+                {
+                    CryptType.CryptAes => new AesCryptor(key),
+                    CryptType.CryptXor => new XorCryptor(key),
+                    _ => NoneCryptor.Default,
+                };
+                //Debug.Log($"cryptType:{cryptType} keyLen:{keyLen} {BitConverter.ToString(key, 0, key.Length)}");
+                int rem = data.Length - keyLen - 2;
+                if (rem > 0)
+                {
+                    byte[] remain = new byte[rem];
+                    Buffer.BlockCopy(data, keyLen + 2, remain, 0, rem);
+                    OnMessage(remain);
+                }
+            }
         }
         public void Connect()
         {
