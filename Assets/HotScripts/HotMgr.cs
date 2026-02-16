@@ -44,9 +44,9 @@ namespace Hot
 
 
 #if UNITY_WX
-            if (WeChatWASM.WxTool.CanUseByVersion("2.26.2"))
+            if (Hot.WxTool.CanUseByVersion("2.26.2"))
             {
-                WeChatWASM.WX.ReportScene(new ReportSceneOption() { sceneId = 7 });
+                WeChatWASM.WX.ReportScene(new WeChatWASM.ReportSceneOption() { sceneId = 7 });
             }
             else
             {

@@ -47,6 +47,12 @@
         "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
       }
     },
+    "com.tuyoogame.yooasset.runtimeext": {
+      "version": "file:YooAsset.RuntimeExt",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.tuyoogame.yooasset.unitask": {
       "version": "file:UniTask.YooAsset",
       "depth": 0,

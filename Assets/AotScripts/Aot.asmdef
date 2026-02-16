@@ -9,7 +9,8 @@
         "Unity.TextMeshPro",
         "Wx",
         "YooAsset.RuntimeExtension",
-        "Obfuz.Runtime"
+        "Obfuz.Runtime",
+        "YooAsset.MiniGame"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
