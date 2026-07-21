@@ -57,12 +57,9 @@ namespace Ad
             rewardedVideoAd = TTSDK.TT.CreateRewardedVideoAd(TbApp.AppCfg.RewardAd1, (isComplete, code) => {
                 UnityEngine.Debug.Log($"关闭广告: {isComplete}");
                 OnRewardAsync(isComplete);
-                Aot.AOTToufangSDK.ReportAd(isComplete);
-                //TrackingReport.SpecEventLogReq(isComplete?"adv_success":"adv_exit");
             }, (code, err) => {
                 UnityEngine.Debug.Log($"广告出错: {code} {err}");
                 OnRewardAsync(false);
-                //TrackingReport.SpecEventLogReq("adv_fail");
 
                 PrepareRewardAd();
             });

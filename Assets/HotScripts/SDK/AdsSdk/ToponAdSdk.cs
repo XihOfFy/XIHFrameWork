@@ -83,7 +83,6 @@ namespace Ad
         {
             onLoad += res =>
             {
-                Aot.AOTToufangSDK.ReportAd(res);
             };
             ToponSDKImp.getInstance().LoadVideo(onLoad,0,DataSave.Instance.userId, TbApp.AppCfg.RewardAd1);
         }

@@ -392,7 +392,7 @@ public class JenkinsSupport
         var bundlePathIdentifier = cdn.Substring(cdn.LastIndexOf('/') + 1);
         cdn = cdn.Substring(0, cdn.LastIndexOf('/'));//+ "/" + BuildTargetGroup.WebGL.ToString();
         config.ProjectConf.CDN = cdn;
-        Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{nameof(XIHAppSetting)}文件设置CDN：{cdn}, 后面最后为固定缓存文件夹名字：{bundlePathIdentifier}");
+        Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{nameof(FrontConfig)}文件设置CDN：{cdn}, 后面最后为固定缓存文件夹名字：{bundlePathIdentifier}");
 
         //使用包内加载，且不压缩首包
         config.ProjectConf.assetLoadType = 1;
@@ -415,7 +415,7 @@ public class JenkinsSupport
         //hash.Add("WebGL");
         config.ProjectConf.bundlePathIdentifier = string.Join(";", hash);
         config.CompileOptions.enableIOSPerformancePlus = true;
-		config.ProjectConf.MemorySize = 128;
+        config.ProjectConf.MemorySize = 128;
 
         /* var prefiles = GetPreloadFiles(cfg.resUrl);//不支持，wx是streamingasset加载和预判断，所以只能手动设置
          config.ProjectConf.preloadFiles = string.Join(';', prefiles);*/

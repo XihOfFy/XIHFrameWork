@@ -4,15 +4,13 @@ using Hot;
 using System;
 using Tmpl;
 using UnityEngine;
-#if UNITY_WX
 using WeChatWASM;
-#endif
 
 namespace Ad
 {
     public class WxAdAdapter : IAdAdapter
     {
-        public void ShowRewardAdv(Action<bool> onLoad, VideoSceneEnum comment, int pLevel=0, int pProcess = 0)
+        public void ShowRewardAdv(Action<bool> onLoad, VideoSceneEnum comment, int pLevel = 0, int pProcess = 0)
         {
             LoadVideo(onLoad, TbApp.AppCfg.RewardAd1);
         }
@@ -38,9 +36,10 @@ namespace Ad
             {
                 adUnitId = TbApp.AppCfg.RewardAd1
             });
-            ad.OnLoad(rsp => {
-               Debug.LogWarning("预加载一个广告");
-               ad.OffLoad(null);
+            ad.OnLoad(rsp =>
+            {
+                Debug.LogWarning("预加载一个广告");
+                ad.OffLoad(null);
             });
             //ad.Load();//预加载一个,CreateRewardedVideoAd自动会预加载
 
@@ -70,48 +69,56 @@ namespace Ad
         }
         public async void LoadVideo(Action<bool> onLoad, string adUnitId)
         {
-            if (string.IsNullOrEmpty(adUnitId)) {
+            if (string.IsNullOrEmpty(adUnitId))
+            {
                 onLoad(true);
                 return;
             }
             UnityEngine.Debug.Log($"加载广告 {adUnitId}");
             var tryLoadCount = 0;
-#if UNITY_WX
             var ad = WX.CreateRewardedVideoAd(new WXCreateRewardedVideoAdParam()
             {
                 adUnitId = adUnitId
             });
             try
             {
-                ad.OnClose(p => {
+                ad.OnClose(p =>
+                {
                     UnityEngine.Debug.Log($"关闭广告 {p.isEnded}");
                     OnRewardAsync(onLoad, p.isEnded);
-                    Aot.AOTToufangSDK.ReportAd(p.isEnded);
                 });
                 //报错都会走这里，所以其他失败只需打印错误日志
-                ad.OnError(rsp => {
+                ad.OnError(rsp =>
+                {
                     UnityEngine.Debug.LogError($"加载广告{tryLoadCount}次失败 OnError:{rsp.callbackId}>{rsp.errCode}:{rsp.errMsg} ，将预加载下一个广告");
                     ReLoad();
                 });
-                ad.Show(s => {
+                ad.Show(s =>
+                {
                     UnityEngine.Debug.Log("展示广告");
-                }, f => {
+                }, f =>
+                {
                     UnityEngine.Debug.LogError($"加载广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
                     ReLoad();
                 });
-                void ReLoad() {
+                void ReLoad()
+                {
                     if (tryLoadCount < maxTryLoadCount)
                     {
                         tryLoadCount += 1;
-                        ad.Load(s2 => {
+                        ad.Load(s2 =>
+                        {
                             UnityEngine.Debug.Log($"加载广告 {tryLoadCount} 次失败后重新 load 广告 成功");
-                            ad.Show(s3 => {
+                            ad.Show(s3 =>
+                            {
                                 UnityEngine.Debug.Log($"重新展示广告 Show 成功 ");
-                            }, f3 => {
+                            }, f3 =>
+                            {
                                 UnityEngine.Debug.LogError($"重新尝试 {tryLoadCount}展示广告失败!!!");
                                 ReLoad();
                             });
-                        }, f2 => {
+                        }, f2 =>
+                        {
                             UnityEngine.Debug.LogError($"加载广告 {tryLoadCount}次 失败后重新 load 广告 失败");
                         });
                     }
@@ -126,7 +133,6 @@ namespace Ad
                 OnRewardAsync(onLoad, false);
                 UnityEngine.Debug.LogException(e);
             }
-#endif
         }
 
 
@@ -134,24 +140,27 @@ namespace Ad
         {
             UnityEngine.Debug.Log($"加载插屏广告 {adUnitId}");
             var tryLoadCount = maxTryLoadCount - 1;//只重新测试一次
-#if UNITY_WX
             var ad = WX.CreateInterstitialAd(new WXCreateInterstitialAdParam()
             {
                 adUnitId = adUnitId
             });
             try
             {
-                ad.OnClose(()=> {
+                ad.OnClose(() =>
+                {
                     UnityEngine.Debug.Log($"关闭插屏广告 ");
                 });
 
-                ad.OnError(rsp => {
+                ad.OnError(rsp =>
+                {
                     UnityEngine.Debug.LogError($"加载插屏广告失败 OnError:{rsp.callbackId}>{rsp.errCode}:{rsp.errMsg} ，加载下一个广告");
                     ReLoad();
                 });
-                ad.Show(s => {
+                ad.Show(s =>
+                {
                     UnityEngine.Debug.Log("展示插屏广告");
-                }, f => {
+                }, f =>
+                {
                     UnityEngine.Debug.LogError($"加载插屏广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
                     ReLoad();
                 });
@@ -160,11 +169,14 @@ namespace Ad
                     if (tryLoadCount < maxTryLoadCount)
                     {
                         tryLoadCount += 1;
-                        ad.OnLoad(rsp => {
+                        ad.OnLoad(rsp =>
+                        {
                             UnityEngine.Debug.Log("加载插屏广告...");
-                            ad.Show(s => {
+                            ad.Show(s =>
+                            {
                                 UnityEngine.Debug.Log("展示插屏广告");
-                            }, f => {
+                            }, f =>
+                            {
                                 UnityEngine.Debug.LogError($"加载插屏广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
                                 ReLoad();
                             });
@@ -176,7 +188,6 @@ namespace Ad
             {
                 UnityEngine.Debug.LogException(e);
             }
-#endif
         }
         void IAdAdapter.RemoveCallBack()
         {

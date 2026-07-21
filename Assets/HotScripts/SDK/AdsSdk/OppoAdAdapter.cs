@@ -98,7 +98,6 @@ namespace Ad
             var temp = OnReward;
             OnReward = null;
             temp?.Invoke(isGet);
-            Aot.AOTToufangSDK.ReportAd(isGet);
         }
 
         /// <summary>
