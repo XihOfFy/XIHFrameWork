@@ -21,7 +21,7 @@ namespace Aot.XiHUtil
 
 #if UNITY_WX_WITHOUT_EDITOR
         static WXFileSystemManager fileSystemManager;
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
         static TTSDK.TTFileSystemManager fileSystemManager;
 #elif UNITY_KS
         static KSWASM.KSFileSystemManager fileSystemManager;
@@ -40,10 +40,10 @@ namespace Aot.XiHUtil
             RootPath = KSWASM.KS.USER_DATA_PATH;
 #elif UNITY_HW_QG
             RootPath = HWWASM.QG.Env.UserDataPath;
-//#elif UNITY_DY
-//https://developer.open-douyin.com/docs/resource/zh-CN/mini-game/develop/guide/game-engine/rd-to-SCgame/c-api/file/file-system-manager
-//目前 Native 方案下效果与 File.Exists || Directory.Exists 一致，路径参数不能使用 scfile 协议头，请使用 Application.persistentDataPath 等原生接口。
-//            RootPath = tt.getEnvInfoSync.USER_DATA_PATH;
+#elif (UNITY_DY || UNITY_TT)
+            //https://developer.open-douyin.com/docs/resource/zh-CN/mini-game/develop/guide/game-engine/rd-to-SCgame/c-api/file/file-system-manager
+            //目前 Native 方案下效果与 File.Exists || Directory.Exists 一致，路径参数不能使用 scfile 协议头，请使用 Application.persistentDataPath 等原生接口。
+            RootPath = TTSDK.TTFileSystemManager.USER_DATA_PATH;
 #else
             RootPath = Application.persistentDataPath;
 #endif
@@ -58,7 +58,7 @@ namespace Aot.XiHUtil
 #elif UNITY_HW_QG
             fileSystemManager = HWWASM.QG.GetFileSystemManager();
             if (!DirExist(SavePath)) fileSystemManager.MkdirSync(SavePath, true);//js error dont need catch
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             fileSystemManager = TTSDK.TT.GetFileSystemManager();
             if (!DirExist(SavePath)) fileSystemManager.MkdirSync(SavePath, true);
 #elif UNITY_KS
@@ -80,7 +80,7 @@ namespace Aot.XiHUtil
                 filePath = fullPath,
                 data = content
             });
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             fileSystemManager.WriteFileSync(fullPath, content);
 #elif UNITY_KS
             Debug.Log($"写入,path{fullPath}：content:{content}");
@@ -100,7 +100,7 @@ namespace Aot.XiHUtil
                 filePath = fullPath,
                 data = content
             });
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             fileSystemManager.WriteFileSync(fullPath, content);
 #elif UNITY_KS
             fileSystemManager.WriteFileSync(fullPath, content);
@@ -114,7 +114,7 @@ namespace Aot.XiHUtil
             if (!FileExist(fullPath)) return "";
 #if UNITY_WX_WITHOUT_EDITOR
             return fileSystemManager.ReadFileSync(fullPath,"utf8");
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             return fileSystemManager.ReadFileSync(fullPath, "utf8");
 #elif UNITY_KS
             return fileSystemManager.ReadFileSync(fullPath, "utf8");
@@ -134,7 +134,7 @@ namespace Aot.XiHUtil
             if (!FileExist(fullPath)) return null;
 #if UNITY_WX_WITHOUT_EDITOR
             return fileSystemManager.ReadFileSync(fullPath);
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             return fileSystemManager.ReadFileSync(fullPath);
 #elif UNITY_KS
             return fileSystemManager.ReadFileSync(fullPath);
@@ -154,7 +154,7 @@ namespace Aot.XiHUtil
             if (!FileExist(fullPath)) return;
 #if UNITY_WX_WITHOUT_EDITOR
             fileSystemManager.UnlinkSync(fullPath);
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             fileSystemManager.UnlinkSync(fullPath);
 #elif UNITY_KS
             fileSystemManager.UnlinkSync(fullPath);
@@ -164,11 +164,11 @@ namespace Aot.XiHUtil
             File.Delete(fullPath);
 #endif
         }
-        static bool FileExist(string fullPath)
+        public static bool FileExist(string fullPath)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             var exist = "access:ok".Equals(fileSystemManager.AccessSync(fullPath));
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             var exist = fileSystemManager.AccessSync(fullPath);
 #elif UNITY_KS
             var exist = "access:ok".Equals(fileSystemManager.AccessSync(fullPath));
@@ -180,12 +180,12 @@ namespace Aot.XiHUtil
 #endif
             return exist;
         }
-        static bool DirExist(string fullPath)
+        public static bool DirExist(string fullPath)
         {
 #if UNITY_WX_WITHOUT_EDITOR
             var exist = "access:ok".Equals(fileSystemManager.AccessSync(fullPath));
             return exist;
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT)
             var exist = fileSystemManager.AccessSync(fullPath);
             return exist;
 #else

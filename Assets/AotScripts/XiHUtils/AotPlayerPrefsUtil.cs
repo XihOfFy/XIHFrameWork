@@ -19,7 +19,7 @@ namespace Aot.XiHUtil
             WX.StorageSetStringSync(key, val);
 #elif UNITY_HW_QG
             HWWASM.QG.LocalStorage.SetItem(key, val);
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             TTSDK.TT.PlayerPrefs.SetString(key, val);
             TTSDK.TT.PlayerPrefs.Save();
 #elif UNITY_KS
@@ -40,7 +40,7 @@ namespace Aot.XiHUtil
             WX.StorageSetIntSync(key, val);
 #elif UNITY_HW_QG
             HWWASM.QG.LocalStorage.SetItem(key, val.ToString());
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             TTSDK.TT.PlayerPrefs.SetInt(key, val);
             TTSDK.TT.PlayerPrefs.Save();
 #elif UNITY_KS
@@ -56,7 +56,7 @@ namespace Aot.XiHUtil
             WX.StorageSetFloatSync(key, val);
 #elif UNITY_HW_QG
             HWWASM.QG.LocalStorage.SetItem(key, val.ToString());
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             TTSDK.TT.PlayerPrefs.SetFloat(key, val);
             TTSDK.TT.PlayerPrefs.Save();
 #elif UNITY_KS
@@ -72,7 +72,7 @@ namespace Aot.XiHUtil
             return WX.StorageGetStringSync(key, val);
 #elif UNITY_HW_QG
             return HWWASM.QG.LocalStorage.GetItem(key);
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             return TTSDK.TT.PlayerPrefs.GetString(key, val);
 #elif UNITY_KS
             return KSWASM.KS.StorageGetStringSync(key,val);
@@ -91,7 +91,7 @@ namespace Aot.XiHUtil
 #elif UNITY_HW_QG
             int.TryParse(HWWASM.QG.LocalStorage.GetItem(key),out var res);
             return res;
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             return TTSDK.TT.PlayerPrefs.GetInt(key, val);
 #elif UNITY_KS
             return KSWASM.KS.StorageGetIntSync(key, val);
@@ -106,7 +106,7 @@ namespace Aot.XiHUtil
 #elif UNITY_HW_QG
             float.TryParse(HWWASM.QG.LocalStorage.GetItem(key), out var res);
             return res;
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             return TTSDK.TT.PlayerPrefs.GetFloat(key, val);
 #elif UNITY_KS
             return KSWASM.KS.StorageGetFloatSync(key, val);
@@ -120,7 +120,7 @@ namespace Aot.XiHUtil
             WX.StorageDeleteKeySync(key);
 #elif UNITY_HW_QG
             HWWASM.QG.LocalStorage.RemoveItem(key);
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             TTSDK.TT.PlayerPrefs.DeleteKey(key);
 #elif UNITY_KS
             KSWASM.KS.StorageDeleteKeySync(key);
@@ -135,7 +135,7 @@ namespace Aot.XiHUtil
             WX.StorageDeleteAllSync();
 #elif UNITY_HW_QG
             HWWASM.QG.LocalStorage.Clear();
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             TTSDK.TT.PlayerPrefs.DeleteAll();
 #elif UNITY_KS
             KSWASM.KS.StorageDeleteAllSync();
@@ -153,7 +153,7 @@ namespace Aot.XiHUtil
             var res = HWWASM.QG.LocalStorage.GetItem(key);
             Debug.LogError("华为不存在key的判断");
             return !string.IsNullOrEmpty(res);
-#elif UNITY_DY
+#elif (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
             return TTSDK.TT.PlayerPrefs.HasKey(key);
 #elif UNITY_KS
             return KSWASM.KS.StorageHasKeySync(key);
