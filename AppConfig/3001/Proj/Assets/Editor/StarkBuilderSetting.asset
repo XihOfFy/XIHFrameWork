@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1677285531, guid: f8dce5ff21290304d98ba9e31b2ed622, type: 3}
+  m_Name: StarkBuilderSetting
+  m_EditorClassIdentifier: 
+  tag: 0
+  wasmResourceUrl: http://
+  OutputDir: XIHWebServerRes/DYWebGL
+  useByteAudioAPI: 0
+  wasmMemorySize: 128
+  isWebGL2: 1
+  needCompress: 1
+  symbolMode: 1
+  profiling: 0
+  clearStreamingAssets: 0
+  buildOptions: 0
+  wasmSubFramework: 0
+  hideAfterCallmain: 1
+  disableLoadingPage: 0
+  useDataCDNAsStreamingAssetsUrl: 0
+  optimizeWebGLMemoryInBackground: 1
+  assetBundleFSEnabled: 1
+  assetBundleBufferCapacity: 128
+  assetBundleBufferTTL: 5
+  preloadFiles: http://192.168.2.4:5000/WebGL/DefaultPackage_2026-04-24-1803.bytes;http://192.168.2.4:5000/WebGL/DefaultPackage_2026-04-24-1803.hash;http://192.168.2.4:5000/WebGL/firstgame_a972ffe887f6699854366b7bf0c2315c.bundle;http://192.168.2.4:5000/WebGL/poolobj_c53a855c75edc1bef9255bbd9369645c.bundle;http://192.168.2.4:5000/WebGL/unityshaders_a5ba687cecc4a4bada28643f81bb4d32.bundle;http://192.168.2.4:5000/WebGL/assets_res_hotscene_game_936c3d287456ec167e84da7b20cdcfba.bundle
+  CDN: http://192.168.2.4:5000
+  preloadDataListUrl: 
+  dataLoadType: 1
+  dataFileSubPrefix: 
+  iOSDevicePixelRatio: 0
+  urlCacheList:
+  - http://192.168.2.4:5000
+  dontCacheFileNames:
+  - version
+  isDevBuild: 0
+  stripEngineCode: 0
+  appHost: 2
+  compressMethod: 1
+  runtimeEnv: 0
+  framework: 1
+  architecture: 2
+  miniApkVersion: 0
+  scriptingBackend: 0
+  NativeWhiteListRegex:
+  - com.bytedance.starksdk
+  - _Backup~
+  _appId: tt4f3d3980d00c4f1307
+  version: 
+  autoVersion: 0
+  _webglPackagePath: C:\Work\Tyre\XIHWebServerRes\DYWebGL\tt-minigame
+  _orientation: 0
+  _iOSPerformancePlus: 1
+  _menuButtonStyle: 0
+  _publishType: 2
+  publishDesc: 
+  idePath: 
+  isConvert: 0
+  isOldBuildFormat: 0

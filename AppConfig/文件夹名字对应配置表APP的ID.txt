@@ -1,0 +1,25 @@
+## 抖音
+
+### - Android Native 方案
+
+#### > 指色 - 这就是消除
+
+- AppID: tta0eed6533fdea14307
+
+- 配置表APP ID: 1001
+
+- 打包前执行脚本`AppConfig\Seeg\Android_Dy.bat`
+  
+  > 使用AdConfig\Base和AdConfig\NoSDK的Android原生配置
+
+### - iOS WebGL方案
+
+#### > 指色 - 这就是消除
+
+- AppID: tta0eed6533fdea14307
+
+- 配置表APP ID: 1001
+
+- 打包前执行脚本`AppConfig\Seeg\Webgl_Dy.bat`
+
+

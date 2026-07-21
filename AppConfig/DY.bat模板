@@ -1,0 +1,32 @@
+@title 打包Bat执行
+@echo off
+
+@set SRC_DIR=%CD%\..\..\
+
+@echo %SRC_DIR%
+
+
+@echo 替换原先文件夹
+xcopy /E /I /C /Y .\Proj %SRC_DIR%
+xcopy /E /I /C /Y ..\SDK_DY %SRC_DIR%
+
+@echo 删除AnyThinkAds
+rd /S /Q %SRC_DIR%\Assets\AnyThinkAds
+del /Q %SRC_DIR%\Assets\AnyThinkAds.meta
+rd /S /Q %SRC_DIR%\Assets\AnyThinkPlugin
+del /Q %SRC_DIR%\Assets\AnyThinkPlugin.meta
+
+@echo 删除 WX-WASM-SDK-V2
+rd /S /Q %SRC_DIR%\Assets\WX-WASM-SDK-V2
+del /Q %SRC_DIR%\Assets\WX-WASM-SDK-V2.meta
+@echo 删除 WebGLTemplates
+rd /S /Q %SRC_DIR%\Assets\WebGLTemplates
+del /Q %SRC_DIR%\Assets\WebGLTemplates.meta
+
+@echo 删除 XiHNet
+rd /S /Q %SRC_DIR%\Assets\HotScripts\XiHNet
+del /Q %SRC_DIR%\Assets\HotScripts\XiHNet.meta
+
+@echo 处理完成!
+pause
+@echo on
