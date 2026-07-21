@@ -7,6 +7,8 @@ namespace Aot
     //配置前端地址，通过这个地址获取后续YooAsset资源加载的一些配置信息
     public class XIHFrontSetting : ScriptableObject
     {
+        public int appId;
+        public SystemLanguage language;
         public string front;
     }
 }

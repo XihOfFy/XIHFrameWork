@@ -71,10 +71,16 @@ Assets/Res/FairyRes/
 Assets/Res/Raw/Aot/
 Assets/Res/Raw/Aot~/
 Assets/Res/Raw/Hot/
+Assets/Res/FairyRes/*
 Assets/Res/Tmpl/
+Assets/BuildReports/*
+Assets/BuildReports.meta
 Assets/YooAssetGenerate/
 Assets/YooAssetGenerate.meta
+Assets/Editor/YooSetting/ScannerOutput/*
 Assets/StreamingAssets/*
 Assets/StreamingAssets.meta
 TextToolDatas/
 SaveDir/
+
+Assets/Resources/Assets/Res/Tmpl/*

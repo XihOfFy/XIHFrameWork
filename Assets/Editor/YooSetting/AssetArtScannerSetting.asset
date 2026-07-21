@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84df5e62e3f1b6746a1263e076b003e1, type: 3}
+  m_Name: AssetArtScannerSetting
+  m_EditorClassIdentifier: 
+  Scanners:
+  - ScannerGUID: 344b456e-105f-4e1b-828b-b9a74ab88208
+    ScannerName: TextureNormal_Fgui
+    ScannerDesc: TextureNormal_Fgui
+    ScannerSchema: 00b9e530e0d4fee4aac997d2642ce817
+    SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
+    Collectors:
+    - CollectPath: Assets/Res/FairyRes
+    WhiteList: []
+  - ScannerGUID: d73803d3-c178-4a08-a96a-8159edd18246
+    ScannerName: TextureNormal_Game
+    ScannerDesc: TextureNormal_Game
+    ScannerSchema: a59b6778a87308648b1ace2e256c856f
+    SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
+    Collectors:
+    - CollectPath: 
+    WhiteList: []
+  - ScannerGUID: b26e55a7-96f0-445c-86ce-03a76dacf523
+    ScannerName: TextureHalf
+    ScannerDesc: TextureHalf
+    ScannerSchema: 3acfa01c8cf255347a52a36b7398b6aa
+    SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
+    Collectors:
+    - CollectPath: Assets/AotRes
+    WhiteList: []
+  - ScannerGUID: bed0debe-076d-4c31-93ef-a8056ff1e6ec
+    ScannerName: SpriteAtlasHalf
+    ScannerDesc: SpriteAtlasHalf
+    ScannerSchema: 3ef8be4cdc4e1e64db16d2650d638edf
+    SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
+    Collectors:
+    - CollectPath: 
+    WhiteList: []
+  - ScannerGUID: cdbf96f4-980b-4104-bfa0-8a2b6a496842
+    ScannerName: Audio
+    ScannerDesc: Audio
+    ScannerSchema: 17e083b4064b9a04c9364bee81c4df7e
+    SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
+    Collectors:
+    - CollectPath: Assets/Res/Audio
+    WhiteList: []

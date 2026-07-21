@@ -1,0 +1,23 @@
+{
+    "name": "YooSetting.Editor",
+    "rootNamespace": "",
+    "references": [
+        "YooAsset",
+        "YooAsset.Editor",
+        "Aot",
+        "Hot"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "USE_YOO"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

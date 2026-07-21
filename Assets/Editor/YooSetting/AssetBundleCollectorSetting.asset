@@ -12,48 +12,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
-  ShowPackageView: 0
+  ShowPackageView: 1
   ShowEditorAlias: 0
   UniqueBundleName: 0
   Packages:
   - PackageName: DefaultPackage
     PackageDesc: 
     EnableAddressable: 0
-    SupportExtensionless: 0
     LocationToLower: 0
     IncludeAssetGUID: 0
     AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
-    - GroupName: Aot2Hot
-      GroupDesc: "Aot2Hot\u7684\u5168\u90E8\u8D44\u6E90"
-      AssetTags: Aot2Hot
+    - GroupName: Font
+      GroupDesc: Font
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/Aot2Hot
-        CollectorGUID: a23ead36b4dbbc84d8c34880c17c58c3
+        CollectorGUID: 84a188371d3b84a47870eca2f6a21954
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackTopDirectory
+        PackRuleName: PackFirstAB
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: RawFile
-      GroupDesc: "\u539F\u59CB\u6587\u4EF6"
-      AssetTags: RawFile
+    - GroupName: Tmpl
+      GroupDesc: Tmpl
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Raw
-        CollectorGUID: 62df3bae15c0973468f192f758df2973
+      - CollectPath: Assets/Res/Tmpl
+        CollectorGUID: 5a99561834a02bd46acf0b1cb771fd59
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackTopDirectory
+        PackRuleName: PackFirstAB
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: FairyRes
+      GroupDesc: FairyRes
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/FairyRes
+        CollectorGUID: 
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
     - GroupName: HotScene
-      GroupDesc: "\u573A\u666F"
-      AssetTags: HotScene
+      GroupDesc: HotScene
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/HotScene
@@ -64,39 +76,13 @@ MonoBehaviour:
         FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
-    - GroupName: Fairy
-      GroupDesc: FairyUI
-      AssetTags: Fairy
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Res/FairyRes
-        CollectorGUID: 3a37eba7c78da924797d94e5a64adf51
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackTopDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-    - GroupName: Tmpl
-      GroupDesc: "\u914D\u7F6E"
-      AssetTags: Tmpl
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Res/Tmpl
-        CollectorGUID: 8e2be00b96fb9d5459fda1f1a21ae201
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: Audio
-      GroupDesc: "\u97F3\u9891"
-      AssetTags: Audio
+      GroupDesc: Audio
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/Audio/Music
-        CollectorGUID: 24e2451e76452ff4fa8326218ebb21a2
+        CollectorGUID: b8ea49defc057234ca6e4f3c6fbebd08
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackSeparately
@@ -104,23 +90,99 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
       - CollectPath: Assets/Res/Audio/Sound
-        CollectorGUID: f01e57e308cb64f43bd53c3b77aeb5a8
+        CollectorGUID: c8d4608e187c5b546b404ea7d0ea64d7
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: ShaderVariants
-      GroupDesc: "\u53D8\u4F53"
-      AssetTags: ShaderVariants
+    - GroupName: Effect
+      GroupDesc: Effect
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/ShaderVariants
-        CollectorGUID: bfe5460834bc67845b3f8022757db3ff
+      - CollectPath: Assets/Res/Effect
+        CollectorGUID: a72f047357291aa4fbeb2141127aecac
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
+        FilterRuleName: CollectUnPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Effect
+        CollectorGUID: a72f047357291aa4fbeb2141127aecac
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Model
+      GroupDesc: Model
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Models
+        CollectorGUID: 22fdb01723935094f867a3f1a8bf4087
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
+        FilterRuleName: CollectUnPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Models
+        CollectorGUID: 22fdb01723935094f867a3f1a8bf4087
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Prefab
+      GroupDesc: Prefab
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Prefabs
+        CollectorGUID: 744973fce3130bb458edc43a5965bf48
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Prefabs
+        CollectorGUID: 744973fce3130bb458edc43a5965bf48
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
+        FilterRuleName: CollectUnPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Tiktok
+      GroupDesc: Tiktok
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/TikTok
+        CollectorGUID: 7687bfe0c125ac8478f9bb49ab4ff06e
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Shader
+      GroupDesc: Shader
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Shader
+        CollectorGUID: 9169f36bc4cb97640ac8fe4673c87130
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstOrSubLayer
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
