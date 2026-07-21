@@ -23,7 +23,7 @@ namespace XiHUI
     {
         public State State { get; private set; }
 
-        public UIParam OpenParams { get; private set; }
+        public UIParamCfg OpenParams { get; private set; }
 
         public string dialogName { get; protected set; }
 
@@ -48,7 +48,7 @@ namespace XiHUI
         {
         }
 
-        internal void SetOpenParams(UIParam openParams)
+        internal void SetOpenParams(UIParamCfg openParams)
         {
             OpenParams = openParams;
             dialogName = OpenParams.DialogName;
@@ -69,7 +69,7 @@ namespace XiHUI
                 _children.Add(wrap);
         }
 
-        internal void Open(GComponent obj, bool isFull, bool isBlur,bool useBatch)
+        internal void Open(GComponent obj, bool isFull, bool isBlur, bool useBatch)
         {
             Content = obj;
             IsFullScreen = isFull;
@@ -79,7 +79,7 @@ namespace XiHUI
                 Content.name = dialogName;
                 Content.fairyBatching = useBatch;
 #if UNITY_EDITOR
-                if(useBatch) Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
+                if (useBatch) Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
 #endif
             }
 

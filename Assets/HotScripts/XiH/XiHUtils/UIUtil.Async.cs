@@ -6,7 +6,7 @@ namespace XiHUtil
 {
     public static partial class UIUtil
     {
-        async static UniTask<UIDialog> OpenDialogAsync(UIParam param)
+        async static UniTask<UIDialog> OpenDialogAsync(UIParamCfg param)
         {
             return await UIDialogManager.Instance.OpenAsync(param);
         }
@@ -21,8 +21,9 @@ namespace XiHUtil
             (await OpenDialogAsync<SceneChangeDialog>()).Show(path).Forget();
         }*/
 
-        public static UniTask GetDependencyUIPackage(string packageName, UIDialog reference) {
-            return UIDialogManager.Instance.GetDependenceUIPackageAsync(packageName,reference);
+        public static UniTask GetDependencyUIPackage(string packageName, UIDialog reference)
+        {
+            return UIDialogManager.Instance.GetDependenceUIPackageAsync(packageName, reference);
         }
     }
 }

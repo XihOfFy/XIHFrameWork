@@ -14,7 +14,7 @@ namespace XiHUI
     /// </summary>
     public partial class UIDialogManager
     {
-        public async UniTask<UIDialog> OpenAsync(UIParam param)
+        public async UniTask<UIDialog> OpenAsync(UIParamCfg param)
         {
             if (!_dialogType.TryGetValue(param.DialogName, out var type))
                 return null;
@@ -24,13 +24,14 @@ namespace XiHUI
 
             var dialog = stack.Get(param.DialogName);
             if (dialog != null && dialog.State == State.Loading)
-            { 
-                await UniTask.WaitUntil(()=>dialog.State != State.Loading);
+            {
+                await UniTask.WaitUntil(() => dialog.State != State.Loading);
                 if (dialog.State == State.Close)
                 {
                     dialog = null;
                 }
-                else {
+                else
+                {
                     return dialog;
                 }
             }
@@ -49,9 +50,10 @@ namespace XiHUI
             }
         }
 
-        private async UniTask<UIDialog> CreateDialogAsync(UIDialog dialog, UIStack stack, UIParam param)
+        private async UniTask<UIDialog> CreateDialogAsync(UIDialog dialog, UIStack stack, UIParamCfg param)
         {
-            if (param.DependencyPackages.Count > 0) {
+            if (param.DependencyPackages.Count > 0)
+            {
                 var tks = new List<UniTask>();
                 foreach (var dependency in param.DependencyPackages)
                 {
@@ -69,7 +71,7 @@ namespace XiHUI
             }
 
             UIControlBinding.BindFields(dialog, compent);
-            dialog.Open(compent, param.IsFull, param.IsBlur,param.UseBatch);
+            dialog.Open(compent, param.IsFull, param.IsBlur, param.UseBatch);
             stack.Push(dialog);
             dialog.Open();
 
@@ -119,10 +121,10 @@ namespace XiHUI
             await handle.ToUniTask();
             _handles.Add(handle);
             //var uniHandles = new List<UniTask>(2);
-            var pkg = UIPackage.AddPackage((handle.GetAsset<TextAsset>()).bytes, string.Empty,async (name, extension, type, item) =>
+            var pkg = UIPackage.AddPackage((handle.GetAsset<TextAsset>()).bytes, string.Empty, async (name, extension, type, item) =>
             {
                 string path = locationPreffix + "_" + name + extension;
-                var subHandle = AssetLoadUtil.LoadAssetAsync(path,type);
+                var subHandle = AssetLoadUtil.LoadAssetAsync(path, type);
                 var uniTask = subHandle.ToUniTask();
                 //uniHandles.Add(uniTask);
                 _handles.Add(subHandle);
