@@ -12,16 +12,18 @@ using YooAsset;
 #endif
 namespace Aot.XiHUtil
 {
-    public class AssetRef {
+    public class AssetRef
+    {
         public int refCount;
         float lastuseTime;
-        public bool CanRelease(float curTime) => refCount==0 && curTime - lastuseTime > AssetLoadUtil.RELEASE_TIME;
+        public bool CanRelease(float curTime) => refCount == 0 && curTime - lastuseTime > AssetLoadUtil.RELEASE_TIME;
         public void Release()
         {
             refCount -= 1;
             lastuseTime = Time.realtimeSinceStartup;
         }
-        public AssetRef Retain() {
+        public AssetRef Retain()
+        {
             refCount += 1;
             return this;
         }
@@ -29,7 +31,8 @@ namespace Aot.XiHUtil
         public AssetHandle assetHandle;
         public bool IsDone => assetHandle.IsDone;
         public bool IsValid => assetHandle.IsValid;
-        public AssetRef(AssetHandle assetHandle) {
+        public AssetRef(AssetHandle assetHandle)
+        {
             this.assetHandle = assetHandle;
         }
         public T GetAsset<T>() where T : Object
@@ -40,47 +43,6 @@ namespace Aot.XiHUtil
         {
             return assetHandle.ToUniTask(cancellationToken: cancellationToken);
         }
-
-        /*若要断线重连，可以使用这个方式
-         * 若之前已经package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);那么可能内部DCFSLoadAssetBundleOperation会无限重连处理（边玩边下下载器引用计数没有Release），所以这里永远不会报错404，也就是没必要try，等网络恢复它将自动完成
-         * public async UniTask ToUniTask(CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                //这里可能因为yoo网络错误导致失败，所以try下做后续处理，若使用了后台下载，这里可能会无限等待，因为后台下载会无限次请求直到完成
-                await assetHandle.ToUniTask(cancellationToken: cancellationToken);
-            }
-            catch
-            {
-                if (assetHandle.LastError.StartsWith("HTTP"))//yoo 网络错误是  Error = HTTP/1.1 404 Not Found
-                {
-                    await ToUniTask(int.MaxValue);
-                }
-                else
-                {
-                    await ToUniTask(1);
-                }
-            }
-        }
-        async UniTask ToUniTask(int leftTimes)
-        {
-            if (leftTimes < 0) return;
-            await UniTask.Yield();
-            var info = assetHandle.GetAssetInfo();
-            Debug.LogError($"加载{info.AssetPath}错误，剩余尝试{leftTimes}次  {assetHandle.LastError}");//yoo 网络错误是  Error = HTTP/1.1 404 Not Found
-            try
-            {
-                assetHandle.Release();
-                YooAssets.GetPackage(Aot.AotConfig.PACKAGE_NAME).TryUnloadUnusedAsset(info);//这个是关键，移除_providers，不然无法重新下载请求,provider.Status为上次的,所以一直失败不重新拉取
-                assetHandle = YooAssets.LoadAssetAsync(info.AssetPath, info.AssetType);
-                await assetHandle.ToUniTask();
-            }
-            catch
-            {
-                await ToUniTask(--leftTimes);
-            }
-        }*/
-
         public GameObject InstantiateSync(Transform transform = null)
         {
             return assetHandle.InstantiateSync(transform);
@@ -114,7 +76,8 @@ namespace Aot.XiHUtil
         }
 #endif
     }
-    public class AssetAllRef {
+    public class AssetAllRef
+    {
         public int refCount;
         float lastuseTime;
         public bool CanRelease(float curTime) => refCount == 0 && curTime - lastuseTime > AssetLoadUtil.RELEASE_TIME;
@@ -143,9 +106,9 @@ namespace Aot.XiHUtil
             for (int i = 0; i < len; ++i) ass[i] = assetObjs.AllAssetObjects[i] as T;
             return ass;
         }
-        public UniTask ToUniTask()
+        public UniTask ToUniTask(CancellationToken cancellationToken = default)
         {
-            return assetObjs.ToUniTask();
+            return assetObjs.ToUniTask(cancellationToken: cancellationToken);
         }
         internal void RealRelease()
         {
@@ -165,7 +128,7 @@ namespace Aot.XiHUtil
             for (int i = 0; i < len; ++i) ass[i] = assetObjs[i] as T;
             return ass;
         }
-        public UniTask ToUniTask()
+        public UniTask ToUniTask(CancellationToken cancellationToken = default)
         {
             return UniTask.CompletedTask;
         }
@@ -179,13 +142,13 @@ namespace Aot.XiHUtil
     public class AssetLoadUtil
     {
         public const float RELEASE_TIME = 60;
-        public static readonly Dictionary<string, AssetRef> AssetCacheDic = new Dictionary<string, AssetRef>();
-        public static readonly Dictionary<string, AssetAllRef> AssetAllCacheDic = new Dictionary<string, AssetAllRef>();
+        public static readonly Dictionary<string, AssetRef> AssetCacheDic = new Dictionary<string, AssetRef>(512);
+        public static readonly Dictionary<string, AssetAllRef> AssetAllCacheDic = new Dictionary<string, AssetAllRef>(64);
         public static AssetRef LoadAssetAsync<T>(string path) where T : Object
         {
-            return LoadAssetAsync(path,typeof(T));
+            return LoadAssetAsync(path, typeof(T));
         }
-        public static AssetRef LoadAssetAsync(string path,Type type)
+        public static AssetRef LoadAssetAsync(string path, Type type)
         {
 #if USE_YOO
             if (AssetCacheDic.ContainsKey(path) && AssetCacheDic[path].IsValid) return AssetCacheDic[path].Retain();
@@ -214,7 +177,7 @@ namespace Aot.XiHUtil
         public static AssetAllRef LoadAllAssetsAsync<T>(string path) where T : Object
         {
 #if USE_YOO
-            if (AssetAllCacheDic.ContainsKey(path) && AssetCacheDic[path].IsValid) return AssetAllCacheDic[path].Retain();
+            if (AssetAllCacheDic.ContainsKey(path) && AssetAllCacheDic[path].IsValid) return AssetAllCacheDic[path].Retain();
             var res = new AssetAllRef(YooAssets.LoadAllAssetsAsync<T>(path));
 #else
             path = Path.GetDirectoryName(path);
@@ -224,7 +187,7 @@ namespace Aot.XiHUtil
             AssetAllCacheDic[path] = res;
             return res.Retain();
         }
-        public static async UniTask LoadScene(string path) 
+        public static async UniTask LoadScene(string path)
         {
             var sceneName = Path.GetFileNameWithoutExtension(path);
 #if USE_YOO
@@ -233,27 +196,41 @@ namespace Aot.XiHUtil
             SceneManager.LoadScene(sceneName);
 #endif
             await UniTask.Yield();//等待一帧，先让对应Instance Awake完毕
+            DynamicGI.UpdateEnvironment();
         }
-        public static void UnloadUnusedAsset() {
+        public static bool CheckLocationValid(string path)
+        {
+#if USE_YOO
+            return YooAssets.CheckLocationValid(path);
+#else
+            return true;
+#endif
+        }
+        public static void UnloadUnusedAsset()
+        {
             UnloadUnusedAssetInner().Forget();
         }
-        public static async UniTask UnloadUnusedAssetInner() {
+        public static async UniTask UnloadUnusedAssetInner()
+        {
             // 实现自己的卸载逻辑 实现LRU策略，避免频繁卸载加载
-            var keys = new HashSet<string>();
+            var keys = new HashSet<string>(AssetCacheDic.Count);
             var curTime = Time.realtimeSinceStartup;
-            foreach (var kv in AssetCacheDic) {
-                if (kv.Value.CanRelease(curTime)) {
+            foreach (var kv in AssetCacheDic)
+            {
+                if (kv.Value.CanRelease(curTime))
+                {
                     keys.Add(kv.Key);
                 }
             }
-            foreach (var key in keys) {
+            foreach (var key in keys)
+            {
                 var val = AssetCacheDic[key];
                 AssetCacheDic.Remove(key);
                 val.RealRelease();
             }
 
 #if UNITY_EDITOR
-            if(keys.Count>0) Debug.Log($"正式卸载单资源[{keys.Count}]个:{string.Join('\n',keys)}");
+            if (keys.Count > 0) Debug.Log($"正式卸载单资源[{keys.Count}]个:{string.Join('\n', keys)}");
 #endif
 
             keys.Clear();

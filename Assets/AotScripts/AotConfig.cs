@@ -11,9 +11,27 @@ namespace Aot
 {
     public class AotConfig
     {
+        public static readonly int APPID;
+        public static SystemLanguage Language;
+        public static readonly string Version;
         public const string PACKAGE_NAME = "DefaultPackage";
+        public static readonly string FrontUrl;
         public static FrontConfig frontConfig = new FrontConfig();
-        public static string GetFrontUrl() {
+        static AotConfig()
+        {
+            var cfg = Resources.Load<XIHFrontSetting>(nameof(XIHFrontSetting));
+            APPID = cfg.appId;
+            Language = cfg.language;
+            FrontUrl = cfg.front;
+#if (UNITY_DY || UNITY_TT) && !UNITY_EDITOR
+            //Version = TTSDK.TT.GamePublishVersion;//游戏发布版本号，发布版本时发布工具中指定的版本号
+            Version = TTSDK.TT.GameVersion;//游戏版本号，通过该接口替换Application.version获得正确的版本号信息
+#else
+            Version = Application.version;
+#endif
+        }
+        public static string GetFrontUrl()
+        {
             string url = GetHotFrontUrlPrefix();
             if (!url.EndsWith("/")) url += "/";
 #if UNITY_EDITOR
@@ -42,14 +60,16 @@ namespace Aot
             {
                 url = AotFileUtil.ReadFile(AotFileUtil.SAVE_FRONT);
             }
-            catch (Exception e) { 
+            catch (Exception e)
+            {
                 Debug.LogException(e);
             }
             if (string.IsNullOrEmpty(url) || !url.StartsWith("http"))
             {
-                url = Resources.Load<XIHFrontSetting>(nameof(XIHFrontSetting)).front;
+                url = FrontUrl;
             }
-            else { 
+            else
+            {
                 Debug.Log($"使用外置的Front地址：{url}");
             }
             return url.Trim();
@@ -61,12 +81,14 @@ namespace Aot
         {
             XIHFrontSetting frontSetting;
             var cfgPath = $"Assets/Resources/{nameof(XIHFrontSetting)}.asset";
-            if (File.Exists(cfgPath)) {
+            if (File.Exists(cfgPath))
+            {
                 frontSetting = AssetDatabase.LoadAssetAtPath<XIHFrontSetting>(cfgPath);
             }
-            else {
+            else
+            {
                 frontSetting = ScriptableObject.CreateInstance<XIHFrontSetting>();
-                frontSetting.front= $"http://{GetIP()}:5000/Front";
+                frontSetting.front = $"http://{GetIP()}:5000/Front";
                 AssetDatabase.CreateAsset(frontSetting, cfgPath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -74,7 +96,7 @@ namespace Aot
             }
             var preffixUrl = frontSetting.front;//例如 http://127.0.0.1:5000/Front/
             if (preffixUrl.EndsWith("/")) preffixUrl = preffixUrl.TrimEnd('/');
-            preffixUrl = preffixUrl.Substring(0,preffixUrl.LastIndexOf('/')+1);//http://127.0.0.1:5000/
+            preffixUrl = preffixUrl.Substring(0, preffixUrl.LastIndexOf('/') + 1);//http://127.0.0.1:5000/
 
             var dir = "XIHWebServerRes/Front";
             if (!Directory.Exists(dir))
@@ -86,7 +108,7 @@ namespace Aot
             config.focusVersion = "0.0.0";
             config.cdn = preffixUrl.TrimEnd('/');
 
-            config.defaultHostServer = preffixUrl+"Android";
+            config.defaultHostServer = preffixUrl + "Android";
             config.fallbackHostServer = preffixUrl + "Android";
             var file = $"{dir}/Android.json";
             if (!File.Exists(file))
@@ -118,8 +140,21 @@ namespace Aot
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
         }
-
-        public static string GetIP() {
+        public static string GetCdnUrl(BuildTarget buildTarget)
+        {
+            var dir = "XIHWebServerRes/Front";
+            var file = $"{dir}/{buildTarget}.json";
+            if (!File.Exists(file))
+            {
+                Debug.LogError($"XIH:上线前记得配置{file}");
+                return null;
+            }
+            var json = File.ReadAllText(file);
+            var frontConfig = JsonUtility.FromJson<FrontConfig>(json);
+            return frontConfig.cdn;
+        }
+        public static string GetIP()
+        {
             string hostname = System.Net.Dns.GetHostName();
             var ipadrlist = System.Net.Dns.GetHostEntry(hostname);
             var localaddrs = ipadrlist.AddressList;
@@ -134,7 +169,7 @@ namespace Aot
     [Serializable]
     public class FrontConfig
     {
-        public string focusVersion="0.0.0";//最低强更版本
+        public string focusVersion = "0.0.0";//最低强更版本
         public string cdn;//可用来切换CDN，替换微信小游戏设置的CDN，使得缓存策略调整
         //yooasset的下载资源路径，后期可以扩展其他的
         public string defaultHostServer;

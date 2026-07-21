@@ -95,7 +95,6 @@ namespace Ad
                     adCalling = false;
                     if (res)
                     {
-                        TrackingReport.AddAdvertisementLogReq();
                         if (GameBase.Instance)
                         {
                             GameBase.Instance.AdSucessEnd();

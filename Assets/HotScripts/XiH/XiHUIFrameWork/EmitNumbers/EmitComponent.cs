@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using FairyGUI;
-using XiHUtil;
+using Aot.XiHUtil;
 namespace XiHUI
 {
     public partial class EmitComponent : GComponent
@@ -59,20 +59,20 @@ namespace XiHUI
                 }
             });*/
 
-           /* var dir = targetPos - localPos;
-            var verDir = new Vector2(-dir.y, dir.x);
-            var split = 3;
-            var midDir = (dir + verDir)/ split;
+            /* var dir = targetPos - localPos;
+             var verDir = new Vector2(-dir.y, dir.x);
+             var split = 3;
+             var midDir = (dir + verDir)/ split;
 
-            var controlPos1 = localPos - midDir;
-            var controlPos2 = localPos  + dir / split * (split-2) - midDir;
+             var controlPos1 = localPos - midDir;
+             var controlPos2 = localPos  + dir / split * (split-2) - midDir;
 
-            GTween.To(0f, 1f, toTargetDuration).SetEase(EaseType.CubicInOut).OnUpdate((GTweener tweener) =>
-            {
-                float t = tweener.value.x;
-                var pos = CalculateBezierPoint(t, localPos, controlPos1, controlPos2, targetPos);
-                this.SetXY(pos.x, pos.y);
-            }).OnComplete(() => { OnPlaySoundCallback?.Invoke(); }).SetTarget(this);*/
+             GTween.To(0f, 1f, toTargetDuration).SetEase(EaseType.CubicInOut).OnUpdate((GTweener tweener) =>
+             {
+                 float t = tweener.value.x;
+                 var pos = CalculateBezierPoint(t, localPos, controlPos1, controlPos2, targetPos);
+                 this.SetXY(pos.x, pos.y);
+             }).OnComplete(() => { OnPlaySoundCallback?.Invoke(); }).SetTarget(this);*/
 
             this.TweenMove(targetPos, toTargetDuration).SetEase(EaseType.BackIn).OnComplete(() => { OnPlaySoundCallback?.Invoke(); });
             this.TweenFade(0, disappearDuration).SetDelay(toTargetDuration);
@@ -86,19 +86,19 @@ namespace XiHUI
             EndLayout();
             //this.TweenMove(targetPos, toTargetDuration).SetEase(EaseType.Linear);
 
-/*            var dir = targetPos - localPos;
-            var verDir = new Vector2(-dir.y, dir.x);
-            var split = 10;
-            var midDir = (dir + verDir) / split;
+            /*            var dir = targetPos - localPos;
+                        var verDir = new Vector2(-dir.y, dir.x);
+                        var split = 10;
+                        var midDir = (dir + verDir) / split;
 
-            var controlPos1 = localPos + midDir;
-            var controlPos2 = localPos + dir / split * (split - 2) + midDir;
-            GTween.To(0f, 1f, toTargetDuration).SetDelay(0.65f).SetEase(EaseType.QuartIn).OnUpdate((GTweener tweener) =>
-            {
-                var pos = CalculateBezierPoint(tweener.value.x, localPos, controlPos1, controlPos2, targetPos);
-                this.SetXY(pos.x, pos.y);
-            }).SetTarget(this);
-*/
+                        var controlPos1 = localPos + midDir;
+                        var controlPos2 = localPos + dir / split * (split - 2) + midDir;
+                        GTween.To(0f, 1f, toTargetDuration).SetDelay(0.65f).SetEase(EaseType.QuartIn).OnUpdate((GTweener tweener) =>
+                        {
+                            var pos = CalculateBezierPoint(tweener.value.x, localPos, controlPos1, controlPos2, targetPos);
+                            this.SetXY(pos.x, pos.y);
+                        }).SetTarget(this);
+            */
 
             this.TweenMove(targetPos, toTargetDuration).SetEase(EaseType.BackIn);
             this.TweenFade(0, disappearDuration).SetDelay(toTargetDuration);

@@ -13,7 +13,8 @@
         "Luban.Runtime",
         "Obfuz.Runtime",
         "UniTask.YooAsset",
-        "YooAsset.MiniGame"
+        "YooAsset.MiniGame",
+        "YooAsset.RuntimeExtension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

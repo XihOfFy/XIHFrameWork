@@ -40,7 +40,7 @@ public class DllCopyEditor
             var files = Directory.GetFiles(sourPath);
             foreach (var file in files)
             {
-                ObfuscateUtil.GeneratePolymorphicDll(file, dstPath+"/"+Path.GetFileName(file));
+                ObfuscateUtil.GeneratePolymorphicDll(file, dstPath + "/" + Path.GetFileName(file));
             }
         }
     }
@@ -59,7 +59,8 @@ public class DllCopyEditor
         {
             CheckAccessMissingMetadata(bakupPath, target);
         }
-        catch { 
+        catch
+        {
         }
         if (Directory.Exists(bakupPath)) Directory.Delete(bakupPath, true);
         Directory.CreateDirectory(bakupPath);
@@ -72,9 +73,10 @@ public class DllCopyEditor
             return;
         }
         var rms = new HashSet<string>();
-        if (Directory.Exists(dstPath)) {
+        if (Directory.Exists(dstPath))
+        {
             var files = Directory.GetFiles(dstPath);
-            foreach(var file in files) rms.Add(Path.GetFileName(file));
+            foreach (var file in files) rms.Add(Path.GetFileName(file));
         }
         else
         {
@@ -88,7 +90,7 @@ public class DllCopyEditor
                 Debug.LogError($"CopyDll {ph}不存在");
                 continue;
             }
-            File.Copy(ph, $"{bakupPath}/{dll}.dll",true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
+            File.Copy(ph, $"{bakupPath}/{dll}.dll", true);//先拷贝原始的到目标，方便下一次进行CheckAccessMissingMetadata
             var dstDll = $"{dstPath}/{dll}.bytes";
             if (usePolymorphic)
             {
@@ -96,16 +98,18 @@ public class DllCopyEditor
                 HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, stripDll);
                 ObfuscateUtil.GeneratePolymorphicDll(stripDll, dstDll);
             }
-            else {
+            else
+            {
                 HybridCLR.Editor.AOT.AOTAssemblyMetadataStripper.Strip(ph, dstDll);
             }
             rms.Remove($"{dll}.bytes");
             rms.Remove($"{dll}.bytes.meta");
         }
-        foreach (var rm in rms) {
+        foreach (var rm in rms)
+        {
             var dst = $"{dstPath}/{rm}";
             File.Delete(dst);
-            Debug.LogWarning("删除多余文件dll："+ dst);
+            Debug.LogWarning("删除多余文件dll：" + dst);
         }
         Debug.LogWarning($"拷贝无需加密的Aotdlls到 {dstPath}");
     }

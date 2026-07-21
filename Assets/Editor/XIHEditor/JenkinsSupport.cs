@@ -91,7 +91,7 @@ public class JenkinsSupport
             //#if !(UNITY_DY || UNITY_TT)
             Debug.LogWarning("设置webgl的图片压缩格式为ASTC，且代码为Size优化");
             EditorUserBuildSettings.webGLBuildSubtarget = WebGLTextureSubtarget.ASTC;
-            UserBuildSettings.codeOptimization = CodeOptimization.Size;
+            UserBuildSettings.codeOptimization = WasmCodeOptimization.DiskSize;
             //#endif
         }
 #if UNITY_WX
@@ -213,7 +213,8 @@ public class JenkinsSupport
         {
             PrebuildCommandExt.CompileAndObfuscateDll();
         }
-        else {
+        else
+        {
             CompileDllCommand.CompileDll(curTarget);//使用混淆的CompileAndObfuscateHotUpdateAssemblies
         }
         Debug.LogWarning("拷贝热更Dll");
@@ -467,8 +468,7 @@ public class JenkinsSupport
 
     static List<string> GetPreLoadList()
     {
-        var cfg = Resources.Load<XIHAppSetting>(nameof(XIHAppSetting));
-        var resUrl = cfg.resUrl;
+        var resUrl = AotConfig.GetCdnUrl(BuildTarget.WebGL);
         if (resUrl.EndsWith('/')) resUrl = resUrl.TrimEnd('/');
         var dic = new Dictionary<string, int>();
         var initNeedAbPreffixs = new string[] {
@@ -483,10 +483,6 @@ public class JenkinsSupport
             "assets_res_fairyres_scene_",
             "unityshaders_",
             "assets_res_hotscene_",
-            "assets_res_game1_",
-            "assets_res_prefab_map_1_",
-            "assets_res_fairyres_home_",
-            "assets_res_fairyres_game_",
             //"assets_res_audio_music_",
         };
         var suffixs = new string[] { ".bytes", ".hash" };

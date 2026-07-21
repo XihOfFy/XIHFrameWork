@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Aot.XiHUtil;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,8 @@ namespace XiHAsset
             {
                 Debug.LogError("若要使用对象池，记得修改路径和添加对于预制体");
             }
-            else {
+            else
+            {
                 var allHandle = AssetLoadUtil.LoadAllAssetsAsync<GameObject>(poolAssetPath);
                 await allHandle.ToUniTask();//不进行release，所以不存储
                 objs = allHandle.GetAssets<GameObject>();
@@ -153,7 +155,7 @@ namespace XiHAsset
             obj.transform.SetParent(poolRootTrs);
             if (que.Contains(obj))
             {
-                Debug.LogError("之前已经回收到池子"+ path, obj);
+                Debug.LogError("之前已经回收到池子" + path, obj);
                 return;
             }
             que.Enqueue(obj);
@@ -173,7 +175,8 @@ namespace XiHAsset
             set.Add(obj);
         }
     }
-    public interface IRecycled {
+    public interface IRecycled
+    {
         public const string POOL_OBJ_PATH = "TestObj";//不需要_X后缀
         void Recycled();
     }

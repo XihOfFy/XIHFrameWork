@@ -1,4 +1,5 @@
-﻿using Hot;
+﻿using Aot.XiHUtil;
+using Hot;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -32,10 +33,11 @@ public class AssetRefWindow : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-        EditorGUILayout.HelpBox(tip,MessageType.Info);
+        EditorGUILayout.HelpBox(tip, MessageType.Info);
         EditorGUILayout.EndScrollView();
     }
-    void AnalysicAssetRef() {
+    void AnalysicAssetRef()
+    {
         if (str == null) str = new StringBuilder();
         str.Append(SyncTimeHelper.GetSystemTime());
         str.AppendLine("\n剩余资源引用个数\t 路径");

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aot;
 using Aot2Hot;
 using FairyGUI;
 using UnityEngine;
@@ -180,7 +181,7 @@ namespace Tmpl
             }
             //var resolvedArgs = TrsValue.ResolveArgs(args);
             var resolvedArgs = args;
-            switch (Aot2HotUtil.Language)
+            switch (AotConfig.Language)
             {
                 case SystemLanguage.Chinese:
                 case SystemLanguage.ChineseSimplified:
@@ -194,7 +195,7 @@ namespace Tmpl
         }
         public static void ChangeLanguageBySystem()
         {
-            var language = Aot2HotUtil.Language;
+            var language = AotConfig.Language;
 #if (UNITY_DY || UNITY_TT)
             try
             {
@@ -224,8 +225,8 @@ namespace Tmpl
         }
         public static void ChangeLanguage(SystemLanguage language)
         {
-            if (Aot2HotUtil.Language == language) return;
-            Aot2HotUtil.Language = language;
+            if (AotConfig.Language == language) return;
+            AotConfig.Language = language;
             var keys = objCache.Keys.ToList();
             foreach (var key in keys)
             {

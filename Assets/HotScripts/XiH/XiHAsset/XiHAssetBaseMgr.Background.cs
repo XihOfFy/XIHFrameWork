@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hot;
+using UnityEngine;
 
 namespace XiHAsset
 {
@@ -8,11 +9,11 @@ namespace XiHAsset
         protected void AddLifeCycle()
         {
             gamePaused = false;
-            IChannelAdapter.GamePause = GamePause;
+            ChannelSDKMgr.GamePause = GamePause;
         }
         protected void RemoveLifeCycle()
         {
-            IChannelAdapter.GamePause = null;
+            ChannelSDKMgr.GamePause = null;
         }
         protected virtual void GamePause(bool pause)
         {

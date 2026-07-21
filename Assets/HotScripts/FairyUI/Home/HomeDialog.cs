@@ -12,12 +12,13 @@ namespace Hot
         {
             startBtn.onClick.Add(OnStarBtn);
         }
-
-        async void OnStarBtn() {
+        async void OnStarBtn()
+        {
             SoundMgr.Instance.PlaySound(10001);
-            (await UIUtil.OpenDialogAsync<ChooseDialog>()).Show("标题","内容", val => {
+            (await UIUtil.OpenDialogAsync<ChooseDialog>()).Show("标题", "内容", val =>
+            {
                 UIUtil.ShowSystemTip($"当前选择: {val}");
-            },"确定","取消");
+            }, "确定", "取消");
         }
     }
 }

@@ -11,10 +11,10 @@ namespace Ad
         {
             DelayInsert(300, callback: () =>
             {
-                IChannelAdapter.GamePause?.Invoke(true);
+                ChannelSDKMgr.GamePause?.Invoke(true);
                 DelayInsert(300, callback: () =>
                 {
-                    IChannelAdapter.GamePause?.Invoke(false);
+                    ChannelSDKMgr.GamePause?.Invoke(false);
                     onLoad?.Invoke(true);
                 }).Forget();
             }).Forget();

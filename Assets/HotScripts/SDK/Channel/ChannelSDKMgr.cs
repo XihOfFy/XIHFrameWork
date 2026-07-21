@@ -5,7 +5,9 @@ namespace Hot
     public static class ChannelSDKMgr
     {
         public static readonly IChannelSDK sdkBase;
-        static ChannelSDKMgr() {
+        public static Action<bool> GamePause;
+        static ChannelSDKMgr()
+        {
 #if UNITY_WX
             sdkBase = new WXSDK();
 #elif UNITY_DY

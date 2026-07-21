@@ -1,11 +1,11 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Aot.XiHUtil;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.U2D;
-using XiHUtil;
 
 namespace XiHAsset
 {
@@ -33,10 +33,11 @@ namespace XiHAsset
             return spriteDic[atlPath].GetSprite(fNmae);
         }
         //网路下载图片资源，若存在并发，可能有所内存溢出
-        public async UniTask<Texture2D> GetTextureFromWeb(string url,int timeout=10, CancellationToken cancelToken = default)
+        public async UniTask<Texture2D> GetTextureFromWeb(string url, int timeout = 10, CancellationToken cancelToken = default)
         {
-            if (webTexDic.TryGetValue(url, out var texture2D)) { 
-                if(texture2D) return texture2D;
+            if (webTexDic.TryGetValue(url, out var texture2D))
+            {
+                if (texture2D) return texture2D;
             }
             try
             {

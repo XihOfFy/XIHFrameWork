@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using XiHUtil;
 using Hot;
 using XiHAsset;
+using Aot.XiHUtil;
 namespace XiHUI
 {
     public class EmitManager
@@ -34,9 +35,9 @@ namespace XiHUI
         public void EmitText(Vector3 worldPos, string txt, string fontUrl = "", int fontSize = 50, int delay = 0, int targetY = -128, float duration = 2f)
         {
             var screenPos = ChangeWorld2ScreenPos(worldPos);    //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
-            EmitText(screenPos, txt, fontUrl ,fontSize , delay, targetY , duration ).Forget();
+            EmitText(screenPos, txt, fontUrl, fontSize, delay, targetY, duration).Forget();
         }
-        public async UniTaskVoid EmitText(Vector2 screenPos, string txt, string fontUrl="", int fontSize=50, int delay=0, int targetY = -128, float duration = 2f)
+        public async UniTaskVoid EmitText(Vector2 screenPos, string txt, string fontUrl = "", int fontSize = 50, int delay = 0, int targetY = -128, float duration = 2f)
         {
             var localPos = ChangeScreen2LocalPos(screenPos);
             await UniTask.Delay(delay);
