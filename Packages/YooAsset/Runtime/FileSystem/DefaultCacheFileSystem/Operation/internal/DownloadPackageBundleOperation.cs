@@ -20,7 +20,7 @@ namespace YooAsset
         private UnityDownloadFileOperation _unityDownloadFileOp;
 
         protected int _requestCount = 0;
-        protected float _tryAgainTimer;
+        protected float _tryAgainTimer = 0;
         protected int _failedTryAgain;
         private ESteps _steps = ESteps.None;
 
@@ -95,7 +95,8 @@ namespace YooAsset
                 }
                 else
                 {
-                    if (IsWaitForAsyncComplete == false && _failedTryAgain > 0)
+                    // 注意：本地文件（解压/导入）校验失败属于确定性失败，重试只会重复读取同一文件，直接判定失败防止无限重试。
+                    if (IsWaitForAsyncComplete == false && _failedTryAgain > 0 && _unityDownloadFileOp.VerifyFailed == false)
                     {
                         _steps = ESteps.TryAgain;
                         YooLogger.Warning($"Failed download : {_unityDownloadFileOp.URL} Try again !");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace YooAsset
@@ -24,6 +25,7 @@ namespace YooAsset
             CheckOptions,
             ReleaseAll,
             TryAbortLoader,
+            RequestForceDestroy,
             CheckLoading,
             DestroyAll,
             Done,
@@ -72,7 +74,10 @@ namespace YooAsset
                 // 释放所有资源句柄
                 if (_options.ReleaseAllHandles)
                 {
-                    foreach (var provider in _resManager.ProviderDic.Values)
+                    // 注意：创建快照，因为释放句柄可能触发自动卸载逻辑（AutoUnloadBundleWhenUnused），
+                    // 进而修改 ProviderDic 容器，导致遍历时抛出 InvalidOperationException。
+                    var snapshot = new List<ProviderOperation>(_resManager.ProviderDic.Values);
+                    foreach (var provider in snapshot)
                     {
                         provider.ReleaseAllHandles();
                     }
@@ -88,6 +93,17 @@ namespace YooAsset
                 foreach (var loader in _resManager.LoaderDic.Values)
                 {
                     loader.TryAbortLoader();
+                }
+                _steps = ESteps.RequestForceDestroy;
+            }
+
+            if (_steps == ESteps.RequestForceDestroy)
+            {
+                // 向所有资源提供者下发强制销毁请求
+                // 注意：防止零引用且尚未进入加载阶段的任务被无限挂起，从而导致 CheckLoading 死锁。
+                foreach (var provider in _resManager.ProviderDic.Values)
+                {
+                    provider.RequestForceDestroy();
                 }
                 _steps = ESteps.CheckLoading;
             }
