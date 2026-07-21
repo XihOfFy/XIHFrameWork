@@ -12,7 +12,7 @@
         "FairyGUI",
         "Luban.Runtime",
         "Obfuz.Runtime",
-        "YooAsset.UniTask",
+        "UniTask.YooAsset",
         "YooAsset.MiniGame"
     ],
     "includePlatforms": [],
