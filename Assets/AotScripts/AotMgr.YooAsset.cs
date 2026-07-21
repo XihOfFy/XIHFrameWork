@@ -74,15 +74,15 @@ namespace Aot
             {
                 var remoteServices = new RemoteServices();
                 //var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
-#if UNITY_WX
+#if UNITY_WX && WEIXINMINIGAME
                 //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀/分隔的是微信缓存的文件夹路径且可多层级，保证名字固定
                 //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
                 var cdn = AotConfig.frontConfig.cdn;
                 var suffix = AotConfig.frontConfig.defaultHostServer.Substring(cdn.Length);
-                if(suffix.StartsWith('/'))suffix = suffix.Substring(1);
+                if (suffix.StartsWith('/')) suffix = suffix.Substring(1);
                 string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffix}";
                 var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
-#elif UNITY_DY //BYTEMINIGAME
+#elif UNITY_DY && DOUYINMINIGAME
                 // 小游戏缓存根目录
                 // 注意：如果有子目录，请修改此处！
                 string packageRoot = $"yoo";
@@ -159,14 +159,15 @@ namespace Aot
                 {
                     result.Encrypted = true;
                     var bytes = File.ReadAllBytes(fileInfo.FileLoadPath);
-					var len = bytes.Length;
+                    var len = bytes.Length;
                     var offset = fileInfo.BundleName.ToLower().Sum(c => c);
                     var newBytes = new byte[bytes.Length + offset];
                     var half = (len >> 1);
-                    for (int i = 0; i < offset; ++i) {
-						if(i< half) newBytes[i] = bytes[i];
-						else newBytes[i] = (byte)((offset | i) % 0XF);
-					}
+                    for (int i = 0; i < offset; ++i)
+                    {
+                        if (i < half) newBytes[i] = bytes[i];
+                        else newBytes[i] = (byte)((offset | i) % 0XF);
+                    }
                     Array.Copy(bytes, 0, newBytes, offset, len);
                     result.EncryptedData = newBytes;
                 }
@@ -208,18 +209,19 @@ namespace Aot
         {
             string IRemoteServices.GetRemoteMainURL(string fileName)
             {
-                return AotConfig.frontConfig.defaultHostServer + "/"+ fileName;
+                return AotConfig.frontConfig.defaultHostServer + "/" + fileName;
             }
             string IRemoteServices.GetRemoteFallbackURL(string fileName)
             {
-                return AotConfig.frontConfig.fallbackHostServer + "/" + fileName; 
+                return AotConfig.frontConfig.fallbackHostServer + "/" + fileName;
             }
         }
 
         //获取资源版本
         async UniTaskVoid UpdatePackageVersionAsync(ResourcePackage package)
         {
-            try {
+            try
+            {
                 var yooOp = package.RequestPackageVersionAsync();
                 await yooOp.ToUniTask();
                 if (yooOp.Status == EOperationStatus.Succeed)
@@ -228,7 +230,9 @@ namespace Aot
                     UpdatePackageManifest(package, yooOp.PackageVersion).Forget();
                     return;
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Debug.LogError(e);
             }
 
@@ -258,7 +262,7 @@ namespace Aot
             }
         }
         //UpdatePackageManifest
-        async UniTaskVoid UpdatePackageManifest(ResourcePackage package,string packageVersion)
+        async UniTaskVoid UpdatePackageManifest(ResourcePackage package, string packageVersion)
         {
             try
             {
@@ -286,7 +290,8 @@ namespace Aot
             }
         }
         //资源包下载,只下载aot2hot的tag资源，余下的到hot再继续下载，因为aot不提供ui功能
-        async UniTaskVoid DownloadAot2HotRes(ResourcePackage package) {
+        async UniTaskVoid DownloadAot2HotRes(ResourcePackage package)
+        {
             int downloadingMaxNum = 10;
             int failedTryAgain = 10;
             var downloader = package.CreateResourceDownloader("Aot2Hot", downloadingMaxNum, failedTryAgain);

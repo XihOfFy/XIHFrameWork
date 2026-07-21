@@ -19,6 +19,7 @@ MonoBehaviour:
   - PackageName: DefaultPackage
     PackageDesc: 
     EnableAddressable: 0
+    SupportExtensionless: 1
     LocationToLower: 0
     IncludeAssetGUID: 0
     AutoCollectShaders: 1
@@ -100,7 +101,7 @@ MonoBehaviour:
     - GroupName: Effect
       GroupDesc: Effect
       AssetTags: 
-      ActiveRuleName: EnableGroup
+      ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/Effect
         CollectorGUID: a72f047357291aa4fbeb2141127aecac
@@ -121,7 +122,7 @@ MonoBehaviour:
     - GroupName: Model
       GroupDesc: Model
       AssetTags: 
-      ActiveRuleName: EnableGroup
+      ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/Models
         CollectorGUID: 22fdb01723935094f867a3f1a8bf4087
@@ -142,7 +143,7 @@ MonoBehaviour:
     - GroupName: Prefab
       GroupDesc: Prefab
       AssetTags: 
-      ActiveRuleName: EnableGroup
+      ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/Prefabs
         CollectorGUID: 744973fce3130bb458edc43a5965bf48
@@ -163,7 +164,7 @@ MonoBehaviour:
     - GroupName: Tiktok
       GroupDesc: Tiktok
       AssetTags: 
-      ActiveRuleName: EnableGroup
+      ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/TikTok
         CollectorGUID: 7687bfe0c125ac8478f9bb49ab4ff06e
@@ -178,11 +179,19 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Shader
-        CollectorGUID: 9169f36bc4cb97640ac8fe4673c87130
+      - CollectPath: Assets/Res/ShaderVariants
+        CollectorGUID: bfe5460834bc67845b3f8022757db3ff
         CollectorType: 2
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
-        FilterRuleName: CollectAll
+        FilterRuleName: CollectShader
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/ShaderVariants
+        CollectorGUID: bfe5460834bc67845b3f8022757db3ff
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstAB
+        FilterRuleName: CollectShaderVariants
         AssetTags: 
         UserData: 
