@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using FairyGUI;
 using Aot.XiHUtil;
+
 namespace XiHUI
 {
     public partial class EmitComponent

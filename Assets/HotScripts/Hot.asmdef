@@ -5,14 +5,15 @@
         "Aot",
         "Aot2Hot",
         "UniTask",
-        "UniTask.YooAsset",
         "YooAsset",
         "HybridCLR.Runtime",
         "Unity.TextMeshPro",
         "Wx",
         "FairyGUI",
         "Luban.Runtime",
-        "Obfuz.Runtime"
+        "Obfuz.Runtime",
+        "YooAsset.UniTask",
+        "YooAsset.MiniGame"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

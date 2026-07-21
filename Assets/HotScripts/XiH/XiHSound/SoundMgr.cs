@@ -100,16 +100,20 @@ namespace XiHSound
         {
             listener = gameObject.AddComponent<AudioListener>();
             musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource.playOnAwake = false;
             soundSources = new Queue<AudioSource>();
-            for (int i = 0; i < 10; i++) {
-                soundSources.Enqueue(gameObject.AddComponent<AudioSource>());
+            for (int i = 0; i < 10; i++)
+            {
+                var sound = gameObject.AddComponent<AudioSource>();
+                soundSources.Enqueue(sound);
+                sound.playOnAwake = false;
             }
             bgmEnable = PlayerPrefsUtil.Get(BGM_ENABLE, true);
             soundEnable = PlayerPrefsUtil.Get(SOUND_ENABLE, true);
             vibrate = PlayerPrefsUtil.Get(VIBRATE_ENABLE, true);
             abHandles = new Dictionary<int, AssetRef>();
             recentBgmUseQue = new LRU(1);
-            recentSoundUseQue = new LRU(16);
+            recentSoundUseQue = new LRU(32);
             InitAudioMixer();
             curBgId = int.MinValue;
         }
@@ -169,9 +173,10 @@ namespace XiHSound
             musicSource.Stop();
             curBgId = int.MinValue;
         }
-        public void PauseBGM() {
+        public void PauseBGM()
+        {
             musicSource.Pause();
-            foreach(var soundSource in soundSources) soundSource.Stop();
+            foreach (var soundSource in soundSources) soundSource.Stop();
         }
         public void UnPause()
         {
@@ -179,7 +184,8 @@ namespace XiHSound
             //使用下面的代替看看
             //musicSource.Stop();
             musicSource.Play();
-            foreach (var soundSource in soundSources) {
+            foreach (var soundSource in soundSources)
+            {
                 soundSource.UnPause();
                 soundSource.Stop();
             }
@@ -188,6 +194,8 @@ namespace XiHSound
         {
             //if (!bgmEnable || bgm == null) return;
             if (bgm == null) return;
+            musicSource.Pause();
+            musicSource.time = 0;
             musicSource.Stop();
             musicSource.volume = bgmVolume;
             musicSource.clip = bgm;
@@ -235,9 +243,10 @@ namespace XiHSound
         {
             if (!soundEnable || sound == null) return;
             AudioSource source = null;
-            foreach (var soundSource in soundSources) {
+            foreach (var soundSource in soundSources)
+            {
                 if (soundSource.isPlaying) continue;
-                source=soundSource;
+                source = soundSource;
                 break;
             }
             if (source == null)
@@ -265,7 +274,7 @@ namespace XiHSound
             uint order = 0;
             public LRU(int maxCount)
             {
-                dic = new Dictionary<int, uint>();
+                dic = new Dictionary<int, uint>(64);
                 mCount = maxCount < 1 ? 1 : maxCount;
             }
             public void InAndOut(int item, Dictionary<int, AssetRef> abHandles)
@@ -281,14 +290,20 @@ namespace XiHSound
                         if (--maxIdx >= 0)
                         {
                             var key = kv.Key;
-                            var tmp = abHandles[key];
-                            if (tmp.IsDone)
+                            if (abHandles.TryGetValue(key, out var tmp))
                             {
-                                tmp.Release();
-                                abHandles.Remove(key);
-                                dic.Remove(key);
-                                //gc = true;
+                                if (tmp.IsDone)
+                                {
+                                    tmp.Release();
+                                    abHandles.Remove(key);
+                                    //gc = true;
+                                }
                             }
+                            else
+                            {
+                                Debug.LogError($"音频不存在：{key}");
+                            }
+                            dic.Remove(key);
                         }
                         else
                         {
@@ -300,7 +315,6 @@ namespace XiHSound
             }
         }
 
-/*
         /// <summary>
         /// 在切后台时和切回时需要处理BGM的播放
         /// </summary>
@@ -309,6 +323,9 @@ namespace XiHSound
         {
             if (pause) PauseBGM();
             else UnPause();
-        }*/
+#if USE_GM
+            Debug.LogWarning($"SoundMgr OnApplicationPause: "+ pause);
+#endif
+        }
     }
 }

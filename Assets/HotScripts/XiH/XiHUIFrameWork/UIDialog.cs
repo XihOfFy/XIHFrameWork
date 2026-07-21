@@ -69,7 +69,7 @@ namespace XiHUI
                 _children.Add(wrap);
         }
 
-        internal void Open(GComponent obj, bool isFull, bool isBlur, bool useBatch)
+        internal void Open(GComponent obj, bool isFull, bool isBlur,bool useBatch)
         {
             Content = obj;
             IsFullScreen = isFull;
@@ -79,7 +79,7 @@ namespace XiHUI
                 Content.name = dialogName;
                 Content.fairyBatching = useBatch;
 #if UNITY_EDITOR
-                if (useBatch) Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
+                if(useBatch) Debug.LogWarning($"{dialogName}: 关闭 fairyBatching 避免动效UI展示错误");
 #endif
             }
 

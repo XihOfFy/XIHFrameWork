@@ -3,14 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using YooAsset;
-using Aot.XiHUtil;
-
+using XiHUtil;
 namespace XiHAsset
 {
     public class AssetPoolMgr
     {
-        const int MIN_CNT = 4;
         Transform poolRootTrs;
         protected static AssetPoolMgr instance;
         public static AssetPoolMgr Instance
@@ -30,23 +27,24 @@ namespace XiHAsset
         Dictionary<string, int> preGenCapacityDic;//容量大小
         Dictionary<string, Queue<GameObject>> objPool;
         Dictionary<string, HashSet<GameObject>> objOutPool;
-        public async UniTask InitPool(string poolPath)
+        /// <summary>
+        /// 任意一个pool文件夹内的main资源
+        /// </summary>
+        /// <param name="poolAssetPath"></param>
+        /// <returns></returns>
+        public async UniTask InitPool(string poolAssetPath)
         {
             //SceneManager.sceneUnloaded += Recycle;
-
             GameObject[] objs = Array.Empty<GameObject>();
-#if USE_YOO
-            if (YooAssets.CheckLocationValid(poolPath))
+            if (string.IsNullOrEmpty(poolAssetPath))
             {
-                var allHandle = AssetLoadUtil.LoadAllAssetsAsync<GameObject>(poolPath);
+                Debug.LogError("若要使用对象池，记得修改路径和添加对于预制体");
+            }
+            else {
+                var allHandle = AssetLoadUtil.LoadAllAssetsAsync<GameObject>(poolAssetPath);
                 await allHandle.ToUniTask();//不进行release，所以不存储
                 objs = allHandle.GetAssets<GameObject>();
             }
-            else
-            {
-                Debug.LogError("若使用对象池，记得修改路径和添加对于预制体");
-            }
-#endif
             prefabDic = new Dictionary<string, GameObject>(objs.Length);
             preGenCapacityDic = new Dictionary<string, int>(objs.Length);
             foreach (var obj in objs)

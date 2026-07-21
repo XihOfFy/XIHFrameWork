@@ -91,9 +91,9 @@
 
 			// 默认字体大小缩放倍数为1
 			font.SetFormat(textField.textFormat, 1);
-			font.PrepareCharacters(text, textField.textFormat, 1);
+            font.PrepareCharacters(text, textField.textFormat, 1);
 
-			float lineWidth = 0, replaceStrWidth = 0;
+            float lineWidth = 0, replaceStrWidth = 0;
 
 			// 计算替换部分长度
 			for (int i = 0; i < replaceStr.Length; i++)

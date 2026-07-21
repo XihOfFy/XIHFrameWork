@@ -1,10 +1,11 @@
 ﻿using FairyGUI;
-using Aot.XiHUtil;
+using Aot;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using XiHUtil;
 using Tmpl;
+using Aot.XiHUtil;
 
 namespace XiHUI
 {
@@ -14,12 +15,9 @@ namespace XiHUI
     public partial class UIDialogManager : MonoBehaviour
     {
         private static UIDialogManager instance;
-        public static UIDialogManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
+        public static UIDialogManager Instance {
+            get {
+                if (instance == null) {
                     instance = new GameObject(nameof(UIDialogManager)).AddComponent<UIDialogManager>();
                     DontDestroyOnLoad(instance.gameObject);
                 }
@@ -190,8 +188,7 @@ namespace XiHUI
             {
                 var pkg = _packages[key];
 
-                if (pkg == null || !pkg.IsReference(considerTime))
-                {
+                if (pkg == null || !pkg.IsReference(considerTime)) { 
                     _removeList.Add(key);
                 }
             }
@@ -261,7 +258,7 @@ namespace XiHUI
             if (dialog != null && dialog.State == State.Loading)
             {
                 UIControlBinding.BindFields(dialog, compent);
-                dialog.Open(compent, param.IsFull, param.IsBlur, param.UseBatch);
+                dialog.Open(compent, param.IsFull, param.IsBlur,param.UseBatch);
                 stack.Push(dialog);
                 dialog.Open();
             }
@@ -299,7 +296,7 @@ namespace XiHUI
         /// <param name="fguiPath">不用包含_fgui和后缀</param>
         /// <param name="reference"></param>
         /// <returns></returns>
-        private UIPackageReference LoadUIPackage(string packageName, UIDialog reference)
+        private UIPackageReference LoadUIPackage(string packageName,  UIDialog reference)
         {
             var _handles = new List<AssetRef>(64);
             object LoadFunc(string name, string extension, System.Type type, out DestroyMethod method)
@@ -386,7 +383,7 @@ namespace XiHUI
         }
 
         private static List<UIParamCfg> _recoverList = new List<UIParamCfg>();
-
+        
         public void GetLayerList(Mode mode, ref IList<UIDialog> result)
         {
             if (result == null)
@@ -394,7 +391,7 @@ namespace XiHUI
             else
                 result.Clear();
 
-            _layers.TryGetValue(mode, out var stack);
+            _layers.TryGetValue(mode,out var stack);
             stack?.GetAll(ref result);
         }
 
@@ -448,5 +445,5 @@ namespace XiHUI
             return cam;
         }
     }
-
+    
 }

@@ -2,8 +2,9 @@
 using UnityEngine;
 using FairyGUI;
 using Cysharp.Threading.Tasks;
-using Aot.XiHUtil;
-
+using XiHUtil;
+using Hot;
+using XiHAsset;
 namespace XiHUI
 {
     public class EmitManager
@@ -19,10 +20,6 @@ namespace XiHUI
             }
         }
 
-        public string hurtFont1;
-        public string hurtFont2;
-        public string criticalSign;
-
         public GComponent view { get; private set; }
 
         private readonly Stack<EmitComponent> _componentPool = new Stack<EmitComponent>();
@@ -34,9 +31,13 @@ namespace XiHUI
             view.SetPivot(0.5f, 0.5f);
             GRoot.inst.AddChild(view);
         }
-        public async UniTaskVoid EmitText(Vector3 worldPos, string txt, string fontUrl, int fontSize, int delay, int targetY = -128, float duration = 2f)
+        public void EmitText(Vector3 worldPos, string txt, string fontUrl = "", int fontSize = 50, int delay = 0, int targetY = -128, float duration = 2f)
         {
             var screenPos = ChangeWorld2ScreenPos(worldPos);    //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
+            EmitText(screenPos, txt, fontUrl ,fontSize , delay, targetY , duration ).Forget();
+        }
+        public async UniTaskVoid EmitText(Vector2 screenPos, string txt, string fontUrl="", int fontSize=50, int delay=0, int targetY = -128, float duration = 2f)
+        {
             var localPos = ChangeScreen2LocalPos(screenPos);
             await UniTask.Delay(delay);
             var ec = GetEmitComponent();
@@ -76,7 +77,7 @@ namespace XiHUI
                 if (--emitCount <= 0) break;
                 await UniTask.Delay(50);
                 ec = GetEmitComponent();
-                ec.EmitUrl(localPos + offset, targetPos, icon, toTargetDuration, disappearDuration, rotate, OnPlaySoundCallback, scale);
+                ec.EmitUrl(localPos + offset, targetPos, icon, toTargetDuration, disappearDuration, rotate, null, scale);//其余飞向不回调OnPlaySoundCallback
             }
         }
 
@@ -108,11 +109,9 @@ namespace XiHUI
         //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
         Vector2 ChangeWorld2ScreenPos(Vector3 worldPos)
         {
-             Debug.LogError("待实现 ChangeWorld2ScreenPos");
-             return Vector2.zero;
-            /*var screenPos = GameBase.Instance.gameCamera.WorldToScreenPoint(worldPos);
+            var screenPos = XiHAssetBaseMgr.BaseInstance.gameCamera.WorldToScreenPoint(worldPos);
             screenPos.y = Screen.height - screenPos.y; //convert to Stage coordinates system
-            return screenPos;*/
+            return screenPos;
         }
 
         //该方法必须在延迟前设置，避免玩家半路返回主界面，导致延迟后物体为空
