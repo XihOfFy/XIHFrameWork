@@ -25,7 +25,7 @@ namespace Aot2Hot
             tip.text = "请稍等一会";
             progerssImg.fillAmount = 0;
             StartCoroutine(IEAwake());
-#if USE_GM
+#if USE_GM && !UNITY_EDITOR
             var report = GameObject.FindObjectOfType<Reporter>(true);
             if (report != null) {
                 report.gameObject.SetActive(true);
@@ -54,58 +54,70 @@ namespace Aot2Hot
             {
                 tip.text = "当前本版过低，请更新后再启动游戏...";
             }
-            else { 
+            else
+            {
                 StartCoroutine(DownloadHotRes());
             }
         }
         //string[] suffixArr = new string[] { "._. . . . .", ". ._. . . .", ". . ._. . .", ". . . ._. .",  ". . . . ._." };
         void OnDownloadProgress(DownloadUpdateData updateData)
         {
-            tip.text = $"下载资源中。。。({updateData.CurrentDownloadCount}/{updateData.TotalDownloadCount}): {(updateData.CurrentDownloadCount >> 10)}KB/{(updateData.TotalDownloadCount >> 10)}KB";
-            //tip.text = $"下载资源中 {suffixArr[currentDownloadCount%6]}";
-            if (updateData.TotalDownloadCount > 0)
+            if (tip && progerssImg)
             {
-                progerssImg.fillAmount = 1.0f * updateData.CurrentDownloadCount / updateData.TotalDownloadBytes;
+                tip.text = $"下载资源中。。。({updateData.CurrentDownloadCount}/{updateData.TotalDownloadCount}): {(updateData.CurrentDownloadCount >> 10)}KB/{(updateData.TotalDownloadCount >> 10)}KB";
+                if (updateData.TotalDownloadCount > 0)
+                {
+                    progerssImg.fillAmount = 1.0f * updateData.CurrentDownloadCount / updateData.TotalDownloadBytes;
+                }
             }
         }
-        void TryReDownload() {
+        void TryReDownload()
+        {
             StartCoroutine(DownloadHotRes());
         }
         void DownLoadEnd()
         {
-            StartCoroutine(GotoHotScene());
-            //GotoHotScene().Forget();
+            GotoHotScene().Forget();
         }
-        IEnumerator GotoHotScene()
+        async UniTaskVoid GotoHotScene()
         {
-            progerssImg.fillAmount = 1;
+            //progerssImg.fillAmount = 1;
+#if UNITY_EDITOR
+            //yield return new WaitForEndOfFrame();
+            await UniTask.Yield();
+#else
 
             //// 注意：location只需要填写资源包里的任意资源地址。
             var rawAotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Aot/mscorlib.bytes");
-            yield return rawAotOp.assetObjs;
-            //await rawAotOp.ToUniTask();
+            //yield return rawAotOp.assetObjs;
+            await rawAotOp.ToUniTask();
 
             // Editor下无需加载，直接查找获得HotUpdate程序集
             var ass = rawAotOp.GetAssets<TextAsset>();
             foreach (var asset in ass) {
-#if !UNITY_EDITOR
                 var err = RuntimeApi.LoadMetadataForAOTAssembly((asset).bytes, HomologousImageMode.SuperSet);
                 Debug.Log($"LoadMetadataForAOTAssembly:{asset.name}. ret:{err}");
-#endif
             }
             rawAotOp.Release();
 
-            var rawHotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Hot/Hot.bytes");
-            yield return rawHotOp.assetObjs;
-            //await rawHotOp.ToUniTask();
-            ass = rawHotOp.GetAssets<TextAsset>();
-            foreach (var asset in ass) {
-#if !UNITY_EDITOR
-                Assembly.Load(XIHDecryptionServices.Decrypt(asset.bytes));
-#endif
+            var bytes = AotFileUtil.ReadFileBytes("Hot.dll");
+            if (bytes != null)
+            {
+                Assembly.Load(bytes);
             }
-            rawHotOp.Release();
-
+            else
+            {
+                var rawHotOp = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Raw/Hot/Hot.bytes");
+                //yield return rawHotOp.assetObjs;
+                await rawHotOp.ToUniTask();
+                ass = rawHotOp.GetAssets<TextAsset>();
+                foreach (var asset in ass)
+                {
+                    Assembly.Load(XIHDecryptionServices.Decrypt(asset.bytes));
+                }
+                rawHotOp.Release();
+            }
+#endif
             //Debug.Log($"成功加载热更程序集和元数据");
             AssetLoadUtil.LoadScene("Assets/Res/HotScene/HotInit.unity").Forget();
         }

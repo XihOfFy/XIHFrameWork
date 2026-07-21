@@ -287,6 +287,8 @@ public class JenkinsSupport
 #else
         buildParameters.EncryptionServices = new AotMgr.EncryptionServices();
 #endif
+        buildParameters.ManifestProcessServices = new AotMgr.ManifestProcessServices();
+        buildParameters.ManifestRestoreServices = new AotMgr.ManifestRestoreServices();
 
         buildParameters.CompressOption = ECompressOption.LZ4;
         buildParameters.ClearBuildCacheFiles = false; //不清理构建缓存，启用增量构建，可以提高打包速度！

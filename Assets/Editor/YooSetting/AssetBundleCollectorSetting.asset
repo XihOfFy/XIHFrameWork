@@ -25,17 +25,49 @@ MonoBehaviour:
     AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
-    - GroupName: Font
+    - GroupName: Aot2Hot
       GroupDesc: Font
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Res/Aot2Hot
-        CollectorGUID: 84a188371d3b84a47870eca2f6a21954
+      - CollectPath: Assets/Res/Aot2Hot/Font
+        CollectorGUID: 56a9ab4bda6e3ed49a2ecbc5c1f4bc8d
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstAB
         FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Aot2Hot/Obfuz
+        CollectorGUID: 822276f73fb63f64487abd0fca14bdbd
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackFirstAB
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Aot2Hot/Raw
+        CollectorGUID: 0617fb888a512414dae4e59b4e980136
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Aot2Hot/Res
+        CollectorGUID: d8d032cd296912847a3e00941a48a977
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Aot2Hot/Scene
+        CollectorGUID: a0e6b4191c0f86d42b5ccfa6bff41bda
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
     - GroupName: Tmpl
