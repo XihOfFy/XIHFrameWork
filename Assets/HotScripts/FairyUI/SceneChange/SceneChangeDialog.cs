@@ -7,6 +7,7 @@ using XiHUI;
 using XiHUtil;
 using XiHAsset;
 using Aot.XiHUtil;
+using Tmpl;
 
 namespace Hot
 {
@@ -16,11 +17,11 @@ namespace Hot
         Queue<Func<UniTask>> loadQue;
         Transition playAni;
         Transition playBackAni;
-        //GTextField title;
+        GTextField title;
         protected override void InitComponent()
         {
             loadQue = new Queue<Func<UniTask>>();
-            //title.Translate(780001);
+            title.Translate(780001);
         }
         public UniTask<T> Show<T>(string path) where T : UIDialog
         {

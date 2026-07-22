@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0_w4cl" name="img_Mask" xy="0,0" size="1080,1920" alpha="0.7" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n2_w4cl" name="SetupCom" src="w4cl7" fileName="SetupCom.xml" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+  </displayList>
+  <transition name="trs_DefaultOpen" frameRate="60">
+    <item time="0" type="Alpha" target="n0_w4cl" tween="true" startValue="0" endValue="0.7" duration="12" ease="Linear"/>
+    <item time="0" type="Alpha" target="n2_w4cl" value="0"/>
+    <item time="0" type="Visible" target="n2_w4cl" value="false"/>
+    <item time="12" type="Alpha" target="n2_w4cl" tween="true" startValue="0" endValue="1" duration="6" ease="Linear"/>
+    <item time="12" type="Visible" target="n2_w4cl" value="true"/>
+  </transition>
+</component>

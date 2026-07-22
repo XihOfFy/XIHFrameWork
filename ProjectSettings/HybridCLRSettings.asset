@@ -25,14 +25,17 @@ MonoBehaviour:
   externalHotUpdateAssembliyDirs: []
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
+  - Aot
   - Luban.Runtime
   - Obfuz.Runtime
   - System.Core
   - System
   - UniTask
   - UnityEngine.CoreModule
+  - UnityEngine.JSONSerializeModule
   - YooAsset
   - mscorlib
+  - protobuf-net
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10

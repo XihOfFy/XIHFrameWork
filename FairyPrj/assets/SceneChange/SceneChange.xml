@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="1080,1920">
+<component size="1080,1920" mask="n18_or8t" reversedMask="true">
   <displayList>
-    <graph id="n0_oc04" name="n0" xy="0,0" size="1080,1920" alpha="0.8" type="rect" fillColor="#ff000000">
-      <relation target="" sidePair="width-width,height-height"/>
+    <graph id="n18_or8t" name="img_Mask" xy="540,960" pivot="0.5,0.5" anchor="true" size="3000,3000" aspect="true" scale="0,0" alpha="0.5" touchable="false" type="eclipse" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </graph>
-    <text id="n1_oc04" name="tip" xy="166,1426" size="748,64" fontSize="32" color="#ffffff" align="center" autoSize="none" text="正在切换场景。。。">
-      <relation target="" sidePair="width-width,bottom-bottom"/>
+    <loader id="n13_qps5" name="lod_BG" xy="0,0" pivot="0.5,0.5" size="1080,1920" align="center" vAlign="middle" fill="scaleMatchWidth">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <text id="n10_j5bq" name="title" xy="359,1562" pivot="0.5,0.5" size="362,116" fontSize="61" color="#ffffff" align="center" vAlign="middle" autoSize="none" strokeColor="#305873" strokeSize="0.4" faceDilate="0.4" text="Loading...">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </text>
   </displayList>
+  <transition name="playAni" autoPlayRepeat="0" frameRate="60">
+    <item time="0" type="Alpha" target="n10_j5bq" tween="true" startValue="1" endValue="0.2" duration="60" ease="Linear" repeat="-1" yoyo="true"/>
+    <item time="0" type="Scale" target="n10_j5bq" tween="true" startValue="1,1" endValue="0.8,0.8" duration="60" ease="Linear" repeat="-1" yoyo="true"/>
+    <item time="0" type="Scale" target="n18_or8t" tween="true" startValue="1,1" endValue="0,0" duration="30"/>
+    <item time="0" type="Visible" target="n18_or8t" value="true"/>
+    <item time="30" type="Visible" target="n18_or8t" value="false"/>
+  </transition>
+  <transition name="playBackAni" frameRate="60">
+    <item time="0" type="Alpha" target="n13_qps5" value="1"/>
+    <item time="0" type="Scale" target="n18_or8t" tween="true" startValue="0,0" endValue="1,1" duration="18"/>
+    <item time="0" type="Visible" target="n10_j5bq" value="false"/>
+    <item time="0" type="Visible" target="n18_or8t" value="true"/>
+    <item time="6" type="Alpha" target="n13_qps5" tween="true" startValue="1" endValue="0" duration="12"/>
+  </transition>
 </component>

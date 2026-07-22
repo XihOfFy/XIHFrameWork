@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="121,117" pivot="0.5,0.5" extention="Button">
+  <controller name="button" pages="2,up,3,down" selected="0"/>
+  <displayList>
+    <image id="n5_w4cl" name="img_OffState" src="w4cl1" fileName="atlas/img_setting.png" xy="0,0" pivot="0.5,0.5" size="121,117" aspect="true">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n6_w4cl" name="img_OnState" src="w4cl3" fileName="atlas/img_open.png" xy="0,-20" pivot="0.5,0.5" size="121,117" aspect="true">
+      <gearDisplay controller="button" pages="3"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+  <Button mode="Check"/>
+</component>

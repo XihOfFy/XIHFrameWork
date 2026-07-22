@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0_jbxu" name="n0" xy="0,0" pivot="0.5,0.5" size="1080,1920" alpha="0.7" type="rect" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n1_jbxu" name="n1" src="nfsgyxd" fileName="atlas/jiazai.png" xy="440,860" pivot="0.5,0.5">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+  <transition name="t0" autoPlay="true" frameRate="60">
+    <item time="0" type="Rotation" target="n1_jbxu" tween="true" startValue="0" endValue="360" duration="12" ease="Linear" repeat="-1"/>
+  </transition>
+</component>

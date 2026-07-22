@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="128,140" pivot="0.5,0.5" extention="Button">
+  <displayList>
+    <graph id="n3_e22z" name="n3" xy="14,18" size="100,100" type="rect" fillColor="#ffff0000"/>
+  </displayList>
+  <Button downEffect="scale" downEffectValue=".8"/>
+</component>

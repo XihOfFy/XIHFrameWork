@@ -10,7 +10,8 @@ namespace Tmpl
     public partial class Tables
     {
         public static Tables Instance { get; private set; }
-        public static async UniTask InitTmpl() {
+        public static async UniTask InitTmpl()
+        {
 #if JSON_LOAD
             var asHandle = AssetLoadUtil.LoadAllAssetsAsync<TextAsset>("Assets/Res/Tmpl/tbaudio.json");
 #else
@@ -23,24 +24,28 @@ namespace Tmpl
             {
                 dic.Add(ast.name, ast);
             }
-            Instance = new Tables((fn) => {
+            Instance = new Tables((fn) =>
+            {
 #if JSON_LOAD
                 return JSON.Parse(dic[fn].text);
 #else
                 return ByteBuf.Wrap(dic[fn].bytes);
 #endif
             });
-            
+
             asHandle.Release();
             AfterLoadTmpl();
         }
 
-        static void AfterLoadTmpl() {
-
+        static void AfterLoadTmpl()
+        {
+            Tables.Instance.TbApp.AfterLoadTmpl();
         }
 #if UNITY_EDITOR
-        public static void InitFromEditor() {
-            Instance = new Tables((fn) => {
+        public static void InitFromEditor()
+        {
+            Instance = new Tables((fn) =>
+            {
 #if JSON_LOAD
                 var asst = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>($"Assets/Res/Tmpl/{fn}.json");
                 return JSON.Parse(asst.text);

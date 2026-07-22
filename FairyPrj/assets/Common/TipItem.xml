@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="1080,64" pivot="0.5,0.5">
+<component size="1600,100" pivot="0.5,0.5">
   <displayList>
-    <text id="n0_zplm" name="tip" xy="39,0" pivot="0.5,0.5" size="1000,64" font="ui://4imy7ztwk6bjd" fontSize="32" align="center" vAlign="middle" ubb="true" autoSize="none" singleLine="true" text="tip">
-      <relation target="" sidePair="width-width,height-height"/>
+    <image id="n6_zslh" name="n6" src="i0s0yxc" fileName="atlas/LevelTitle.png" xy="676,100" pivot="0.5,0.5" size="247,101" alpha="0.4">
+      <relation target="n0_zplm" sidePair="width-width"/>
+    </image>
+    <text id="n0_zplm" name="tip" xy="770,120" pivot="0.5,0.5" size="57,60" font="ui://4imy7ztwk6bjd" fontSize="45" color="#ffffff" align="center" vAlign="middle" ubb="true" singleLine="true" text="tip">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </text>
   </displayList>
-  <transition name="show">
-    <item time="0" type="Alpha" tween="true" startValue="1" endValue="0" duration="48"/>
+  <transition name="show" options="2">
+    <item time="0" type="Alpha" tween="true" startValue="0.1" endValue="1" duration="5" ease="Linear"/>
+    <item time="0" type="XY" value="-,0"/>
+    <item time="1" type="XY" tween="true" startValue="-,0" endValue="-,-200" duration="4" ease="Linear"/>
+    <item time="30" type="Alpha" tween="true" startValue="1" endValue="0" duration="17" ease="Linear"/>
+    <item time="47" type="XY" value="-,0"/>
   </transition>
 </component>

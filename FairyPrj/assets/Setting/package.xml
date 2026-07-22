@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="jbdjmb77">
+  <resources>
+    <image id="w4cl1" name="img_setting.png" path="/atlas/" exported="true"/>
+    <image id="w4cl3" name="img_open.png" path="/atlas/" exported="true"/>
+    <component id="w4cl6" name="Setup.xml" path="/" exported="true"/>
+    <component id="w4cl7" name="SetupCom.xml" path="/" exported="true"/>
+    <component id="w4cl8" name="BtnSet.xml" path="/"/>
+    <component id="w4cl9" name="LabTilte.xml" path="/"/>
+    <component id="e22zb" name="CloseBtn.xml" path="/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

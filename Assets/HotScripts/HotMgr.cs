@@ -40,7 +40,7 @@ namespace Hot
             //PlatformUtil.SetFramePerSecond(60);根据游戏需要确定是否锁帧
             //UnityEngine.Input.multiTouchEnabled = false;//禁用多点触屏,对于EvenetSystem的触控没法限制
             DOTween.SetTweensCapacity(1250, 500);
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             //酌情考虑是否开启输入，对于小游戏，开启这个会有一定性能消耗
             WebGLInput.mobileKeyboardSupport = true;
 #endif

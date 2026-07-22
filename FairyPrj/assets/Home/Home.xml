@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1080,1920">
   <displayList>
-    <component id="n1_zplm" name="startBtn" src="zplm6" fileName="Button.xml" pkg="4imy7ztw" xy="340,1126">
-      <relation target="" sidePair="center-center,bottom-bottom"/>
-      <Button title="Start" icon="ui://4imy7ztwzplm0" selectedIcon="ui://4imy7ztwzplm0"/>
+    <component id="n2_e22z" name="setBtn" src="e22z1" fileName="SetBtn.xml" xy="101,80" size="200,100">
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+    <component id="n3_e22z" name="startBtn" src="e22z1" fileName="SetBtn.xml" xy="440,910" size="200,100">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
 </component>

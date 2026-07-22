@@ -2,6 +2,7 @@
 <packageDescription id="43u9fsq5">
   <resources>
     <component id="ik070" name="Home.xml" path="/" exported="true"/>
+    <component id="e22z1" name="SetBtn.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

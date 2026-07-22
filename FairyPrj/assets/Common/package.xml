@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <packageDescription id="4imy7ztw">
   <resources>
-    <component id="zplm6" name="Button.xml" path="/" exported="true"/>
     <component id="zplm8" name="SystemTip.xml" path="/" exported="true"/>
     <component id="zplm9" name="TipItem.xml" path="/" exported="true"/>
-    <component id="zplma" name="Choose.xml" path="/" exported="true"/>
-    <component id="zplmc" name="ChooseContent.xml" path="/" exported="true"/>
-    <font id="k6bjd" name="JTFont.ttf" path="/" renderMode="sdfaa" samplePointSize="90"/>
+    <font id="k6bjd" name="JTFont.ttf" path="/" renderMode="sdfaa" samplePointSize="30" atlasPadding="2"/>
+    <image id="i0s0yxc" name="TipBg.png" path="/atlas/" scale="9grid" scale9grid="35,18,4,36"/>
+    <image id="nfsgyxd" name="jiazai.png" path="/atlas/"/>
+    <component id="nfsgyxe" name="WaitMask.xml" path="/" exported="true"/>
+    <component id="e22zyxf" name="Choose.xml" path="/" exported="true"/>
+    <component id="e22zyxg" name="ChooseContent.xml" path="/" exported="true"/>
+    <component id="e22zyxh" name="Button.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

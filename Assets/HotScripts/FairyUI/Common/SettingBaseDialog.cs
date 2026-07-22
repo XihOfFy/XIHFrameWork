@@ -17,9 +17,9 @@ namespace Hot
         GButton musicBtn;
         GTextField soundTxt;
         GButton soundBtn;
-        //GTextField vibrateTxt;
-        //GButton vibrateBtn;
-        GLabel lab_title;
+        GTextField vibrateTxt;
+        GButton vibrateBtn;
+        GLabel labTitle;
         GTextField verTxt;
 
         protected override void InitComponent()
@@ -31,17 +31,17 @@ namespace Hot
 #else
             verTxt.SetText(AotConfig.Version);
 #endif
-            lab_title.GetTextField().Translate(790001);
-            lab_title.onClick.Add(OnGMBtn);
+            labTitle.GetTextField().Translate(790001);
+            labTitle.onClick.Add(OnGMBtn);
             musicTxt.Translate(790002);
             musicBtn.onClick.Add(OnMusicBtn);
             musicBtn.selected = SoundMgr.Instance.BgmEnable;
             soundTxt.Translate(790003);
             soundBtn.onClick.Add(OnSoundBtn);
             soundBtn.selected = SoundMgr.Instance.SoundEnable;
-            //vibrateTxt.SetText(7004.Translate());
-            //vibrateBtn.onClick.Add(OnVibrateBtn);
-            //vibrateBtn.selected = SoundMgr.Instance.Vibrate;
+            vibrateTxt.Translate(790004);
+            vibrateBtn.onClick.Add(OnVibrateBtn);
+            vibrateBtn.selected = SoundMgr.Instance.Vibrate;
         }
         public abstract void OnGMBtn();
 
@@ -57,10 +57,11 @@ namespace Hot
         }
         void OnVibrateBtn()
         {
-            //if (SoundMgr.Instance.Vibrate = vibrateBtn.selected) {
-            //    SoundMgr.Instance.PlayVibrate();
-            //}
-            //SoundMgr.Instance.PlayBtnSound();
+            if (SoundMgr.Instance.Vibrate = vibrateBtn.selected)
+            {
+                SoundMgr.Instance.PlayVibrate();
+            }
+            SoundMgr.Instance.PlayBtnSound();
         }
 
         protected void OnCloseBtn()
