@@ -16,10 +16,6 @@ del /Q %SRC_DIR%\Assets\AnyThinkAds.meta
 rd /S /Q %SRC_DIR%\Assets\AnyThinkPlugin
 del /Q %SRC_DIR%\Assets\AnyThinkPlugin.meta
 
-@echo É¾³ý XiHNet
-rd /S /Q %SRC_DIR%\Assets\HotScripts\XiHNet
-del /Q %SRC_DIR%\Assets\HotScripts\XiHNet.meta
-
 @echo É¾³ý WeixinMinigame
 rd /S /Q %SRC_DIR%\Packages\com.qq.weixin.minigame
 @echo É¾³ý WX-WASM-SDK-V2
@@ -42,20 +38,11 @@ del /Q %SRC_DIR%\Assets\Plugins\com.tiktok.minigame.meta
 rd /S /Q %SRC_DIR%\Assets\Res\TikTok
 del /Q %SRC_DIR%\Assets\Res\TikTok.meta
 
-@echo É¾³ý Seeg
-rd /S /Q %SRC_DIR%\Assets\Seeg
-del /Q %SRC_DIR%\Assets\Seeg.meta
-rd /S /Q %SRC_DIR%\Packages\seeg-sdk-unity
+::@echo É¾³ý cursor
+::rd /S /Q %SRC_DIR%\Packages\com.boxqkrtm.ide.cursor
 
-
-@echo É¾³ý cursor
-rd /S /Q %SRC_DIR%\Packages\com.boxqkrtm.ide.cursor
-
-@echo É¾³ý unity-mcp
-rd /S /Q %SRC_DIR%\Packages\com.coplaydev.unity-mcp
-
-@echo É¾³ý trae
-rd /S /Q %SRC_DIR%\Packages\com.unity.ide.trae
+::@echo É¾³ý unity-mcp
+::rd /S /Q %SRC_DIR%\Packages\com.coplaydev.unity-mcp
 
 @echo Ô¤´¦ÀíÍê³É!
 @echo on
