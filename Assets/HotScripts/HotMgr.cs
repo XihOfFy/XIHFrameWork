@@ -54,7 +54,6 @@ namespace Hot
             tks.Add(UIDialogManager.Instance.InitCommonPackageAsync(new List<string>() { "Common" }));
             await UniTask.WhenAll(tks);
             SoundMgr.Instance.PlayBGM(1);//初始化音频，并播放一个音乐
-            await InitThridSdk();
             CheckGuide();
         }
     }
