@@ -1,4 +1,4 @@
-﻿#if UNITY_DY && !USE_ZSSDK
+﻿#if UNITY_DY
 using Cysharp.Threading.Tasks;
 using Hot;
 using System;

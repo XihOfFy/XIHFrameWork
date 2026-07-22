@@ -46,22 +46,18 @@ namespace Ad
             _adapter = new LocalAdapter();
 #elif UNITY_HW_QG && UNITY_WEBGL //优先华为QG ，然后使用指色上报日志
             _adapter = new HuaweiQGAdAdapter();
-#elif USE_ZSSDK //指色全使用他的AD api
-            _adapter = new SeegAdAdapter();
 #elif TOPONSDK_AD
             _adapter = new ToponAdSdk();
 #elif UNITY_WX && UNITY_WEBGL
             _adapter = new WxAdAdapter();
-#elif UNITY_DY
+#elif UNITY_DY && UNITY_WEBGL
             _adapter = new DYAdAdapter();
+#elif UNITY_TT && UNITY_WEBGL
+            _adapter = new TTAdAdapter();
 #elif UNITY_OPPO
             _adapter = OppoAdAdapter.Instance;
-#elif UNITY_KS
+#elif UNITY_KS && UNITY_WEBGL
             _adapter = new KsAdAdapter();
-#elif UNITY_OVERSEA_NIUKOU
-            _adapter = new NiuKouAdAdapter();
-#elif UNITY_TT
-            _adapter = new TTAdAdapter();
 #else
             _adapter = new LocalAdapter();
 #endif

@@ -1,5 +1,4 @@
 ﻿#if UNITY_WX
-using Cysharp.Threading.Tasks;
 using Hot;
 using System;
 using Tmpl;
@@ -8,198 +7,134 @@ using WeChatWASM;
 
 namespace Ad
 {
+    /// <summary>
+    /// 微信激励/插屏广告适配，结构对齐 TTAdAdapter：预加载激励、关闭后重建、插屏即用即建。
+    /// </summary>
     public class WxAdAdapter : IAdAdapter
     {
-        public void ShowRewardAdv(Action<bool> onLoad, VideoSceneEnum comment, int pLevel = 0, int pProcess = 0)
+        void IAdAdapter.CloseNativeAd() { }
+        void IAdAdapter.InitCallBack() { }
+        bool IAdAdapter.IsHaveReadyAd() { return true; }
+        void IAdAdapter.RemoveCallBack() { }
+
+        WXRewardedVideoAd _rewardedAd;
+        Action<bool> _rewardCallback;
+
+        WXInterstitialAd _interstitialAd;
+
+        public void InitSDK()
         {
-            LoadVideo(onLoad, TbApp.AppCfg.RewardAd1);
-        }
-
-
-
-
-
-
-
-
-        const int maxTryLoadCount = 3;
-        void IAdAdapter.InitCallBack()
-        {
-
-        }
-
-        void IAdAdapter.InitSDK()
-        {
-#if UNITY_WX
-            //激励视频广告组件是自动拉取广告并进行更新的。在组件创建后会拉取一次广告，用户点击 关闭广告 后会去拉取下一条广告。
-            var ad = WX.CreateRewardedVideoAd(new WXCreateRewardedVideoAdParam()
-            {
-                adUnitId = TbApp.AppCfg.RewardAd1
-            });
-            ad.OnLoad(rsp =>
-            {
-                Debug.LogWarning("预加载一个广告");
-                ad.OffLoad(null);
-            });
-            //ad.Load();//预加载一个,CreateRewardedVideoAd自动会预加载
-
-
-            /*var interAd = WX.CreateInterstitialAd(new WXCreateInterstitialAdParam()
-            {
-                adUnitId = "adunit-640365ba79a3b7ef"
-            });
-            interAd.OnLoad(rsp => {
-                Debug.LogWarning("预加载一个插屏广告");
-                interAd.OffLoad(null);
-            });
-            //interAd.Load();//预加载一个,CreateInterstitialAd自动会预加载？
-            */
-#endif
-        }
-
-        bool IAdAdapter.IsHaveReadyAd()
-        {
-            return true;
-        }
-
-        async void OnRewardAsync(Action<bool> onLoad, bool isGet)
-        {
-            await UniTask.SwitchToMainThread();
-            onLoad?.Invoke(isGet);
-        }
-        public async void LoadVideo(Action<bool> onLoad, string adUnitId)
-        {
-            if (string.IsNullOrEmpty(adUnitId))
-            {
-                onLoad(true);
-                return;
-            }
-            UnityEngine.Debug.Log($"加载广告 {adUnitId}");
-            var tryLoadCount = 0;
-            var ad = WX.CreateRewardedVideoAd(new WXCreateRewardedVideoAdParam()
-            {
-                adUnitId = adUnitId
-            });
-            try
-            {
-                ad.OnClose(p =>
-                {
-                    UnityEngine.Debug.Log($"关闭广告 {p.isEnded}");
-                    OnRewardAsync(onLoad, p.isEnded);
-                });
-                //报错都会走这里，所以其他失败只需打印错误日志
-                ad.OnError(rsp =>
-                {
-                    UnityEngine.Debug.LogError($"加载广告{tryLoadCount}次失败 OnError:{rsp.callbackId}>{rsp.errCode}:{rsp.errMsg} ，将预加载下一个广告");
-                    ReLoad();
-                });
-                ad.Show(s =>
-                {
-                    UnityEngine.Debug.Log("展示广告");
-                }, f =>
-                {
-                    UnityEngine.Debug.LogError($"加载广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
-                    ReLoad();
-                });
-                void ReLoad()
-                {
-                    if (tryLoadCount < maxTryLoadCount)
-                    {
-                        tryLoadCount += 1;
-                        ad.Load(s2 =>
-                        {
-                            UnityEngine.Debug.Log($"加载广告 {tryLoadCount} 次失败后重新 load 广告 成功");
-                            ad.Show(s3 =>
-                            {
-                                UnityEngine.Debug.Log($"重新展示广告 Show 成功 ");
-                            }, f3 =>
-                            {
-                                UnityEngine.Debug.LogError($"重新尝试 {tryLoadCount}展示广告失败!!!");
-                                ReLoad();
-                            });
-                        }, f2 =>
-                        {
-                            UnityEngine.Debug.LogError($"加载广告 {tryLoadCount}次 失败后重新 load 广告 失败");
-                        });
-                    }
-                    else
-                    {
-                        OnRewardAsync(onLoad, false);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                OnRewardAsync(onLoad, false);
-                UnityEngine.Debug.LogException(e);
-            }
-        }
-
-
-        public void LoadInterstitialAd(string adUnitId)
-        {
-            UnityEngine.Debug.Log($"加载插屏广告 {adUnitId}");
-            var tryLoadCount = maxTryLoadCount - 1;//只重新测试一次
-            var ad = WX.CreateInterstitialAd(new WXCreateInterstitialAdParam()
-            {
-                adUnitId = adUnitId
-            });
-            try
-            {
-                ad.OnClose(() =>
-                {
-                    UnityEngine.Debug.Log($"关闭插屏广告 ");
-                });
-
-                ad.OnError(rsp =>
-                {
-                    UnityEngine.Debug.LogError($"加载插屏广告失败 OnError:{rsp.callbackId}>{rsp.errCode}:{rsp.errMsg} ，加载下一个广告");
-                    ReLoad();
-                });
-                ad.Show(s =>
-                {
-                    UnityEngine.Debug.Log("展示插屏广告");
-                }, f =>
-                {
-                    UnityEngine.Debug.LogError($"加载插屏广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
-                    ReLoad();
-                });
-                void ReLoad()
-                {
-                    if (tryLoadCount < maxTryLoadCount)
-                    {
-                        tryLoadCount += 1;
-                        ad.OnLoad(rsp =>
-                        {
-                            UnityEngine.Debug.Log("加载插屏广告...");
-                            ad.Show(s =>
-                            {
-                                UnityEngine.Debug.Log("展示插屏广告");
-                            }, f =>
-                            {
-                                UnityEngine.Debug.LogError($"加载插屏广告失败 Show:{f.callbackId}>{f.errCode}:{f.errMsg}");
-                                ReLoad();
-                            });
-                        });
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                UnityEngine.Debug.LogException(e);
-            }
-        }
-        void IAdAdapter.RemoveCallBack()
-        {
-        }
-        public void CloseNativeAd()
-        {
-
+            PreloadRewardedAd();
         }
 
         public void ShowInsertAdv(Action<bool> onLoad, VideoSceneEnum comment)
         {
+            if (string.IsNullOrEmpty(TbApp.AppCfg.InterstitialAd1))
+            {
+                onLoad?.Invoke(true);
+                return;
+            }
 
+            // 创建新的插屏广告实例（微信建议用完即弃）
+            _interstitialAd = WX.CreateInterstitialAd(new WXCreateInterstitialAdParam
+            {
+                adUnitId = TbApp.AppCfg.InterstitialAd1
+            });
+
+            _interstitialAd.OnClose(() =>
+            {
+                Debug.Log("插屏广告已关闭");
+                _interstitialAd = null;
+                onLoad?.Invoke(true);
+            });
+
+            _interstitialAd.OnError(rsp =>
+            {
+                Debug.LogError($"插屏广告错误: {rsp.errCode}, {rsp.errMsg}");
+                _interstitialAd = null;
+                onLoad?.Invoke(false);
+            });
+
+            _interstitialAd.Show(
+                _ => Debug.Log("展示插屏广告"),
+                f =>
+                {
+                    Debug.LogError($"插屏广告展示失败: {f.errCode}, {f.errMsg}");
+                    _interstitialAd = null;
+                    onLoad?.Invoke(false);
+                });
+        }
+
+        public void ShowRewardAdv(Action<bool> onLoad, VideoSceneEnum comment, int pLevel = 0, int pProcess = 0)
+        {
+            if (string.IsNullOrEmpty(TbApp.AppCfg.RewardAd1))
+            {
+                onLoad?.Invoke(true);
+                return;
+            }
+
+            _rewardCallback = onLoad;
+            if (_rewardedAd == null)
+            {
+                PreloadRewardedAd();
+            }
+
+            // 微信 Show 失败时常见原因是尚未加载完成，补一次 Load 后再 Show
+            _rewardedAd?.Show(
+                _ => Debug.Log("展示激励广告"),
+                f =>
+                {
+                    Debug.LogError($"激励广告展示失败，尝试重新加载: {f.errCode}, {f.errMsg}");
+                    _rewardedAd?.Load(
+                        _ => _rewardedAd?.Show(
+                            null,
+                            f2 =>
+                            {
+                                Debug.LogError($"激励广告重试展示失败: {f2.errCode}, {f2.errMsg}");
+                                InvokeRewardCallback(false);
+                            }),
+                        f2 =>
+                        {
+                            Debug.LogError($"激励广告重新加载失败: {f2.errCode}, {f2.errMsg}");
+                            InvokeRewardCallback(false);
+                        });
+                });
+        }
+
+        void PreloadRewardedAd()
+        {
+            if (string.IsNullOrEmpty(TbApp.AppCfg.RewardAd1))
+                return;
+
+            // Create 后会自动拉取一条广告
+            _rewardedAd = WX.CreateRewardedVideoAd(new WXCreateRewardedVideoAdParam
+            {
+                adUnitId = TbApp.AppCfg.RewardAd1
+            });
+
+            _rewardedAd.OnClose(p =>
+            {
+                var isEnded = p != null && p.isEnded;
+                Debug.Log($"关闭激励广告 isEnded={isEnded}");
+                _rewardedAd = null;
+                InvokeRewardCallback(isEnded);
+                // 关闭后预加载下一条
+                PreloadRewardedAd();
+            });
+
+            _rewardedAd.OnError(rsp =>
+            {
+                Debug.LogError($"激励广告错误: {rsp.errCode}, {rsp.errMsg}");
+                _rewardedAd = null;
+                InvokeRewardCallback(false);
+            });
+        }
+
+        void InvokeRewardCallback(bool isEnded)
+        {
+            var act = _rewardCallback;
+            _rewardCallback = null;
+            act?.Invoke(isEnded);
         }
     }
 }
