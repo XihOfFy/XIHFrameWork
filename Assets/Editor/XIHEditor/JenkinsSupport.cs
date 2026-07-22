@@ -365,6 +365,7 @@ public class JenkinsSupport
         }
         return dic;
     }
+
 #if UNITY_WX
     static void WXSettings()
     {
@@ -378,24 +379,23 @@ public class JenkinsSupport
 
         config.CompileOptions.Il2CppOptimizeSize = true;//压缩包体大小
         var remoteCfgPath = $"{WEB_ROOT}/Front/WebGL.json";
-        FrontConfig fontCfg = null;
         if (File.Exists(remoteCfgPath))
         {
-            fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
-            config.ProjectConf.CDN = fontCfg.cdn;
-            Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{fontCfg.cdn}\n 若资源分包记得分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/WebGL");
+            var fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
+            ResolveCdnAndBundlePath(fontCfg, out var cdnRoot, out var bundlePathIdentifier);
+            config.ProjectConf.CDN = cdnRoot;
+            //缓存www下载中包含WebGL路径的文件
+            var strCache = config.ProjectConf.bundlePathIdentifier;
+            var hashCache = new HashSet<string>(strCache.Split(";"));
+            hashCache.Remove("");
+            hashCache.Add(bundlePathIdentifier);
+            config.ProjectConf.bundlePathIdentifier = string.Join(";", hashCache);
+            Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{cdnRoot} 缓存使用bundlePathIdentifier：{bundlePathIdentifier}\n 若资源分包记得分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/{bundlePathIdentifier}");
         }
         else
         {
             Debug.LogError($"未找到{remoteCfgPath}文件,CDN保留原始设置");
         }
-        var cdn = fontCfg.cdn;
-        if (cdn.EndsWith('/')) cdn = cdn.TrimEnd('/');
-        var bundlePathIdentifier = cdn.Substring(cdn.LastIndexOf('/') + 1);
-        cdn = cdn.Substring(0, cdn.LastIndexOf('/'));//+ "/" + BuildTargetGroup.WebGL.ToString();
-        config.ProjectConf.CDN = cdn;
-        Debug.LogWarning($"为了方便分包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{nameof(FrontConfig)}文件设置CDN：{cdn}, 后面最后为固定缓存文件夹名字：{bundlePathIdentifier}");
-
         //使用包内加载，且不压缩首包
         config.ProjectConf.assetLoadType = 1;
         config.ProjectConf.compressDataPackage = false;
@@ -408,14 +408,6 @@ public class JenkinsSupport
         //hash.Add("cfg");
         //hash.Add("json");
         config.ProjectConf.bundleExcludeExtensions = string.Join(";", hash);
-
-        //缓存www下载中包含WebGL路径的文件
-        str = config.ProjectConf.bundlePathIdentifier;
-        hash = new HashSet<string>(str.Split(";"));
-        hash.Remove("");
-        hash.Add(bundlePathIdentifier);
-        //hash.Add("WebGL");
-        config.ProjectConf.bundlePathIdentifier = string.Join(";", hash);
         config.CompileOptions.enableIOSPerformancePlus = true;
         config.ProjectConf.MemorySize = 128;
 
@@ -450,6 +442,31 @@ public class JenkinsSupport
     }
 
 #endif
+
+    /// <summary>
+    /// 从 Front 配置解析微信/抖音 CDN 根地址与缓存路径标识。
+    /// 兼容两种写法：
+    /// 1) cdn=http://host:port ，defaultHostServer=http://host:port/WebGL
+    /// 2) cdn=http://host:port/WebGL（旧写法，需剥掉末级路径）
+    /// </summary>
+    static void ResolveCdnAndBundlePath(FrontConfig fontCfg, out string cdnRoot, out string bundlePathIdentifier)
+    {
+        cdnRoot = (fontCfg.cdn ?? string.Empty).Trim().TrimEnd('/');
+        // 兼容 cdn 自带平台后缀：只在 "://" 之后仍有路径段时才剥离，避免 http://host:port → http:/
+        var downloadHostServer = fontCfg.defaultHostServer;
+        if (downloadHostServer.EndsWith('/')) downloadHostServer = downloadHostServer.TrimEnd('/');
+        var schemeIdx = downloadHostServer.IndexOf("://", StringComparison.Ordinal);
+        var authorityStart = schemeIdx >= 0 ? schemeIdx + 3 : 0;
+        var lastSlash = downloadHostServer.LastIndexOf('/');
+        if (lastSlash > authorityStart)
+        {
+            bundlePathIdentifier = downloadHostServer.Substring(lastSlash + 1);
+        }
+        else
+        {
+            bundlePathIdentifier = BuildTarget.WebGL.ToString();
+        }
+    }
     static void SetWXPreloadFiles()
     {
         var orders = GetPreLoadList();
@@ -545,12 +562,26 @@ public class JenkinsSupport
         var starkBuilderSettings = StarkBuilderSettings.Instance;//        var starkBuilderSettings = StarkBuilderSettings.LoadSettings();
         starkBuilderSettings.framework = Framework.Wasm;
 
-        var cfg = Resources.Load<XIHAppSetting>(nameof(XIHAppSetting));
-        var cdn = cfg.resUrl;
-        if (cdn.EndsWith('/')) cdn = cdn.TrimEnd('/');
-        var bundlePathIdentifier = cdn.Substring(cdn.LastIndexOf('/') + 1);
-        cdn = cdn.Substring(0, cdn.LastIndexOf('/'));//+ "/" + BuildTargetGroup.WebGL.ToString();
-        starkBuilderSettings.CDN = cdn;
+        var remoteCfgPath = $"{WEB_ROOT}/Front/WebGL.json";
+        if (File.Exists(remoteCfgPath))
+        {
+            var fontCfg = JsonUtility.FromJson<FrontConfig>(File.ReadAllText(remoteCfgPath));
+            ResolveCdnAndBundlePath(fontCfg, out var cdnRoot, out var bundlePathIdentifier);
+            starkBuilderSettings.CDN = cdnRoot;
+            //缓存www下载中包含WebGL路径的文件
+            var strCache = starkBuilderSettings.urlCacheList;
+            var hashCache = new HashSet<string>(strCache);
+            hashCache.Remove("");
+            hashCache.Add(cdnRoot);
+            hashCache.Add(bundlePathIdentifier);
+            hashCache.Add(fontCfg.defaultHostServer);
+            starkBuilderSettings.urlCacheList = hashCache.ToArray();
+            Debug.LogWarning($"抖音打包才设置默认CDN，AOT2HOT后都是走代码设置的CDN，当前默认通过{remoteCfgPath}文件设置CDN：{cdnRoot} 缓存使用bundlePathIdentifier：{bundlePathIdentifier}\n 若资源分包记得分包要放在{WEB_ROOT}，而不是{WEB_ROOT}/{bundlePathIdentifier}");
+        }
+        else
+        {
+            Debug.LogError($"未找到{remoteCfgPath}文件,CDN保留原始设置");
+        }
 
         var outDir = $"{WEB_ROOT}/DYWebGL";
         if (Directory.Exists(outDir)) Directory.Delete(outDir, true);
@@ -563,7 +594,6 @@ public class JenkinsSupport
         starkBuilderSettings.isWebGL2 = true;//为了支持fanshe shader
         starkBuilderSettings.needCompress = true;
         starkBuilderSettings.buildOptions = BuildOptions.None;
-        starkBuilderSettings.urlCacheList = new string[] { cdn };
         starkBuilderSettings.dontCacheFileNames = new string[] { "version" };
         starkBuilderSettings.iOSPerformancePlus = true;
 #if UNITY_DY
