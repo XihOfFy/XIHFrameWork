@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: MiniGameConfig
   m_EditorClassIdentifier: 
   ProjectConf:
-    projectName: 
-    Appid: 
-    CDN: http://192.168.2.194:8080/job/Gun_WebGL_WX/lastSuccessfulBuild/artifact
+    projectName: FTUNI
+    Appid: wxdb969b951fdef68f
+    CDN: http://192.168.2.36:5000/WebGL
     assetLoadType: 1
     compressDataPackage: 0
     VideoUrl: 
     relativeDST: XIHWebServerRes/MiniGame
-    DST: D:\Work\gun_wx\XIHWebServerRes\MiniGame
+    DST: C:\Work\Thirds\XIHFrameWork\XIHWebServerRes/MiniGame
     StreamCDN: 
     bundleHashLength: 32
     bundlePathIdentifier: StreamingAssets;WebGL
@@ -46,7 +46,7 @@ MonoBehaviour:
     UseCompressedTexture: 0
     UseMiniGameChat: 0
     PreloadWXFont: 0
-    disableMultiTouch: 1
+    disableMultiTouch: 0
   CompileOptions:
     DevelopBuild: 0
     AutoProfile: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
     profilingFuncs: 0
     Webgl2: 1
     fbslim: 1
-    DeleteStreamingAssets: 1
+    DeleteStreamingAssets: 0
     ProfilingMemory: 0
     CleanBuild: 0
     CustomNodePath: 

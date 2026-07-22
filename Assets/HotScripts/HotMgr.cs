@@ -20,14 +20,7 @@ namespace Hot
         private void Awake()
         {
 #if UNITY_WX
-            if (Hot.WxTool.CanUseByVersion("2.26.2"))
-            {
-                WeChatWASM.WX.ReportScene(new WeChatWASM.ReportSceneOption() { sceneId = 7 });
-            }
-            else
-            {
-                Debug.LogWarning("暂时不支持该WX API使用：WX.ReportScene");
-            }
+            WeChatWASM.WX.ReportScene(new WeChatWASM.ReportSceneOption() { sceneId = 7 });
 #elif UNITY_DY
             var param = new TTSDK.UNBridgeLib.LitJson.JsonData();
             param["sceneId"] = 7001;
