@@ -73,25 +73,23 @@ namespace Aot
             else if (playMode == EPlayMode.WebPlayMode)
             {
                 var remoteServices = new RemoteServices();
-                //var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
-#if UNITY_WX && WEIXINMINIGAME
-                //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀/分隔的是微信缓存的文件夹路径且可多层级，保证名字固定
-                //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
                 var cdn = AotConfig.frontConfig.cdn;
                 var suffix = AotConfig.frontConfig.defaultHostServer.Substring(cdn.Length);
                 if (suffix.StartsWith('/')) suffix = suffix.Substring(1);
+#if UNITY_WX && WEIXINMINIGAME
+                //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀/分隔的是微信缓存的文件夹路径且可多层级，保证名字固定
+                //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
                 string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffix}";
                 var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
 #elif UNITY_DY && DOUYINMINIGAME
                 // 小游戏缓存根目录
                 // 注意：如果有子目录，请修改此处！
-                string packageRoot = $"yoo";
+                string packageRoot = $"{StarkSDKSpace.StarkFileSystemManager.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffix}";
                 var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
 #else
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
 #endif
                 webRemoteFileSystemParams.AddParameter(FileSystemParametersDefine.MANIFEST_SERVICES, new ManifestRestoreServices());
-
                 var initParameters = new WebPlayModeParameters();
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
                 createParameters = initParameters;
