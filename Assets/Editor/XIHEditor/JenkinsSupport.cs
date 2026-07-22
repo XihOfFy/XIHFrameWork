@@ -487,7 +487,8 @@ public class JenkinsSupport
 
     static List<string> GetPreLoadList()
     {
-        var resUrl = AotConfig.GetCdnUrl(BuildTarget.WebGL);
+        var frontCfg = AotConfig.GetFrontConfig(BuildTarget.WebGL);
+        var resUrl = frontCfg.defaultHostServer;
         if (resUrl.EndsWith('/')) resUrl = resUrl.TrimEnd('/');
         var dic = new Dictionary<string, int>();
         var initNeedAbPreffixs = new string[] {

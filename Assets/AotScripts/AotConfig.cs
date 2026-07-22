@@ -140,7 +140,7 @@ namespace Aot
                 File.WriteAllText(file, JsonUtility.ToJson(config));
             }
         }
-        public static string GetCdnUrl(BuildTarget buildTarget)
+        public static FrontConfig GetFrontConfig(BuildTarget buildTarget)
         {
             var dir = "XIHWebServerRes/Front";
             var file = $"{dir}/{buildTarget}.json";
@@ -151,7 +151,7 @@ namespace Aot
             }
             var json = File.ReadAllText(file);
             var frontConfig = JsonUtility.FromJson<FrontConfig>(json);
-            return frontConfig.cdn;
+            return frontConfig;
         }
         public static string GetIP()
         {
