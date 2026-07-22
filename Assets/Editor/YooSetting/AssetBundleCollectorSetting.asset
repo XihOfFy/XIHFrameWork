@@ -76,7 +76,7 @@ MonoBehaviour:
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/Tmpl
-        CollectorGUID: 5a99561834a02bd46acf0b1cb771fd59
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstAB
@@ -115,7 +115,7 @@ MonoBehaviour:
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/Res/Audio/Music
-        CollectorGUID: b8ea49defc057234ca6e4f3c6fbebd08
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackSeparately
@@ -123,7 +123,7 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
       - CollectPath: Assets/Res/Audio/Sound
-        CollectorGUID: c8d4608e187c5b546b404ea7d0ea64d7
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -136,7 +136,7 @@ MonoBehaviour:
       ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/Effect
-        CollectorGUID: a72f047357291aa4fbeb2141127aecac
+        CollectorGUID: 
         CollectorType: 2
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
@@ -144,7 +144,7 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
       - CollectPath: Assets/Res/Effect
-        CollectorGUID: a72f047357291aa4fbeb2141127aecac
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
@@ -157,7 +157,7 @@ MonoBehaviour:
       ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/Models
-        CollectorGUID: 22fdb01723935094f867a3f1a8bf4087
+        CollectorGUID: 
         CollectorType: 2
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
@@ -165,7 +165,7 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
       - CollectPath: Assets/Res/Models
-        CollectorGUID: 22fdb01723935094f867a3f1a8bf4087
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
@@ -178,7 +178,7 @@ MonoBehaviour:
       ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/Prefabs
-        CollectorGUID: 744973fce3130bb458edc43a5965bf48
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
@@ -186,7 +186,7 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
       - CollectPath: Assets/Res/Prefabs
-        CollectorGUID: 744973fce3130bb458edc43a5965bf48
+        CollectorGUID: 
         CollectorType: 2
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstOrSubLayer
@@ -199,7 +199,7 @@ MonoBehaviour:
       ActiveRuleName: DisableGroup
       Collectors:
       - CollectPath: Assets/Res/TikTok
-        CollectorGUID: 7687bfe0c125ac8478f9bb49ab4ff06e
+        CollectorGUID: 
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -225,5 +225,18 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackFirstAB
         FilterRuleName: CollectShaderVariants
+        AssetTags: 
+        UserData: 
+    - GroupName: Raw
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Raw
+        CollectorGUID: 62df3bae15c0973468f192f758df2973
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

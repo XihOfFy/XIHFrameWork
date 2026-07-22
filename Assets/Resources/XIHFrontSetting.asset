@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   appId: 4001
   language: 6
-  front: http://192.168.2.192:5000/Front/
+  front: http://192.168.2.36:5000/Front/

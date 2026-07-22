@@ -7,8 +7,8 @@
     <component id="n3_e22z" name="startBtn" src="e22z1" fileName="SetBtn.xml" xy="440,910" size="200,100">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <text id="n6_e22z" name="n6" xy="164,1376" size="716,132" fontSize="80" align="center" vAlign="middle" autoSize="none" text="dddddddddd" input="true">
-      <relation target="" sidePair="center-center,bottom-bottom"/>
+    <text id="n6_e22z" name="n6" xy="182,1361" size="716,132" fontSize="80" align="center" vAlign="middle" autoSize="none" text="dddddddddd" input="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </text>
   </displayList>
 </component>

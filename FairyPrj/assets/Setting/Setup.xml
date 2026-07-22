@@ -4,8 +4,8 @@
     <graph id="n0_w4cl" name="img_Mask" xy="0,0" size="1080,1920" alpha="0.7" type="rect" lineSize="0" fillColor="#ff000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n2_w4cl" name="SetupCom" src="w4cl7" fileName="SetupCom.xml" xy="0,0">
-      <relation target="" sidePair="width-width,height-height"/>
+    <component id="n2_w4cl" name="SetupCom" src="w4cl7" fileName="SetupCom.xml" xy="0,560">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
   <transition name="trs_DefaultOpen" frameRate="60">

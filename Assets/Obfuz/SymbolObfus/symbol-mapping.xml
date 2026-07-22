@@ -585,8 +585,8 @@
       <field signature="int $Obfuz$RVA_Value5" newName="$C" />
       <field signature="int $Obfuz$RVA_Value6" newName="$wC" />
       <field signature="int $Obfuz$RVA_Value7" newName="$D" />
-      <field signature="string $Obfuz$RVA_Value8" newName="$yh" />
-      <field signature="int $Obfuz$RVA_Value9" newName="$E" />
+      <field signature="int $Obfuz$RVA_Value8" newName="$QG" />
+      <field signature="string $Obfuz$RVA_Value9" newName="$rG" />
       <field signature="int $Obfuz$RVA_Value10" newName="$f" />
       <field signature="int $Obfuz$RVA_Value11" newName="$xC" />
       <field signature="int $Obfuz$RVA_Value12" newName="$g" />
@@ -603,64 +603,64 @@
       <field signature="int $Obfuz$RVA_Value23" newName="$YC" />
       <field signature="int $Obfuz$RVA_Value24" newName="$m" />
       <field signature="int $Obfuz$RVA_Value25" newName="$M" />
-      <field signature="string $Obfuz$RVA_Value26" newName="$zh" />
-      <field signature="int $Obfuz$RVA_Value27" newName="$zC" />
-      <field signature="string $Obfuz$RVA_Value28" newName="$Zh" />
-      <field signature="int $Obfuz$RVA_Value29" newName="$O" />
-      <field signature="string $Obfuz$RVA_Value30" newName="$aH" />
-      <field signature="int $Obfuz$RVA_Value31" newName="$AH" />
-      <field signature="string $Obfuz$RVA_Value32" newName="$bH" />
-      <field signature="int $Obfuz$RVA_Value33" newName="$BH" />
-      <field signature="string $Obfuz$RVA_Value34" newName="$cH" />
-      <field signature="int $Obfuz$RVA_Value35" newName="$CH" />
-      <field signature="string $Obfuz$RVA_Value36" newName="$dH" />
-      <field signature="int $Obfuz$RVA_Value37" newName="$DH" />
-      <field signature="string $Obfuz$RVA_Value38" newName="$Bd" />
-      <field signature="int $Obfuz$RVA_Value39" newName="$T" />
+      <field signature="int $Obfuz$RVA_Value26" newName="$wh" />
+      <field signature="string $Obfuz$RVA_Value27" newName="$Wh" />
+      <field signature="int $Obfuz$RVA_Value28" newName="$yh" />
+      <field signature="string $Obfuz$RVA_Value29" newName="$zh" />
+      <field signature="int $Obfuz$RVA_Value30" newName="$Zh" />
+      <field signature="string $Obfuz$RVA_Value31" newName="$aH" />
+      <field signature="int $Obfuz$RVA_Value32" newName="$AH" />
+      <field signature="string $Obfuz$RVA_Value33" newName="$bH" />
+      <field signature="int $Obfuz$RVA_Value34" newName="$BH" />
+      <field signature="string $Obfuz$RVA_Value35" newName="$cH" />
+      <field signature="int $Obfuz$RVA_Value36" newName="$CH" />
+      <field signature="string $Obfuz$RVA_Value37" newName="$dH" />
+      <field signature="int $Obfuz$RVA_Value38" newName="$DH" />
+      <field signature="string $Obfuz$RVA_Value39" newName="$EH" />
       <field signature="int $Obfuz$RVA_Value40" newName="$eH" />
-      <field signature="float $Obfuz$RVA_Value41" newName="$EH" />
-      <field signature="int $Obfuz$RVA_Value42" newName="$fH" />
+      <field signature="int $Obfuz$RVA_Value41" newName="$fH" />
+      <field signature="float $Obfuz$RVA_Value42" newName="$gH" />
       <field signature="int $Obfuz$RVA_Value43" newName="$V" />
       <field signature="int $Obfuz$RVA_Value44" newName="$w" />
       <field signature="int $Obfuz$RVA_Value45" newName="$FH" />
       <field signature="int $Obfuz$RVA_Value46" newName="$x" />
-      <field signature="string $Obfuz$RVA_Value47" newName="$gH" />
-      <field signature="int $Obfuz$RVA_Value48" newName="$y" />
-      <field signature="string $Obfuz$RVA_Value49" newName="$GH" />
+      <field signature="int $Obfuz$RVA_Value47" newName="$GH" />
+      <field signature="string $Obfuz$RVA_Value48" newName="$jH" />
+      <field signature="int $Obfuz$RVA_Value49" newName="$JH" />
       <field signature="string $Obfuz$RVA_Value50" newName="$hH" />
       <field signature="string $Obfuz$RVA_Value51" newName="$HH" />
       <field signature="string $Obfuz$RVA_Value52" newName="$Dd" />
-      <field signature="int $Obfuz$RVA_Value53" newName="$AA" />
+      <field signature="string $Obfuz$RVA_Value53" newName="$lH" />
       <field signature="int $Obfuz$RVA_Value54" newName="$ed" />
       <field signature="int $Obfuz$RVA_Value55" newName="$Ed" />
       <field signature="int $Obfuz$RVA_Value56" newName="$fd" />
       <field signature="int $Obfuz$RVA_Value57" newName="$Fd" />
       <field signature="int $Obfuz$RVA_Value58" newName="$iH" />
-      <field signature="string $Obfuz$RVA_Value59" newName="$Gd" />
+      <field signature="int $Obfuz$RVA_Value59" newName="$LH" />
       <field signature="string $Obfuz$RVA_Value60" newName="$hd" />
-      <field signature="int $Obfuz$RVA_Value61" newName="$Hd" />
+      <field signature="string $Obfuz$RVA_Value61" newName="$MH" />
       <field signature="int $Obfuz$RVA_Value62" newName="$IH" />
       <field signature="int $Obfuz$RVA_Value63" newName="$Id" />
       <field signature="int $Obfuz$RVA_Value64" newName="$jd" />
       <field signature="int $Obfuz$RVA_Value65" newName="$Jd" />
       <field signature="int $Obfuz$RVA_Value66" newName="$kd" />
-      <field signature="string $Obfuz$RVA_Value67" newName="$jH" />
-      <field signature="int $Obfuz$RVA_Value68" newName="$ld" />
+      <field signature="int $Obfuz$RVA_Value67" newName="$Si" />
+      <field signature="string $Obfuz$RVA_Value68" newName="$ti" />
       <field signature="int $Obfuz$RVA_Value69" newName="$Ld" />
       <field signature="int $Obfuz$RVA_Value70" newName="$md" />
       <field signature="int $Obfuz$RVA_Value71" newName="$Md" />
       <field signature="int $Obfuz$RVA_Value72" newName="$nd" />
-      <field signature="string $Obfuz$RVA_Value73" newName="$JH" />
+      <field signature="int $Obfuz$RVA_Value73" newName="$Ti" />
       <field signature="string $Obfuz$RVA_Value74" newName="$kH" />
       <field signature="string $Obfuz$RVA_Value75" newName="$KH" />
-      <field signature="int $Obfuz$RVA_Value76" newName="$pd" />
-      <field signature="string $Obfuz$RVA_Value77" newName="$lH" />
-      <field signature="int $Obfuz$RVA_Value78" newName="$qd" />
+      <field signature="string $Obfuz$RVA_Value76" newName="$ui" />
+      <field signature="int $Obfuz$RVA_Value77" newName="$Ui" />
+      <field signature="string $Obfuz$RVA_Value78" newName="$vi" />
       <field signature="int $Obfuz$RVA_Value79" newName="$Qd" />
       <field signature="int $Obfuz$RVA_Value80" newName="$rd" />
       <field signature="int $Obfuz$RVA_Value81" newName="$Rd" />
-      <field signature="string $Obfuz$RVA_Value82" newName="$LH" />
-      <field signature="int $Obfuz$RVA_Value83" newName="$Sd" />
+      <field signature="int $Obfuz$RVA_Value82" newName="$Vi" />
+      <field signature="string $Obfuz$RVA_Value83" newName="$wi" />
       <field signature="int $Obfuz$RVA_Value84" newName="$td" />
       <field signature="int $Obfuz$RVA_Value85" newName="$Td" />
       <field signature="int $Obfuz$RVA_Value86" newName="$ud" />
@@ -731,11 +731,11 @@
       <field signature="int $Obfuz$RVA_Value151" newName="$Ae" />
       <field signature="int $Obfuz$RVA_Value152" newName="$be" />
       <field signature="int $Obfuz$RVA_Value153" newName="$Be" />
-      <field signature="string $Obfuz$RVA_Value154" newName="$MH" />
+      <field signature="int $Obfuz$RVA_Value154" newName="$Wi" />
       <field signature="int $Obfuz$RVA_Value155" newName="$Ce" />
       <field signature="int $Obfuz$RVA_Value156" newName="$de" />
       <field signature="int $Obfuz$RVA_Value157" newName="$De" />
-      <field signature="int $Obfuz$RVA_Value158" newName="$ee" />
+      <field signature="string $Obfuz$RVA_Value158" newName="$xi" />
       <field signature="int $Obfuz$RVA_Value159" newName="$Ee" />
       <field signature="int $Obfuz$RVA_Value160" newName="$fe" />
       <field signature="int $Obfuz$RVA_Value161" newName="$Fe" />
@@ -816,6 +816,10 @@
       <field signature="int $Obfuz$RVA_Value236" newName="$Mi" />
       <field signature="int $Obfuz$RVA_Value237" newName="$ni" />
       <field signature="int $Obfuz$RVA_Value238" newName="$Ni" />
+      <field signature="int $Obfuz$RVA_Value239" newName="$Xi" />
+      <field signature="int $Obfuz$RVA_Value240" newName="$yi" />
+      <field signature="int $Obfuz$RVA_Value241" newName="$Yi" />
+      <field signature="int $Obfuz$RVA_Value242" newName="$zi" />
     </type>
     <type fullName="$Obfuz$ProxyCall" newFullName="$kb" status="Renamed">
       <method signature="[Hot]Ad.AdManager $Obfuz$ProxyCall::@$Obfuz$Dispatch_11150_9098127(object, int)" newName="$cj" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_11150_9098127(Object, Int32)" newStackTraceSignature="$kb:$cj(Object, Int32)" />
@@ -866,6 +870,7 @@
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[Aot]Aot.XiHUtil.AssetRef&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_36812_742171(object, object, int)" newName="$Fe" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_36812_742171(Object, Object, Int32)" newStackTraceSignature="$kb:$Fe(Object, Object, Int32)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[FairyGUI]FairyGUI.GComponent&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_21712_9764154(object, object, object, object, int)" newName="$ge" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_21712_9764154(Object, Object, Object, Object, Int32)" newStackTraceSignature="$kb:$ge(Object, Object, Object, Object, Int32)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[FairyGUI]FairyGUI.GComponent&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_2966_9764154(nint, int)" newName="$Ge" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_2966_9764154(IntPtr, Int32)" newStackTraceSignature="$kb:$Ge(IntPtr, Int32)" />
+      <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[Hot]Hot.BattleSettingDialog&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_22824_14185404(int)" newName="$iK" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_22824_14185404(Int32)" newStackTraceSignature="$kb:$iK(Int32)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[Hot]Hot.ChooseDialog&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_22824_11991193(int)" newName="$he" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_22824_11991193(Int32)" newStackTraceSignature="$kb:$he(Int32)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[Hot]Hot.HomeDialog&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_22824_3623651(int)" newName="$jj" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_22824_3623651(Int32)" newStackTraceSignature="$kb:$jj(Int32)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[Hot]Hot.HomeDialog&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_36812_3623651(object, object, int)" newName="$Jj" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_36812_3623651(Object, Object, Int32)" newStackTraceSignature="$kb:$Jj(Object, Object, Int32)" />
@@ -930,6 +935,7 @@
       <method signature="[Hot]Hot.IDataSave $Obfuz$ProxyCall::@$Obfuz$Dispatch_11150_10640515(object, int)" newName="$rj" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_11150_10640515(Object, Int32)" newStackTraceSignature="$kb:$rj(Object, Int32)" />
       <method signature="[Hot]Hot.SceneChangeDialog $Obfuz$ProxyCall::@$Obfuz$Dispatch_2966_15022565(nint, int)" newName="$EE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_2966_15022565(IntPtr, Int32)" newStackTraceSignature="$kb:$EE(IntPtr, Int32)" />
       <method signature="[Hot]Hot.SystemTipDialog $Obfuz$ProxyCall::@$Obfuz$Dispatch_2966_13707119(nint, int)" newName="$fE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_2966_13707119(IntPtr, Int32)" newStackTraceSignature="$kb:$fE(IntPtr, Int32)" />
+      <method signature="[Hot]Hot.TipItem $Obfuz$ProxyCall::@$Obfuz$Dispatch_11150_13087075(object, int)" newName="$IK" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_11150_13087075(Object, Int32)" newStackTraceSignature="$kb:$IK(Object, Int32)" />
       <method signature="[Luban.Runtime]Luban.ByteBuf $Obfuz$ProxyCall::@$Obfuz$Dispatch_2052_912621(byte[], int)" newName="$FE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_2052_912621(Byte[], Int32)" newStackTraceSignature="$kb:$FE(Byte[], Int32)" />
       <method signature="System.Action $Obfuz$ProxyCall::@$Obfuz$Dispatch_11150_3287101(object, int)" newName="$gE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_11150_3287101(Object, Int32)" newStackTraceSignature="$kb:$gE(Object, Int32)" />
       <method signature="System.Action`1&lt;byte[]&gt; $Obfuz$ProxyCall::@$Obfuz$Dispatch_11150_9162841(object, int)" newName="$GE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_11150_9162841(Object, Int32)" newStackTraceSignature="$kb:$GE(Object, Int32)" />
@@ -938,6 +944,7 @@
       <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_15442_12616511(object, object, [UnityEngine.IMGUIModule]UnityEngine.GUILayoutOption[], int)" newName="$Rj" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_15442_12616511(Object, Object, GUILayoutOption[], Int32)" newStackTraceSignature="$kb:$Rj(Object, Object, GUILayoutOption[], Int32)" />
       <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_15535_12616511(object, nuint, int)" newName="$iE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_15535_12616511(Object, UIntPtr, Int32)" newStackTraceSignature="$kb:$iE(Object, UIntPtr, Int32)" />
       <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_22615_12616511(object, ushort, nuint, nuint, nuint, int)" newName="$jE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_22615_12616511(Object, UInt16, UIntPtr, UIntPtr, UIntPtr, Int32)" newStackTraceSignature="$kb:$jE(Object, UInt16, UIntPtr, UIntPtr, UIntPtr, Int32)" />
+      <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_22824_12616511(int)" newName="$jK" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_22824_12616511(Int32)" newStackTraceSignature="$kb:$jK(Int32)" />
       <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_23426_12616511(ushort, int)" newName="$sj" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_23426_12616511(UInt16, Int32)" newStackTraceSignature="$kb:$sj(UInt16, Int32)" />
       <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_2966_12616511(nint, int)" newName="$JE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_2966_12616511(IntPtr, Int32)" newStackTraceSignature="$kb:$JE(IntPtr, Int32)" />
       <method signature="bool $Obfuz$ProxyCall::@$Obfuz$Dispatch_33954_12616511(object, byte[], int, int, nuint, byte, int)" newName="$kE" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_33954_12616511(Object, Byte[], Int32, Int32, UIntPtr, Byte, Int32)" newStackTraceSignature="$kb:$kE(Object, Byte[], Int32, Int32, UIntPtr, Byte, Int32)" />
@@ -1049,6 +1056,7 @@
       <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_49088_4780505(object, ushort, int)" newName="$KJ" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_49088_4780505(Object, UInt16, Int32)" newStackTraceSignature="$kb:$KJ(Object, UInt16, Int32)" />
       <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_49395_4780505(long, byte, int)" newName="$lJ" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_49395_4780505(Int64, Byte, Int32)" newStackTraceSignature="$kb:$lJ(Int64, Byte, Int32)" />
       <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_50754_4780505(object, object, object, int)" newName="$xf" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_50754_4780505(Object, Object, Object, Int32)" newStackTraceSignature="$kb:$xf(Object, Object, Object, Int32)" />
+      <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_51048_4780505([UniTask]Cysharp.Threading.Tasks.UniTask`1&lt;[Hot]Hot.BattleSettingDialog&gt;, int)" newName="$JK" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_51048_4780505(UniTask`1, Int32)" newStackTraceSignature="$kb:$JK(UniTask`1, Int32)" />
       <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_51425_4780505(object, int, int)" newName="$Xf" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_51425_4780505(Object, Int32, Int32)" newStackTraceSignature="$kb:$Xf(Object, Int32, Int32)" />
       <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_52393_4780505(byte, int)" newName="$yf" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_52393_4780505(Byte, Int32)" newStackTraceSignature="$kb:$yf(Byte, Int32)" />
       <method signature="void $Obfuz$ProxyCall::@$Obfuz$Dispatch_55575_4780505(object, object, byte, int, int, int)" newName="$Yf" oldStackTraceSignature="$Obfuz$ProxyCall:$Obfuz$Dispatch_55575_4780505(Object, Object, Byte, Int32, Int32, Int32)" newStackTraceSignature="$kb:$Yf(Object, Object, Byte, Int32, Int32, Int32)" />
@@ -1176,13 +1184,13 @@
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize24_13 $Obfuz$WatermarkDataHolderField13" newName="$PC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize32_3 $Obfuz$WatermarkDataHolderField3" newName="$qC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize36_12 $Obfuz$WatermarkDataHolderField12" newName="$QC" />
-      <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=6835 59454023D04C4C82ED0F3DF7D9E01C12A41C9B4F58340C290F176FBAB6B6BB9A" newName="$wh" />
+      <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=6900 03AD89ACB11A475751AE8BE764C871F23B5EBB4BDFBC9CFD2BA7793F468B4B2D" newName="$PG" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize52_10 $Obfuz$WatermarkDataHolderField10" newName="$RC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize32_7 $Obfuz$WatermarkDataHolderField7" newName="$sC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize36_5 $Obfuz$WatermarkDataHolderField5" newName="$SC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize44_11 $Obfuz$WatermarkDataHolderField11" newName="$tC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize36_8 $Obfuz$WatermarkDataHolderField8" newName="$TC" />
-      <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=2941 F3FC4073B2C5CA0061A64F21BA2AD0C48BCFB48AE457A3E80854189B23EDA645" newName="$Wh" />
+      <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=2969 112229BE8860FC32F88E81D5357F9C2DC55A8971C9BB0308997173147AFBCA55" newName="$qG" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize56_2 $Obfuz$WatermarkDataHolderField2" newName="$UC" />
       <field signature="[Hot]&lt;PrivateImplementationDetails&gt;/$Obfuz$WatermarkDataHolderSize48_4 $Obfuz$WatermarkDataHolderField4" newName="$vC" />
     </type>
@@ -1201,9 +1209,11 @@
     <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=1541" newFullName="$hb/$Hb" status="Renamed" />
     <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=1605" newFullName="$hb/$fB" status="Renamed" />
     <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=2941" newFullName="$hb/$yc" status="Renamed" />
+    <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=2969" newFullName="$hb/$nc" status="Renamed" />
     <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=3436" newFullName="$hb/$ib" status="Renamed" />
     <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=4013" newFullName="$hb/$FB" status="Renamed" />
     <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=6835" newFullName="$hb/$Yc" status="Renamed" />
+    <type fullName="&lt;PrivateImplementationDetails&gt;/__StaticArrayInitTypeSize=6900" newFullName="$hb/$Nc" status="Renamed" />
     <type fullName="Ad.AdManager" newFullName="" status="NotRenamed">
       <field signature="[Hot]Ad.IAdAdapter _adapter" newName="$gF" />
       <field signature="[Hot]Ad.AdManager instance" newName="$GF" />
@@ -1360,6 +1370,10 @@
       <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder &lt;&gt;t__builder" newName="$Dh" />
       <field signature="[Hot]Hot.AbsDataSave`1&lt;!0&gt; &lt;&gt;4__this" newName="$eh" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.YieldAwaitable/Awaiter &lt;&gt;u__1" newName="$Eh" />
+    </type>
+    <type fullName="Hot.BattleSettingDialog" newFullName="" status="NotRenamed">
+      <method signature="void Hot.BattleSettingDialog::InitComponent([Hot]Hot.BattleSettingDialog)" newName="$t" oldStackTraceSignature="Hot.BattleSettingDialog:InitComponent()" newStackTraceSignature="Hot.BattleSettingDialog:$t()" />
+      <method signature="void Hot.BattleSettingDialog::OnGMBtn([Hot]Hot.BattleSettingDialog)" newName="$Qk" oldStackTraceSignature="Hot.BattleSettingDialog:OnGMBtn()" newStackTraceSignature="Hot.BattleSettingDialog:$Qk()" />
     </type>
     <type fullName="Hot.ChannelSDKMgr" newFullName="$f.$fb" status="Renamed">
       <field signature="[Hot]Hot.IChannelSDK sdkBase" newName="$a" />
@@ -1551,16 +1565,22 @@
     <type fullName="Hot.HomeDialog" newFullName="" status="NotRenamed">
       <method signature="void Hot.HomeDialog::InitComponent([Hot]Hot.HomeDialog)" newName="$t" oldStackTraceSignature="Hot.HomeDialog:InitComponent()" newStackTraceSignature="Hot.HomeDialog:$t()" />
       <method signature="void Hot.HomeDialog::OnStarBtn([Hot]Hot.HomeDialog)" newName="$a" oldStackTraceSignature="Hot.HomeDialog:OnStarBtn()" newStackTraceSignature="Hot.HomeDialog:$a()" />
+      <method signature="void Hot.HomeDialog::OnSetBtn([Hot]Hot.HomeDialog)" newName="$gI" oldStackTraceSignature="Hot.HomeDialog:OnSetBtn()" newStackTraceSignature="Hot.HomeDialog:$gI()" />
     </type>
     <type fullName="Hot.HomeDialog/&lt;&gt;c" newFullName="" status="NotRenamed">
       <field signature="[Hot]Hot.HomeDialog/&lt;&gt;c &lt;&gt;9" newName="$a" />
-      <field signature="System.Action`1&lt;bool&gt; &lt;&gt;9__2_0" newName="$A" />
-      <method signature="void Hot.HomeDialog/&lt;&gt;c::&lt;OnStarBtn&gt;b__2_0([Hot]Hot.HomeDialog/&lt;&gt;c, bool)" newName="$b" oldStackTraceSignature="Hot.&lt;&gt;c:&lt;OnStarBtn&gt;b__2_0(Boolean)" newStackTraceSignature="Hot.&lt;&gt;c:$b(Boolean)" />
+      <field signature="System.Action`1&lt;bool&gt; &lt;&gt;9__3_0" newName="$Bd" />
+      <method signature="void Hot.HomeDialog/&lt;&gt;c::&lt;OnStarBtn&gt;b__3_0([Hot]Hot.HomeDialog/&lt;&gt;c, bool)" newName="$gK" oldStackTraceSignature="Hot.&lt;&gt;c:&lt;OnStarBtn&gt;b__3_0(Boolean)" newStackTraceSignature="Hot.&lt;&gt;c:$gK(Boolean)" />
     </type>
     <type fullName="Hot.HomeDialog/&lt;OnStarBtn&gt;d__2" newFullName="Hot.HomeDialog/$Ab" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
       <field signature="System.Runtime.CompilerServices.AsyncVoidMethodBuilder &lt;&gt;t__builder" newName="$A" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1/Awaiter&lt;[Hot]Hot.ChooseDialog&gt; &lt;&gt;u__1" newName="$b" />
+    </type>
+    <type fullName="Hot.HomeDialog/&lt;OnStarBtn&gt;d__3" newFullName="Hot.HomeDialog/$Ab" status="Renamed">
+      <field signature="int &lt;&gt;1__state" newName="$Gd" />
+      <field signature="System.Runtime.CompilerServices.AsyncVoidMethodBuilder &lt;&gt;t__builder" newName="$Hd" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1/Awaiter&lt;[Hot]Hot.ChooseDialog&gt; &lt;&gt;u__1" newName="$ld" />
     </type>
     <type fullName="Hot.HomeMgr" newFullName="" status="NotRenamed">
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.HomeMgr::ShowDialog([Hot]Hot.HomeMgr)" newName="$JI" oldStackTraceSignature="Hot.HomeMgr:ShowDialog()" newStackTraceSignature="Hot.HomeMgr:$JI()" />
@@ -1643,7 +1663,16 @@
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.SceneChangeDialog::PlayOpen([Hot]Hot.SceneChangeDialog, float)" newName="$eI" oldStackTraceSignature="Hot.SceneChangeDialog:PlayOpen(Single)" newStackTraceSignature="Hot.SceneChangeDialog:$eI(Single)" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.SceneChangeDialog::_show([Hot]Hot.SceneChangeDialog, string)" newName="$EI" oldStackTraceSignature="Hot.SceneChangeDialog:_show(String)" newStackTraceSignature="Hot.SceneChangeDialog:$EI(String)" />
       <method signature="void Hot.SceneChangeDialog::OnLoadScene([Hot]Hot.SceneChangeDialog)" newName="$d" oldStackTraceSignature="Hot.SceneChangeDialog:OnLoadScene()" newStackTraceSignature="Hot.SceneChangeDialog:$d()" />
-      <method signature="bool Hot.SceneChangeDialog::&lt;PlayOpen&gt;b__8_0([Hot]Hot.SceneChangeDialog)" newName="$fI" oldStackTraceSignature="Hot.SceneChangeDialog:&lt;PlayOpen&gt;b__8_0()" newStackTraceSignature="Hot.SceneChangeDialog:$fI()" />
+      <method signature="bool Hot.SceneChangeDialog::&lt;PlayOpen&gt;b__9_0([Hot]Hot.SceneChangeDialog)" newName="$GK" oldStackTraceSignature="Hot.SceneChangeDialog:&lt;PlayOpen&gt;b__9_0()" newStackTraceSignature="Hot.SceneChangeDialog:$GK()" />
+    </type>
+    <type fullName="Hot.SceneChangeDialog/&lt;_show&gt;d__10" newFullName="Hot.SceneChangeDialog/$Mc" status="Renamed">
+      <field signature="int &lt;&gt;1__state" newName="$mG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder &lt;&gt;t__builder" newName="$MG" />
+      <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$nG" />
+      <field signature="string path" newName="$NG" />
+      <field signature="float &lt;endTime&gt;5__2" newName="$oG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$OG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.YieldAwaitable/Awaiter &lt;&gt;u__2" newName="$pG" />
     </type>
     <type fullName="Hot.SceneChangeDialog/&lt;_show&gt;d__6" newFullName="Hot.SceneChangeDialog/$Db" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
@@ -1683,12 +1712,25 @@
       <field signature="string path" newName="$CG" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass4_0`1::&lt;Show&gt;b__0([Hot]Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass4_0`1&lt;!0&gt;)" newName="$FI" oldStackTraceSignature="Hot.&lt;&gt;c__DisplayClass4_0`1:&lt;Show&gt;b__0()" newStackTraceSignature="Hot.$mc`1:$FI()" />
     </type>
+    <type fullName="Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass5_0`1" newFullName="Hot.SceneChangeDialog/$bb`1" status="Renamed">
+      <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$pd" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTaskCompletionSource`1&lt;!0&gt; tcs" newName="$qd" />
+      <field signature="string path" newName="$Sd" />
+      <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass5_0`1::&lt;Show&gt;b__0([Hot]Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass5_0`1&lt;!0&gt;)" newName="$hK" oldStackTraceSignature="Hot.&lt;&gt;c__DisplayClass5_0`1:&lt;Show&gt;b__0()" newStackTraceSignature="Hot.$bb`1:$hK()" />
+    </type>
     <type fullName="Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass6_0" newFullName="Hot.SceneChangeDialog/$Mc" status="Renamed">
       <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$dG" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTaskCompletionSource`1&lt;[Hot]Hot.SceneChangeDialog&gt; tcs" newName="$DG" />
       <field signature="string path" newName="$eG" />
       <field signature="bool autoOpen" newName="$EG" />
       <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass6_0::&lt;Show&gt;b__0([Hot]Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass6_0)" newName="$gI" oldStackTraceSignature="Hot.&lt;&gt;c__DisplayClass6_0:&lt;Show&gt;b__0()" newStackTraceSignature="Hot.$Mc:$gI()" />
+    </type>
+    <type fullName="Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass7_0" newFullName="Hot.SceneChangeDialog/$zb" status="Renamed">
+      <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$ee" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTaskCompletionSource`1&lt;[Hot]Hot.SceneChangeDialog&gt; tcs" newName="$BG" />
+      <field signature="string path" newName="$cG" />
+      <field signature="bool autoOpen" newName="$CG" />
+      <method signature="[UniTask]Cysharp.Threading.Tasks.UniTask Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass7_0::&lt;Show&gt;b__0([Hot]Hot.SceneChangeDialog/&lt;&gt;c__DisplayClass7_0)" newName="$HK" oldStackTraceSignature="Hot.&lt;&gt;c__DisplayClass7_0:&lt;Show&gt;b__0()" newStackTraceSignature="Hot.$zb:$HK()" />
     </type>
     <type fullName="Hot.SceneChangeDialog/&lt;LoadHomeScene&gt;d__8" newFullName="Hot.SceneChangeDialog/$cb" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
@@ -1701,6 +1743,12 @@
       <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder &lt;&gt;t__builder" newName="$FG" />
       <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$gG" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$GG" />
+    </type>
+    <type fullName="Hot.SceneChangeDialog/&lt;PlayOpen&gt;d__9" newFullName="Hot.SceneChangeDialog/$Zb" status="Renamed">
+      <field signature="int &lt;&gt;1__state" newName="$dG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder &lt;&gt;t__builder" newName="$DG" />
+      <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$eG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$EG" />
     </type>
     <type fullName="Hot.SceneChangeDialog/&lt;Show&gt;d__3`1" newFullName="Hot.SceneChangeDialog/$Cb`1" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$a" />
@@ -1730,6 +1778,15 @@
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$JG" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1/Awaiter&lt;!0&gt; &lt;&gt;u__2" newName="$kG" />
     </type>
+    <type fullName="Hot.SceneChangeDialog/&lt;Show&gt;d__6`1" newFullName="Hot.SceneChangeDialog/$bB`1" status="Renamed">
+      <field signature="int &lt;&gt;1__state" newName="$fG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1&lt;!0&gt; &lt;&gt;t__builder" newName="$FG" />
+      <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$gG" />
+      <field signature="string path" newName="$GG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTaskCompletionSource`1&lt;!0&gt; tcs" newName="$hG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$HG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask`1/Awaiter&lt;!0&gt; &lt;&gt;u__2" newName="$iG" />
+    </type>
     <type fullName="Hot.SceneChangeDialog/&lt;Show&gt;d__7" newFullName="Hot.SceneChangeDialog/$oc" status="Renamed">
       <field signature="int &lt;&gt;1__state" newName="$KG" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1&lt;[Hot]Hot.SceneChangeDialog&gt; &lt;&gt;t__builder" newName="$lG" />
@@ -1738,6 +1795,15 @@
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTaskCompletionSource`1&lt;[Hot]Hot.SceneChangeDialog&gt; tcs" newName="$MG" />
       <field signature="bool autoOpen" newName="$nG" />
       <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$NG" />
+    </type>
+    <type fullName="Hot.SceneChangeDialog/&lt;Show&gt;d__8" newFullName="Hot.SceneChangeDialog/$mc" status="Renamed">
+      <field signature="int &lt;&gt;1__state" newName="$IG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1&lt;[Hot]Hot.SceneChangeDialog&gt; &lt;&gt;t__builder" newName="$jG" />
+      <field signature="[Hot]Hot.SceneChangeDialog &lt;&gt;4__this" newName="$JG" />
+      <field signature="string path" newName="$kG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTaskCompletionSource`1&lt;[Hot]Hot.SceneChangeDialog&gt; tcs" newName="$KG" />
+      <field signature="bool autoOpen" newName="$lG" />
+      <field signature="[UniTask]Cysharp.Threading.Tasks.UniTask/Awaiter &lt;&gt;u__1" newName="$LG" />
     </type>
     <type fullName="Hot.SettingBaseDialog" newFullName="" status="NotRenamed">
       <method signature="void Hot.SettingBaseDialog::InitComponent([Hot]Hot.SettingBaseDialog)" newName="$t" oldStackTraceSignature="Hot.SettingBaseDialog:InitComponent()" newStackTraceSignature="Hot.SettingBaseDialog:$t()" />
@@ -1763,8 +1829,11 @@
       <method signature="string Hot.SyncTimeHelper::@ConvertToShortDHMS(int, bool)" newName="$vi" oldStackTraceSignature="Hot.SyncTimeHelper:ConvertToShortDHMS(Int32, Boolean)" newStackTraceSignature="$k.$Jc:$vi(Int32, Boolean)" />
     </type>
     <type fullName="Hot.SystemTipDialog" newFullName="" status="NotRenamed">
+      <field signature="System.Collections.Generic.Stack`1&lt;[Hot]Hot.TipItem&gt; stackPool" newName="$zC" />
+      <method signature="void Hot.SystemTipDialog::InitComponent([Hot]Hot.SystemTipDialog)" newName="$t" oldStackTraceSignature="Hot.SystemTipDialog:InitComponent()" newStackTraceSignature="Hot.SystemTipDialog:$t()" />
       <method signature="void Hot.SystemTipDialog::Show([Hot]Hot.SystemTipDialog, string)" newName="$a" oldStackTraceSignature="Hot.SystemTipDialog:Show(String)" newStackTraceSignature="Hot.SystemTipDialog:$a(String)" />
-      <method signature="void Hot.SystemTipDialog::&lt;Show&gt;b__1_0([Hot]Hot.SystemTipDialog, [Hot]Hot.TipItem)" newName="$A" oldStackTraceSignature="Hot.SystemTipDialog:&lt;Show&gt;b__1_0(TipItem)" newStackTraceSignature="Hot.SystemTipDialog:$A($ZA)" />
+      <method signature="[Hot]Hot.TipItem Hot.SystemTipDialog::GetFromPool([Hot]Hot.SystemTipDialog)" newName="$fI" oldStackTraceSignature="Hot.SystemTipDialog:GetFromPool()" newStackTraceSignature="Hot.SystemTipDialog:$fI()" />
+      <method signature="void Hot.SystemTipDialog::Return2Pool([Hot]Hot.SystemTipDialog, [Hot]Hot.TipItem)" newName="$FI" oldStackTraceSignature="Hot.SystemTipDialog:Return2Pool(TipItem)" newStackTraceSignature="Hot.SystemTipDialog:$FI($ZA)" />
     </type>
     <type fullName="Hot.TimeDialog" newFullName="" status="NotRenamed">
       <method signature="void Hot.TimeDialog::InitComponent([Hot]Hot.TimeDialog)" newName="$t" oldStackTraceSignature="Hot.TimeDialog:InitComponent()" newStackTraceSignature="Hot.TimeDialog:$t()" />
@@ -1774,7 +1843,7 @@
       <method signature="void Hot.TipItem::Render([Hot]Hot.TipItem, string, System.Action`1&lt;[Hot]Hot.TipItem&gt;)" newName="$a" oldStackTraceSignature="Hot.TipItem:Render(String, Action`1)" newStackTraceSignature="$f.$ZA:$a(String, Action`1)" />
     </type>
     <type fullName="Hot.TipItem/&lt;&gt;c__DisplayClass3_0" newFullName="$f.$ZA/$ab" status="Renamed">
-      <field signature="System.Action`1&lt;[Hot]Hot.TipItem&gt; endPlay" newName="$a" />
+      <field signature="System.Action`1&lt;[Hot]Hot.TipItem&gt; callBack" newName="$O" />
       <method signature="void Hot.TipItem/&lt;&gt;c__DisplayClass3_0::&lt;Render&gt;b__0([Hot]Hot.TipItem/&lt;&gt;c__DisplayClass3_0)" newName="$A" oldStackTraceSignature="Hot.&lt;&gt;c__DisplayClass3_0:&lt;Render&gt;b__0()" newStackTraceSignature="$f.$ab:$A()" />
     </type>
     <type fullName="Hot.TrackingReport" newFullName="$k.$wc" status="Renamed">

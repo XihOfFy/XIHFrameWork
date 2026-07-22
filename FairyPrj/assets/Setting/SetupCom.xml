@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="1080,1920">
+<component size="1080,800">
   <displayList>
-    <graph id="n0_w4cl" name="img_Bg" xy="154,705" pivot="0.5,0.5" size="772,589" aspect="true" type="rect">
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </graph>
-    <graph id="n11_6jwi" name="img_TitleBG" xy="319,630" size="460,112" type="rect" fillColor="#ff000000"/>
-    <component id="n1_w4cl" name="closeBtn" src="e22zb" fileName="CloseBtn.xml" xy="835,662"/>
-    <component id="n2_w4cl" name="labTitle" src="w4cl9" fileName="LabTilte.xml" xy="540,710" pivot="0.5,0.5" anchor="true" size="296,120"/>
-    <text id="n12_e22z" name="somusicTxtundTxt" xy="280,807" pivot="0.5,0.5" size="300,104" group="n14_e22z" fontSize="80" color="#50443b" vAlign="middle" autoSize="shrink" singleLine="true" text="音效"/>
-    <component id="n13_e22z" name="musicBtn" src="w4cl8" fileName="BtnSet.xml" xy="640,806" group="n14_e22z"/>
-    <group id="n14_e22z" name="GrpMusic" xy="280,806" size="481,117" group="n9_w4cl" advanced="true" layout="hz" colGap="60" excludeInvisibles="true"/>
-    <text id="n6_w4cl" name="soundTxt" xy="294,954" pivot="0.5,0.5" size="300,104" group="n8_w4cl" fontSize="80" color="#50443b" vAlign="middle" autoSize="shrink" singleLine="true" text="音效"/>
-    <component id="n7_w4cl" name="soundBtn" src="w4cl8" fileName="BtnSet.xml" xy="654,953" group="n8_w4cl"/>
-    <group id="n8_w4cl" name="GrpSound" xy="294,953" size="481,117" group="n9_w4cl" advanced="true" layout="hz" colGap="60" excludeInvisibles="true"/>
-    <text id="n4_w4cl" name="vibrateTxt" xy="294,1101" pivot="0.5,0.5" size="300,104" group="n5_w4cl" fontSize="80" color="#50443b" vAlign="middle" autoSize="shrink" singleLine="true" text="震动"/>
-    <component id="n3_w4cl" name="vibrateBtn" src="w4cl8" fileName="BtnSet.xml" xy="654,1100" group="n5_w4cl"/>
-    <group id="n5_w4cl" name="GrpVibrate" xy="294,1100" size="481,117" group="n9_w4cl" advanced="true" layout="hz" colGap="60" excludeInvisibles="true"/>
-    <group id="n9_w4cl" name="Grp" xy="280,806" size="495,411" advanced="true" layout="vt" lineGap="30" excludeInvisibles="true">
+    <graph id="n0_w4cl" name="img_Bg" xy="154,145" pivot="0.5,0.5" size="772,589" aspect="true" type="rect"/>
+    <graph id="n11_6jwi" name="img_TitleBG" xy="319,81" size="460,112" type="rect" fillColor="#ff000000"/>
+    <component id="n2_w4cl" name="labTitle" src="w4cl9" fileName="LabTilte.xml" xy="540,133" pivot="0.5,0.5" anchor="true" size="296,120"/>
+    <component id="n1_w4cl" name="closeBtn" src="e22zb" fileName="CloseBtn.xml" xy="850,77"/>
+    <text id="n12_e22z" name="somusicTxtundTxt" xy="301,236" pivot="0.5,0.5" size="300,104" group="n14_e22z" fontSize="80" color="#50443b" vAlign="middle" autoSize="shrink" singleLine="true" text="音效"/>
+    <component id="n13_e22z" name="musicBtn" src="w4cl8" fileName="BtnSet.xml" xy="661,235" group="n14_e22z"/>
+    <group id="n14_e22z" name="GrpMusic" xy="301,235" size="481,117" group="n9_w4cl" advanced="true" layout="hz" colGap="60" excludeInvisibles="true"/>
+    <text id="n6_w4cl" name="soundTxt" xy="301,383" pivot="0.5,0.5" size="300,104" group="n8_w4cl" fontSize="80" color="#50443b" vAlign="middle" autoSize="shrink" singleLine="true" text="音效"/>
+    <component id="n7_w4cl" name="soundBtn" src="w4cl8" fileName="BtnSet.xml" xy="661,382" group="n8_w4cl"/>
+    <group id="n8_w4cl" name="GrpSound" xy="301,382" size="481,117" group="n9_w4cl" advanced="true" layout="hz" colGap="60" excludeInvisibles="true"/>
+    <text id="n4_w4cl" name="vibrateTxt" xy="301,530" pivot="0.5,0.5" size="300,104" group="n5_w4cl" fontSize="80" color="#50443b" vAlign="middle" autoSize="shrink" singleLine="true" text="震动"/>
+    <component id="n3_w4cl" name="vibrateBtn" src="w4cl8" fileName="BtnSet.xml" xy="661,529" group="n5_w4cl"/>
+    <group id="n5_w4cl" name="GrpVibrate" xy="301,529" size="481,117" group="n9_w4cl" advanced="true" layout="hz" colGap="60" excludeInvisibles="true"/>
+    <group id="n9_w4cl" name="Grp" xy="301,235" size="481,411" advanced="true" layout="vt" lineGap="30" excludeInvisibles="true">
       <relation target="n0_w4cl" sidePair="center-center,middle-middle"/>
     </group>
-    <text id="n10_w4cl" name="verTxt" xy="242,1219" pivot="0.5,0.5" size="600,44" fontSize="32" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="simulate 1.3.5">
+    <text id="n10_w4cl" name="verTxt" xy="242,662" pivot="0.5,0.5" size="600,44" fontSize="32" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="simulate 1.3.5">
       <relation target="n0_w4cl" sidePair="center-center,bottom-bottom"/>
     </text>
   </displayList>
