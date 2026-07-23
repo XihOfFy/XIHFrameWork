@@ -72,6 +72,7 @@ namespace Aot
             // WebGL运行模式
             else if (playMode == EPlayMode.WebPlayMode)
             {
+                var decryptionServices = new DecryptionServicesWeb();
                 var remoteServices = new RemoteServices();
                 var cdn = AotConfig.frontConfig.cdn;
                 var suffix = AotConfig.frontConfig.defaultHostServer.Substring(cdn.Length);
@@ -80,18 +81,16 @@ namespace Aot
                 //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀/分隔的是微信缓存的文件夹路径且可多层级，保证名字固定
                 //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
                 string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffix}";
-                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
+                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices,decryptionServices);
 #elif UNITY_DY && DOUYINMINIGAME
                 // 小游戏缓存根目录
                 // 注意：如果有子目录，请修改此处！
                 string packageRoot = $"{StarkSDKSpace.StarkFileSystemManager.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffix}";
-                var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices);
+                var webRemoteFileSystemParams = TiktokFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices, decryptionServices);
 #else
-                var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
+                var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices, decryptionServices); //支持跨域下载
 #endif
                 webRemoteFileSystemParams.AddParameter(FileSystemParametersDefine.MANIFEST_SERVICES, new ManifestRestoreServices());
-                //测试webgl平台加密资源
-                webRemoteFileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, new DecryptionServices());
                 var initParameters = new WebPlayModeParameters();
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
                 createParameters = initParameters;
@@ -144,6 +143,17 @@ namespace Aot
                 return AotFileUtil.ReadFile(fileInfo.FileLoadPath);
             }
         }
+        private class DecryptionServicesWeb : IWebDecryptionServices
+        {
+            public WebDecryptResult LoadAssetBundle(WebDecryptFileInfo fileInfo)
+            {
+                var res = new WebDecryptResult();
+                var offset = fileInfo.BundleName.ToLower().Sum(c => c);
+                var newBytes = XIHDecryptionServices.DecryptYooAB(fileInfo.FileData, offset);
+                res.Result = AssetBundle.LoadFromMemory(newBytes);
+                return res;
+            }
+        }
 #if UNITY_EDITOR
         public class EncryptionServices : IEncryptionServices
         {
@@ -160,7 +170,7 @@ namespace Aot
                     result.Encrypted = true;
                     var bytes = File.ReadAllBytes(fileInfo.FileLoadPath);
                     var offset = fileInfo.BundleName.ToLower().Sum(c => c);
-                    var newBytes = XIHDecryptionServices.DecryptYooAsset(bytes, offset);
+                    var newBytes = XIHDecryptionServices.EncryptYooAB(bytes, offset);
                     result.EncryptedData = newBytes;
                 }
                 return result;
@@ -170,7 +180,7 @@ namespace Aot
         {
             public byte[] ProcessManifest(byte[] fileData)
             {
-                return XIHDecryptionServices.DecryptYooManifest(fileData);
+                return XIHDecryptionServices.EnOrDecryptYooManifest(fileData);
             }
         }
 
@@ -179,7 +189,7 @@ namespace Aot
         {
             public byte[] RestoreManifest(byte[] fileData)
             {
-                return XIHDecryptionServices.DecryptYooManifest(fileData);
+                return XIHDecryptionServices.EnOrDecryptYooManifest(fileData);
             }
         }
         /// <summary>

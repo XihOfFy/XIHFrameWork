@@ -5,7 +5,7 @@ namespace Aot.XiHUtil
     //无需实现IDecryptionServices，因为我们只加密原生文件rawfile，不是ab
     public class XIHDecryptionServices
     {
-        public static byte[] DecryptDll(byte[] bytes)
+        public static byte[] EnOrDecryptDll(byte[] bytes)
         {
             int len = bytes.Length;
             var encryptedData = new byte[len];
@@ -16,7 +16,7 @@ namespace Aot.XiHUtil
             }
             return encryptedData;
         }
-        public static byte[] DecryptYooManifest(byte[] bytes)
+        public static byte[] EnOrDecryptYooManifest(byte[] bytes)
         {
             int len = bytes.Length;
             var encryptedData = new byte[len];
@@ -27,7 +27,7 @@ namespace Aot.XiHUtil
             }
             return encryptedData;
         }
-        public static byte[] DecryptYooAsset(byte[] bytes, int offset)
+        public static byte[] EncryptYooAB(byte[] bytes, int offset)
         {
             int len = bytes.Length;
             var newBytes = new byte[len + offset];
@@ -38,6 +38,13 @@ namespace Aot.XiHUtil
                 else newBytes[i] = (byte)((offset | i) % 0XF);
             }
             Array.Copy(bytes, 0, newBytes, offset, len);
+            return newBytes;
+        }
+        public static byte[] DecryptYooAB(byte[] bytes, int offset)
+        {
+            int len = bytes.Length;
+            var newBytes = new byte[len - offset];
+            Array.Copy(bytes, offset, newBytes, 0, len - offset);
             return newBytes;
         }
     }

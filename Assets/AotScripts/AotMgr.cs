@@ -47,7 +47,7 @@ namespace Aot
             await rawOp.ToUniTask();
 
 #if !UNITY_EDITOR
-            var hotUpdateAss =Assembly.Load(XIHDecryptionServices.Decrypt((rawOp.GetAsset<TextAsset>()).bytes));
+            var hotUpdateAss =Assembly.Load(XIHDecryptionServices.EnOrDecryptDll((rawOp.GetAsset<TextAsset>()).bytes));
 #else
             // Editor下无需加载，直接查找获得HotUpdate程序集
             var hotUpdateAss = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Aot2Hot");

@@ -113,7 +113,7 @@ namespace Aot2Hot
                 ass = rawHotOp.GetAssets<TextAsset>();
                 foreach (var asset in ass)
                 {
-                    Assembly.Load(XIHDecryptionServices.Decrypt(asset.bytes));
+                    Assembly.Load(XIHDecryptionServices.EnOrDecryptDll(asset.bytes));
                 }
                 rawHotOp.Release();
             }
