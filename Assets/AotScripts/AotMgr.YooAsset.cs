@@ -81,7 +81,7 @@ namespace Aot
                 //若是微信小游戏,cdn是defaultHostServer的前缀，且defaultHostServer的后缀/分隔的是微信缓存的文件夹路径且可多层级，保证名字固定
                 //这样就得到packageRoot，到时候资源会缓存在packageRoot里面，后面执行 ClearCacheFilesAsync(EFileClearMode.ClearUnusedManifestFiles); 就能准确清理
                 string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/{suffix}";
-                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices,decryptionServices);
+                var webRemoteFileSystemParams = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices, decryptionServices);
 #elif UNITY_DY && DOUYINMINIGAME
                 // 小游戏缓存根目录
                 // 注意：如果有子目录，请修改此处！

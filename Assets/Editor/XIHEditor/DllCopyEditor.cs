@@ -182,13 +182,23 @@ public class DllCopyEditor
             {
                 var polyDll = $"{sourPath}/{dll}_poly.dll";
                 ObfuscateUtil.GeneratePolymorphicDll(srcDll, polyDll);
-                XIHEncryptionServices.Encrypt(polyDll, dstDll);
+                Encrypt(polyDll, dstDll);
             }
             else
             {
-                XIHEncryptionServices.Encrypt(srcDll, dstDll);
+                Encrypt(srcDll, dstDll);
             }
         }
         Debug.LogWarning($"拷贝加密的dlls到 {dstPath}");
+    }
+    static void Encrypt(string srcFilePath, string dstFilePath)
+    {
+        if (!File.Exists(srcFilePath))
+        {
+            Debug.LogError($"CopyDll {srcFilePath}不存在 (这个报错若是Hot.Ext.dll可以忽略，因为这个是预留的，所以不存在很正常)");
+            return;
+        }
+        File.WriteAllBytes(dstFilePath, Aot.XiHUtil.XIHDecryptionServices.EnOrDecryptDll(File.ReadAllBytes(srcFilePath)));
+        Debug.LogWarning($"{srcFilePath}已经加密输出到{dstFilePath}");
     }
 }
