@@ -2,6 +2,7 @@
 using Aot2Hot;
 using FairyGUI;
 using Tmpl;
+using XiHAsset;
 using XiHSound;
 using XiHUI;
 
@@ -43,7 +44,18 @@ namespace Hot
             vibrateBtn.onClick.Add(OnVibrateBtn);
             vibrateBtn.selected = SoundMgr.Instance.Vibrate;
         }
-        public abstract void OnGMBtn();
+        public virtual void OnGMBtn()
+        {
+#if USE_GM
+            XiHAssetBaseMgr.BaseInstance.isGmShow = !XiHAssetBaseMgr.BaseInstance.isGmShow ;
+#else
+            var isGmEnv = EnvCheck.IsDevEnv();
+            if (isGmEnv)
+            {
+                XiHAssetBaseMgr.BaseInstance.isGmShow = !XiHAssetBaseMgr.BaseInstance.isGmShow;
+            }
+#endif
+        }
 
         void OnMusicBtn()
         {

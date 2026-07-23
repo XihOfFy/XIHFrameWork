@@ -19,17 +19,5 @@ namespace Hot
             //homeBtn.onClick.Add(OnHomeBtnAsync);
             //againBtn.onClick.Add(OnRestartBtn);
         }
-        public override void OnGMBtn()
-        {
-#if USE_GM
-            GameBase.Instance.isGmShow = !GameBase.Instance.isGmShow;
-#else
-            var isGmEnv = EnvCheck.IsDevEnv();
-            if (isGmEnv)
-            {
-                GameBase.Instance.isGmShow = !GameBase.Instance.isGmShow;
-            }
-#endif
-        }
     }
 }
