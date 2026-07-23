@@ -27,7 +27,7 @@ MonoBehaviour:
     ScannerSchema: a59b6778a87308648b1ace2e256c856f
     SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
     Collectors:
-    - CollectPath: 
+    - CollectPath: Assets/Res/Aot2Hot
     WhiteList: []
   - ScannerGUID: b26e55a7-96f0-445c-86ce-03a76dacf523
     ScannerName: TextureHalf
@@ -43,7 +43,7 @@ MonoBehaviour:
     ScannerSchema: 3ef8be4cdc4e1e64db16d2650d638edf
     SaveDirectory: Assets/Editor/YooSetting/ScannerOutput
     Collectors:
-    - CollectPath: 
+    - CollectPath: Assets/Res
     WhiteList: []
   - ScannerGUID: cdbf96f4-980b-4104-bfa0-8a2b6a496842
     ScannerName: Audio

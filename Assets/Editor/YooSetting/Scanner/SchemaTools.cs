@@ -9,26 +9,70 @@ public class SchemaTools
 {
     #region 一键完成全部扫描和设置
     [MenuItem("YooAsset/ArtScanAndFixAll (耗时)")]
-    static void ArtScanAndFixAll() {
-        var files = Directory.GetFiles("Assets/Editor/YooSetting/ScannerOutput", "*.json");
-        foreach (var file in files) File.Delete(file);
-        AssetArtScannerSettingData.ScanAll();
-        files = Directory.GetFiles("Assets/Editor/YooSetting/ScannerOutput", "*.json");
-        foreach (var file in files) {
-            Debug.LogWarning("开始执行:"+file);
-            var _reportCombiner = new ScanReportCombiner();
+    static void ArtScanAndFixAll()
+    {
+        // 注意：AssetArtScannerSettingData.ScanAll() 只跑扫描，不会把报告写到 SaveDirectory。
+        // 原先「扫完再读 ScannerOutput/*.json 再 Fix」会在清空 JSON 后拿不到任何报告，导致修复完全不生效。
+        // 另外多个 Schema 的 ReportName/ReportDesc 可能相同，落盘时会互相覆盖。
+        // 正确做法：逐个扫描器在内存中 Combine + FixAll，可选顺便落盘便于人工查看。
+        var scanners = AssetArtScannerSettingData.Setting.Scanners;
+        if (scanners == null || scanners.Count == 0)
+        {
+            Debug.LogWarning("ArtScanAndFixAll: 没有配置任何 Scanner。");
+            return;
+        }
+
+        int okCount = 0;
+        int failCount = 0;
+        foreach (var scanner in scanners)
+        {
+            Debug.LogWarning($"开始扫描并修复: {scanner.ScannerName}");
+            var scanResult = AssetArtScannerSettingData.Scan(scanner.ScannerGUID);
+            if (!scanResult.Succeed || scanResult.Report == null)
+            {
+                failCount++;
+                Debug.LogError($"{scanner.ScannerName} 扫描失败: {scanResult.ErrorInfo}\n{scanResult.ErrorStack}");
+                continue;
+            }
+
+            if (!string.IsNullOrEmpty(scanner.SaveDirectory))
+            {
+                try
+                {
+                    if (!Directory.Exists(scanner.SaveDirectory))
+                        Directory.CreateDirectory(scanner.SaveDirectory);
+                    // 用 ScannerName 区分文件，避免同名报告互相覆盖
+                    var savePath = Path.Combine(scanner.SaveDirectory, $"{scanner.ScannerName}.json");
+                    ScanReportConfig.ExportJsonConfig(savePath, scanResult.Report);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"{scanner.ScannerName} 报告落盘失败（不影响修复）: {e.Message}");
+                }
+            }
+
             try
             {
-                var scanReport = ScanReportConfig.ImportJsonConfig(file);
-                _reportCombiner.Combine(scanReport);
-                _reportCombiner.FixAll();
+                var reportCombiner = new ScanReportCombiner();
+                if (!reportCombiner.Combine(scanResult.Report))
+                {
+                    failCount++;
+                    Debug.LogError($"{scanner.ScannerName} Combine 报告失败");
+                    continue;
+                }
+                reportCombiner.FixAll();
+                okCount++;
             }
             catch (System.Exception e)
             {
-                UnityEngine.Debug.LogError(e.StackTrace);
+                failCount++;
+                Debug.LogError($"{scanner.ScannerName} 修复失败: {e}");
             }
         }
-        Debug.LogWarning("执行完毕");
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.LogWarning($"ArtScanAndFixAll 执行完毕: 成功 {okCount}, 失败 {failCount}");
     }
     #endregion
 

@@ -807,7 +807,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: FAIRYGUI_TMPRO;USE_YOO
     Standalone: USE_YOO;FAIRYGUI_TMPRO
-    WebGL: FAIRYGUI_TMPRO;STARK_UNITY_INPUT_OVERRIDE;USE_YOO;UNITY_WX;WEIXINMINIGAME
+    WebGL: FAIRYGUI_TMPRO;STARK_UNITY_INPUT_OVERRIDE;USE_YOO
     iPhone: FAIRYGUI_TMPRO;USE_YOO
   additionalCompilerArguments: {}
   platformArchitecture: {}

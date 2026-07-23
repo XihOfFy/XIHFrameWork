@@ -9,22 +9,26 @@ namespace Hot
         public static void InitData()
         {
             DataSave.Instance.LoadData();
-            //PuzzleSave.Instance.LoadData();
+            //DataSavexxx.Instance.LoadData();
             ReAddAllData();
         }
-        static void ReAddAllData() {
+        static void ReAddAllData()
+        {
             AllData.Clear();
             AllData.Add(DataSave.Instance);//主存档必须第一个Add，方便后续远程存档进行对比
-            //AllData.Add(PuzzleSave.Instance);
+            //AllData.Add(DataSavexxx.Instance);
         }
-        public static void ClearAllData() {
-            var data = new DataSave();
-            data.AfterLoad();
-            DataSave.SetInstance(data);
-/*            var data2 = new PuzzleSave();
-            data2.AfterLoad();
-            PuzzleSave.SetInstance(data2);*/
+        public static void ClearAllData()
+        {
+            ClearData<DataSave>();
+            //ClearData<DataSavexxx>();
             ReAddAllData();
+        }
+        static void ClearData<T>() where T : AbsDataSave<T>, new()
+        {
+            var data = new T();
+            data.AfterLoad();
+            AbsDataSave<T>.SetInstance(data);
         }
         public static T SerializeByJson<T>(string dataJson) where T : class, IDataSave, new()
         {
