@@ -11,7 +11,7 @@ public class XIHEncryptionServices
             Debug.LogError($"CopyDll {srcFilePath}不存在 (这个报错若是Hot.Ext.dll可以忽略，因为这个是预留的，所以不存在很正常)");
             return;
         }
-        File.WriteAllBytes(dstFilePath, XIHDecryptionServices.Decrypt(File.ReadAllBytes(srcFilePath)));
+        File.WriteAllBytes(dstFilePath, XIHDecryptionServices.DecryptDll(File.ReadAllBytes(srcFilePath)));
         Debug.LogWarning($"{srcFilePath}已经加密输出到{dstFilePath}");
     }
 }

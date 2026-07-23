@@ -281,12 +281,14 @@ public class JenkinsSupport
         buildParameters.BuildinFileCopyOption = buildinFileCopyOption;
         buildParameters.BuildinFileCopyParams = string.Empty;
 
-#if UNITY_WEBGL
-        buildParameters.EncryptionServices = null;
-        //buildParameters.EncryptionServices = new EncryptionNone();
-#else
+        // #if UNITY_WEBGL
+        //         buildParameters.EncryptionServices = null;
+        // #else
+        //         buildParameters.EncryptionServices = new AotMgr.EncryptionServices();
+        // #endif
         buildParameters.EncryptionServices = new AotMgr.EncryptionServices();
-#endif
+
+
         buildParameters.ManifestProcessServices = new AotMgr.ManifestProcessServices();
         buildParameters.ManifestRestoreServices = new AotMgr.ManifestRestoreServices();
 

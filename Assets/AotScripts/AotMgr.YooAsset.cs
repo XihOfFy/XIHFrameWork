@@ -90,6 +90,8 @@ namespace Aot
                 var webRemoteFileSystemParams = FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteServices); //支持跨域下载
 #endif
                 webRemoteFileSystemParams.AddParameter(FileSystemParametersDefine.MANIFEST_SERVICES, new ManifestRestoreServices());
+                //测试webgl平台加密资源
+                webRemoteFileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, new DecryptionServices());
                 var initParameters = new WebPlayModeParameters();
                 initParameters.WebRemoteFileSystemParameters = webRemoteFileSystemParams;
                 createParameters = initParameters;
@@ -157,16 +159,8 @@ namespace Aot
                 {
                     result.Encrypted = true;
                     var bytes = File.ReadAllBytes(fileInfo.FileLoadPath);
-                    var len = bytes.Length;
                     var offset = fileInfo.BundleName.ToLower().Sum(c => c);
-                    var newBytes = new byte[bytes.Length + offset];
-                    var half = (len >> 1);
-                    for (int i = 0; i < offset; ++i)
-                    {
-                        if (i < half) newBytes[i] = bytes[i];
-                        else newBytes[i] = (byte)((offset | i) % 0XF);
-                    }
-                    Array.Copy(bytes, 0, newBytes, offset, len);
+                    var newBytes = XIHDecryptionServices.DecryptYooAsset(bytes, offset);
                     result.EncryptedData = newBytes;
                 }
                 return result;
@@ -176,13 +170,7 @@ namespace Aot
         {
             public byte[] ProcessManifest(byte[] fileData)
             {
-                var len = fileData.Length;
-                var data = new byte[len];
-                for (int i = 0; i < len; ++i)
-                {
-                    data[i] = (byte)(fileData[i] ^ (byte)i);
-                }
-                return data;
+                return XIHDecryptionServices.DecryptYooManifest(fileData);
             }
         }
 
@@ -191,13 +179,7 @@ namespace Aot
         {
             public byte[] RestoreManifest(byte[] fileData)
             {
-                var len = fileData.Length;
-                var data = new byte[len];
-                for (int i = 0; i < len; ++i)
-                {
-                    data[i] = (byte)(fileData[i] ^ (byte)i);
-                }
-                return data;
+                return XIHDecryptionServices.DecryptYooManifest(fileData);
             }
         }
         /// <summary>
@@ -220,7 +202,7 @@ namespace Aot
         {
             try
             {
-                var yooOp = package.RequestPackageVersionAsync();
+                var yooOp = package.RequestPackageVersionAsync(timeout: 10);
                 await yooOp.ToUniTask();
                 if (yooOp.Status == EOperationStatus.Succeed)
                 {
