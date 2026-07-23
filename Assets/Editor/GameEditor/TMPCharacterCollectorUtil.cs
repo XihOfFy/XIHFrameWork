@@ -73,7 +73,7 @@ public class TMPCharacterCollectorUtil
         ;
 
         var dirPaths = new List<string>() {
-            //"Assets/Aot2HotScripts",
+            "Assets/Aot2HotScripts",
             "Assets/AotScripts",
             "Assets/HotScripts",
         };
