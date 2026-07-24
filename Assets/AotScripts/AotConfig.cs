@@ -174,5 +174,32 @@ namespace Aot
         //yooasset的下载资源路径，后期可以扩展其他的
         public string defaultHostServer;
         public string fallbackHostServer;
+
+        /// <summary>
+        /// 微信/抖音本地缓存子路径：优先取 defaultHostServer 相对 cdn 的后缀（可多级）；
+        /// 二者不同源时（如本机 defaultHostServer + 公网 cdn）回退为 defaultHostServer 末级路径。
+        /// </summary>
+        public string GetCachePathSuffix()
+        {
+            var cdnRoot = (cdn ?? string.Empty).Trim().TrimEnd('/');
+            var host = (defaultHostServer ?? string.Empty).Trim().TrimEnd('/');
+            if (!string.IsNullOrEmpty(cdnRoot)
+                && host.StartsWith(cdnRoot, StringComparison.OrdinalIgnoreCase)
+                && host.Length > cdnRoot.Length)
+            {
+                var suffix = host.Substring(cdnRoot.Length);
+                if (suffix.StartsWith('/'))
+                    suffix = suffix.Substring(1);
+                if (!string.IsNullOrEmpty(suffix))
+                    return suffix;
+            }
+
+            var schemeIdx = host.IndexOf("://", StringComparison.Ordinal);
+            var authorityStart = schemeIdx >= 0 ? schemeIdx + 3 : 0;
+            var lastSlash = host.LastIndexOf('/');
+            if (lastSlash > authorityStart)
+                return host.Substring(lastSlash + 1);
+            return "WebGL";
+        }
     }
 }
