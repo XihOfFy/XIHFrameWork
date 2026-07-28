@@ -193,7 +193,7 @@ public class JenkinsEntry
                 if (isAbb)
                 {//使用aab，需要使用rebuild打包，因为newbuild会将exportAsGoogleAndroidProject = false;
                     EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Gradle;
-                    PlayerSettings.SetApplicationIdentifier(group, "com.yunduo.ws3d.gp");
+                    //PlayerSettings.SetApplicationIdentifier(group, "com.app.name.gp");
                     EditorUserBuildSettings.exportAsGoogleAndroidProject = true;//仍需导出AS，但是可以As打包aab
                 }
                 else
