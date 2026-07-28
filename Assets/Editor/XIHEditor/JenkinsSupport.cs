@@ -107,27 +107,6 @@ public class JenkinsSupport
             return;
         }
 #elif (UNITY_DY || UNITY_TT)
-        //Native方案可以调用 StarkSDKTool.API.BuildMananger.Build，WebGL方案可以调用StarkSDKTool.Builder.BuildWebGL
-#if UNITY_ANDROID
-        PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android, false);
-        PlayerSettings.SetGraphicsAPIs(BuildTarget.Android, new UnityEngine.Rendering.GraphicsDeviceType[]{ UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3 });
-        StarkBuilderSettings.Instance.framework = Framework.Native;
-        StarkBuilderSettings.Instance.isWebGL2 = true;
-        StarkBuilderSettings.Instance.urlCacheList = new string[] { "app02.yundooo.com" };
-        StarkBuilderSettings.Instance.dontCacheFileNames = new string[] { "json", "version" };
-
-        var outDir = $"{WEB_ROOT}/DYOutput";
-        if(Directory.Exists(outDir))Directory.Delete(outDir,true);
-        EditorPrefs.SetString("pref_sc_output_dir", outDir);//设置抖音输出目录 pref_sc_build_output_dir
-
-        StarkBuilderSettings.Instance.apkOutputDir = $"{WEB_ROOT}/DYOutput";
-
-        //var result = BuildDY(false, false, "screwlike", appId: "tta0eed6533fdea14307");
-        //Debug.Log($"Native Build Start reuslt={result.Sucess},isCancelBuild={result.IsCancelBuild},OutputPath={result.OutputPath}");
-
-        var res = StarkSDKTool.API.BuildManager.Build(Framework.Native,false);
-        Debug.Log($"Native Build Start reuslt={res}");
-#elif UNITY_WEBGL
         DYSettings();
 #if UNITY_TT
         var setting = StarkBuilderSettings.Instance;
@@ -142,7 +121,6 @@ public class JenkinsSupport
         var result = TTSDK.Tool.Builder.BuildWebGL(setting, setting.OutputDir, out var isCancelBuild);
         Debug.Log($"WebGL Build Start reuslt={result},isCancelBuild={isCancelBuild}");
         WritePreLoadList2TTGameJs();
-#endif
 #endif
 #else
         string targetPath = null;

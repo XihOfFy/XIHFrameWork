@@ -48,20 +48,8 @@ namespace XiHUtil
             //if (!DYStarkSDK.Instance.DY_PC) TTSDK.TT.VibrateShort(new long[] {0 , 30 }, -1); //等待0s，开始震动30ms 使手机发生较短时间的振动。Android 震动时间为 30ms，iOS 震动时间为 15ms。某些机型在不支持短振动时会 fallback 到 vibrateLong，某些机型不支持时会进入 fail 回调。
             //if (!DYStarkSDK.Instance.DY_PC) TTSDK.TT.VibrateShort(new TTSDK.VibrateShortParam());
             TTSDK.TT.VibrateShort(new TTSDK.VibrateShortParam());
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            if (jc == null)
-            {
-                jc = new AndroidJavaClass("com.yundooo.bridge.YDBridge");
-            }
-            jc.CallStatic("vibrate", 50);
-#elif UNITY_IOS
-#if USE_ZSSDK
-            ZhiSe.Seeg.VibrateShort();
 #else
-            //Handheld.Vibrate();
-            YDiOSVibrate.YDiOSVibrateBridge.VibrateTaptic(YDiOSVibrate.TapticStyle.Medium);
-#endif
-#else
+            Handheld.Vibrate();
             //Debug.LogWarning("当前平台不支持震动");
 #endif
         }
