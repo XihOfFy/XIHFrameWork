@@ -5,7 +5,7 @@ using UnityEditor.Android;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-#if UNITY_WEBGL && USE_ZSSDK
+#if UNITY_WEBGL
 public class WebGLEmscriptenBuildFixer : IPreprocessBuildWithReport
 {
     public int callbackOrder => 1;
@@ -15,7 +15,7 @@ public class WebGLEmscriptenBuildFixer : IPreprocessBuildWithReport
     }
 }
 #endif
-public class LocalizationBuildPlayerAndroid : IPostGenerateGradleAndroidProject,IPostprocessBuildWithReport
+public class LocalizationBuildPlayerAndroid : IPostGenerateGradleAndroidProject, IPostprocessBuildWithReport
 {
     public int callbackOrder { get; }
     public void OnPostGenerateGradleAndroidProject(string path)
@@ -33,27 +33,23 @@ public class LocalizationBuildPlayerAndroid : IPostGenerateGradleAndroidProject,
     }
     public void OnPostprocessBuild(BuildReport report)
     {
-		if (report.summary.platform != UnityEditor.BuildTarget.Android) return;
+        if (report.summary.platform != UnityEditor.BuildTarget.Android) return;
         var path = report.summary.outputPath;
-#if USE_ZSSDK
-        var dst = path + "/gradle/wrapper/gradle-wrapper.properties";
-        var lines = File.ReadAllLines(dst);
-        var sb = new StringBuilder();
-        foreach (var line in lines)
-        {
-            if (line.TrimStart().StartsWith("distributionUrl="))
-            {
-                //sb.AppendLine("distributionUrl=https\\://services.gradle.org/distributions/gradle-7.6-bin.zip");
-                //sb.AppendLine("distributionUrl=https\\://services.gradle.org/distributions/gradle-8.13-bin.zip");
-                sb.AppendLine("distributionUrl=https\\://mirrors.cloud.tencent.com/gradle/gradle-8.13-bin.zip");
-            }
-            else
-            {
-                sb.AppendLine(line);
-            }
-        }
-        File.WriteAllText(dst, sb.ToString());
-#endif
+        // var dst = path + "/gradle/wrapper/gradle-wrapper.properties";
+        // var lines = File.ReadAllLines(dst);
+        // var sb = new StringBuilder();
+        // foreach (var line in lines)
+        // {
+        //     if (line.TrimStart().StartsWith("distributionUrl="))
+        //     {
+        //         sb.AppendLine("distributionUrl=https\\://mirrors.cloud.tencent.com/gradle/gradle-8.13-bin.zip");
+        //     }
+        //     else
+        //     {
+        //         sb.AppendLine(line);
+        //     }
+        // }
+        // File.WriteAllText(dst, sb.ToString());
     }
 
     public static void CopyFolder(string from, string to)

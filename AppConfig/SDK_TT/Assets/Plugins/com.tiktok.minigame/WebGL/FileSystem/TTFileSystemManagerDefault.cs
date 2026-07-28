@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEngine;
 namespace TTSDK
 {
     public class TTFileSystemManagerDefault : TTFileSystemManager
@@ -118,7 +119,7 @@ namespace TTSDK
             }
             catch (System.Exception exception)
             {
-                UnityEngine.Debug.LogError($"ReadFileSync: {exception.Message}");
+                Debug.LogError($"ReadFileSync: {exception.Message}");
                 return null;
             }
         }
@@ -137,7 +138,7 @@ namespace TTSDK
             }
             catch (System.Exception exception)
             {
-                UnityEngine.Debug.LogError($"ReadFileSync: {exception.Message}");
+                Debug.LogError($"ReadFileSync: {exception.Message}");
                 return null;
             }
         }

@@ -2,11 +2,11 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
 
-[assembly: Preserve]
-
 namespace TTSDK
 {
+    [Preserve]
     public delegate void GetFontDataDelegate(IntPtr pBuffer, int length);
+
     public class TTWebGLInterface
     {
 #if (UNITY_WEBPLAYER || UNITY_WEBGL)
@@ -27,6 +27,7 @@ namespace TTSDK
         [DllImport("__Internal")]
         public static extern string unityMixCallJs(string msg);
 
+        [method: Preserve]
         [DllImport("__Internal")]
         public static extern void StarkGetSystemFont(GetFontDataDelegate onFontData);
 #else

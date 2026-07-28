@@ -9,6 +9,13 @@ namespace TTSDK
 {
     public class TTFileSystemManagerWebGL : TTFileSystemManager
     {
+        // Inlined here (rather than calling TTSDKLog.Debug) because TTWebGL asmdef cannot
+        // reference the runtime asmdef without creating a cycle. Define TTSDK_LOG_DEBUG to
+        // enable; otherwise the entire call (including string-interpolation arguments) is
+        // compiler-erased.
+        [System.Diagnostics.Conditional("TTSDK_LOG_DEBUG")]
+        private static void TraceLog(string message) => UnityEngine.Debug.Log(message);
+
 #region 非流式读写
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")]
@@ -428,7 +435,7 @@ namespace TTSDK
             {
                 try
                 {
-                    Debug.Log($"{handlerName} - {msg}");
+                    TraceLog($"{handlerName} - {msg}");
                     action(msg);
                 }
                 catch (Exception e)
@@ -962,7 +969,7 @@ namespace TTSDK
             {
                 return JsonUtility.FromJson<TTStatInfo>(info);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 if (throwException)
                 {
@@ -1023,7 +1030,7 @@ namespace TTSDK
         
         public override string AppendFileSync(string filePath, string data, string encoding = "utf8")
         {
-            Debug.Log($"AppendFileSync filePath:{filePath},data:{data},encoding:{encoding}");
+            TraceLog($"AppendFileSync filePath:{filePath},data:{data},encoding:{encoding}");
             if (string.IsNullOrEmpty(encoding))
             {
                 encoding = "utf8";
@@ -1034,7 +1041,7 @@ namespace TTSDK
 
         public override string AppendFileSync(string filePath, byte[] data)
         {
-            Debug.Log($"AppendFileSync filePath:{filePath},data:{data}");
+            TraceLog($"AppendFileSync filePath:{filePath},data:{data}");
             return StarkAppendBinFileSync(FixFilePath(filePath), data, data.Length);
         }
 
@@ -1073,7 +1080,7 @@ namespace TTSDK
         public override string[] ReadDirSync(string dirPath)
         {
             var msg = StarkReadDirSync(FixFilePath(dirPath));
-            Debug.Log($"ReadDirSync callback -->{msg}");
+            TraceLog($"ReadDirSync callback -->{msg}");
             string[] res;
             try
             {
@@ -1252,7 +1259,7 @@ namespace TTSDK
             {
                 return JsonUtility.FromJson<TTStatInfo>(info);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 throw new Exception(info);
             }
