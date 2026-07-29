@@ -1,4 +1,4 @@
-using ProtoBuf;
+﻿using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,8 @@ namespace XiHNet
         /// SomeRsp: 服务端返回给客户端的响应
         /// SomeNtf: 通知信息
         /// </summary>
-        public MsgTypeCodeAttribute(ushort code,bool isRsp) {
+        public MsgTypeCodeAttribute(ushort code, bool isRsp)
+        {
             MsgTypeCode = code;
             IsResponse = isRsp;
         }
@@ -37,26 +38,40 @@ namespace XiHNet
         /// 服务器针对响应Response,将使用该ID并与请求Request一致，返回给客户端
         /// </summary>
         ushort TaskId { get; set; }
+        /// <summary>
+        /// 服务器据此标志决定将消息转发给谁，可组合使用
+        /// </summary>
+        MsgRoute Route { get; set; }
+        /// <summary>
+        /// 当 <see cref="Route"/> 包含 <see cref="MsgRoute.ToSession"/> 时，指定目标客户端的 SessionKey
+        /// </summary>
+        ulong TargetSession { get; set; }
     }
     public sealed class NullMessage : IMessage
     {
         public static NullMessage IMessageNull { get; } = new NullMessage();
         public ushort TaskId { get => 0; set => _ = 0; }
+        public MsgRoute Route { get; set; }
+        public ulong TargetSession { get; set; }
         public string Msg { get; } = "Failed";
         public NullMessage() { }
-        public NullMessage(string err) {
+        public NullMessage(string err)
+        {
             Msg = err;
         }
     }
-    public static class IMessageExt {
-        public static void Init() {
+    public static class IMessageExt
+    {
+        public static void Init()
+        {
         }
         private static readonly Dictionary<ushort, Type> msg2Types = new Dictionary<ushort, Type>();//映射MsgType与Type
         private static readonly Dictionary<Type, ushort> type2Msgs = new Dictionary<Type, ushort>();//映射Type与MsgType
         private static readonly HashSet<ushort> rsps = new HashSet<ushort>();
-        static IMessageExt() {
+        static IMessageExt()
+        {
             var types = AppDomain.CurrentDomain.GetAssemblies()
-                    .Where(asm =>asm.FullName.StartsWith("Hot"))
+                    .Where(asm => asm.FullName.StartsWith("Hot"))
                     .SelectMany(asm => asm.GetTypes());
             Type mt = typeof(IMessage);
             foreach (Type type in types)
@@ -93,34 +108,41 @@ namespace XiHNet
             }
         }
         public static bool IsRespone(ushort type) => rsps.Contains(type);
-        public static Type GetClassType(ushort msgType) {
+        public static Type GetClassType(ushort msgType)
+        {
             if (msg2Types.ContainsKey(msgType))
             {
                 return msg2Types[msgType];
             }
-            else {
+            else
+            {
                 throw new TypeAccessException($"<color=red>{nameof(msg2Types)}不包含值为{msgType}所对应类型</color>");
             }
         }
-        public static ushort GetMsgType<Rsp>() {
+        public static ushort GetMsgType<Rsp>()
+        {
             Type type = typeof(Rsp);
-            if (type2Msgs.ContainsKey(type)) {
+            if (type2Msgs.ContainsKey(type))
+            {
                 return type2Msgs[type];
             }
-            else {
+            else
+            {
                 throw new TypeAccessException($"<color=red>{nameof(type2Msgs)}不包含{type}类型</color>");
             }
         }
-        public static ushort GetMsgType(this IMessage self) {
+        public static ushort GetMsgType(this IMessage self)
+        {
             Type type = self.GetType();
             if (type2Msgs.ContainsKey(type))
             {
                 return type2Msgs[type];
             }
-            else {
+            else
+            {
                 throw new TypeAccessException($"<color=red>{nameof(type2Msgs)}枚举中不包含{type}类型</color>");
             }
-        } 
+        }
     }
-    
+
 }

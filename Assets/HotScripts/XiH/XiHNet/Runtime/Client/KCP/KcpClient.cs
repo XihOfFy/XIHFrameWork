@@ -12,6 +12,11 @@ namespace XiHNet
     public class KcpClient : NetClient
     {
         private Kcp _kcp;
+        //KCP 内部使用 LinkedList/数组等非线程安全结构。Request 在线程池跑 _kcp.Send，
+        //同时 StartKcpUpdate 在另一个线程池任务里跑 _kcp.Input/Update/PeekSize/Recv，
+        //并发修改会导致 LinkedList 节点指针损坏 → AddLast 内部 NRE → catch → Close 掉线。
+        //用一把锁串行化所有 _kcp.* 调用即可。
+        private readonly object _kcpLock = new object();
         private UdpClient _client = null;
         // recv buffer
         private readonly byte[] _kcpRcvBuf;
@@ -46,6 +51,7 @@ namespace XiHNet
                     _client.Client.ReceiveTimeout = NetConfig.RecTimeOut;
                     _client.Connect(_endPoint);
                 });
+                await _client.SendAsync(new byte[] { 0x1 }, 1);
                 _kcp = new Kcp(912, OutputKcpAsync);
                 // fast mode
                 _kcp.NoDelay(1, 10, 2, 1);
@@ -68,8 +74,10 @@ namespace XiHNet
             }
             var binary = new byte[size];
             Buffer.BlockCopy(data, 0, binary, 0, size);
-            await _client.SendAsync(binary, binary.Length);
-            //Debugger.Log($"OutputKcpAsync <color=red>{_udpClient.Client.LocalEndPoint}  | {_endPoint} | {BitConverter.ToString(data,0,size)}</color> ");
+            //Close 流程会先 Dispose UdpClient 再释放 KCP，KCP 内部仍可能在另一线程触发本回调，
+            //此时 SendAsync 会抛 ObjectDisposedException；async void 异常无人接会污染上层任务。
+            try { await _client.SendAsync(binary, binary.Length); }
+            catch { }
         }
         private CancellationTokenSource source;
         private async void StartRecUpdate()
@@ -82,13 +90,16 @@ namespace XiHNet
                     StartKcpUpdate();
                     while (NetState == NetState.Open)
                     {
-                        if (_client.Available > 0)
+                        //每次轮询把当前 UDP 缓冲排空，避免 OS 级缓冲溢出导致丢包、KCP 重传风暴和超时
+                        while (_client != null && _client.Available > 0)
                         {
                             UdpReceiveResult res = await _client.ReceiveAsync();
                             var data = res.Buffer;
                             if (data.Length <= 0)
                             {
                                 Debug.Log("终端主动断开连接");
+                                PushToRecvQueue(Array.Empty<byte>());
+                                NetState = NetState.Closed;
                                 break;
                             }
                             PushToRecvQueue(data);
@@ -100,7 +111,7 @@ namespace XiHNet
                 {
                     Debug.Log(e.ToString());
                 }
-            },source.Token);
+            }, source.Token);
             Close();
         }
 
@@ -134,7 +145,11 @@ namespace XiHNet
             var ret = -1;
             await Task.Factory.StartNew(() =>
             {
-                ret = _kcp.Send(data, 0, data.Length);
+                lock (_kcpLock)
+                {
+                    if (_kcp == null) return;
+                    ret = _kcp.Send(data, 0, data.Length);
+                }
             });
             _needUpdate = true;
             if (ret == 0)
@@ -149,32 +164,38 @@ namespace XiHNet
         private void ProcessRecv(uint current)
         {
             var queue = SwitchRecvQueue();
+            //Step 1：先把当前批次所有 UDP 包喂入 KCP，集中处理 ACK/重组
             while (queue.Count > 0)
             {
                 _lastRecvTime = current;
                 var data = queue.Dequeue();
-                var r = _kcp.Input(data, 0, data.Length);
+                if (data == null || data.Length == 0) continue;
+                int r;
+                lock (_kcpLock)
+                {
+                    if (_kcp == null) return;
+                    r = _kcp.Input(data, 0, data.Length);
+                }
                 Debug.Assert(r >= 0);
                 _needUpdate = true;
-                if (NetState == NetState.Open)
+            }
+            //Step 2：循环取完所有已就绪的逻辑消息，防止一次 tick 只能消费一条导致延迟堆积
+            if (NetState != NetState.Open) return;
+            while (true)
+            {
+                int size, r;
+                lock (_kcpLock)
                 {
-                    var size = _kcp.PeekSize();
-                    if (size > 0)
-                    {
-                        r = _kcp.Recv(_kcpRcvBuf, 0, _kcpRcvBuf.Length);
-                        if (r <= 0)
-                        {
-                            break;
-                        }
-                        var binary = new byte[size];
-                        Buffer.BlockCopy(_kcpRcvBuf, 0, binary, 0, size);
-                        OnMessageAct.Invoke(binary);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    if (_kcp == null) return;
+                    size = _kcp.PeekSize();
+                    if (size <= 0) break;
+                    r = _kcp.Recv(_kcpRcvBuf, 0, _kcpRcvBuf.Length);
+                    if (r <= 0) break;
                 }
+                var binary = new byte[size];
+                Buffer.BlockCopy(_kcpRcvBuf, 0, binary, 0, size);
+                //OnMessageAct 内部有自己的 lock(recvLock)，不应再持 _kcpLock，避免锁顺序耦合
+                OnMessageAct.Invoke(binary);
             }
         }
         private bool Update(uint current)
@@ -182,9 +203,13 @@ namespace XiHNet
             ProcessRecv(current);
             if (_needUpdate || current > _nextUpdateTime)
             {
-                _kcp.Update(current);
-                _nextUpdateTime = _kcp.Check(current);
-                _needUpdate = false;
+                lock (_kcpLock)
+                {
+                    if (_kcp == null) return false;
+                    _kcp.Update(current);
+                    _nextUpdateTime = _kcp.Check(current);
+                    _needUpdate = false;
+                }
             }
             return current - _lastRecvTime <= _recvTimeoutMM;
         }
@@ -203,11 +228,12 @@ namespace XiHNet
                     {
                         await Task.Delay(NetConfig.KcpInterval);
                     }
-                    else {
+                    else
+                    {
                         break;
                     }
                 }
-            },source.Token);
+            }, source.Token);
             Close();
         }
 
@@ -229,10 +255,13 @@ namespace XiHNet
                 }
                 _client = null;
             }
-            if (_kcp != null)
+            lock (_kcpLock)
             {
-                _kcp.Release();
-                _kcp = null;
+                if (_kcp != null)
+                {
+                    _kcp.Release();
+                    _kcp = null;
+                }
             }
             source.Cancel();
             source.Dispose();
