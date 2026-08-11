@@ -80,6 +80,13 @@ namespace XiHAsset
                 if (!tmp.IsValid)
                 {
                     assHandles.Remove(path);
+                    // 加载已结束但仍 Invalid：失败句柄，禁止无限递归重试（WebGL 上会表现为界面卡死）。
+                    if (tmp.IsDone)
+                    {
+                        Debug.LogWarning($"此资源{path}加载失败且无效");
+                        return tmp;
+                    }
+
                     Debug.LogWarning($"此资源{path}已经释放,无法使用");
                     return await GetHandle<T>(path);
                 }
@@ -96,11 +103,17 @@ namespace XiHAsset
             if (assAllHandles.ContainsKey(path))
             {
                 var tmp = assAllHandles[path];
-                //await UniTask.WaitUntil(() => tmp.IsDone, cancellationToken: cancellationToken);
                 await UniTask.WaitUntil(() => tmp.IsDone || !tmp.IsValid, cancellationToken: cancellationToken);
                 if (!tmp.IsValid)
                 {
                     assAllHandles.Remove(path);
+                    // 加载已结束但仍 Invalid：失败句柄，禁止无限递归重试（WebGL 上会表现为界面卡死）。
+                    if (tmp.IsDone)
+                    {
+                        Debug.LogWarning($"此资源{path}加载失败且无效");
+                        return tmp;
+                    }
+
                     Debug.LogWarning($"此资源{path}已经释放,无法使用");
                     return await GetAllHandles<T>(path);
                 }

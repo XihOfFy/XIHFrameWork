@@ -94,7 +94,8 @@ namespace Aot.XiHUtil
 #if USE_YOO
         public AllAssetsHandle assetObjs;
         public bool IsDone => assetObjs.IsDone;
-        public bool IsValid => IsDone && assetObjs.IsValid;
+        // 与 AssetRef 一致：加载中也应视为 Valid，否则 GetAllHandles 的 WaitUntil 会立刻当成已释放并死循环重试。
+        public bool IsValid => assetObjs.IsValid;
         public AssetAllRef(AllAssetsHandle allAssetsHandle)
         {
             this.assetObjs = allAssetsHandle;
